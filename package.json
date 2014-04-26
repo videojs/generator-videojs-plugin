@@ -1,0 +1,36 @@
+{
+  "name": "generator-videojs-plugin",
+  "version": "0.0.0",
+  "description": "Yeoman generator",
+  "license": "MIT",
+  "main": "app/index.js",
+  "repository": "dmlap/generator-videojs-plugin",
+  "author": {
+    "name": "David LaPalomento",
+    "email": "",
+    "url": "https://github.com/dmlap"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "app"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "chalk": "~0.4.0",
+    "underscore.string": "^2.3.3",
+    "yeoman-generator": "~0.16.0"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "peerDependencies": {
+    "yo": ">=1.0.0"
+  }
+}
