@@ -85,6 +85,7 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
                   path.join('test', this.pluginName + '.test.js'));
     this.copy('_Gruntfile.js', 'Gruntfile.js');
     this.template('_README.md', 'README.md');
+    this.template('_example.html', 'example.html');
 
     if (this.license) {
       this.template('_LICENSE-' + this.license,

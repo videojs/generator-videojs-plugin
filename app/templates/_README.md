@@ -13,7 +13,9 @@ Once you've added the plugin script to your page, you can use it with any video:
 </script>
 ```
 
-## Documenation
+There's also a [working example](example.html) of the plugin you can check out if you're having trouble.
+
+## Documentation
 ### Plugin Options
 
 You may pass in an options object to the plugin upon initialization. This
