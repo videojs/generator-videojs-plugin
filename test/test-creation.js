@@ -21,11 +21,18 @@ describe('videojs-plugin generator', function () {
     var expected = [
       // add files you expect to exist here.
       '.jshintrc',
-      '.editorconfig'
+      '.editorconfig',
+      'README.md',
+      'package.json',
+      'LICENSE-MIT',
+      'lib/videojs-generated-plugin.js',
+      'test/index.html',
+      'test/videojs-generated-plugin.test.js'
     ];
 
     helpers.mockPrompt(this.app, {
-      'someOption': true
+      'pluginName': 'videojs-generated-plugin',
+      'license': 'MIT'
     });
     this.app.options['skip-install'] = true;
     this.app.run({}, function () {
