@@ -1,8 +1,9 @@
 {
   "name": "<%= _.slugify(pluginName) %>",
   "version": "0.1.0",
-  "dependencies": {},
+  "description": "<%= description %>",
   "license": "<%= license %>",
+  "dependencies": {},
   "devDependencies": {
     "grunt-contrib-clean": "^0.4",
     "grunt-contrib-concat": "^0.3",

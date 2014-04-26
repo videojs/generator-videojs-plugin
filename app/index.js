@@ -33,6 +33,10 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
         .replace(/^videojs-/, '')
         .replace(/^vjs-/, '')
     }, {
+      name: 'description',
+      message: 'Describe your plugin in one short sentence:',
+      default: 'A revolutionary plugin for video.js'
+    },{
       name: 'author',
       message: 'What is your name?'
     }, {
@@ -54,6 +58,8 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
       this.today =
         now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + (now.getDate());
       this.year = now.getFullYear();
+
+      this.description = props.description;
 
       if ((/Apache(-)?2(\.0)?/i).test(props.license)) {
         this.license = 'Apache-2.0';
@@ -78,6 +84,7 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
     this.template('_videojs-plugin.test.js',
                   path.join('test', this.pluginName + '.test.js'));
     this.copy('_Gruntfile.js', 'Gruntfile.js');
+    this.template('_README.md', 'README.md');
 
     if (this.license) {
       this.template('_LICENSE-' + this.license,
