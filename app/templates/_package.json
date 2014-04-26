@@ -4,6 +4,13 @@
   "author": "<%= author %>",
   "description": "<%= description %>",
   "license": "<%= license %>",
+  "keywords": [
+    "videojs",
+    "html5",
+    "flash",
+    "video",
+    "player"
+  ],
   "dependencies": {},
   "devDependencies": {
     "grunt-contrib-clean": "^0.4",
