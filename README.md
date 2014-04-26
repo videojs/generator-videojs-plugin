@@ -1,9 +1,12 @@
 # generator-videojs-plugin [![Build Status](https://secure.travis-ci.org/dmlap/generator-videojs-plugin.png?branch=master)](https://travis-ci.org/dmlap/generator-videojs-plugin)
 
-> [Yeoman](http://yeoman.io) generator
+> [Yeoman](http://yeoman.io) generator for [video.js](http://www.videojs.com/) plugins.
 
 
 ## Getting Started
+
+The video.js plugin generator builds out scaffolding for your video.js plugin.
+It uses [Grunt](http://gruntjs.com/) to manage your build, [npm](https://www.npmjs.org/) to pull in dependencies, and [QUnit](http://qunitjs.com/) for testing.
 
 ### What is Yeoman?
 

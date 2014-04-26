@@ -69,7 +69,7 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
           _.titleize(_.humanize(this.pluginName.replace('videojs', 'video.js')));
 
         this.author = props.author;
-        this.version = '0.1.0';
+        this.version = '0.0.0';
         this.today =
           now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + (now.getDate());
         this.year = now.getFullYear();

@@ -1,7 +1,7 @@
 {
   "name": "generator-videojs-plugin",
   "version": "0.0.0",
-  "description": "Yeoman generator",
+  "description": "Yeoman generator for video.js plugins",
   "license": "MIT",
   "main": "app/index.js",
   "repository": "dmlap/generator-videojs-plugin",
