@@ -7,7 +7,8 @@
 Once you've added the plugin script to your page, you can use it with any video:
 
 ```html
-<script src="<%= pluginName %>"></script>
+<script src="video.js"></script>
+<script src="<%= pluginName %>.js"></script>
 <script>
   videojs(document.querySelector('video')).<%= camelPluginName %>();
 </script>

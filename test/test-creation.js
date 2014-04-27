@@ -22,6 +22,8 @@ describe('videojs-plugin generator', function () {
       // add files you expect to exist here.
       '.jshintrc',
       '.editorconfig',
+      '.gitignore',
+      '.npmignore',
       'README.md',
       'package.json',
       'LICENSE-MIT',

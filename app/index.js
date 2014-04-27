@@ -91,6 +91,8 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
     this.mkdir('test');
 
     this.copy('jshintrc', '.jshintrc');
+    this.copy('gitignore', '.gitignore');
+    this.copy('npmignore', '.npmignore');
 
     this.template('_package.json', 'package.json');
     this.template('_videojs-plugin.js', path.join('lib', this.pluginName + '.js'));
