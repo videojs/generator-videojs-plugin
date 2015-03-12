@@ -24,6 +24,7 @@ describe('videojs-plugin generator', function () {
       '.editorconfig',
       '.gitignore',
       '.npmignore',
+      'Gruntfile.js',
       'README.md',
       'package.json',
       'LICENSE-MIT',
