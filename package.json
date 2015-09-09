@@ -4,7 +4,7 @@
   "description": "Yeoman generator for TV 2 Player (video.js) plugins",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "klan/generator-videojs-plugin",
+  "repository": "klan/generator-tv2-player-plugin",
   "author": {
     "name": "Klaus Nielsen",
     "email": "klan@tv2.dk",
