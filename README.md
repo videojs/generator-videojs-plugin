@@ -1,6 +1,6 @@
-# generator-videojs-plugin [![Build Status](https://secure.travis-ci.org/dmlap/generator-videojs-plugin.png?branch=master)](https://travis-ci.org/dmlap/generator-videojs-plugin)
+# generator-videojs-plugin
 
-> [Yeoman](http://yeoman.io) generator for [video.js](http://www.videojs.com/) plugins.
+> [Yeoman](http://yeoman.io) generator for TV 2 Player ([video.js](http://www.videojs.com/)) plugins.
 
 
 ## Getting Started

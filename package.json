@@ -1,14 +1,14 @@
 {
-  "name": "generator-videojs-plugin",
-  "version": "0.1.1",
-  "description": "Yeoman generator for video.js plugins",
+  "name": "generator-tv2-player-plugin",
+  "version": "0.1.2",
+  "description": "Yeoman generator for TV 2 Player (video.js) plugins",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "dmlap/generator-videojs-plugin",
+  "repository": "klan/generator-videojs-plugin",
   "author": {
-    "name": "David LaPalomento",
-    "email": "",
-    "url": "https://github.com/dmlap"
+    "name": "Klaus Nielsen",
+    "email": "klan@tv2.dk",
+    "url": "https://github.com/klan"
   },
   "engines": {
     "node": ">=0.10.0"
