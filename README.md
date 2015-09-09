@@ -1,4 +1,4 @@
-# generator-videojs-plugin
+# generator-tv2-player-plugin
 
 > [Yeoman](http://yeoman.io) generator for TV 2 Player ([video.js](http://www.videojs.com/)) plugins.
 
