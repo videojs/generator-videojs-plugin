@@ -6,7 +6,7 @@ var chalk = require('chalk');
 var _ = require('underscore.string');
 var spawn = require('child_process').spawn;
 
-var VideojsPluginGenerator = yeoman.generators.Base.extend({
+var TV2PlayerPluginGenerator = yeoman.generators.Base.extend({
   init: function () {
     this.pkg = require('../package.json');
 
@@ -27,7 +27,7 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
     this.log(this.yeoman);
 
     // short generator description
-    this.log(chalk.magenta('Build a video.js plugin with Grunt, npm, and qunit.'));
+    this.log(chalk.magenta('Build a TV 2 Player (video.js) plugin with Grunt, npm, and qunit.'));
 
     // look up a default author name through git config
     gitConfig = spawn('git', ['config', 'user.name']);
@@ -38,14 +38,14 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
       var prompts = [{
             name: 'pluginName',
             message: 'What would you like to call your plugin?',
-            default: 'videojs-' +
+            default: 'tv2-player-' +
               process.cwd().split(path.sep).slice(-1)[0]
-              .replace(/^videojs-/, '')
+              .replace(/^tv2-player-/, '')
               .replace(/^vjs-/, '')
           }, {
             name: 'description',
             message: 'Describe your plugin in one short sentence:',
-            default: 'A revolutionary plugin for video.js'
+            default: 'A revolutionary plugin for the TV 2 Player'
           },{
             name: 'author',
             message: 'What is your name?'
@@ -64,9 +64,9 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
 
         this.pluginName = props.pluginName;
         this.camelPluginName =
-          _.camelize(this.pluginName.replace(/^videojs-/, ''));
+          _.camelize(this.pluginName.replace(/^tv2-player-/, ''));
         this.humanPluginName =
-          _.titleize(_.humanize(this.pluginName.replace('videojs', 'video.js')));
+          _.titleize(_.humanize(this.pluginName.replace('tv2-player', 'video.js')));
 
         this.author = props.author;
         this.version = '0.0.0';
@@ -90,17 +90,13 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
     this.mkdir('lib');
     this.mkdir('test');
 
-    this.copy('jshintrc', '.jshintrc');
-    this.copy('gitignore', '.gitignore');
-    this.copy('npmignore', '.npmignore');
-
     this.template('_package.json', 'package.json');
-    this.template('_videojs-plugin.js', path.join('lib', this.pluginName + '.js'));
+    this.template('_tv2-player-plugin.js', path.join('lib', this.pluginName + '.js'));
 
     this.template('_index.html', path.join('test', 'index.html'));
-    this.template('_videojs-plugin.test.js',
+    this.template('_tv2-player-plugin.test.js',
                   path.join('test', this.pluginName + '.test.js'));
-    this.copy('_Gruntfile.js', 'Gruntfile.js');
+
     this.template('_README.md', 'README.md');
     this.template('_example.html', 'example.html');
 
@@ -111,9 +107,13 @@ var VideojsPluginGenerator = yeoman.generators.Base.extend({
   },
 
   projectfiles: function () {
+    this.copy('gitignore', '.gitignore');
+    this.copy('npmignore', '.npmignore');
+
+    this.copy('_Gruntfile.js', 'Gruntfile.js');
+
     this.copy('editorconfig', '.editorconfig');
-    this.copy('jshintrc', '.jshintrc');
   }
 });
 
-module.exports = VideojsPluginGenerator;
+module.exports = TV2PlayerPluginGenerator;
