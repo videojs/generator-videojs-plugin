@@ -4,8 +4,7 @@
 (function(window, videojs, qunit) {
   'use strict';
 
-  var realIsHtmlSupported,
-      player,
+  var player,
 
       // local QUnit aliases
       // http://api.qunitjs.com/
@@ -29,13 +28,6 @@
 
   module('<%= pluginName %>', {
     setup: function() {
-      // force HTML support so the tests run in a reasonable
-      // environment under phantomjs
-      realIsHtmlSupported = videojs.Html5.isSupported;
-      videojs.Html5.isSupported = function() {
-        return true;
-      };
-
       // create a video element
       var video = document.createElement('video');
       document.querySelector('#qunit-fixture').appendChild(video);
@@ -47,7 +39,6 @@
       player.<%= camelPluginName %>();
     },
     teardown: function() {
-      videojs.Html5.isSupported = realIsHtmlSupported;
     }
   });
 

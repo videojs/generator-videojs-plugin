@@ -87,11 +87,11 @@ var TV2PlayerPluginGenerator = yeoman.generators.Base.extend({
   },
 
   app: function () {
-    this.mkdir('lib');
+    this.mkdir('src');
     this.mkdir('test');
 
     this.template('_package.json', 'package.json');
-    this.template('_tv2-player-plugin.js', path.join('lib', this.pluginName + '.js'));
+    this.template('_tv2-player-plugin.js', path.join('src', this.pluginName + '.js'));
 
     this.template('_index.html', path.join('test', 'index.html'));
     this.template('_tv2-player-plugin.test.js',
