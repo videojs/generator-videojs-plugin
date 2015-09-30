@@ -6,15 +6,14 @@
 
   var defaults = {
         option: true
-      },
-      <%= camelPluginName %>;
+      }, <%= camelPluginName %>;
 
   /**
    * Initialize the plugin.
    * @param options (optional) {object} configuration for the plugin
    */
   <%= camelPluginName %> = function(options) {
-    var settings = videojs.util.mergeOptions(defaults, options),
+    var settings = videojs.mergeOptions(defaults, options),
         player = this;
 
     // TODO: write some amazing plugin code
