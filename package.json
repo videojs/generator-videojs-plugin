@@ -1,0 +1,29 @@
+{
+  "name": "generator-videojs-plugin",
+  "version": "0.0.0",
+  "description": "A Yeoman generator for VideoJS plugins",
+  "license": "Apache 2.0",
+  "main": "generators/app/index.js",
+  "repository": "videojs/generator-videojs-plugin",
+  "author": {
+    "name": "VideoJS",
+    "url": "https://github.com/videojs"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "generators"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^0.19.0",
+    "chalk": "^1.0.0",
+    "yosay": "^1.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.3"
+  }
+}
