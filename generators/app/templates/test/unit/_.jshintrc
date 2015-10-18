@@ -13,5 +13,10 @@
   "quotmark": "single",
   "undef": true,
   "unused": true,
-  "strict": true
+  "predef": [
+    "_",
+    "QUnit",
+    "sinon",
+    "videojs"
+  ]
 }

@@ -1,6 +1,12 @@
 {
-  "name": "package",
+  "name": "<%= packageName %>",
   "version": "0.0.0",
-  "dependencies": {}
+  "author": "<%= author %>",
+  "license": "<%= licenseName %>",
+  "main": "dist/<%= packageName %>.js",
+  "keywords": [
+    "videojs",
+    "videojs-plugin"
+  ]
 }
 

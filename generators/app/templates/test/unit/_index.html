@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title><%= packageName %> Unit Tests</title>
+  <link rel="stylesheet" href="../../node_modules/qunitjs/qunit/qunit.css">
+  <link rel="stylesheet" href="../../dist/<%= packageName %>.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <script src="../../node_modules/lodash/index.js"></script>
+  <script src="../../node_modules/sinon/pkg/sinon.js"></script>
+  <script src="../../node_modules/sinon/pkg/sinon-ie.js"></script>
+  <script src="../../node_modules/qunitjs/qunit/qunit.js"></script>
+  <script src="../../node_modules/video.js/dist/video.js"></script>
+  <script>
+    QUnit.test('the environment is sane', function(assert) {
+      'use strict';
+      assert.strictEqual(typeof Array.isArray, 'function', 'es5 exists');
+      assert.strictEqual(typeof _, 'function', 'lodash exists');
+      assert.strictEqual(typeof sinon, 'object', 'sinon exists');
+      assert.strictEqual(typeof videojs, 'function', 'videojs exists');
+    });
+  </script>
+  <script src="bundle.js"></script>
+</body>
+</html>

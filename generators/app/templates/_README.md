@@ -1,0 +1,5 @@
+# <%= packageName %>
+
+## License
+
+<%= licenseName %>
