@@ -25,11 +25,23 @@ You will be walked through several options and ultimately be presented with a wo
 
 ### Options
 
-Using the `--bcov` option will set certain values automatically for Brightcove-authored plugins. For example, all Brightcove plugins use the Apache-2.0 license; so, the license option is not presented to the user.
+#### Brightcove Defaults
 
-```bash
-yo videojs-plugin --bcov
-```
+Set certain values automatically for Brightcove-authored plugins. For example, all Brightcove plugins use the Apache-2.0 license; so, the license prompt is not presented to the user.
+
+Turn Brightcove defaults on with: `yo videojs-plugin --bcov`
+
+#### Install
+
+By default, the generator will run `npm install` after it is finished. This can be a slower process and you may not always need it; so, it can be disabled. This may be useful for updating an already-generated plugin project.
+
+Turn installation off with: `yo videojs-plugin --no-install`
+
+#### Prompt
+
+By default, the generator will present the user with a series of prompts to choose various settings. This can be disabled. This may be useful for updating an already-generated plugin project.
+
+Turn Grunt off with: `yo videojs-plugin --no-prompt`
 
 ## License
 

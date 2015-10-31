@@ -74,9 +74,8 @@ Task         | Description
 `clean:dist` | Removes `dist/`.
 `clean:css`  | Removes all `.css` file(s) in `dist/`.
 `clean:js`   | Removes all `.js` file(s) in `dist/`.
-`connect`    | Runs a development server.
 `default`    | Alias for: `test`
-`dev`        | Alias for: `concurrent`
+`dev`        | Runs a dev server and `watch` concurrently.
 `lint`       | Alias for: `jshint`
 `test`       | Alias for: `lint`, `build`, `qunit`
 `watch`      | Alias for: `watch:css`, `watch:gruntfile`, `watch:js`, `watch:test`
@@ -96,7 +95,7 @@ We want to support Bower users as well as following software best practices (i.e
 1. npm automatically bumps the `package.json` version.
 1. The npm `"version"` script will run:
   1. `package.json` is staged, committed, and pushed. The effect of this is that the `package.json` change exists in the history of `master`.
-  1. The npm `"build-all"` script will run to compile the project.
+  1. The npm `"build"` script will run to compile the project.
   1. The `dist/` directory will be force-staged. Normally, it is ignored, but it needs to exist in the tag for Bower to install things properly.
 1. npm automatically commits and tags. This commit will contain only the `dist/` dir (the `package.json` bump is the parent commit).
 1. The npm `"postversion"` script will run:

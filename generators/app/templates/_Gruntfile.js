@@ -55,6 +55,7 @@ module.exports = function(grunt) {
     connect: {
       options: {
         keepalive: true,
+        livereload: true,
         useAvailablePort: true
       },
       dev: {

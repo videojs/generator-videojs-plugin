@@ -15,8 +15,6 @@ var LICENSE_NAMES = {
   none: 'None',
 };
 
-require('es6-promise').polyfill();
-
 module.exports = yeoman.generators.Base.extend({
 
   /**
@@ -197,7 +195,6 @@ module.exports = yeoman.generators.Base.extend({
       'test/unit/_plugin.test.js',
       '_bower.json',
       '_index.html',
-      '_package.json',
       '_README.md'
     ];
 
@@ -306,6 +303,65 @@ module.exports = yeoman.generators.Base.extend({
         );
       }
     },
+
+    package: function () {
+      var pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
+
+      _.defaultsDeep(pkg, {
+        name: this.context.packageName,
+        version: '0.0.0',
+        author: this.context.author,
+        license: this.context.licenseName,
+        main: 'src/plugin.js',
+        keywords: [
+          'videojs',
+          'videojs-plugin'
+        ],
+        'browserify-shim': {
+          'video.js': 'global:videojs'
+        },
+        scripts: {
+          build: 'grunt build',
+          'build-css': 'grunt build:css',
+          'build-js': 'grunt build:js',
+          clean: 'grunt clean:dist',
+          'clean-css': 'grunt clean:css',
+          'clean-js': 'grunt clean:js',
+          dev: 'grunt dev',
+          lint: 'grunt lint',
+          test: 'grunt',
+          watch: 'grunt watch',
+          'watch-css': 'grunt watch:css',
+          'watch-js': 'grunt watch:js',
+          preversion: '',
+          version: '',
+          postversion: ''
+        },
+        dependencies: {},
+        devDependencies: {
+          babelify: '^6.0.0',
+          browserify: '^11.0.0',
+          'browserify-shim': '^3.0.0',
+          'grunt-banner': '^0.6.0',
+          'grunt-browserify': '^4.0.1',
+          'grunt-concurrent': '^2.0.3',
+          'grunt-contrib-clean': '^0.6.0',
+          'grunt-contrib-connect': '^0.11.2',
+          'grunt-contrib-jshint': '^0.11.3',
+          'grunt-contrib-qunit': '^0.7.0',
+          'grunt-contrib-uglify': '^0.9.2',
+          'grunt-contrib-watch': '^0.6.1',
+          'grunt-sass': '^1.0.0',
+          'load-grunt-tasks': '^3.1.0',
+          lodash: '^3.0.0',
+          qunitjs: '^1.0.0',
+          sinon: '^1.0.0',
+          'video.js': '^5.0.0'
+        }
+      });
+
+      this.fs.writeJSON(this.destinationPath('package.json'), pkg);
+    }
   },
 
   /**

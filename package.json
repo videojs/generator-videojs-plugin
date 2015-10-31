@@ -20,7 +20,6 @@
   ],
   "dependencies": {
     "chalk": "^1.0.0",
-    "es6-promise": "~3.0.2",
     "lodash": "~3.10.1",
     "mkdirp": "~0.5.1",
     "yeoman-generator": "^0.19.0",
