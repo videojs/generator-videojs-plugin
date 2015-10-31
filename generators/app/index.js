@@ -49,9 +49,13 @@ module.exports = yeoman.generators.Base.extend({
     var name = this.config.get('name');
     return {
       author: this.config.get('author'),
+      hasStyle: this.config.get('style') !== 'none',
       licenseName: LICENSE_NAMES[this.config.get('license')],
       packageName: 'videojs-' + name,
       pluginName: name,
+      pluginNamePropertyAccessor: name.indexOf('-') > -1 ?
+        '[\'' + name + '\']' :
+        '.' + name,
       year: (new Date()).getFullYear(),
     };
   },
@@ -110,8 +114,11 @@ module.exports = yeoman.generators.Base.extend({
     var configs = this.config.getAll();
     return [{
       name: 'name',
-      message: 'Enter the name of this plugin (will be prefixed with "videojs-" automatically as needed):',
+      message: 'Enter the name of this plugin ("a-z" and "-" only; prefixed with "videojs-" automatically):',
       default: configs.name,
+      validate: function (input) {
+        return /^[a-z][a-z-]+$/.test(input) || 'Names must start with a lower-case letter and contain only lower-case letters and hyphens.';
+      }
     }, {
       name: 'author',
       message: 'Enter the author of this plugin:',

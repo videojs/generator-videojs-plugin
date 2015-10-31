@@ -19,11 +19,11 @@ Folder/Filename     | Optional | Description
 `dist/`             |          | Created during builds and ignored by Git.
 `docs/`             | ✓        | Any documentation beyond `README.md`.
 `lang/`             | ✓        | Any JSON language files for the plugin.
-`scripts/`          |          | Scripts used by npm.
+`scripts/`          | ✓        | Scripts used by npm.
 `src/`              |          | All source code.
 `src/css/`          | ✓        | Sass or CSS source code.
 `src/js/`           | ✓        | JavaScript source code.
-`src/plugin.[s]css` |          | Sass or CSS entry point.
+`src/plugin.[s]css` | ✓        | Sass or CSS entry point.
 `src/plugin.js`     |          | JavaScript entry point.
 `test/`             |          | All testing-related source code.
 `test/unit/`        |          | QUnit/Karma unit tests.
@@ -119,11 +119,3 @@ This process results in a `master` history that looks something like this:
 ## Publishing
 
 TODO Outline publishing process after versioning.
-
-
-
-
-
-
-
-

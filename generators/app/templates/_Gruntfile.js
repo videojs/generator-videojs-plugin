@@ -33,7 +33,7 @@ module.exports = function(grunt) {
           }
         },
         src: ['test/unit/**/*.test.js'],
-        dest: 'test/unit/bundle.js'
+        dest: 'test/unit/dist/plugin.js'
       }
     },
 
@@ -44,17 +44,23 @@ module.exports = function(grunt) {
     },
 
     concurrent: {
-      tasks: ['connect', 'watch'],
       options: {
         logConcurrentOutput: true
+      },
+      dev: {
+        tasks: ['connect:dev', 'watch']
       }
     },
 
     connect: {
       options: {
         keepalive: true,
-        port: Number(process.env.VJS_CONNECT_PORT) || 9999,
         useAvailablePort: true
+      },
+      dev: {
+        options: {
+          port: 9999
+        }
       }
     },
 
@@ -138,7 +144,7 @@ module.exports = function(grunt) {
     'build:css': ['clean:css', 'sass:dist', 'usebanner:css'],
     'build:js': ['clean:js', 'browserify:dist', 'usebanner:js', 'uglify'],
     'default': ['test'],
-    'dev': ['concurrent'],
+    'dev': ['concurrent:dev'],
     'lint': ['jshint'],
     'test': ['lint', 'build', 'browserify:test', 'qunit'],
   }, function (value, key) {

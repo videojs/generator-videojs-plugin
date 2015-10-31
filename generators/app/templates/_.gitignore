@@ -1,10 +1,37 @@
-.yo-rc.json
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 .DS_Store
-test/unit/bundle.js
+._*
 
+# Editors
+*~
 *.swp
+*.tmproj
+*.tmproject
 *.sublime-*
+.idea/
+.project/
+.settings/
+.vscode/
 
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
 bower_components/
-dist/
 node_modules/
+
+# Yeoman meta-data
+.yo-rc.json
+
+# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt/
+
+# Common build-related directories
+build/
+dist/
+tmp/
