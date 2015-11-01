@@ -175,9 +175,9 @@ module.exports = yeoman.generators.Base.extend({
 
     this._filesToCopy = [
       'docs/_standards.md',
+      'scripts/_grunt.js',
       '_.editorconfig',
       '_.gitignore',
-      '_.jshintrc',
       '_.npmignore',
       '_CHANGELOG.md',
       '_CONTRIBUTING.md'
@@ -185,7 +185,6 @@ module.exports = yeoman.generators.Base.extend({
 
     this._templatesToCopy = [
       'src/_plugin.js',
-      'test/unit/_.jshintrc',
       'test/unit/_index.html',
       'test/unit/_plugin.test.js',
       '_bower.json',

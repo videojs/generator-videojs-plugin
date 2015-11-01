@@ -20,7 +20,6 @@ describe('videojs-plugin:app', function () {
       'bower.json',
       'package.json',
       '.editorconfig',
-      '.jshintrc'
     ]);
   });
 });

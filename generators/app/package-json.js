@@ -22,10 +22,15 @@ var PACKAGE = {
       'browserify-shim': {
         'video.js': 'global:videojs'
       },
+      standard: {
+        ignore: ['dist/']
+      },
       scripts: {
         'preversion': 'npm test',
         'version': '',
-        'postversion': ''
+        'postversion': '',
+        'lint': 'standard',
+        'pretest': 'npm run lint'
       },
       dependencies: {},
       devDependencies: {
@@ -36,7 +41,8 @@ var PACKAGE = {
         'lodash': '^3.0.0',
         'qunitjs': '^1.0.0',
         'sinon': '^1.0.0',
-        'video.js': '^5.0.0'
+        'video.js': '^5.0.0',
+        'videojs-standard': '^3.7.0'
       }
     };
   },
@@ -48,7 +54,6 @@ var PACKAGE = {
       'clean': 'grunt clean:dist',
       'clean-css': 'grunt clean:css',
       'clean-js': 'grunt clean:js',
-      'lint': 'grunt lint',
       'start': 'grunt start',
       'test': 'grunt',
       'watch': 'grunt watch',
@@ -61,10 +66,10 @@ var PACKAGE = {
       'grunt-concurrent': '^2.0.3',
       'grunt-contrib-clean': '^0.6.0',
       'grunt-contrib-connect': '^0.11.2',
-      'grunt-contrib-jshint': '^0.11.3',
       'grunt-contrib-qunit': '^0.7.0',
       'grunt-contrib-uglify': '^0.9.2',
       'grunt-contrib-watch': '^0.6.1',
+      'grunt-run': '^0.5.2',
       'load-grunt-tasks': '^3.1.0'
     }
   },
@@ -77,6 +82,7 @@ var PACKAGE = {
         'build': commands('npm run clean', 'npm run build-js'),
         'build-js': util.format(
           commands(
+            'npm run lint',
             'mkdir -p dist',
             'npm run clean-js',
             'browserify src/plugin.js -o dist/%s.js',
@@ -90,7 +96,6 @@ var PACKAGE = {
         'clean-js': 'rm -f dist/*.js',
         'prestart': 'npm run build',
         'start': 'babel-node scripts/server.js',
-        'lint': 'jshint src',
         'test': commands('npm run lint'),
         'watch-js': util.format(
           'watchify src/plugin.js -v -o dist/%s.js',
@@ -99,7 +104,6 @@ var PACKAGE = {
       },
       devDependencies: {
         'babel': '^5.8.0',
-        'jshint': '^2.8.0',
         'uglify-js': '^2.5.0',
         'watch': '^0.16.0'
       },

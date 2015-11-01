@@ -19,7 +19,7 @@ Folder/Filename     | Optional | Description
 `dist/`             |          | Created during builds and ignored by Git.
 `docs/`             | ✓        | Any documentation beyond `README.md`.
 `lang/`             | ✓        | Any JSON language files for the plugin.
-`scripts/`          | ✓        | Scripts used by npm.
+`scripts/`          | ✓        | Scripts used by npm, Grunt, or other tools.
 `src/`              |          | All source code.
 `src/css/`          | ✓        | Sass or CSS source code.
 `src/js/`           | ✓        | JavaScript source code.
@@ -27,10 +27,8 @@ Folder/Filename     | Optional | Description
 `src/plugin.js`     |          | JavaScript entry point.
 `test/`             |          | All testing-related source code.
 `test/unit/`        |          | QUnit/Karma unit tests.
-`test/spec/`        | ✓        | Protractor specs.
 `.editorconfig`     |          |
 `.gitignore`        |          |
-`.jshintrc`         |          |
 `.npmignore`        |          | Override `.gitignore`'s exclusion of `dist/`.
 `bower.json`        |          |
 `CHANGELOG.md`      | ✓        | 
@@ -53,7 +51,7 @@ Script      | Description
 `clean`     | Removes `dist/`.
 `clean-css` | Removes all `.css` file(s) in `dist/`.
 `clean-js`  | Removes all `.js` file(s) in `dist/`.
-`lint`      | Lints all `.js` file(s) except those in `bower_components/`, `dist/`, and `node_modules/`.
+`lint`      | Lints all `.js` file(s) using [videojs-standard](https://www.npmjs.com/package/videojs-standard)
 `start`     | Starts a development server.
 `test`      | Runs `lint`, `build`, and unit tests.
 `watch`     | Runs `watch-css` and `watch-js`.
@@ -76,12 +74,12 @@ Task         | Description
 `clean:css`  | Removes all `.css` file(s) in `dist/`.
 `clean:js`   | Removes all `.js` file(s) in `dist/`.
 `default`    | Alias for: `test`
-`lint`       | Alias for: `jshint`
+`lint`       | Runs the npm `lint` script.
 `start`      | Runs a dev server and `watch` concurrently.
 `test`       | Alias for: `lint`, `build`, `qunit`
 `watch`      | Alias for: `watch:css`, `watch:gruntfile`, `watch:js`, `watch:test`
 `watch:css`  | Watches `.[s]css` file(s) for changes and runs `build:css`.
-`watch:js`   | Watches `.js` file(s) for changes and runs `jshint:src` and `build:js`.
+`watch:js`   | Watches `.js` file(s) for changes and runs `lint` and `build:js`.
 `watch:test` | Watches test file(s) and `Gruntfile.js` for changes and runs `test`.
 
 ## Release

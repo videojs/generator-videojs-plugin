@@ -13,17 +13,6 @@
   <script src="/node_modules/sinon/pkg/sinon-ie.js"></script>
   <script src="/node_modules/qunitjs/qunit/qunit.js"></script>
   <script src="/node_modules/video.js/dist/video.js"></script>
-  <script>
-    (function (QUnit) {
-      QUnit.test('the environment is sane', function(assert) {
-        'use strict';
-        assert.strictEqual(typeof Array.isArray, 'function', 'es5 exists');
-        assert.strictEqual(typeof _, 'function', 'lodash exists');
-        assert.strictEqual(typeof sinon, 'object', 'sinon exists');
-        assert.strictEqual(typeof videojs, 'function', 'videojs exists');
-      });
-    }(window.QUnit));
-  </script>
   <script src="/test/unit/dist/plugin.js"></script>
 </body>
 </html>
