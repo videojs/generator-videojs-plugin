@@ -47,8 +47,8 @@ module.exports = function(grunt) {
       options: {
         logConcurrentOutput: true
       },
-      dev: {
-        tasks: ['connect:dev', 'watch']
+      start: {
+        tasks: ['connect:start', 'watch']
       }
     },
 
@@ -58,7 +58,7 @@ module.exports = function(grunt) {
         livereload: true,
         useAvailablePort: true
       },
-      dev: {
+      start: {
         options: {
           port: 9999
         }
@@ -145,8 +145,8 @@ module.exports = function(grunt) {
     'build:css': ['clean:css', 'sass:dist', 'usebanner:css'],
     'build:js': ['clean:js', 'browserify:dist', 'usebanner:js', 'uglify'],
     'default': ['test'],
-    'dev': ['concurrent:dev'],
     'lint': ['jshint'],
+    'start': ['concurrent:start'],
     'test': ['lint', 'build', 'browserify:test', 'qunit'],
   }, function (value, key) {
     grunt.registerTask(key, value);

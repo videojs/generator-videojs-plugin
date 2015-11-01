@@ -14,7 +14,8 @@ const defaults = {};
  * @param    {Object} options
  */
 function onPlayerReady(options) {
-  videojs.log('<%= pluginName %> initializing', options);
+  videojs.log('<%= packageName %> initializing', options);
+  this.addClass('<%= pluginClassName %>');
 }
 
 /**
@@ -23,14 +24,14 @@ function onPlayerReady(options) {
  * @function plugin
  * @param    {Object} [options={}]
  */
-export default function plugin(options = {}) {
+export default function <%= pluginFunctionName %>(options = {}) {
 
   // In here, the value of `this` is a video.js `Player` instance. You
   // cannot rely on the player being in a "ready" state here, depending
   // on how the plugin is invoked. This may or may not be important to
   // you; if not, remove the wait for "ready"!
-  this.ready(() => onPlayerReady(videojs.mergeOptions(defaults, options)));
+  this.ready(() => onPlayerReady.call(this, videojs.mergeOptions(defaults, options)));
 }
 
 // Register the plugin with video.js.
-videojs.plugin('<%= pluginName %>', plugin);
+videojs.plugin('<%= pluginFunctionName %>', <%= pluginFunctionName %>);

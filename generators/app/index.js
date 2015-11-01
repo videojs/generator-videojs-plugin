@@ -2,12 +2,12 @@
 
 var _ = require('lodash');
 var chalk = require('chalk');
-var mkdirp = require('mkdirp');
 var path = require('path');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 
 var bcov = require('./bcov');
+var packageJSON = require('./package-json');
 
 var LICENSE_NAMES = {
   apache2: 'Apache-2.0',
@@ -50,10 +50,11 @@ module.exports = yeoman.generators.Base.extend({
       hasStyle: this.config.get('style') !== 'none',
       licenseName: LICENSE_NAMES[this.config.get('license')],
       packageName: 'videojs-' + name,
+      pluginClassName: 'vjs-' + name,
       pluginName: name,
-      pluginNamePropertyAccessor: name.indexOf('-') > -1 ?
-        '[\'' + name + '\']' :
-        '.' + name,
+      pluginFunctionName: name.replace(/-([a-z])/g, function (match, char) {
+        return char.toUpperCase();
+      }),
       year: (new Date()).getFullYear(),
     };
   },
@@ -82,23 +83,6 @@ module.exports = yeoman.generators.Base.extend({
     var source = this.templatePath(src);
     var dest = this._dest(src);
     this.fs.copyTpl(source, dest, this.context);
-  },
-
-  /**
-   * Processes a single directory name to be created.
-   *
-   * Unlike `_cpfile`/`_cptmpl`, this method is asynchronous and creates
-   * a directory in the live file system (but only if it does not exist).
-   *
-   * @method _mkdir
-   * @private
-   * @param {String} dir
-   * @return {Promise}
-   */
-  _mkdir: function (dir) {
-    return new Promise(function (resolve) {
-      mkdirp(dir, resolve);
-    });
   },
 
   /**
@@ -151,6 +135,18 @@ module.exports = yeoman.generators.Base.extend({
         name: 'SCSS',
         value: 'scss'
       }],
+    }, {
+      type: 'list',
+      name: 'builder',
+      message: 'What build tool do you want to use?',
+      default: configs.builder || 'grunt',
+      choices: [{
+        name: 'Grunt',
+        value: 'grunt'
+      }, {
+        name: 'npm',
+        value: 'npm'
+      }]
     }];
   },
 
@@ -184,8 +180,7 @@ module.exports = yeoman.generators.Base.extend({
       '_.jshintrc',
       '_.npmignore',
       '_CHANGELOG.md',
-      '_CONTRIBUTING.md',
-      '_Gruntfile.js'
+      '_CONTRIBUTING.md'
     ];
 
     this._templatesToCopy = [
@@ -196,16 +191,6 @@ module.exports = yeoman.generators.Base.extend({
       '_bower.json',
       '_index.html',
       '_README.md'
-    ];
-
-    this._dirsToMake = [
-      'docs',
-      'lang',
-      'scripts',
-      'src/css',
-      'src/js',
-      'test/unit',
-      'test/spec'
     ];
 
     // Apply Brightcove-specific decoration.
@@ -254,22 +239,21 @@ module.exports = yeoman.generators.Base.extend({
   writing: {
 
     /**
-     * Writes common directories and files.
+     * Writes common files.
      *
      * @function common
      */
     common: function () {
-      var done = this.async();
+      var builder = this.config.get('builder');
+
+      if (builder === 'grunt') {
+        this._filesToCopy.push('_Gruntfile.js');
+      } else if (builder === 'npm') {
+        this._filesToCopy.push('scripts/_server.js');
+      }
 
       this._templatesToCopy.forEach(this._cptmpl, this);
       this._filesToCopy.forEach(this._cpfile, this);
-
-      Promise.all(this._dirsToMake.map(this._mkdir, this)).then(function () {
-        done();
-      }.bind(this), function () {
-        this.log(chalk.red('Failed to create some directories. Please check your permissions.'));
-        process.exit(1);
-      }.bind(this));
     },
 
     /**
@@ -305,60 +289,15 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     package: function () {
-      var pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
+      var builder = this.config.get('builder');
+      var style = this.config.get('style');
 
-      _.defaultsDeep(pkg, {
-        name: this.context.packageName,
-        version: '0.0.0',
-        author: this.context.author,
-        license: this.context.licenseName,
-        main: 'src/plugin.js',
-        keywords: [
-          'videojs',
-          'videojs-plugin'
-        ],
-        'browserify-shim': {
-          'video.js': 'global:videojs'
-        },
-        scripts: {
-          build: 'grunt build',
-          'build-css': 'grunt build:css',
-          'build-js': 'grunt build:js',
-          clean: 'grunt clean:dist',
-          'clean-css': 'grunt clean:css',
-          'clean-js': 'grunt clean:js',
-          dev: 'grunt dev',
-          lint: 'grunt lint',
-          test: 'grunt',
-          watch: 'grunt watch',
-          'watch-css': 'grunt watch:css',
-          'watch-js': 'grunt watch:js',
-          preversion: '',
-          version: '',
-          postversion: ''
-        },
-        dependencies: {},
-        devDependencies: {
-          babelify: '^6.0.0',
-          browserify: '^11.0.0',
-          'browserify-shim': '^3.0.0',
-          'grunt-banner': '^0.6.0',
-          'grunt-browserify': '^4.0.1',
-          'grunt-concurrent': '^2.0.3',
-          'grunt-contrib-clean': '^0.6.0',
-          'grunt-contrib-connect': '^0.11.2',
-          'grunt-contrib-jshint': '^0.11.3',
-          'grunt-contrib-qunit': '^0.7.0',
-          'grunt-contrib-uglify': '^0.9.2',
-          'grunt-contrib-watch': '^0.6.1',
-          'grunt-sass': '^1.0.0',
-          'load-grunt-tasks': '^3.1.0',
-          lodash: '^3.0.0',
-          qunitjs: '^1.0.0',
-          sinon: '^1.0.0',
-          'video.js': '^5.0.0'
-        }
-      });
+      var pkg = _.merge(
+        this.fs.readJSON(this.destinationPath('package.json'), {}),
+        packageJSON(this.context, 'common'),
+        packageJSON(this.context, builder),
+        packageJSON(this.context, builder, style)
+      );
 
       this.fs.writeJSON(this.destinationPath('package.json'), pkg);
     }

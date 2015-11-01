@@ -17,10 +17,7 @@
   <script>
     (function (videojs) {
       var player = videojs('<%= packageName %>-player');
-
-      player<%= pluginNamePropertyAccessor %>({
-        foo: 'bar'
-      });
+      player.<%= pluginFunctionName %>();
     }(window.videojs));
   </script>
 </body>

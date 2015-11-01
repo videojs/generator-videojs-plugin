@@ -1,1 +1,5 @@
 // Sass for <%= packageName %>
+
+.video-js.vjs-<%= pluginName %> {
+  display: block;
+}

@@ -43,7 +43,7 @@ Folder/Filename     | Optional | Description
 
 ## Building
 
-Building a standard video.js plugin must be possible through npm scripts (`"scripts"` in `package.json`). In general, these scripts will delegate to Grunt, but for simple plugins Grunt may be overkill. Regardless, the following npm scripts exist by default and are expected to exist for all standard video.js plugins:
+Building a standard video.js plugin should be possible through npm scripts (`"scripts"` in `package.json`). In general, these scripts will delegate to Grunt, but for simple plugins Grunt may be overkill. Regardless, the following npm scripts exist by default and are expected to exist for all standard video.js plugins:
 
 Script      | Description
 ----------- | -----------
@@ -54,6 +54,7 @@ Script      | Description
 `clean-css` | Removes all `.css` file(s) in `dist/`.
 `clean-js`  | Removes all `.js` file(s) in `dist/`.
 `lint`      | Lints all `.js` file(s) except those in `bower_components/`, `dist/`, and `node_modules/`.
+`start`     | Starts a development server.
 `test`      | Runs `lint`, `build`, and unit tests.
 `watch`     | Runs `watch-css` and `watch-js`.
 `watch-css` | Watches `.[s]css` file(s) for changes and runs `build-css`.
@@ -75,8 +76,8 @@ Task         | Description
 `clean:css`  | Removes all `.css` file(s) in `dist/`.
 `clean:js`   | Removes all `.js` file(s) in `dist/`.
 `default`    | Alias for: `test`
-`dev`        | Runs a dev server and `watch` concurrently.
 `lint`       | Alias for: `jshint`
+`start`      | Runs a dev server and `watch` concurrently.
 `test`       | Alias for: `lint`, `build`, `qunit`
 `watch`      | Alias for: `watch:css`, `watch:gruntfile`, `watch:js`, `watch:test`
 `watch:css`  | Watches `.[s]css` file(s) for changes and runs `build:css`.
