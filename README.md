@@ -1,8 +1,8 @@
-# generator-videojs-plugin [![Build Status](https://secure.travis-ci.org/videojs/generator-videojs-plugin.png?branch=master)](https://travis-ci.org/videojs/generator-videojs-plugin)
+# generator-videojs-plugin
 
 This is a [Yeoman](http://yeoman.io) generator for [video.js](http://videojs.com) plugins. It is based on the recommendations of the video.js core team as well as tools and conventions for developing plugins at [Brightcove](https://www.brightcove.com).
 
-To learn more about video.js plugins and this generator, check out:
+To learn more about video.js plugins and this generator's standards and opinions, check out:
 
 - [video.js Plugins Guide](https://github.com/videojs/video.js/blob/master/docs/guides/plugins.md).
 - [Brightcove's video.js Plugin Standards](https://github.com/videojs/generator-videojs-plugin/generators/app/templates/docs/_standards.md).
@@ -41,7 +41,7 @@ Turn installation off with: `yo videojs-plugin --no-install`
 
 By default, the generator will present the user with a series of prompts to choose various settings. This can be disabled. This may be useful for updating an already-generated plugin project.
 
-Turn Grunt off with: `yo videojs-plugin --no-prompt`
+Turn prompts off with: `yo videojs-plugin --no-prompt`
 
 ## License
 

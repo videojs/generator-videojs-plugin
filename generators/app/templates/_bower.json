@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "author": "<%= author %>",
   "license": "<%= licenseName %>",
-  "main": "dist/<%= packageName %>.js",
+  "main": "dist/<%= packageName %>.min.js",
   "keywords": [
     "videojs",
     "videojs-plugin"

@@ -2,6 +2,20 @@
 
 This document outlines standard of structure, tools, and workflows [Brightcove](https://www.brightcove.com) uses in developing both open-source and proprietary plugins for [video.js](http://videojs.com).
 
+## Highlights
+
+- JavaScript is:
+  - Written in [ES6](http://es6-features.org/)
+  - Linted with [videojs-standard](https://www.npmjs.com/package/videojs-standard)
+  - Tested with [QUnit](https://api.qunitjs.com/)
+  - Transpiled by [Babel](https://babeljs.io/)
+  - Bundled with [Browserify](http://browserify.org/)
+  - Minified with [UglifyJS](https://www.npmjs.com/package/uglify-js)
+
+- Sass is _optional_ (and off by default), but it is the only option available in the generator for producing stylesheets.
+
+- Task automation __must__ be available via npm scripts, but _optional_ Grunt tasks are provided by default.
+
 ## Packaging and Dependencies
 
 All video.js plugins should be npm packages.
@@ -10,7 +24,7 @@ Direct dependencies (`"dependencies"` in `package.json`) will be empty by defaul
 
 Development dependencies (`"devDependencies"` in `package.json`) will include a number of defaults related to developing, building, and testing a video.js plugin.
 
-The entry point for the package (`"main"` in `package.json`) should be `src/plugin.js`. This script should import or require whatever dependencies it needs. Similarly, `src/plugin.scss` is considered the entry point for Sass or `src/plugin.css` for plain CSS source.
+The entry point for the package (`"main"` in `package.json`) should be `src/plugin.js`. This script should import whatever dependencies it needs. Similarly, `src/plugin.scss` is considered the entry point for Sass.
 
 ### Structure
 
@@ -21,9 +35,9 @@ Folder/Filename     | Optional | Description
 `lang/`             | ✓        | Any JSON language files for the plugin.
 `scripts/`          | ✓        | Scripts used by npm, Grunt, or other tools.
 `src/`              |          | All source code.
-`src/css/`          | ✓        | Sass or CSS source code.
+`src/scss/`         | ✓        | Sass source code.
 `src/js/`           | ✓        | JavaScript source code.
-`src/plugin.[s]css` | ✓        | Sass or CSS entry point.
+`src/plugin.scss`   | ✓        | Sass entry point.
 `src/plugin.js`     |          | JavaScript entry point.
 `test/`             |          | All testing-related source code.
 `test/unit/`        |          | QUnit/Karma unit tests.
@@ -34,35 +48,37 @@ Folder/Filename     | Optional | Description
 `CHANGELOG.md`      | ✓        | 
 `CONTRIBUTING.md`   | ✓        |
 `index.html`        |          | An example of usage of the plugin. This can be used with GitHub pages as well.
-`Gruntfile.js`      |          |
-`LICENSE`           |          | Defaults to `Apache-2.0`
+`Gruntfile.js`      | ✓        |
+`LICENSE`           | ✓        | Defaults to `Apache-2.0`
 `package.json`      |          |
 `README.md`         |          | Documents which version(s) of video.js the plugin supports. Explains how to build/test.
 
 ## Building
 
-Building a standard video.js plugin should be possible through npm scripts (`"scripts"` in `package.json`). In general, these scripts will delegate to Grunt, but for simple plugins Grunt may be overkill. Regardless, the following npm scripts exist by default and are expected to exist for all standard video.js plugins:
+Building a standard video.js plugin should be possible through npm scripts (`"scripts"` in `package.json`).
+
+Consistency is paramount in plugin build tasks: the names must be consistent across _all_ plugins that want to be called "standard." The following npm scripts exist by default and are expected to exist for all standard video.js plugins:
 
 Script      | Description
 ----------- | -----------
 `build`     | Runs `clean`, `build-css`, and `build-js`.
 `build-css` | Compiles `src/plugin.scss` to `dist/<plugin-name>.css`.
-`build-js`  | Uses Browserify and Babelify on `src/plugin.js` and outputs `dist/<plugin-name>.js`, which is Uglified to produce `dist/<plugin-name>.min.js`.
+`build-js`  | Builds `src/plugin.js` and outputs `dist/<plugin-name>.js` and `dist/<plugin-name>.min.js`.
 `clean`     | Removes `dist/`.
 `clean-css` | Removes all `.css` file(s) in `dist/`.
 `clean-js`  | Removes all `.js` file(s) in `dist/`.
-`lint`      | Lints all `.js` file(s) using [videojs-standard](https://www.npmjs.com/package/videojs-standard)
+`lint`      | Lints all `.js` file(s)
 `start`     | Starts a development server.
 `test`      | Runs `lint`, `build`, and unit tests.
 `watch`     | Runs `watch-css` and `watch-js`.
-`watch-css` | Watches `.[s]css` file(s) for changes and runs `build-css`.
+`watch-css` | Watches `.scss` file(s) for changes and runs `build-css`.
 `watch-js`  | Watches `.js` file(s) for changes and runs `build-js`.
 
-### Building with Grunt
+### Building with Grunt (Optional)
 
-By default, plugins produced by the generator will provide a fully functional Grunt-based build process and the npm scripts mentioned previously will delegate to Grunt. This is completely optional; simple plugins may use npm scripts only.
+By default, plugins produced by the generator will provide a fully functional Grunt-based build process and the npm scripts mentioned previously will delegate to Grunt.
 
-However, many would be more comfortable with Grunt; so, we recommend creating task aliases for common build tasks. The reason for this is it will allow plugin authors to vary the tools underlying the build process (test libraries, etc) while keeping the commands to execute the process identical and predictable:
+As with npm-based scripts, Grunt tasks/targets must be consistently named. It is the developer's prerogative to change the underlying tools, but exposing the following Grunt tasks is expected for all standard video.js plugins:
 
 Task         | Description
 ------------ | -----------
@@ -78,9 +94,13 @@ Task         | Description
 `start`      | Runs a dev server and `watch` concurrently.
 `test`       | Alias for: `lint`, `build`, `qunit`
 `watch`      | Alias for: `watch:css`, `watch:gruntfile`, `watch:js`, `watch:test`
-`watch:css`  | Watches `.[s]css` file(s) for changes and runs `build:css`.
+`watch:css`  | Watches `.scss` file(s) for changes and runs `build:css`.
 `watch:js`   | Watches `.js` file(s) for changes and runs `lint` and `build:js`.
 `watch:test` | Watches test file(s) and `Gruntfile.js` for changes and runs `test`.
+
+### Other Build/Automation Tools
+
+If you prefer Gulp or Broccoli or the build tool of the week, you should feel free to use it, but remember to map the standard npm scripts to your build tool of choice!
 
 ## Release
 
