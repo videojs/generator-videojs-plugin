@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title><%= packageName %> Unit Tests</title>
-  <link rel="stylesheet" href="../../node_modules/qunitjs/qunit/qunit.css">
-  <link rel="stylesheet" href="../../dist/<%= packageName %>.css">
+  <link rel="stylesheet" href="/node_modules/qunitjs/qunit/qunit.css">
+  <% if (sass) { %><link href="/dist/<%= packageName %>.css" rel="stylesheet"><% } %>
 </head>
 <body>
   <div id="qunit"></div>

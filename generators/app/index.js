@@ -47,7 +47,6 @@ module.exports = yeoman.generators.Base.extend({
     var name = this.config.get('name');
     return {
       author: this.config.get('author'),
-      hasStyle: this.config.get('style') !== 'none',
       licenseName: LICENSE_NAMES[this.config.get('license')],
       packageName: 'videojs-' + name,
       pluginClassName: 'vjs-' + name,
@@ -55,6 +54,7 @@ module.exports = yeoman.generators.Base.extend({
       pluginFunctionName: name.replace(/-([a-z])/g, function (match, char) {
         return char.toUpperCase();
       }),
+      sass: this.config.get('sass'),
       year: (new Date()).getFullYear(),
     };
   },
@@ -121,20 +121,10 @@ module.exports = yeoman.generators.Base.extend({
         value: 'none'
       }]
     }, {
-      type: 'list',
-      name: 'style',
-      message: 'What styling do you need?',
-      default: configs.style || 'none',
-      choices: [{
-        name: 'None',
-        value: 'none'
-      }, {
-        name: 'CSS',
-        value: 'css'
-      }, {
-        name: 'SCSS',
-        value: 'scss'
-      }],
+      type: 'confirm',
+      name: 'sass',
+      message: 'Do you need Sass styling?',
+      default: configs.sass || false
     }, {
       type: 'list',
       name: 'builder',
@@ -175,7 +165,6 @@ module.exports = yeoman.generators.Base.extend({
 
     this._filesToCopy = [
       'docs/_standards.md',
-      'scripts/_grunt.js',
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
@@ -184,6 +173,7 @@ module.exports = yeoman.generators.Base.extend({
     ];
 
     this._templatesToCopy = [
+      'scripts/_grunt.js',
       'src/_plugin.js',
       'test/unit/_index.html',
       'test/unit/_plugin.test.js',
@@ -244,6 +234,7 @@ module.exports = yeoman.generators.Base.extend({
      */
     common: function () {
       var builder = this.config.get('builder');
+      var sass = this.config.get('sass');
 
       if (builder === 'grunt') {
         this._filesToCopy.push('_Gruntfile.js');
@@ -251,20 +242,12 @@ module.exports = yeoman.generators.Base.extend({
         this._filesToCopy.push('scripts/_server.js');
       }
 
+      if (sass) {
+        this._templatesToCopy.push('src/_plugin.scss');
+      }
+
       this._templatesToCopy.forEach(this._cptmpl, this);
       this._filesToCopy.forEach(this._cpfile, this);
-    },
-
-    /**
-     * Writes the entry file for the chosen styling option.
-     *
-     * @function css
-     */
-    css: function () {
-      var style = this.config.get('style');
-      if (style !== 'none') {
-        this._cptmpl('src/_plugin.' + style);
-      }
     },
 
     /**
@@ -289,14 +272,16 @@ module.exports = yeoman.generators.Base.extend({
 
     package: function () {
       var builder = this.config.get('builder');
-      var style = this.config.get('style');
 
       var pkg = _.merge(
         this.fs.readJSON(this.destinationPath('package.json'), {}),
         packageJSON(this.context, 'common'),
-        packageJSON(this.context, builder),
-        packageJSON(this.context, builder, style)
+        packageJSON(this.context, builder)
       );
+
+      if (this.config.get('sass')) {
+        _.merge(pkg, packageJSON(this.context, builder, 'sass'));
+      }
 
       this.fs.writeJSON(this.destinationPath('package.json'), pkg);
     }

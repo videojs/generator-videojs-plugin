@@ -2,17 +2,17 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
-    banner: `
-      /*! <%= pkg.name %> - v<%= pkg.version %>
-       * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>
-       * Licensed <%= pkg.license %>
-       */
-    `,
+    banner: [
+      '/*! <%%= pkg.name %> - v<%%= pkg.version %>',
+      ' *  Copyright (c) <%%= grunt.template.today("yyyy") %> <%%= pkg.author %>',
+      ' *  License: <%%= pkg.license %>',
+      ' */'
+    ].join('\n'),
 
     browserify: {
       options: {
         browserifyOptions: {
-          standalone: '<%= pkg.name %>'
+          standalone: '<%%= pkg.name %>'
         },
         transform: [
           'babelify',
@@ -21,7 +21,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: ['src/plugin.js'],
-        dest: 'dist/<%= pkg.name %>.js'
+        dest: 'dist/<%%= pkg.name %>.js'
       },
       test: {
         options: {
@@ -35,7 +35,9 @@ module.exports = function(grunt) {
     },
 
     clean: {
+<% if (sass) { -%>
       css: ['dist/**/*.css'],
+<% } -%>
       dist: ['dist'],
       js: ['dist/**/*.js']
     },
@@ -62,7 +64,7 @@ module.exports = function(grunt) {
       }
     },
 
-    pkg: grunt.file.readJSON('../package.json'),
+    pkg: grunt.file.readJSON('package.json'),
 
     qunit: {
       unit: 'test/unit/index.html'
@@ -74,43 +76,49 @@ module.exports = function(grunt) {
       }
     },
 
+<% if (sass) { -%>
     sass: {
       options: {
         outputStyle: 'compressed'
       },
       dist: {
         src: ['src/plugin.scss'],
-        dest: 'dist/<%= pkg.name %>.css'
+        dest: 'dist/<%%= pkg.name %>.css'
       }
     },
 
+<% } -%>
     uglify: {
       options: {
         preserveComments: 'some'
       },
       dist: {
-        src: 'dist/<%= pkg.name %>.js',
-        dest: 'dist/<%= pkg.name %>.min.js'
+        src: 'dist/<%%= pkg.name %>.js',
+        dest: 'dist/<%%= pkg.name %>.min.js'
       }
     },
 
     usebanner: {
       options: {
-        banner: '<%= banner %>'
+        banner: '<%%= banner %>'
       },
+<% if (sass) { -%>
       css: {
-        src: ['dist/<%= pkg.name %>.css']
+        src: ['dist/<%%= pkg.name %>.css']
       },
+<% } -%>
       js: {
-        src: ['dist/<%= pkg.name %>.js']
+        src: ['dist/<%%= pkg.name %>.js']
       }
     },
 
     watch: {
+<% if (sass) { -%>
       css: {
-        files: '<%= sass.dist.src %>',
+        files: '<%%= sass.dist.src %>',
         tasks: ['build:css']
       },
+<% } -%>
       js: {
         files: 'src/**/*.js',
         tasks: ['lint', 'build:js']
@@ -126,17 +134,22 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+<% if (sass) { -%>
     'build:css',
+<% } -%>
     'build:js'
   ]);
 
+<% if (sass) { -%>
   grunt.registerTask('build:css', [
     'clean:css',
     'sass:dist',
     'usebanner:css'
   ]);
 
+<% } -%>
   grunt.registerTask('build:js', [
+    'run:lint',
     'clean:js',
     'browserify:dist',
     'usebanner:js',

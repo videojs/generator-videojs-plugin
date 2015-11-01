@@ -34,6 +34,7 @@ var PACKAGE = {
       },
       dependencies: {},
       devDependencies: {
+        'babel': '^5.8.0',
         'babelify': '^6.0.0',
         'browserify': '^11.0.0',
         'browserify-shim': '^3.0.0',
@@ -49,15 +50,12 @@ var PACKAGE = {
   grunt: {
     scripts: {
       'build': 'grunt build',
-      'build-css': 'grunt build:css',
       'build-js': 'grunt build:js',
       'clean': 'grunt clean:dist',
-      'clean-css': 'grunt clean:css',
       'clean-js': 'grunt clean:js',
       'start': 'grunt start',
       'test': 'grunt',
       'watch': 'grunt watch',
-      'watch-css': 'grunt watch:css',
       'watch-js': 'grunt watch:js'
     },
     devDependencies: {
@@ -73,8 +71,15 @@ var PACKAGE = {
       'load-grunt-tasks': '^3.1.0'
     }
   },
-  'grunt+scss': {
-    'grunt-sass': '^1.0.0'
+  'grunt+sass': {
+    scripts: {
+      'build-css': 'grunt build:css',
+      'clean-css': 'grunt clean:css',
+      'watch-css': 'grunt watch:css',
+    },
+    devDependencies: {
+      'grunt-sass': '^1.0.0'
+    }
   },
   npm: function (context) {
     return {
@@ -103,7 +108,6 @@ var PACKAGE = {
         )
       },
       devDependencies: {
-        'babel': '^5.8.0',
         'uglify-js': '^2.5.0',
         'watch': '^0.16.0'
       },
@@ -115,26 +119,7 @@ var PACKAGE = {
       }
     };
   },
-  'npm+css': function (context) {
-    return {
-      scripts: {
-        'build': commands('npm run clean', 'npm run build-css', 'npm run build-js'),
-        'build-css': commands(
-          'mkdir -p dist',
-          'npm run clean-css',
-          'cp src/plugin.css dist/plugin.css',
-          util.format('cssmin dist/plugin.css > dist/%s.css', context.packageName),
-          'rm dist/plugin.css'
-        ),
-        'clean-css': 'rm -f dist/*.css',
-        'watch-css': 'watch \'npm run build-css\' src'
-      },
-      devDependencies: {
-        'cssmin': '^0.4.0'
-      }
-    };
-  },
-  'npm+scss': {
+  'npm+sass': {
     scripts: {
       'build': commands('npm run clean', 'npm run build-css', 'npm run build-js'),
       'build-css': commands(

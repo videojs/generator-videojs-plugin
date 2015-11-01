@@ -40,12 +40,6 @@ module.exports = function bcov(generator) {
      */
     _prompts: function () {
       var prompts = originals._prompts.apply(this, arguments);
-      var style = _.findWhere(prompts, {name: 'style'});
-
-      // Remove "css" choice from the "style" option.
-      style.choices = style.choices.filter(function (choice) {
-        return choice.value !== 'css';
-      });
 
       // Remove the "author" and "license" prompts.
       return prompts.filter(function (prompt) {

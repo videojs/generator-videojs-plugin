@@ -21,7 +21,7 @@
   "dependencies": {
     "chalk": "^1.0.0",
     "lodash": "^3.10.1",
-    "yeoman-generator": "^0.19.0",
+    "yeoman-generator": "^0.20.0",
     "yosay": "^1.0.2"
   },
   "devDependencies": {
