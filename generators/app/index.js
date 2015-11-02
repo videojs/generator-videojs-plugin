@@ -9,7 +9,12 @@ var yosay = require('yosay');
 var bcov = require('./bcov');
 var packageJSON = require('./package-json');
 
-var LICENSE_NAMES = {
+var BUILDERS = {
+  grunt: 'Grunt',
+  npm: 'npm'
+};
+
+var LICENSES = {
   apache2: 'Apache-2.0',
   mit: 'MIT',
   none: 'None',
@@ -18,14 +23,15 @@ var LICENSE_NAMES = {
 module.exports = yeoman.generators.Base.extend({
 
   /**
-   * Removes the leading underscore from a template file name.
+   * Removes the leading underscore from a template file name and
+   * generates the full destination path for it.
    *
    * @method _dest
    * @private
    * @example
-   *         this._dest('some-dir/__foo') // "some-dir/_foo"
-   *         this._dest('_some-file.js')  // "some-file.js"
-   *         this._dest('some-file.js')   // "some-file.js"
+   *         this._dest('some-dir/__foo') // "/path/to/some-dir/_foo"
+   *         this._dest('_some-file.js')  // "/path/to/some-file.js"
+   *         this._dest('some-file.js')   // "/path/to/some-file.js"
    *
    * @param  {String} src
    * @return {String}
@@ -39,15 +45,17 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   /**
-   * Gets the context for template files.
+   * Creates the rendering context for template files.
    *
+   * @method _context
+   * @private
    * @return {Object}
    */
   _context: function () {
     var name = this.config.get('name');
     return {
       author: this.config.get('author'),
-      licenseName: LICENSE_NAMES[this.config.get('license')],
+      licenseName: LICENSES[this.config.get('license')],
       packageName: 'videojs-' + name,
       pluginClassName: 'vjs-' + name,
       pluginName: name,
@@ -109,17 +117,10 @@ module.exports = yeoman.generators.Base.extend({
       type: 'list',
       name: 'license',
       message: 'Choose a license for your project',
-      default: configs.license || 'apache2',
-      choices: [{
-        name: LICENSE_NAMES.apache2,
-        value: 'apache2'
-      }, {
-        name: LICENSE_NAMES.mit,
-        value: 'mit'
-      }, {
-        name: LICENSE_NAMES.none,
-        value: 'none'
-      }]
+      default: configs.license || 'mit',
+      choices: _.map(LICENSES, function (value, key) {
+        return {name: value, value: key};
+      })
     }, {
       type: 'confirm',
       name: 'sass',
@@ -130,13 +131,9 @@ module.exports = yeoman.generators.Base.extend({
       name: 'builder',
       message: 'What build tool do you want to use?',
       default: configs.builder || 'grunt',
-      choices: [{
-        name: 'Grunt',
-        value: 'grunt'
-      }, {
-        name: 'npm',
-        value: 'npm'
-      }]
+      choices: _.map(BUILDERS, function (value, key) {
+        return {name: value, value: key};
+      })
     }];
   },
 
@@ -257,8 +254,8 @@ module.exports = yeoman.generators.Base.extend({
      */
     license: function () {
       var file = {
-        apache2: '_LICENSE_APACHE2',
-        mit: '_LICENSE_MIT',
+        apache2: 'licenses/_apache2',
+        mit: 'licenses/_mit',
       }[this.config.get('license')];
 
       if (file) {
@@ -270,6 +267,11 @@ module.exports = yeoman.generators.Base.extend({
       }
     },
 
+    /**
+     * Writes/updates the package.json file.
+     *
+     * @function package
+     */
     package: function () {
       var builder = this.config.get('builder');
 
