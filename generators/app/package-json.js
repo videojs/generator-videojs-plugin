@@ -26,6 +26,7 @@ var PACKAGE = {
         ignore: ['dist/']
       },
       scripts: {
+        'clean': 'npm run clean-dist',
         'preversion': 'npm test',
         'version': '',
         'postversion': '',
@@ -51,10 +52,10 @@ var PACKAGE = {
     scripts: {
       'build': 'grunt build',
       'build-js': 'grunt build:js',
-      'clean': 'grunt clean:dist',
+      'clean-dist': 'grunt clean:dist',
       'clean-js': 'grunt clean:js',
       'start': 'grunt start',
-      'test': 'grunt',
+      'test': 'grunt test',
       'watch': 'grunt watch',
       'watch-js': 'grunt watch:js'
     },
@@ -84,12 +85,16 @@ var PACKAGE = {
   npm: function (context) {
     return {
       scripts: {
-        'build': commands('npm run clean', 'npm run build-js'),
+        'build': commands(
+          'npm run clean-dist',
+          'mkdir -p dist',
+          'npm run build-js'
+        ),
         'build-js': util.format(
           commands(
             'npm run lint',
-            'mkdir -p dist',
             'npm run clean-js',
+            'mkdir -p dist',
             'browserify src/plugin.js -o dist/%s.js',
             'uglifyjs dist/%s.js --mangle --compress -o dist/%s.min.js'
           ),
@@ -97,7 +102,7 @@ var PACKAGE = {
           context.packageName,
           context.packageName
         ),
-        'clean': 'rm -rf dist/*',
+        'clean-dist': 'rm -rf dist',
         'clean-js': 'rm -f dist/*.js',
         'prestart': 'npm run build',
         'start': 'babel-node scripts/server.js',
@@ -121,10 +126,15 @@ var PACKAGE = {
   },
   'npm+sass': {
     scripts: {
-      'build': commands('npm run clean', 'npm run build-css', 'npm run build-js'),
-      'build-css': commands(
+      'build': commands(
+        'npm run clean-dist',
         'mkdir -p dist',
+        'npm run build-css',
+        'npm run build-js'
+      ),
+      'build-css': commands(
         'npm run clean-css',
+        'mkdir -p dist',
         'node-sass --output-style=compressed --linefeed=lf src/plugin.scss -o dist'
       ),
       'clean-css': 'rm -f dist/*.css',
