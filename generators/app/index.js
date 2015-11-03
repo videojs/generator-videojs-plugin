@@ -36,7 +36,7 @@ module.exports = yeoman.generators.Base.extend({
    * @param  {String} src
    * @return {String}
    */
-  _dest: function (src) {
+  _dest: function(src) {
     var parsed = path.parse(src);
     if (_.startsWith(parsed.base, '_')) {
       parsed.base = parsed.base.substr(1);
@@ -51,7 +51,7 @@ module.exports = yeoman.generators.Base.extend({
    * @private
    * @return {Object}
    */
-  _context: function () {
+  _context: function() {
     var name = this.config.get('name');
     return {
       author: this.config.get('author'),
@@ -59,7 +59,7 @@ module.exports = yeoman.generators.Base.extend({
       packageName: 'videojs-' + name,
       pluginClassName: 'vjs-' + name,
       pluginName: name,
-      pluginFunctionName: name.replace(/-([a-z])/g, function (match, char) {
+      pluginFunctionName: name.replace(/-([a-z])/g, function(match, char) {
         return char.toUpperCase();
       }),
       sass: this.config.get('sass'),
@@ -74,7 +74,7 @@ module.exports = yeoman.generators.Base.extend({
    * @private
    * @param {String} src
    */
-  _cpfile: function (src) {
+  _cpfile: function(src) {
     var source = this.templatePath(src);
     var dest = this._dest(src);
     this.fs.copy(source, dest);
@@ -87,7 +87,7 @@ module.exports = yeoman.generators.Base.extend({
    * @private
    * @param {String} src
    */
-  _cptmpl: function (src) {
+  _cptmpl: function(src) {
     var source = this.templatePath(src);
     var dest = this._dest(src);
     this.fs.copyTpl(source, dest, this.context);
@@ -100,13 +100,13 @@ module.exports = yeoman.generators.Base.extend({
    * @private
    * @return {Array}
    */
-  _prompts: function () {
+  _prompts: function() {
     var configs = this.config.getAll();
     return [{
       name: 'name',
       message: 'Enter the name of this plugin ("a-z" and "-" only; prefixed with "videojs-" automatically):',
       default: configs.name,
-      validate: function (input) {
+      validate: function(input) {
         return /^[a-z][a-z-]+$/.test(input) || 'Names must start with a lower-case letter and contain only lower-case letters and hyphens.';
       }
     }, {
@@ -118,20 +118,20 @@ module.exports = yeoman.generators.Base.extend({
       name: 'license',
       message: 'Choose a license for your project',
       default: configs.license || 'mit',
-      choices: _.map(LICENSES, function (value, key) {
+      choices: _.map(LICENSES, function(value, key) {
         return {name: value, value: key};
       })
     }, {
       type: 'confirm',
       name: 'sass',
       message: 'Do you need Sass styling?',
-      default: configs.sass || false
+      default: _.isUndefined(configs.sass) ? false : configs.sass
     }, {
       type: 'list',
       name: 'builder',
       message: 'What build tool do you want to use?',
       default: configs.builder || 'grunt',
-      choices: _.map(BUILDERS, function (value, key) {
+      choices: _.map(BUILDERS, function(value, key) {
         return {name: value, value: key};
       })
     }];
@@ -142,7 +142,7 @@ module.exports = yeoman.generators.Base.extend({
    *
    * @method constructor
    */
-  constructor: function () {
+  constructor: function() {
     yeoman.generators.Base.apply(this, arguments);
 
     this.option('bcov', {
@@ -150,14 +150,9 @@ module.exports = yeoman.generators.Base.extend({
       defaults: false
     });
 
-    this.option('prompt', {
+    this.option('skip-prompt', {
       type: 'boolean',
-      defaults: true
-    });
-
-    this.option('install', {
-      type: 'boolean',
-      defaults: true
+      defaults: false
     });
 
     this._filesToCopy = [
@@ -180,7 +175,8 @@ module.exports = yeoman.generators.Base.extend({
     ];
 
     // Apply Brightcove-specific decoration.
-    if (this.options.bcov) {
+    if (this.options.bcov === true || this.config.get('bcov') === true) {
+      this.config.set('bcov', true);
       bcov(this);
     }
   },
@@ -190,16 +186,16 @@ module.exports = yeoman.generators.Base.extend({
    *
    * @method prompting
    */
-  prompting: function () {
+  prompting: function() {
     var done;
 
     this.log(yosay(
       'Welcome to the excellent ' + chalk.red('videojs-plugin') + ' generator!'
     ));
 
-    if (this.options.prompt) {
+    if (!this.options.skipPrompt) {
       done = this.async();
-      this.prompt(this._prompts(), function (props) {
+      this.prompt(this._prompts(), function(props) {
         this.props = props;
         done();
       }.bind(this));
@@ -211,7 +207,7 @@ module.exports = yeoman.generators.Base.extend({
    *
    * @method configuring
    */
-  configuring: function () {
+  configuring: function() {
     this.config.set(this.props);
     delete this.props;
     this.context = this._context();
@@ -229,7 +225,7 @@ module.exports = yeoman.generators.Base.extend({
      *
      * @function common
      */
-    common: function () {
+    common: function() {
       var builder = this.config.get('builder');
       var sass = this.config.get('sass');
 
@@ -254,7 +250,7 @@ module.exports = yeoman.generators.Base.extend({
      *
      * @function license
      */
-    license: function () {
+    license: function() {
       var file = {
         apache2: 'licenses/_apache2',
         mit: 'licenses/_mit',
@@ -274,7 +270,7 @@ module.exports = yeoman.generators.Base.extend({
      *
      * @function package
      */
-    package: function () {
+    package: function() {
       var builder = this.config.get('builder');
 
       var pkg = _.merge(
@@ -297,10 +293,8 @@ module.exports = yeoman.generators.Base.extend({
    *
    * @method install
    */
-  install: function () {
-    if (this.options.install) {
-      this.npmInstall();
-    }
+  install: function() {
+    this.npmInstall();
   },
 
   /**
@@ -308,7 +302,7 @@ module.exports = yeoman.generators.Base.extend({
    *
    * @method end
    */
-  end: function () {
+  end: function() {
     this.log(yosay(
       'All done; ' + chalk.red(this.context.packageName) + ' is ready to go!'
     ));

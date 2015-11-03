@@ -33,15 +33,15 @@ Turn Brightcove defaults on with: `yo videojs-plugin --bcov`
 
 #### Install
 
-By default, the generator will run `npm install` after it is finished. This can be a slower process and you may not always need it; so, it can be disabled. This may be useful for updating an already-generated plugin project.
+By default, the generator will run `npm install` after it is finished. This can be a slower process and you may not always need it; so, it can be disabled (this option is provided by Yeoman itself).
 
-Turn installation off with: `yo videojs-plugin --no-install`
+Turn installation off with: `yo videojs-plugin --skip-install`
 
 #### Prompt
 
-By default, the generator will present the user with a series of prompts to choose various settings. This can be disabled. This may be useful for updating an already-generated plugin project.
+By default, the generator will present the user with a series of prompts to choose various settings. This can be disabled if you've previously selected values and don't want to change them.
 
-Turn prompts off with: `yo videojs-plugin --no-prompt`
+Turn prompts off with: `yo videojs-plugin --skip-prompt`
 
 ## License
 

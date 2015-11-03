@@ -17,7 +17,7 @@ var PACKAGE = {
    *           Rendering context passed in by the generator.
    * @return   {Object}
    */
-  common: function (context) {
+  common: function(context) {
     return {
       name: context.packageName,
       author: context.author,
@@ -72,7 +72,7 @@ var PACKAGE = {
    *           Rendering context passed in by the generator.
    * @return   {Object}
    */
-  grunt: function () {
+  grunt: function() {
     return {
       scripts: {
         'build': 'grunt build',
@@ -107,7 +107,7 @@ var PACKAGE = {
    *           Rendering context passed in by the generator.
    * @return   {Object}
    */
-  'grunt+sass': function () {
+  'grunt+sass': function() {
     return {
       scripts: {
         'build-css': 'grunt build:css',
@@ -128,7 +128,7 @@ var PACKAGE = {
    *           Rendering context passed in by the generator.
    * @return   {Object}
    */
-  npm: function (context) {
+  npm: function(context) {
     var browserifyTest = util.format(
       'browserify test/unit/plugin.test.js -o test/unit/dist/%s.js',
       context.packageName
@@ -201,7 +201,7 @@ var PACKAGE = {
    *
    * @return   {Object}
    */
-  'npm+sass': function (context) {
+  'npm+sass': function(context) {
     var nodeSass = util.format(
       'node-sass --output-style=compressed --linefeed=lf src/plugin.scss -o dist && mv dist/plugin.css dist/%s.css',
       context.packageName

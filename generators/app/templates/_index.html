@@ -15,7 +15,7 @@
   <script src="/node_modules/video.js/dist/video.js"></script>
   <script src="/dist/<%= packageName %>.js"></script>
   <script>
-    (function (window, videojs) {
+    (function(window, videojs) {
       var player = window.player = videojs('<%= packageName %>-player');
       player.<%= pluginFunctionName %>();
     }(window, window.videojs));

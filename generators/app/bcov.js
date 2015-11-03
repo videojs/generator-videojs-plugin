@@ -38,11 +38,11 @@ module.exports = function bcov(generator) {
      * @private
      * @return {Array}
      */
-    _prompts: function () {
+    _prompts: function() {
       var prompts = originals._prompts.apply(this, arguments);
 
       // Remove the "author" and "license" prompts.
-      return prompts.filter(function (prompt) {
+      return prompts.filter(function(prompt) {
         return excludedPromptNames.indexOf(prompt.name) === -1;
       });
     },
@@ -52,7 +52,7 @@ module.exports = function bcov(generator) {
      *
      * @method configuring
      */
-    configuring: function () {
+    configuring: function() {
 
       // Adjust properties before setting. These are not optional.
       _.extend(this.props, {
