@@ -36,7 +36,8 @@ var PACKAGE = {
       },
       standard: {
         ignore: [
-          '**/dist/'
+          '**/dist/',
+          'docs'
         ]
       },
       scripts: {
@@ -47,10 +48,11 @@ var PACKAGE = {
         'clean-css': '',
         'clean-dist': '',
         'clean-js': '',
+        'docs': 'documentation src/*.js -f html -o docs/api',
         'lint': 'standard',
         'mkdist': 'mkdir -p dist test/unit/dist',
         'postversion': '',
-        'prestart': '',
+        'prestart': 'npm run docs',
         'pretest': 'npm run lint',
         'preversion': 'npm test',
         'start': '',
@@ -67,6 +69,7 @@ var PACKAGE = {
         'babelify': '^6.0.0',
         'browserify': '^11.0.0',
         'browserify-shim': '^3.0.0',
+        'documentation': '^3.0.0',
         'global': '^4.3.0',
         'lodash': '^3.0.0',
         'qunitjs': '^1.0.0',
@@ -183,7 +186,7 @@ var PACKAGE = {
         ),
         'clean-dist': 'rm -rf dist',
         'clean-js': 'rm -f dist/*.js',
-        'prestart': 'npm run build',
+        'prestart': commands('npm run docs', 'npm run build'),
         'start': 'babel-node scripts/server.js',
         'test': browserifyTest,
         'watch-js': util.format(

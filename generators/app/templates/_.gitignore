@@ -34,4 +34,5 @@ node_modules/
 # Common build-related directories
 build/
 dist/
+docs/api/
 tmp/
