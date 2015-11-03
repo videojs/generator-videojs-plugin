@@ -15,10 +15,10 @@
   <script src="/node_modules/video.js/dist/video.js"></script>
   <script src="/dist/<%= packageName %>.js"></script>
   <script>
-    (function (videojs) {
-      var player = videojs('<%= packageName %>-player');
+    (function (window, videojs) {
+      var player = window.player = videojs('<%= packageName %>-player');
       player.<%= pluginFunctionName %>();
-    }(window.videojs));
+    }(window, window.videojs));
   </script>
 </body>
 </html>

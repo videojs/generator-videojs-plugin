@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+const init = function(grunt) {
 
   grunt.initConfig({
 
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
           }
         },
         src: ['test/unit/**/*.test.js'],
-        dest: 'test/unit/dist/plugin.js'
+        dest: 'test/unit/dist/<%%= pkg.name %>.js'
       }
     },
 
@@ -152,6 +152,7 @@ module.exports = function(grunt) {
     'run:lint',
     'clean:js',
     'browserify:dist',
+    'browserify:test',
     'usebanner:js',
     'uglify'
   ]);
@@ -165,13 +166,15 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('start', [
+    'build',
     'concurrent:start'
   ]);
 
   grunt.registerTask('test', [
     'lint',
     'build',
-    'browserify:test',
     'qunit'
   ]);
 };
+
+export default init;

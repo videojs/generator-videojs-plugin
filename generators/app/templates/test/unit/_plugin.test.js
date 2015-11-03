@@ -1,4 +1,4 @@
-import document from 'globals/document';
+import document from 'global/document';
 
 import _ from 'lodash';
 import QUnit from 'qunit';
@@ -20,16 +20,36 @@ QUnit.module('<%= packageName %>', {
 
   beforeEach() {
     this.player = new Player(document.createElement('video'));
+
+    // Mock the environment's timers because certain things - particularly
+    // player readiness - are asynchronous in video.js 5.
+    this.clock = sinon.useFakeTimers();
   },
 
   afterEach() {
-    this.player.dispose();
+    this.clock.restore();
   }
 });
 
 QUnit.test('registers itself with video.js', function(assert) {
-  assert.strictEqual(typeof plugin, 'function', '<%= packageName %> plugin is a function');
-  assert.strictEqual(Player.prototype.<%= pluginFunctionName %>, plugin, '<%= packageName %> plugin was registered');
+  assert.ok(
+    _.isFunction(plugin),
+    '<%= packageName %> plugin is a function'
+  );
+
+  assert.strictEqual(
+    Player.prototype.<%= pluginFunctionName %>,
+    plugin,
+    '<%= packageName %> plugin was registered'
+  );
+
   this.player.<%= pluginFunctionName %>();
-  assert.ok(this.player.hasClass('<%= pluginClassName %>'), 'the plugin adds a class to the player');
+
+  // Tick the clock forward enough to trigger the player to be "ready".
+  this.clock.tick(1);
+
+  assert.ok(
+    this.player.hasClass('<%= pluginClassName %>'),
+    'the plugin adds a class to the player'
+  );
 });
