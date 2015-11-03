@@ -60,7 +60,7 @@ By default, a Grunt-based workflow is provided by the generator. Its tasks close
 
 ### npm Scripts
 
-What follows is a table of the standard npm script names. All names are lower-case and use hyphens (`-`) as word-separators.
+What follows is a table of the standard npm script names. All names are lower-case and use hyphens (`-`) as word-separators. Certain `pre*` and `post*` scripts will be created as well, but these are not documented here necessarily.
 
 npm Script   | Grunt Equiv.       | Optional | Description
 ------------ | ------------------ | -------- | -----------
@@ -68,16 +68,18 @@ npm Script   | Grunt Equiv.       | Optional | Description
 `build-css`  | `grunt build:css`  | ✓        | Compiles `src/plugin.scss` to `dist/<plugin-name>.css`.
 `build-js`   | `grunt build:js`   |          | Builds `src/plugin.js` and outputs `dist/<plugin-name>.js` and `dist/<plugin-name>.min.js`.
 `clean`      | `grunt clean`      |          | Alias for `clean-dist`.
-`clean-dist` | `grunt clean:dist` |          | Removes `dist/`.
 `clean-css`  | `grunt clean:css`  | ✓        | Rremoves all `.css` file(s) in `dist/`.
+`clean-dist` | `grunt clean:dist` |          | Removes `dist/`.
 `clean-js`   | `grunt clean:js`   |          | Removes all `.js` file(s) in `dist/`.
 `lint`       | `grunt lint`       |          | Lints all `.js` file(s)
+`mkdist`     | n/a                |          | Creates necessary `dist` directories.
 `start`      | `grunt start`      |          | Starts a development server.
 `test`       | `grunt test`       |          | Runs `lint`, `build`, and tests.
 `watch`      | `grunt watch`      |          | Watches everything and runs appropriate tasks.
 `watch-css`  | `grunt watch:css`  | ✓        | Watches `.scss` file(s) for changes and runs `build-css`.
 `watch-js`   | `grunt watch:js`   |          | Watches `.js` file(s) for changes and runs `build-js`.
 `watch-test` | `grunt watch:test` |          | Watches test `.js` file(s) and runs `test`.
+`version`    | n/a                |          | Bumps the package version and creates a distributable tag.
 
 ### Other Build/Automation Tools
 

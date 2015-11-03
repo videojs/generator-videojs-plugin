@@ -18,7 +18,7 @@ var PACKAGE = {
    * @return   {Object}
    */
   common: function(context) {
-    return {
+    var pkg = {
       name: context.packageName,
       author: context.author,
       license: context.licenseName,
@@ -40,13 +40,26 @@ var PACKAGE = {
         ]
       },
       scripts: {
+        'build': '',
+        'build-css': '',
+        'build-js': '',
         'clean': 'npm run clean-dist',
+        'clean-css': '',
+        'clean-dist': '',
+        'clean-js': '',
         'lint': 'standard',
-        'mkdirs': 'mkdir -p dist test/unit/dist',
+        'mkdist': 'mkdir -p dist test/unit/dist',
         'postversion': '',
+        'prestart': '',
         'pretest': 'npm run lint',
         'preversion': 'npm test',
-        'version': ''
+        'start': '',
+        'test': '',
+        'version': '',
+        'watch': '',
+        'watch-css': '',
+        'watch-js': '',
+        'watch-test': ''
       },
       dependencies: {},
       devDependencies: {
@@ -62,6 +75,12 @@ var PACKAGE = {
         'videojs-standard': '^3.7.0'
       }
     };
+
+    if (context.private) {
+      pkg.private = true;
+    }
+
+    return pkg;
   },
 
   /**
@@ -82,7 +101,8 @@ var PACKAGE = {
         'start': 'grunt start',
         'test': 'grunt test',
         'watch': 'grunt watch',
-        'watch-js': 'grunt watch:js'
+        'watch-js': 'grunt watch:js',
+        'watch-test': 'grunt watch:test'
       },
       devDependencies: {
         'grunt-banner': '^0.6.0',
@@ -138,13 +158,13 @@ var PACKAGE = {
       scripts: {
         'build': commands(
           'npm run clean-dist',
-          'npm run mkdirs',
+          'npm run mkdist',
           'npm run build-js'
         ),
         'build-js': commands(
           'npm run lint',
           'npm run clean-js',
-          'npm run mkdirs',
+          'npm run mkdist',
           util.format(
             'browserify src/plugin.js -s %s -o dist/%s.js',
             context.packageName,
@@ -165,12 +185,13 @@ var PACKAGE = {
         'clean-js': 'rm -f dist/*.js',
         'prestart': 'npm run build',
         'start': 'babel-node scripts/server.js',
-        'test': commands(
-          'npm run lint',
-          browserifyTest
-        ),
+        'test': browserifyTest,
         'watch-js': util.format(
           'watchify src/plugin.js -v -o dist/%s.js',
+          context.packageName
+        ),
+        'watch-test': util.format(
+          'watchify test/unit/plugin.test.js -v -o test/unit/dist/%s.js',
           context.packageName
         )
       },
@@ -211,13 +232,13 @@ var PACKAGE = {
       scripts: {
         'build': commands(
           'npm run clean-dist',
-          'npm run mkdirs',
+          'npm run mkdist',
           'npm run build-css',
           'npm run build-js'
         ),
         'build-css': commands(
           'npm run clean-css',
-          'npm run mkdirs',
+          'npm run mkdist',
           nodeSass,
           util.format(
             'babel-node scripts/bannerize.js dist/%s.css',

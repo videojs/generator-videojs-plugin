@@ -3,10 +3,10 @@
 var _ = require('lodash');
 var chalk = require('chalk');
 var path = require('path');
+var util = require('util');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 
-var bcov = require('./bcov');
 var packageJSON = require('./package-json');
 
 var BUILDERS = {
@@ -18,6 +18,7 @@ var LICENSES = {
   apache2: 'Apache-2.0',
   mit: 'MIT',
   none: 'None',
+  priv: 'Private/Proprietary'
 };
 
 module.exports = yeoman.generators.Base.extend({
@@ -62,6 +63,7 @@ module.exports = yeoman.generators.Base.extend({
       pluginFunctionName: name.replace(/-([a-z])/g, function(match, char) {
         return char.toUpperCase();
       }),
+      private: this.config.get('priv'),
       sass: this.config.get('sass'),
       year: (new Date()).getFullYear(),
     };
@@ -102,12 +104,12 @@ module.exports = yeoman.generators.Base.extend({
    */
   _prompts: function() {
     var configs = this.config.getAll();
-    return [{
+    var prompts = [{
       name: 'name',
       message: 'Enter the name of this plugin ("a-z" and "-" only; prefixed with "videojs-" automatically):',
       default: configs.name,
       validate: function(input) {
-        return /^[a-z][a-z-]+$/.test(input) || 'Names must start with a lower-case letter and contain only lower-case letters and hyphens.';
+        return (/^[a-z][a-z-]+$/).test(input) || 'Names must start with a lower-case letter and contain only lower-case letters and hyphens.';
       }
     }, {
       name: 'author',
@@ -135,6 +137,10 @@ module.exports = yeoman.generators.Base.extend({
         return {name: value, value: key};
       })
     }];
+
+    return prompts.filter(function(prompt) {
+      return !_.contains(this._promptsToFilter, prompt.name);
+    }, this);
   },
 
   /**
@@ -146,6 +152,11 @@ module.exports = yeoman.generators.Base.extend({
     yeoman.generators.Base.apply(this, arguments);
 
     this.option('bcov', {
+      type: 'boolean',
+      defaults: false
+    });
+
+    this.option('private', {
       type: 'boolean',
       defaults: false
     });
@@ -174,10 +185,31 @@ module.exports = yeoman.generators.Base.extend({
       '_README.md'
     ];
 
-    // Apply Brightcove-specific decoration.
-    if (this.options.bcov === true || this.config.get('bcov') === true) {
-      this.config.set('bcov', true);
-      bcov(this);
+    this._promptsToFilter = [];
+
+    this.props = {
+      bcov: this.options.bcov === true || this.config.get('bcov') === true,
+      priv: this.options.private === true || this.config.get('priv') === true
+    };
+
+    // Handle general closed-source plugins.
+    if (this.props.priv) {
+      this._filesToCopy = _.without(this._filesToCopy, '_CONTRIBUTING.md');
+      this._promptsToFilter.push('license');
+      this.props.license = 'priv';
+    }
+
+    if (this.props.bcov) {
+
+      // All Brightcove plugins use the same author string.
+      this._promptsToFilter.push('author');
+      this.props.author = 'Brightcove, Inc.';
+
+      // Open-source Brightcove plugins MUST use the Apache-2.0 license.
+      if (!this.props.priv) {
+        this._promptsToFilter.push('license');
+        this.props.license = 'apache2';
+      }
     }
   },
 
@@ -188,15 +220,22 @@ module.exports = yeoman.generators.Base.extend({
    */
   prompting: function() {
     var done;
+    var type = (this.props.bcov || this.props.priv ? 'a ' : 'an ') +
+      chalk.green([
+        this.props.bcov ? 'Brightcove ' : '',
+        this.props.priv ? 'closed' : 'open',
+        '-source'
+      ].join(''));
 
-    this.log(yosay(
-      'Welcome to the excellent ' + chalk.red('videojs-plugin') + ' generator!'
-    ));
+    this.log(yosay([
+      'Welcome to the ' + chalk.red('videojs-plugin') + ' generator!',
+      util.format('Let’s build %s plugin.', type)
+    ].join(' ')));
 
     if (!this.options.skipPrompt) {
       done = this.async();
       this.prompt(this._prompts(), function(props) {
-        this.props = props;
+        _.extend(this.props, props);
         done();
       }.bind(this));
     }

@@ -31,6 +31,12 @@ Set certain values automatically for Brightcove-authored plugins. For example, a
 
 Turn Brightcove defaults on with: `yo videojs-plugin --bcov`
 
+#### Private
+
+For those who want to create private/closed-source modules, this allows that. It will set both the `"private"` property of `package.json` and set the license to `"Private/Proprietary"` (suppressing the license prompt).
+
+Turn Brightcove defaults on with: `yo videojs-plugin --private`
+
 #### Install
 
 By default, the generator will run `npm install` after it is finished. This can be a slower process and you may not always need it; so, it can be disabled (this option is provided by Yeoman itself).
