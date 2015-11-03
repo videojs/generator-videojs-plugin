@@ -152,7 +152,11 @@ var PACKAGE = {
           ),
           browserifyTest,
           util.format(
-            'uglifyjs dist/%s.js --mangle --compress -o dist/%s.min.js',
+            'babel-node scripts/bannerize.js dist/%s.js',
+            context.packageName
+          ),
+          util.format(
+            'uglifyjs dist/%s.js --comments --mangle --compress -o dist/%s.min.js',
             context.packageName,
             context.packageName
           )
@@ -172,6 +176,8 @@ var PACKAGE = {
       },
       devDependencies: {
         'connect': '^3.4.0',
+        'ejs': '^2.3.4',
+        'minimist': '^1.2.0',
         'portscanner': '^1.0.0',
         'serve-static': '^1.10.0',
         'uglify-js': '^2.5.0',
@@ -212,7 +218,11 @@ var PACKAGE = {
         'build-css': commands(
           'npm run clean-css',
           'npm run mkdirs',
-          nodeSass
+          nodeSass,
+          util.format(
+            'babel-node scripts/bannerize.js dist/%s.css',
+            context.packageName
+          )
         ),
         'clean-css': 'rm -f dist/*.css',
         'watch-css': nodeSass

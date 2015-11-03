@@ -2,12 +2,9 @@ const init = function(grunt) {
 
   grunt.initConfig({
 
-    banner: [
-      '/*! <%%= pkg.name %> - v<%%= pkg.version %>',
-      ' *  Copyright (c) <%%= grunt.template.today("yyyy") %> <%%= pkg.author %>',
-      ' *  License: <%%= pkg.license %>',
-      ' */'
-    ].join('\n'),
+    banner: grunt.file.read('scripts/banner.ejs'),
+    pkg: grunt.file.readJSON('package.json'),
+    year: (new Date()).getFullYear(),
 
     browserify: {
       options: {
@@ -63,8 +60,6 @@ const init = function(grunt) {
         }
       }
     },
-
-    pkg: grunt.file.readJSON('package.json'),
 
     qunit: {
       unit: 'test/unit/index.html'

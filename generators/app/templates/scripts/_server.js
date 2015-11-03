@@ -1,3 +1,5 @@
+// A simple static file server for development convenience.
+
 import connect from 'connect';
 import path from 'path';
 import portscanner from 'portscanner';

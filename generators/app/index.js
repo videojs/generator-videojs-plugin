@@ -162,6 +162,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this._filesToCopy = [
       'docs/_standards.md',
+      'scripts/_banner.ejs',
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
@@ -170,7 +171,6 @@ module.exports = yeoman.generators.Base.extend({
     ];
 
     this._templatesToCopy = [
-      'scripts/_grunt.js',
       'src/_plugin.js',
       'test/unit/_index.html',
       'test/unit/_plugin.test.js',
@@ -234,8 +234,10 @@ module.exports = yeoman.generators.Base.extend({
       var sass = this.config.get('sass');
 
       if (builder === 'grunt') {
+        this._templatesToCopy.push('scripts/_grunt.js');
         this._filesToCopy.push('_Gruntfile.js');
       } else if (builder === 'npm') {
+        this._filesToCopy.push('scripts/_bannerize.js');
         this._filesToCopy.push('scripts/_server.js');
       }
 
