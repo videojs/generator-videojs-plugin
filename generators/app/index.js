@@ -38,11 +38,14 @@ module.exports = yeoman.generators.Base.extend({
    * @return {String}
    */
   _dest: function(src) {
-    var parsed = path.parse(src);
-    if (_.startsWith(parsed.base, '_')) {
-      parsed.base = parsed.base.substr(1);
+    var basename = path.basename(src);
+    var destname = src;
+
+    if (_.startsWith(basename, '_')) {
+      destname = src.replace(basename, basename.substr(1));
     }
-    return this.destinationPath(path.format(parsed));
+
+    return this.destinationPath(destname);
   },
 
   /**
