@@ -169,9 +169,17 @@ module.exports = yeoman.generators.Base.extend({
       defaults: false
     });
 
+    this.option('hurry', {
+      type: 'boolean',
+      defaults: false
+    });
+
     this._filesToCopy = [
       'docs/_standards.md',
       'scripts/_banner.ejs',
+      'scripts/_npm-postversion.sh',
+      'scripts/_npm-preversion.sh',
+      'scripts/_npm-version.sh',
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
@@ -189,6 +197,10 @@ module.exports = yeoman.generators.Base.extend({
     ];
 
     this._promptsToFilter = [];
+
+    if (this.options.hurry) {
+      this.options.skipPrompt = this.options.skipInstall = true;
+    }
 
     this.props = {
       bcov: this.options.bcov === true || this.config.get('bcov') === true,
@@ -230,10 +242,12 @@ module.exports = yeoman.generators.Base.extend({
         '-source'
       ].join(''));
 
-    this.log(yosay([
-      'Welcome to the ' + chalk.red('videojs-plugin') + ' generator!',
-      util.format('Let’s build %s plugin.', type)
-    ].join(' ')));
+    if (!this.options.hurry) {
+      this.log(yosay([
+        'Welcome to the ' + chalk.red('videojs-plugin') + ' generator!',
+        util.format('Let’s build %s plugin.', type)
+      ].join(' ')));
+    }
 
     if (!this.options.skipPrompt) {
       done = this.async();
@@ -345,8 +359,10 @@ module.exports = yeoman.generators.Base.extend({
    * @method end
    */
   end: function() {
-    this.log(yosay(
-      'All done; ' + chalk.red(this.context.packageName) + ' is ready to go!'
-    ));
+    if (!this.options.hurry) {
+      this.log(yosay(
+        'All done; ' + chalk.red(this.context.packageName) + ' is ready to go!'
+      ));
+    }
   }
 });

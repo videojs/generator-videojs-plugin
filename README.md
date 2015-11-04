@@ -49,6 +49,12 @@ By default, the generator will present the user with a series of prompts to choo
 
 Turn prompts off with: `yo videojs-plugin --skip-prompt`
 
+#### Hurry
+
+If you just want to update an existing plugin and skip all the other stuff (prompts, installation, "yosay"s), you can use this option to do that.
+
+Turn prompts off with: `yo videojs-plugin --hurry`
+
 ## License
 
 [Apache 2.0](LICENSE)

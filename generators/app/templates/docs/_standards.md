@@ -93,16 +93,17 @@ Plugins should be tagged and published to npm as their primary release method.
 
 We want to support Bower users as well as following software best practices (i.e. not adding build artifacts to source control); so, the version bumping process is somewhat involved under the hood. It is kicked off using `npm version` and will have the following effects:
 
-1. The npm `"preversion"` script will run npm test.
-1. npm automatically bumps the `package.json` version.
+1. The npm `"preversion"` script will:
+  1. Verify that the project is a Git repository and that there are not unstaged/uncommitted changes. Either condition will cause the rest of the workflow to fail.
+  1. Run tests to enforce code quality _before_ allowing the version to be bumped.
+1. _npm automatically bumps the `package.json` version._
 1. The npm `"version"` script will run:
   1. `package.json` is staged, committed, and pushed. The effect of this is that the `package.json` change exists in the history of `master`.
-  1. The npm `"build"` script will run to compile the project.
+  1. Build assets, so that the new version number gets picked up.
   1. The `dist/` directory will be force-staged. Normally, it is ignored, but it needs to exist in the tag for Bower to install things properly.
 1. npm automatically commits and tags. This commit will contain only the `dist/` dir (the `package.json` bump is the parent commit).
 1. The npm `"postversion"` script will run:
   1. `master` is reset to the state of `origin/master`. This avoids `dist/` being added to `master`'s history - tagged commits will be children of commits on `master`.
-  1. `master` is pushed to `origin/gh-pages` allowing the `index.html` demo file to be hosted on GitHub Pages.
   1. Tags are pushed to `origin`.
 
 This process results in a `master` history that looks something like this:
