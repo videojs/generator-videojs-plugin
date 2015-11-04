@@ -29,7 +29,6 @@ var PACKAGE = {
         'videojs-plugin'
       ],
       'browserify-shim': {
-        'lodash': 'global:_',
         'qunit': 'global:QUnit',
         'sinon': 'global:sinon',
         'video.js': 'global:videojs'
@@ -71,7 +70,6 @@ var PACKAGE = {
         'browserify-shim': '^3.0.0',
         'documentation': '^3.0.0',
         'global': '^4.3.0',
-        'lodash': '^3.0.0',
         'qunitjs': '^1.0.0',
         'sinon': '^1.0.0',
         'video.js': '^5.0.0',

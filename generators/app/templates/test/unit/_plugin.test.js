@@ -1,6 +1,5 @@
 import document from 'global/document';
 
-import _ from 'lodash';
 import QUnit from 'qunit';
 import sinon from 'sinon';
 import videojs from 'video.js';
@@ -11,7 +10,6 @@ const Player = videojs.getComponent('Player');
 
 QUnit.test('the environment is sane', function(assert) {
   assert.strictEqual(typeof Array.isArray, 'function', 'es5 exists');
-  assert.strictEqual(typeof _, 'function', 'lodash exists');
   assert.strictEqual(typeof sinon, 'object', 'sinon exists');
   assert.strictEqual(typeof videojs, 'function', 'videojs exists');
 });
@@ -33,7 +31,8 @@ QUnit.module('<%= packageName %>', {
 
 QUnit.test('registers itself with video.js', function(assert) {
   assert.ok(
-    _.isFunction(plugin),
+    typeof plugin,
+    'function',
     '<%= packageName %> plugin is a function'
   );
 
