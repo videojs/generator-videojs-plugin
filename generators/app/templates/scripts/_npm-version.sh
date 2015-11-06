@@ -9,7 +9,7 @@ if [ -d "./.git" ]; then
 
   # Commit package.json with a new version and push it.
   git add package.json
-  git commit -m "Bump package.json to $VERSION"
+  git commit -m "$VERSION"
 
   if [ "$ORIGIN" != "" ]; then
     git push origin master
