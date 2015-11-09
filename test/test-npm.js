@@ -8,6 +8,19 @@ var assert = require('yeoman-generator').assert;
 var helpers = require('yeoman-generator').test;
 
 describe('videojs-plugin:app npm', function() {
+  var scripts = [
+    'build',
+    'build-js',
+    'build-test',
+    'clean-dist',
+    'clean-js',
+    'clean-test',
+    'start',
+    // TODO: 'test',
+    // TODO: 'watch',
+    'watch-js',
+    'watch-test'
+  ];
 
   describe('npm', function() {
     before(function(done) {
@@ -31,17 +44,7 @@ describe('videojs-plugin:app npm', function() {
     });
 
     it('populates otherwise empty npm scripts', function() {
-      libs.allAreNonEmpty(this.pkg.scripts, [
-        'build',
-        'build-js',
-        'clean-dist',
-        'clean-js',
-        'start',
-        'test',
-        // TODO: 'watch',
-        'watch-js',
-        'watch-test'
-      ]);
+      libs.allAreNonEmpty(this.pkg.scripts, scripts);
     });
   });
 
@@ -67,20 +70,11 @@ describe('videojs-plugin:app npm', function() {
     });
 
     it('populates otherwise empty npm scripts', function() {
-      libs.allAreNonEmpty(this.pkg.scripts, [
-        'build',
+      libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
         'build-css',
-        'build-js',
         'clean-css',
-        'clean-dist',
-        'clean-js',
-        'start',
-        'test',
-        // TODO: 'watch',
-        'watch-css',
-        'watch-js',
-        'watch-test'
-      ]);
+        'watch-css'
+      ]));
     });
   });
 });

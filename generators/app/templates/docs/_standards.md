@@ -64,13 +64,15 @@ What follows is a table of the standard npm script names. All names are lower-ca
 
 npm Script   | Grunt Equiv.       | Optional | Description
 ------------ | ------------------ | -------- | -----------
-`build`      | `grunt build`      |          | Cleans up any old build and produces a new one.
+`build`      | `grunt build`      |          | Runs all build sub-tasks.
 `build-css`  | `grunt build:css`  | ✓        | Compiles `src/plugin.scss` to `dist/<plugin-name>.css`.
 `build-js`   | `grunt build:js`   |          | Builds `src/plugin.js` and outputs `dist/<plugin-name>.js` and `dist/<plugin-name>.min.js`.
-`clean`      | `grunt clean`      |          | Alias for `clean-dist`.
+`build-test` | `grunt build:test` |          | Builds tests in `test/unit/` and outputs to `test/unit/dist/`.
+`clean`      | `grunt clean`      |          | Alias for `clean-dist` and `clean-test`.
 `clean-css`  | `grunt clean:css`  | ✓        | Rremoves all `.css` file(s) in `dist/`.
 `clean-dist` | `grunt clean:dist` |          | Removes `dist/`.
 `clean-js`   | `grunt clean:js`   |          | Removes all `.js` file(s) in `dist/`.
+`clean-test` | `grunt clean:test` |          | Removes `test/unit/dist/`.
 `lint`       | `grunt lint`       |          | Lints all `.js` file(s)
 `mkdist`     | n/a                |          | Creates necessary `dist` directories.
 `start`      | `grunt start`      |          | Starts a development server.
@@ -78,12 +80,12 @@ npm Script   | Grunt Equiv.       | Optional | Description
 `watch`      | `grunt watch`      |          | Watches everything and runs appropriate tasks.
 `watch-css`  | `grunt watch:css`  | ✓        | Watches `.scss` file(s) for changes and runs `build-css`.
 `watch-js`   | `grunt watch:js`   |          | Watches `.js` file(s) for changes and runs `build-js`.
-`watch-test` | `grunt watch:test` |          | Watches test `.js` file(s) and runs `test`.
+`watch-test` | `grunt watch:test` |          | Watches test `.js` file(s) and runs `build-test`.
 `version`    | n/a                |          | Bumps the package version and creates a distributable tag.
 
 ### Other Build/Automation Tools
 
-If you prefer Gulp or Broccoli or the other build tool of the week, you should feel free to use it, but remember to map the standard npm scripts to your build tool of choice!
+If you prefer Gulp or Broccoli or Webpack - or the other build tool of the week - you should feel free to use it, but remember to map the standard npm scripts to your build tool of choice!
 
 ## Release
 

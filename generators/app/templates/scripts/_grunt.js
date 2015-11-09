@@ -36,7 +36,8 @@ const init = function(grunt) {
       css: ['dist/**/*.css'],
 <% } -%>
       dist: ['dist'],
-      js: ['dist/**/*.js']
+      js: ['dist/**/*.js'],
+      test: ['test/unit/dist']
     },
 
     concurrent: {
@@ -61,11 +62,10 @@ const init = function(grunt) {
       }
     },
 
-    qunit: {
-      unit: 'test/unit/index.html'
-    },
-
     run: {
+      docs: {
+        exec: 'npm run docs'
+      },
       lint: {
         exec: 'npm run lint'
       }
@@ -119,8 +119,8 @@ const init = function(grunt) {
         tasks: ['lint', 'build:js']
       },
       test: {
-        files: ['Gruntfile.js', 'test/**/*.test.js'],
-        tasks: ['test']
+        files: ['test/**/*.test.js'],
+        tasks: ['build:test']
       }
     }
   });
@@ -132,7 +132,8 @@ const init = function(grunt) {
 <% if (sass) { -%>
     'build:css',
 <% } -%>
-    'build:js'
+    'build:js',
+    'build:test'
   ]);
 
 <% if (sass) { -%>
@@ -144,16 +145,23 @@ const init = function(grunt) {
 
 <% } -%>
   grunt.registerTask('build:js', [
-    'run:lint',
     'clean:js',
     'browserify:dist',
-    'browserify:test',
     'usebanner:js',
     'uglify'
   ]);
 
+  grunt.registerTask('build:test', [
+    'clean:test',
+    'browserify:test'
+  ]);
+
   grunt.registerTask('default', [
     'test'
+  ]);
+
+  grunt.registerTask('docs', [
+    'run:docs'
   ]);
 
   grunt.registerTask('lint', [
@@ -161,14 +169,15 @@ const init = function(grunt) {
   ]);
 
   grunt.registerTask('start', [
+    'docs',
     'build',
     'concurrent:start'
   ]);
 
   grunt.registerTask('test', [
     'lint',
-    'build',
-    'qunit'
+    'build:test'
+    // TODO Karma
   ]);
 };
 

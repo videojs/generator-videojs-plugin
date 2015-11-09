@@ -8,6 +8,20 @@ var assert = require('yeoman-generator').assert;
 var helpers = require('yeoman-generator').test;
 
 describe('videojs-plugin:app grunt', function() {
+  var scripts = [
+    'build',
+    'build-js',
+    'build-test',
+    'clean',
+    'clean-dist',
+    'clean-js',
+    'clean-test',
+    'start',
+    'test',
+    'watch',
+    'watch-js',
+    'watch-test'
+  ];
 
   describe('grunt', function() {
     before(function(done) {
@@ -31,17 +45,7 @@ describe('videojs-plugin:app grunt', function() {
     });
 
     it('populates otherwise empty npm scripts with grunt aliases', function() {
-      libs.allAreGruntAliases(this.pkg.scripts, [
-        'build',
-        'build-js',
-        'clean-dist',
-        'clean-js',
-        'start',
-        'test',
-        'watch',
-        'watch-js',
-        'watch-test'
-      ]);
+      libs.allAreGruntAliases(this.pkg.scripts, scripts);
     });
   });
 
@@ -67,20 +71,11 @@ describe('videojs-plugin:app grunt', function() {
     });
 
     it('populates otherwise empty npm scripts with grunt aliases', function() {
-      libs.allAreGruntAliases(this.pkg.scripts, [
-        'build',
+      libs.allAreGruntAliases(this.pkg.scripts, scripts.concat([
         'build-css',
-        'build-js',
         'clean-css',
-        'clean-dist',
-        'clean-js',
-        'start',
-        'test',
-        'watch',
-        'watch-css',
-        'watch-js',
-        'watch-test'
-      ]);
+        'watch-css'
+      ]));
     });
   });
 });
