@@ -124,13 +124,11 @@ var PACKAGE = {
       ]),
       devDependencies: {
         'grunt': '^0.4.0',
-        'grunt-banner': '^0.6.0',
         'grunt-browserify': '^4.0.1',
         'grunt-concurrent': '^2.0.3',
         'grunt-contrib-clean': '^0.6.0',
         'grunt-contrib-connect': '^0.11.2',
         'grunt-contrib-uglify': '^0.9.2',
-        'grunt-contrib-watch': '^0.6.1',
         'grunt-run': '^0.5.2',
         'load-grunt-tasks': '^3.1.0'
       }
@@ -152,7 +150,9 @@ var PACKAGE = {
         'watch:css'
       ]),
       devDependencies: {
-        'grunt-sass': '^1.0.0'
+        'grunt-banner': '^0.6.0',
+        'grunt-sass': '^1.0.0',
+        'grunt-contrib-watch': '^0.6.0'
       }
     };
   },
@@ -170,7 +170,7 @@ var PACKAGE = {
       scripts: {
         'prebuild': 'npm run clean',
         'build': 'npm-run-all -p build:js build:test',
-        'build:js': 'npm-run-all browserify:js usebanner:js uglify',
+        'build:js': 'npm-run-all browserify:js bannerize:js uglify',
         'build:test': nameify('browserify test/unit/plugin.test.js -o test/unit/dist/%s.js', context),
         'clean': 'rm -rf dist test/unit/dist && mkdir -p dist test/unit/dist',
         'prestart': 'npm-run-all -p docs build',
@@ -182,7 +182,7 @@ var PACKAGE = {
         'watch:js': nameify('watchify src/plugin.js -v -o dist/%s.js', context),
         'watch:test': nameify('watchify test/unit/plugin.test.js -v -o test/unit/dist/%s.js', context),
         'browserify:js': nameify('browserify src/plugin.js -s %s -o dist/%s.js', context),
-        'usebanner:js': nameify('babel-node scripts/bannerize.js dist/%s.js', context),
+        'bannerize:js': nameify('babel-node scripts/bannerize.js dist/%s.js', context),
         'uglify': nameify('uglifyjs dist/%s.js --comments --mangle --compress -o dist/%s.min.js', context)
       },
       devDependencies: {
@@ -192,7 +192,7 @@ var PACKAGE = {
         'portscanner': '^1.0.0',
         'serve-static': '^1.10.0',
         'uglify-js': '^2.5.0',
-        'watch': '^0.16.0'
+        'watchify': '^3.6.0'
       },
       browserify: {
         transform: [
@@ -216,10 +216,10 @@ var PACKAGE = {
     return {
       scripts: {
         'build': 'npm-run-all -p build:js build:test build:css',
-        'build:css': 'npm-run-all sass usebanner:css',
+        'build:css': 'npm-run-all sass bannerize:css',
         'watch': 'npm-run-all -p watch:css watch:js watch:test',
-        'watch:css': nameify('node-sass -w --output-style=nested --linefeed=lf src/plugin.scss -o dist && mv dist/plugin.css dist/%s.css', context),
-        'usebanner:css': nameify('babel-node scripts/bannerize.js dist/%s.css', context),
+        'watch:css': nameify('node-sass --output-style=nested --linefeed=lf src/plugin.scss -o dist -w src && mv dist/plugin.css dist/%s.css', context),
+        'bannerize:css': nameify('babel-node scripts/bannerize.js dist/%s.css', context),
         'sass': nameify('node-sass --output-style=compressed --linefeed=lf src/plugin.scss -o dist && mv dist/plugin.css dist/%s.css', context),
       },
       devDependencies: {

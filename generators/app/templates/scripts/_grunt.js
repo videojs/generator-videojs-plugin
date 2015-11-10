@@ -6,30 +6,49 @@ const init = function(grunt) {
 
     banner: grunt.file.read('scripts/banner.ejs'),
     pkg: grunt.file.readJSON('package.json'),
-    year: (new Date()).getFullYear(),
+    year: grunt.template.today('yyyy'),
 
     browserify: {
+
       options: {
-        browserifyOptions: {
-          standalone: '<%%= pkg.name %>'
-        },
         transform: [
           'babelify',
           'browserify-shim'
         ]
       },
+
       js: {
+        options: {
+          banner: '<%%= banner %>',
+          browserifyOptions: {
+            standalone: '<%%= pkg.name %>'
+          }
+        }
         src: 'src/plugin.js',
         dest: 'dist/<%%= pkg.name %>.js'
       },
-      test: {
+
+      'watch-js': {
         options: {
-          browserifyOptions: {
-            standalone: false
-          }
+          watch: true,
+          keepAlive: true
         },
+        src: '<%%= browserify.js.src %>',
+        dest: '<%%= browserify.js.dest %>'
+      },
+
+      test: {
         src: 'test/unit/**/*.test.js',
         dest: 'test/unit/<%%= browserify.js.dest %>'
+      },
+
+      'watch-test': {
+        options: {
+          watch: true,
+          keepAlive: true
+        },
+        src: '<%%= browserify.test.src %>',
+        dest: '<%%= browserify.test.dest %>'
       }
     },
 
@@ -38,11 +57,30 @@ const init = function(grunt) {
     },
 
     concurrent: {
+
       options: {
         logConcurrentOutput: true
       },
+
       start: {
-        tasks: ['connect:start', 'watch']
+        tasks: [
+          'connect:start',
+<% if (sass) { -%>
+          'contrib-watch',
+<% } -%>
+          'browserify:watch-js',
+          'browserify:watch-test'
+        ]
+      },
+
+      watch: {
+        tasks: [
+<% if (sass) { -%>
+          'contrib-watch',
+<% } -%>
+          'browserify:watch-js',
+          'browserify:watch-test'
+        ]
       }
     },
 
@@ -69,10 +107,10 @@ const init = function(grunt) {
 
 <% if (sass) { -%>
     sass: {
-      options: {
-        outputStyle: 'compressed'
-      },
       dist: {
+        options: {
+          outputStyle: 'compressed'
+        },
         src: 'src/plugin.scss',
         dest: 'dist/<%%= pkg.name %>.css'
       }
@@ -87,37 +125,24 @@ const init = function(grunt) {
         src: '<%%= browserify.js.dest %>',
         dest: 'dist/<%%= pkg.name %>.min.js'
       }
+<% if (sass) { -%>
     },
 
     usebanner: {
       options: {
         banner: '<%%= banner %>'
       },
-<% if (sass) { -%>
       css: {
         src: 'dist/<%%= pkg.name %>.css'
-      },
-<% } -%>
-      js: {
-        src: '<%%= browserify.js.dest %>'
       }
     },
 
-    watch: {
-<% if (sass) { -%>
+    'contrib-watch': {
       css: {
-        files: '<%%= sass.dist.src %>',
-        tasks: ['build:css']
-      },
-<% } -%>
-      js: {
-        files: 'src/**/*.js',
-        tasks: ['build:js']
-      },
-      test: {
-        files: ['test/**/*.test.js'],
-        tasks: ['build:test']
+        files: 'src/**/*.scss',
+        tasks: ['sass:dist']
       }
+<% } -%>
     }
   });
 
@@ -134,15 +159,14 @@ const init = function(grunt) {
 
 <% if (sass) { -%>
   grunt.registerTask('build:css', [
-    'sass',
+    'sass:dist',
     'usebanner:css'
   ]);
 
 <% } -%>
   grunt.registerTask('build:js', [
     'browserify:js',
-    'usebanner:js',
-    'uglify'
+    'uglify:js'
   ]);
 
   grunt.registerTask('build:test', [
@@ -171,6 +195,26 @@ const init = function(grunt) {
     'lint',
     'build:test'
     // TODO Karma
+  ]);
+
+  // The grunt-contrib-watch task gets renamed so that it can be used as an
+  // alias for "concurrent:watch".
+  grunt.renameTask('watch', 'contrib-watch');
+
+  grunt.registerTask('watch', [
+    'concurrent:watch'
+  ]);
+
+  grunt.registerTask('watch:css', [
+    'contrib-watch'
+  ]);
+
+  grunt.registerTask('watch:js', [
+    'browserify:watch-js'
+  ]);
+
+  grunt.registerTask('watch:test', [
+    'browserify:watch-test'
   ]);
 };
 
