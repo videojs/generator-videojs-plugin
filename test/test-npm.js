@@ -10,16 +10,14 @@ var helpers = require('yeoman-generator').test;
 describe('videojs-plugin:app npm', function() {
   var scripts = [
     'build',
-    'build-js',
-    'build-test',
-    'clean-dist',
-    'clean-js',
-    'clean-test',
+    'build:js',
+    'build:test',
+    'clean',
     'start',
-    // TODO: 'test',
-    // TODO: 'watch',
-    'watch-js',
-    'watch-test'
+    // 'test', TODO Karma
+    'watch',
+    'watch:js',
+    'watch:test'
   ];
 
   describe('npm', function() {
@@ -71,9 +69,8 @@ describe('videojs-plugin:app npm', function() {
 
     it('populates otherwise empty npm scripts', function() {
       libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
-        'build-css',
-        'clean-css',
-        'watch-css'
+        'build:css',
+        'watch:css'
       ]));
     });
   });

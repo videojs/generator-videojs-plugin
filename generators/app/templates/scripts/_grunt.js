@@ -1,3 +1,5 @@
+import loadGruntTasks from 'load-grunt-tasks';
+
 const init = function(grunt) {
 
   grunt.initConfig({
@@ -16,8 +18,8 @@ const init = function(grunt) {
           'browserify-shim'
         ]
       },
-      dist: {
-        src: ['src/plugin.js'],
+      js: {
+        src: 'src/plugin.js',
         dest: 'dist/<%%= pkg.name %>.js'
       },
       test: {
@@ -26,18 +28,13 @@ const init = function(grunt) {
             standalone: false
           }
         },
-        src: ['test/unit/**/*.test.js'],
-        dest: 'test/unit/dist/<%%= pkg.name %>.js'
+        src: 'test/unit/**/*.test.js',
+        dest: 'test/unit/<%%= browserify.js.dest %>'
       }
     },
 
     clean: {
-<% if (sass) { -%>
-      css: ['dist/**/*.css'],
-<% } -%>
-      dist: ['dist'],
-      js: ['dist/**/*.js'],
-      test: ['test/unit/dist']
+      dist: 'dist'
     },
 
     concurrent: {
@@ -52,7 +49,6 @@ const init = function(grunt) {
     connect: {
       options: {
         keepalive: true,
-        livereload: true,
         useAvailablePort: true
       },
       start: {
@@ -77,7 +73,7 @@ const init = function(grunt) {
         outputStyle: 'compressed'
       },
       dist: {
-        src: ['src/plugin.scss'],
+        src: 'src/plugin.scss',
         dest: 'dist/<%%= pkg.name %>.css'
       }
     },
@@ -87,8 +83,8 @@ const init = function(grunt) {
       options: {
         preserveComments: 'some'
       },
-      dist: {
-        src: 'dist/<%%= pkg.name %>.js',
+      js: {
+        src: '<%%= browserify.js.dest %>',
         dest: 'dist/<%%= pkg.name %>.min.js'
       }
     },
@@ -99,11 +95,11 @@ const init = function(grunt) {
       },
 <% if (sass) { -%>
       css: {
-        src: ['dist/<%%= pkg.name %>.css']
+        src: 'dist/<%%= pkg.name %>.css'
       },
 <% } -%>
       js: {
-        src: ['dist/<%%= pkg.name %>.js']
+        src: '<%%= browserify.js.dest %>'
       }
     },
 
@@ -116,7 +112,7 @@ const init = function(grunt) {
 <% } -%>
       js: {
         files: 'src/**/*.js',
-        tasks: ['lint', 'build:js']
+        tasks: ['build:js']
       },
       test: {
         files: ['test/**/*.test.js'],
@@ -125,7 +121,7 @@ const init = function(grunt) {
     }
   });
 
-  require('load-grunt-tasks')(grunt);
+  loadGruntTasks(grunt);
 
   grunt.registerTask('build', [
     'clean:dist',
@@ -138,26 +134,23 @@ const init = function(grunt) {
 
 <% if (sass) { -%>
   grunt.registerTask('build:css', [
-    'clean:css',
-    'sass:dist',
+    'sass',
     'usebanner:css'
   ]);
 
 <% } -%>
   grunt.registerTask('build:js', [
-    'clean:js',
-    'browserify:dist',
+    'browserify:js',
     'usebanner:js',
     'uglify'
   ]);
 
   grunt.registerTask('build:test', [
-    'clean:test',
     'browserify:test'
   ]);
 
   grunt.registerTask('default', [
-    'test'
+    'build'
   ]);
 
   grunt.registerTask('docs', [

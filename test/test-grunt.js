@@ -10,17 +10,14 @@ var helpers = require('yeoman-generator').test;
 describe('videojs-plugin:app grunt', function() {
   var scripts = [
     'build',
-    'build-js',
-    'build-test',
+    'build:js',
+    'build:test',
     'clean',
-    'clean-dist',
-    'clean-js',
-    'clean-test',
     'start',
     'test',
     'watch',
-    'watch-js',
-    'watch-test'
+    'watch:js',
+    'watch:test'
   ];
 
   describe('grunt', function() {
@@ -72,9 +69,8 @@ describe('videojs-plugin:app grunt', function() {
 
     it('populates otherwise empty npm scripts with grunt aliases', function() {
       libs.allAreGruntAliases(this.pkg.scripts, scripts.concat([
-        'build-css',
-        'clean-css',
-        'watch-css'
+        'build:css',
+        'watch:css'
       ]));
     });
   });

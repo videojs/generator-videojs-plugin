@@ -35,26 +35,21 @@ describe('videojs-plugin:app', function() {
   it('has all scripts, even if they are empty', function() {
     libs.allExist(this.pkg.scripts, [
       'build',
-      'build-css',
-      'build-js',
-      'build-test',
+      'build:css',
+      'build:js',
+      'build:test',
       'clean',
-      'clean-css',
-      'clean-dist',
-      'clean-js',
-      'clean-test',
       'docs',
       'lint',
-      'mkdist',
       'start',
       'test',
       'preversion',
       'version',
       'postversion',
       'watch',
-      'watch-css',
-      'watch-js',
-      'watch-test'
+      'watch:css',
+      'watch:js',
+      'watch:test'
     ]);
   });
 
