@@ -9,11 +9,11 @@ var DEFAULTS = {
     'node_modules/sinon/pkg/sinon.js',
     'node_modules/sinon/pkg/sinon-ie.js',
     'node_modules/video.js/dist/video.js',
-    'test/unit/**/*.js'
+    'test/**/*.js'
   ],
 
   exclude: [
-    'test/unit/dist/**/*'
+    'test/bundle.js'
   ],
 
   plugins: [
@@ -22,7 +22,7 @@ var DEFAULTS = {
   ],
 
   preprocessors: {
-    'test/unit/**/*.js': ['browserify']
+    'test/**/*.js': ['browserify']
   },
 
   reporters: ['dots'],

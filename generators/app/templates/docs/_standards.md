@@ -22,7 +22,7 @@ The entry point for the package (`"main"` in `package.json`) and the plugin's Br
 
 If Sass is enabled, `src/plugin.scss` _should_ be the entry point for plugin styles.
 
-The entry point for the test Browserify bundle _should_ be `test/unit/plugin.test.js`.
+The entry point for the test Browserify bundle _should_ be `test/plugin.test.js`.
 
 ### Structure
 
@@ -36,14 +36,14 @@ Folder/Filename            | Optional | Description
 `src/scss/`                | ✓        | Sass source code/partials.
 `src/js/`                  | ✓        | JavaScript source code.
 `src/plugin.scss`          | ✓        | Sass entry point.
-`src/plugin.js`            |          | JavaScript entry point.
-`test/`                    |          | All testing-related source code.
+`src/plugin.js`            |          | Browserify entry point.
+`test/`                    |          | Unit tests.
 `test/karma/`              |          | Karma configuration files.
-`test/unit/`               |          | Unit tests.
-`test/unit/plugin.test.js` |          | Testing entry point.
+`test/bundle.js`           |          | Built Browserify test bundle.
+`test/plugin.test.js`      |          | Browserify entry point.
 `.editorconfig`            |          |
 `.gitignore`               |          |
-`.npmignore`               |          | Override `.gitignore`'s exclusion of `dist/`.
+`.npmignore`               |          |
 `bower.json`               |          |
 `CHANGELOG.md`             | ✓        | May be removed if not desired.
 `CONTRIBUTING.md`          | ✓        | Not present in closed-source plugins.
@@ -84,11 +84,14 @@ npm Script   | Grunt Equiv.       | Optional | Description
 `lint`       | `grunt lint`       |          | Lints all `.js` file(s).
 `start`      | `grunt start`      |          | Starts a development server and runs `watch`.
 `test`       | `grunt test`       |          | Runs `lint`, `build`, and tests.
+`test:*`     | `grunt test:*`     |          | Browser-specific tests (e.g. `test:firefox`).
 `watch`      | `grunt watch`      |          | Watches everything and runs appropriate tasks.
 `watch:css`  | `grunt watch:css`  | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
 `watch:js`   | `grunt watch:js`   |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
 `watch:test` | `grunt watch:test` |          | Triggers a build when the test entry point changes.
 `version`    | n/a                |          | Bumps the package version and creates a distributable, Bower-friendly, tag.
+
+__Note:__ While most of these scripts are run using `npm run *`, `start` and `test` are built-in npm scripts and do not need to be run with `npm run` (that is, `npm start` and `npm test` work).
 
 ## Release
 

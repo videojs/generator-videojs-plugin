@@ -63,22 +63,11 @@ var PACKAGE = {
         ]
       },
       scripts: {
-        'build': '',
-        'build:css': '',
-        'build:js': '',
-        'build:test': '',
-        'clean': '',
         'docs': 'documentation src/*.js -f html -o docs/api',
         'lint': 'standard .',
-        'start': '',
-        'test': '',
         'preversion': './scripts/npm-preversion.sh',
         'version': './scripts/npm-version.sh',
-        'postversion': './scripts/npm-postversion.sh',
-        'watch': '',
-        'watch:css': '',
-        'watch:js': '',
-        'watch:test': ''
+        'postversion': './scripts/npm-postversion.sh'
       },
       dependencies: {},
       devDependencies: {
@@ -142,7 +131,8 @@ var PACKAGE = {
         'grunt-contrib-uglify': '^0.9.2',
         'grunt-karma': '^0.12.0',
         'grunt-run': '^0.5.2',
-        'load-grunt-tasks': '^3.1.0'
+        'load-grunt-tasks': '^3.1.0',
+        'time-grunt': '^1.2.0'
       }
     };
 
@@ -189,25 +179,26 @@ var PACKAGE = {
       scripts: {
         'prebuild': 'npm run clean',
         'build': 'npm-run-all -p build:js build:test',
-        'build:js': 'npm-run-all mkdirs browserify:js bannerize:js uglify',
-        'build:test': 'npm-run-all mkdirs browserify:test',
-        'clean': 'rm -rf dist test/unit/dist && npm run mkdirs',
-        'mkdirs': 'mkdir -p dist test/unit/dist',
+        'build:js': 'npm-run-all mkdist browserify:js bannerize:js uglify',
+        'build:test': 'npm-run-all mkdist browserify:test',
+        'clean': 'rm -rf dist && npm run mkdist',
+        'mkdist': 'mkdir -p dist',
         'prestart': 'npm-run-all -p docs build',
         'start': 'npm-run-all -p serve watch',
         'serve': 'babel-node scripts/server.js',
         'pretest': 'npm-run-all lint build:test',
         'test': 'karma start test/karma/detected.js',
-        'watch': 'npm-run-all mkdirs -p watch:js watch:test',
+        'watch': 'npm run mkdist && npm-run-all -p watch:*',
         'watch:js': nameify('watchify src/plugin.js -v -o dist/%s.js', context),
-        'watch:test': nameify('watchify test/unit/plugin.test.js -v -o test/unit/dist/%s.js', context),
-        'browserify:js': nameify('mkdir -p dist && browserify src/plugin.js -s %s -o dist/%s.js', context),
-        'browserify:test': nameify('browserify test/unit/plugin.test.js -o test/unit/dist/%s.js', context),
+        'watch:test': 'watchify test/plugin.test.js -v -o test/bundle.js',
+        'browserify:js': nameify('browserify src/plugin.js -s %s -o dist/%s.js', context),
+        'browserify:test': 'browserify test/plugin.test.js -o test/bundle.js',
         'bannerize:js': nameify('babel-node scripts/bannerize.js dist/%s.js', context),
         'uglify': nameify('uglifyjs dist/%s.js --comments --mangle --compress -o dist/%s.min.js', context)
       },
       devDependencies: {
         'connect': '^3.4.0',
+        'cowsay': '^1.1.0',
         'ejs': '^2.3.4',
         'minimist': '^1.2.0',
         'portscanner': '^1.0.0',
@@ -247,8 +238,7 @@ var PACKAGE = {
     return {
       scripts: {
         'build': 'npm-run-all -p build:js build:test build:css',
-        'build:css': 'npm-run-all mkdirs sass bannerize:css',
-        'watch': 'npm-run-all mkdirs -p watch:css watch:js watch:test',
+        'build:css': 'npm-run-all mkdist sass bannerize:css',
         'watch:css': nameify('node-sass --output-style=nested --linefeed=lf src/plugin.scss -o dist -w src && mv dist/plugin.css dist/%s.css', context),
         'bannerize:css': nameify('babel-node scripts/bannerize.js dist/%s.css', context),
         'sass': nameify('node-sass --output-style=compressed --linefeed=lf src/plugin.scss -o dist && mv dist/plugin.css dist/%s.css', context),

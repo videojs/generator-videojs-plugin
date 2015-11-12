@@ -1,6 +1,7 @@
 // A simple static file server for development convenience.
 
 import connect from 'connect';
+import cowsay from 'cowsay';
 import path from 'path';
 import portscanner from 'portscanner';
 import serveStatic from 'serve-static';
@@ -18,6 +19,10 @@ portscanner.findAPortNotInUse(PORT, MAX_PORT, HOST, (error, port) => {
   if (error) {
     throw error;
   }
+
+  console.log(cowsay.say({
+    text: `Listening on ${HOST}:${port}`
+  }));
 
   app.listen(port);
 });

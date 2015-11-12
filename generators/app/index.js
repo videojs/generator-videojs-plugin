@@ -227,8 +227,8 @@ module.exports = yeoman.generators.Base.extend({
     this._templatesToCopy = [
       'src/_plugin.js',
       'test/karma/_common.js',
-      'test/unit/_index.html',
-      'test/unit/_plugin.test.js',
+      'test/_index.html',
+      'test/_plugin.test.js',
       '_bower.json',
       '_index.html',
       '_README.md'

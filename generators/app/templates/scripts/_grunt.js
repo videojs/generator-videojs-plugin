@@ -1,4 +1,5 @@
 import loadGruntTasks from 'load-grunt-tasks';
+import timeGrunt from 'time-grunt';
 
 const init = function(grunt) {
 
@@ -9,6 +10,8 @@ const init = function(grunt) {
     'opera',
     'safari'
   ];
+
+  timeGrunt(grunt);
 
   grunt.initConfig({
 
@@ -46,8 +49,8 @@ const init = function(grunt) {
       },
 
       test: {
-        src: 'test/unit/**/*.test.js',
-        dest: 'test/unit/<%%= browserify.js.dest %>'
+        src: 'test/**/*.test.js',
+        dest: 'test/bundle.js'
       },
 
       'watch-test': {

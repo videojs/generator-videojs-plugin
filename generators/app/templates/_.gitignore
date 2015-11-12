@@ -32,7 +32,6 @@ node_modules/
 .grunt/
 
 # Common build-related directories
-build/
 dist/
 docs/api/
-tmp/
+test/bundle.js

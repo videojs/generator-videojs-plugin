@@ -1,8 +1,8 @@
 {
   "name": "generator-videojs-plugin",
-  "version": "0.0.0",
+  "version": "0.1.2",
   "description": "A Yeoman generator for VideoJS plugins",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "main": "generators/app/index.js",
   "repository": "videojs/generator-videojs-plugin",
   "author": {
@@ -12,9 +12,6 @@
   "scripts": {
     "test": "mocha"
   },
-  "files": [
-    "generators"
-  ],
   "keywords": [
     "yeoman-generator"
   ],
@@ -25,11 +22,6 @@
     "yosay": "^1.0.2"
   },
   "devDependencies": {
-    "karma-chrome-launcher": "^0.2.1",
-    "karma-firefox-launcher": "^0.1.6",
-    "karma-ie-launcher": "^0.2.0",
-    "karma-qunit": "^0.1.8",
-    "karma-safari-launcher": "^0.1.1",
     "mocha": "^2.3.3"
   }
 }
