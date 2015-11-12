@@ -2,6 +2,14 @@ import loadGruntTasks from 'load-grunt-tasks';
 
 const init = function(grunt) {
 
+  const KARMA_BROWSERS = {
+    chrome: 'Chrome',
+    firefox: 'Firefox',
+    ie: 'IE',
+    opera: 'Opera',
+    safari: 'Safari'
+  };
+
   grunt.initConfig({
 
     banner: grunt.file.read('scripts/banner.ejs'),
@@ -23,7 +31,7 @@ const init = function(grunt) {
           browserifyOptions: {
             standalone: '<%%= pkg.name %>'
           }
-        }
+        },
         src: 'src/plugin.js',
         dest: 'dist/<%%= pkg.name %>.js'
       },
@@ -96,6 +104,26 @@ const init = function(grunt) {
       }
     },
 
+    karma: (() => {
+      var karma = {
+        options: {
+          configFile: 'test/unit/karma.conf.js'
+        },
+        detected: {}
+      };
+
+      Object.keys(KARMA_BROWSERS).forEach(function(key) {
+        karma[key] = {
+          browsers: [KARMA_BROWSERS[key]],
+          detectBrowsers: {
+            enabled: false
+          }
+        };
+      });
+
+      return karma;
+    })(),
+
     run: {
       docs: {
         exec: 'npm run docs'
@@ -148,6 +176,10 @@ const init = function(grunt) {
 
   loadGruntTasks(grunt);
 
+  // The grunt-contrib-watch task gets renamed so that "watch" can be used as
+  // an alias for "concurrent:watch".
+  grunt.renameTask('watch', 'contrib-watch');
+
   grunt.registerTask('build', [
     'clean:dist',
 <% if (sass) { -%>
@@ -158,32 +190,13 @@ const init = function(grunt) {
   ]);
 
 <% if (sass) { -%>
-  grunt.registerTask('build:css', [
-    'sass:dist',
-    'usebanner:css'
-  ]);
-
+  grunt.registerTask('build:css', ['sass:dist', 'usebanner:css']);
 <% } -%>
-  grunt.registerTask('build:js', [
-    'browserify:js',
-    'uglify:js'
-  ]);
-
-  grunt.registerTask('build:test', [
-    'browserify:test'
-  ]);
-
-  grunt.registerTask('default', [
-    'build'
-  ]);
-
-  grunt.registerTask('docs', [
-    'run:docs'
-  ]);
-
-  grunt.registerTask('lint', [
-    'run:lint'
-  ]);
+  grunt.registerTask('build:js', ['browserify:js', 'uglify:js']);
+  grunt.registerTask('build:test', ['browserify:test']);
+  grunt.registerTask('default', ['build']);
+  grunt.registerTask('docs', ['run:docs']);
+  grunt.registerTask('lint', ['run:lint']);
 
   grunt.registerTask('start', [
     'docs',
@@ -191,31 +204,20 @@ const init = function(grunt) {
     'concurrent:start'
   ]);
 
-  grunt.registerTask('test', [
-    'lint',
-    'build:test'
-    // TODO Karma
-  ]);
+  // Create tasks for each Karma target.
+  ['detected'].concat(Object.keys(KARMA_BROWSERS)).forEach((target) => {
+    grunt.registerTask('test:' + target, [
+      'lint',
+      'build:test',
+      'karma:' + target
+    ]);
+  });
 
-  // The grunt-contrib-watch task gets renamed so that it can be used as an
-  // alias for "concurrent:watch".
-  grunt.renameTask('watch', 'contrib-watch');
-
-  grunt.registerTask('watch', [
-    'concurrent:watch'
-  ]);
-
-  grunt.registerTask('watch:css', [
-    'contrib-watch'
-  ]);
-
-  grunt.registerTask('watch:js', [
-    'browserify:watch-js'
-  ]);
-
-  grunt.registerTask('watch:test', [
-    'browserify:watch-test'
-  ]);
+  grunt.registerTask('test', ['test:detected']);
+  grunt.registerTask('watch', ['concurrent:watch']);
+  grunt.registerTask('watch:css', ['contrib-watch']);
+  grunt.registerTask('watch:js', ['browserify:watch-js']);
+  grunt.registerTask('watch:test', ['browserify:watch-test']);
 };
 
 export default init;

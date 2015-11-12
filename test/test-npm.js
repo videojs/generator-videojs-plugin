@@ -14,7 +14,7 @@ describe('videojs-plugin:app npm', function() {
     'build:test',
     'clean',
     'start',
-    // 'test', TODO Karma
+    'test',
     'watch',
     'watch:js',
     'watch:test'
