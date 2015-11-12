@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var chalk = require('chalk');
 var path = require('path');
+var spawn = require('child_process').spawn;
 var util = require('util');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
@@ -99,51 +100,81 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   /**
+   * Attempts to get a default author from either an existing Yeoman config
+   * or from Git, if none is found.
+   *
+   * @method _getAuthor
+   * @private
+   * @param  {Function} cb Callback called with author string.
+   */
+  _getAuthor: function(cb) {
+    var author = this.config.get('author') || '';
+    var gitConfig;
+
+    if (author) {
+      cb(author);
+    } else {
+      gitConfig = spawn('git', ['config', 'user.name']);
+
+      gitConfig.stdout.on('data', function(chunk) {
+        author += chunk;
+      });
+
+      gitConfig.on('close', function() {
+        cb(author.trim());
+      });
+    }
+  },
+
+  /**
    * Gets prompts for the user.
    *
    * @method _prompts
    * @private
+   * @param  {Function} cb Callback when prompts array is ready.
    * @return {Array}
    */
-  _prompts: function() {
-    var configs = this.config.getAll();
-    var prompts = [{
-      name: 'name',
-      message: 'Enter the name of this plugin ("a-z" and "-" only; prefixed with "videojs-" automatically):',
-      default: configs.name,
-      validate: function(input) {
-        return (/^[a-z][a-z-]+$/).test(input) || 'Names must start with a lower-case letter and contain only lower-case letters and hyphens.';
-      }
-    }, {
-      name: 'author',
-      message: 'Enter the author of this plugin:',
-      default: configs.author
-    }, {
-      type: 'list',
-      name: 'license',
-      message: 'Choose a license for your project',
-      default: configs.license || 'mit',
-      choices: _.map(LICENSES, function(value, key) {
-        return {name: value, value: key};
-      })
-    }, {
-      type: 'confirm',
-      name: 'sass',
-      message: 'Do you need Sass styling?',
-      default: _.isUndefined(configs.sass) ? false : configs.sass
-    }, {
-      type: 'list',
-      name: 'builder',
-      message: 'What build tool do you want to use?',
-      default: configs.builder || 'grunt',
-      choices: _.map(BUILDERS, function(value, key) {
-        return {name: value, value: key};
-      })
-    }];
+  _prompts: function(cb) {
+    this._getAuthor(function(author) {
+      var configs = this.config.getAll();
+      var prompts = [{
+        name: 'name',
+        message: 'Enter the name of this plugin ("a-z" and "-" only; prefixed with "videojs-" automatically):',
+        default: configs.name,
+        validate: function(input) {
+          return (/^[a-z][a-z-]+$/).test(input) || 'Names must start with a lower-case letter and contain only lower-case letters and hyphens.';
+        }
+      }, {
+        name: 'author',
+        message: 'Enter the author of this plugin:',
+        default: author
+      }, {
+        type: 'list',
+        name: 'license',
+        message: 'Choose a license for your project',
+        default: configs.license || 'mit',
+        choices: _.map(LICENSES, function(value, key) {
+          return {name: value, value: key};
+        })
+      }, {
+        type: 'confirm',
+        name: 'sass',
+        message: 'Do you need Sass styling?',
+        default: _.isUndefined(configs.sass) ? false : configs.sass
+      }, {
+        type: 'list',
+        name: 'builder',
+        message: 'What build tool do you want to use?',
+        default: configs.builder || 'grunt',
+        choices: _.map(BUILDERS, function(value, key) {
+          return {name: value, value: key};
+        })
+      }];
 
-    return prompts.filter(function(prompt) {
-      return !_.contains(this._promptsToFilter, prompt.name);
-    }, this);
+      cb(prompts.filter(function(prompt) {
+        return !_.contains(this._promptsToFilter, prompt.name);
+      }, this));
+    }.bind(this));
   },
 
   /**
@@ -258,9 +289,11 @@ module.exports = yeoman.generators.Base.extend({
 
     if (!this.options.skipPrompt) {
       done = this.async();
-      this.prompt(this._prompts(), function(props) {
-        _.extend(this.props, props);
-        done();
+      this._prompts(function(prompts) {
+        this.prompt(prompts, function(props) {
+          _.extend(this.props, props);
+          done();
+        }.bind(this));
       }.bind(this));
     }
   },

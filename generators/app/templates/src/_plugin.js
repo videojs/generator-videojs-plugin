@@ -14,7 +14,6 @@ const defaults = {};
  * @param    {Object} [options={}]
  */
 const onPlayerReady = function(options) {
-  videojs.log('<%= packageName %> initializing', options);
   this.addClass('<%= pluginClassName %>');
 };
 
