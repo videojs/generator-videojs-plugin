@@ -15,6 +15,11 @@ describe('videojs-plugin:app grunt', function() {
     'clean',
     'start',
     'test',
+    'test:chrome',
+    'test:firefox',
+    'test:ie',
+    'test:opera',
+    'test:safari',
     'watch',
     'watch:js',
     'watch:test'

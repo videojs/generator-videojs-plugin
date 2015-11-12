@@ -28,6 +28,8 @@ var nameify = function(string, context) {
   return util.format.apply(util, args);
 };
 
+var KARMA_BROWSERS = ['chrome', 'firefox', 'ie', 'opera', 'safari'];
+
 var PACKAGE = {
 
   /**
@@ -119,7 +121,7 @@ var PACKAGE = {
    * @return   {Object}
    */
   grunt: function() {
-    return {
+    var result = {
       scripts: gruntify([
         'build',
         'build:js',
@@ -143,6 +145,13 @@ var PACKAGE = {
         'load-grunt-tasks': '^3.1.0'
       }
     };
+
+    // Create scripts for each Karma browser.
+    KARMA_BROWSERS.forEach(function(browser) {
+      result.scripts['test:' + browser] = 'grunt test:' + browser;
+    });
+
+    return result;
   },
 
   /**
@@ -176,22 +185,24 @@ var PACKAGE = {
    * @return   {Object}
    */
   npm: function(context) {
-    return {
+    var result = {
       scripts: {
         'prebuild': 'npm run clean',
         'build': 'npm-run-all -p build:js build:test',
-        'build:js': 'npm-run-all browserify:js bannerize:js uglify',
-        'build:test': nameify('browserify test/unit/plugin.test.js -o test/unit/dist/%s.js', context),
-        'clean': 'rm -rf dist test/unit/dist && mkdir -p dist test/unit/dist',
+        'build:js': 'npm-run-all mkdirs browserify:js bannerize:js uglify',
+        'build:test': 'npm-run-all mkdirs browserify:test',
+        'clean': 'rm -rf dist test/unit/dist && npm run mkdirs',
+        'mkdirs': 'mkdir -p dist test/unit/dist',
         'prestart': 'npm-run-all -p docs build',
         'start': 'npm-run-all -p serve watch',
         'serve': 'babel-node scripts/server.js',
         'pretest': 'npm-run-all lint build:test',
-        'test': 'karma start test/unit/karma.conf.js',
-        'watch': 'npm-run-all -p watch:js watch:test',
+        'test': 'karma start test/karma/detected.js',
+        'watch': 'npm-run-all mkdirs -p watch:js watch:test',
         'watch:js': nameify('watchify src/plugin.js -v -o dist/%s.js', context),
         'watch:test': nameify('watchify test/unit/plugin.test.js -v -o test/unit/dist/%s.js', context),
-        'browserify:js': nameify('browserify src/plugin.js -s %s -o dist/%s.js', context),
+        'browserify:js': nameify('mkdir -p dist && browserify src/plugin.js -s %s -o dist/%s.js', context),
+        'browserify:test': nameify('browserify test/unit/plugin.test.js -o test/unit/dist/%s.js', context),
         'bannerize:js': nameify('babel-node scripts/bannerize.js dist/%s.js', context),
         'uglify': nameify('uglifyjs dist/%s.js --comments --mangle --compress -o dist/%s.min.js', context)
       },
@@ -211,6 +222,16 @@ var PACKAGE = {
         ]
       }
     };
+
+    // Create scripts for each Karma browser.
+    KARMA_BROWSERS.forEach(function(browser) {
+      result.scripts['test:' + browser] = [
+        'npm run pretest',
+        'karma start test/karma/' + browser + '.js'
+      ].join(' && ');
+    });
+
+    return result;
   },
 
   /**
@@ -226,8 +247,8 @@ var PACKAGE = {
     return {
       scripts: {
         'build': 'npm-run-all -p build:js build:test build:css',
-        'build:css': 'npm-run-all sass bannerize:css',
-        'watch': 'npm-run-all -p watch:css watch:js watch:test',
+        'build:css': 'npm-run-all mkdirs sass bannerize:css',
+        'watch': 'npm-run-all mkdirs -p watch:css watch:js watch:test',
         'watch:css': nameify('node-sass --output-style=nested --linefeed=lf src/plugin.scss -o dist -w src && mv dist/plugin.css dist/%s.css', context),
         'bannerize:css': nameify('babel-node scripts/bannerize.js dist/%s.css', context),
         'sass': nameify('node-sass --output-style=compressed --linefeed=lf src/plugin.scss -o dist && mv dist/plugin.css dist/%s.css', context),

@@ -180,6 +180,12 @@ module.exports = yeoman.generators.Base.extend({
       'scripts/_npm-postversion.sh',
       'scripts/_npm-preversion.sh',
       'scripts/_npm-version.sh',
+      'test/karma/_chrome.js',
+      'test/karma/_detected.js',
+      'test/karma/_firefox.js',
+      'test/karma/_ie.js',
+      'test/karma/_opera.js',
+      'test/karma/_safari.js',
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
@@ -189,8 +195,8 @@ module.exports = yeoman.generators.Base.extend({
 
     this._templatesToCopy = [
       'src/_plugin.js',
+      'test/karma/_common.js',
       'test/unit/_index.html',
-      'test/unit/_karma.conf.js',
       'test/unit/_plugin.test.js',
       '_bower.json',
       '_index.html',

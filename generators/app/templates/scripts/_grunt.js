@@ -2,13 +2,13 @@ import loadGruntTasks from 'load-grunt-tasks';
 
 const init = function(grunt) {
 
-  const KARMA_BROWSERS = {
-    chrome: 'Chrome',
-    firefox: 'Firefox',
-    ie: 'IE',
-    opera: 'Opera',
-    safari: 'Safari'
-  };
+  const KARMA_BROWSERS = [
+    'chrome',
+    'firefox',
+    'ie',
+    'opera',
+    'safari'
+  ];
 
   grunt.initConfig({
 
@@ -106,17 +106,17 @@ const init = function(grunt) {
 
     karma: (() => {
       var karma = {
-        options: {
-          configFile: 'test/unit/karma.conf.js'
-        },
-        detected: {}
+        detected: {
+          options: {
+            configFile: 'test/karma/detected.js'
+          }
+        }
       };
 
-      Object.keys(KARMA_BROWSERS).forEach(function(key) {
-        karma[key] = {
-          browsers: [KARMA_BROWSERS[key]],
-          detectBrowsers: {
-            enabled: false
+      KARMA_BROWSERS.forEach(function(browser) {
+        karma[browser] = {
+          options: {
+            configFile: `test/karma/${browser}.js`
           }
         };
       });
@@ -176,10 +176,12 @@ const init = function(grunt) {
 
   loadGruntTasks(grunt);
 
+<% if (sass) { -%>
   // The grunt-contrib-watch task gets renamed so that "watch" can be used as
   // an alias for "concurrent:watch".
   grunt.renameTask('watch', 'contrib-watch');
 
+<% } -%>
   grunt.registerTask('build', [
     'clean:dist',
 <% if (sass) { -%>
@@ -204,12 +206,12 @@ const init = function(grunt) {
     'concurrent:start'
   ]);
 
-  // Create tasks for each Karma target.
-  ['detected'].concat(Object.keys(KARMA_BROWSERS)).forEach((target) => {
-    grunt.registerTask('test:' + target, [
+  // Create tasks for each Karma browser.
+  KARMA_BROWSERS.forEach((browser) => {
+    grunt.registerTask('test:' + browser, [
       'lint',
       'build:test',
-      'karma:' + target
+      'karma:' + browser
     ]);
   });
 

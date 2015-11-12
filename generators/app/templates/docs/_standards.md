@@ -38,6 +38,7 @@ Folder/Filename            | Optional | Description
 `src/plugin.scss`          | ✓        | Sass entry point.
 `src/plugin.js`            |          | JavaScript entry point.
 `test/`                    |          | All testing-related source code.
+`test/karma/`              |          | Karma configuration files.
 `test/unit/`               |          | Unit tests.
 `test/unit/plugin.test.js` |          | Testing entry point.
 `.editorconfig`            |          |
