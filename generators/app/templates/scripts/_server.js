@@ -13,6 +13,14 @@ const HOST = '127.0.0.1';
 
 const app = connect();
 
+const verbs = [
+  'Chewing the cud',
+  'Grazing',
+  'Mooing',
+  'Lowing',
+  'Churning the cream'
+];
+
 app.use(serveStatic(path.join(__dirname, '..')));
 
 portscanner.findAPortNotInUse(PORT, MAX_PORT, HOST, (error, port) => {
@@ -21,7 +29,7 @@ portscanner.findAPortNotInUse(PORT, MAX_PORT, HOST, (error, port) => {
   }
 
   console.log(cowsay.say({
-    text: `Listening on ${HOST}:${port}`
+    text: `${verbs[Math.floor(Math.random() * 5)]} on ${HOST}:${port}`
   }));
 
   app.listen(port);
