@@ -53,7 +53,7 @@ Folder/Filename            | Optional | Description
 `package.json`             |          |
 `README.md`                |          | Documents which version(s) of video.js the plugin supports. Explains how to build/test.
 
-## Building
+## Tooling
 
 __All tooling for a standard video.js plugin must be available through npm scripts.__
 
@@ -82,7 +82,7 @@ npm Script   | Grunt Equiv.       | Optional | Description
 `build:test` | `grunt build:test` |          | Builds the test Browserify entry point.
 `clean`      | `grunt clean`      |          | Cleans up build artifacts.
 `lint`       | `grunt lint`       |          | Lints all `.js` file(s).
-`start`      | `grunt start`      |          | Starts a development server and runs `watch`.
+`start`      | `grunt start`      |          | Starts a development server at port `9999` (or closest open port) and runs `watch`.
 `test`       | `grunt test`       |          | Runs `lint`, `build`, and tests.
 `test:*`     | `grunt test:*`     |          | Browser-specific tests (e.g. `test:firefox`).
 `watch`      | `grunt watch`      |          | Watches everything and runs appropriate tasks.
@@ -91,7 +91,23 @@ npm Script   | Grunt Equiv.       | Optional | Description
 `watch:test` | `grunt watch:test` |          | Triggers a build when the test entry point changes.
 `version`    | n/a                |          | Bumps the package version and creates a distributable, Bower-friendly, tag.
 
-__Note:__ While most of these scripts are run using `npm run *`, `start` and `test` are built-in npm scripts and do not need to be run with `npm run` (that is, `npm start` and `npm test` work).
+__Note:__ While most of these scripts are run using `npm run *`, `start` and `test` are built-in npm scripts and can be run via `npm start` and `npm test`.
+
+## Testing
+
+__All standard video.js plugins must have tests.__
+
+Testing is a critical element of any software project and it should be done in an environment as similar to "production" as possible. To that end, video.js tests should be run in a browser.
+
+By default, testing is achieved with [QUnit](https://qunitjs.com/) as the testing framework and [Karma](https://karma-runner.github.io/) as the runner.
+
+### Testing with Karma
+
+All the test tooling uses single-run Karma sessions. `npm test` will launch all the matching browsers which Karma supports and run tests in them. `npm run test:*` will test in a given browser (e.g. `chrome` or `firefox`).
+
+### Testing in a Browser
+
+During development, it may be more convenient to run your tests in a persistent, user-controlled browser tab (i.e. not through Karma). This can be achieved easily by running a development server with `npm start` and navigating to [`http://localhost:9999/test/`](http://localhost:9999/test/) (_note:_ port may vary, check console output).
 
 ## Release
 
