@@ -12,13 +12,19 @@ To learn more about video.js plugins and this generator's standards and opinions
 If you don't know what Yeoman is or what generators are, check out the Yeoman [Getting Started](http://yeoman.io/learning/index.html) document. Long story short, make sure you have Yoeman and this generator installed globally:
 
 ```bash
-npm install -g yo generator-videojs-plugin
+$ npm install -g yo generator-videojs-plugin
 ```
 
 Then, creating the foundation for your video.js plugin is as simple as:
 
 ```bash
-yo videojs-plugin
+$ yo videojs-plugin
+```
+
+Or - on a non-Windows environment - a shortcut is available:
+
+```bash
+$ vjsp
 ```
 
 You will be walked through several options and ultimately be presented with a working video.js plugin. Of course, this plugin won't do anything out of the box - that part is left to your creativity!
