@@ -47,7 +47,6 @@ module.exports = {
     ],
 
     npm: [
-      'scripts/bannerize.js',
       'scripts/server.js'
     ],
 

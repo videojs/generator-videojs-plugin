@@ -329,7 +329,6 @@ module.exports = yeoman.generators.Base.extend({
         this._templatesToCopy.push('scripts/_grunt.js');
         this._filesToCopy.push('_Gruntfile.js');
       } else if (builder === 'npm') {
-        this._filesToCopy.push('scripts/_bannerize.js');
         this._filesToCopy.push('scripts/_server.js');
       }
 

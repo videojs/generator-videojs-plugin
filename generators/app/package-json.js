@@ -193,10 +193,11 @@ var PACKAGE = {
         'watch:test': 'watchify test/plugin.test.js -v -o test/bundle.js',
         'browserify:js': nameify('browserify src/plugin.js -s %s -o dist/%s.js', context),
         'browserify:test': 'browserify test/plugin.test.js -o test/bundle.js',
-        'bannerize:js': nameify('babel-node scripts/bannerize.js dist/%s.js', context),
+        'bannerize:js': nameify('bannerize dist/%s.js --banner=scripts/banner.ejs', context),
         'uglify': nameify('uglifyjs dist/%s.js --comments --mangle --compress -o dist/%s.min.js', context)
       },
       devDependencies: {
+        'bannerize': '^1.0.0',
         'connect': '^3.4.0',
         'cowsay': '^1.1.0',
         'ejs': '^2.3.4',
@@ -240,7 +241,7 @@ var PACKAGE = {
         'build': 'npm-run-all -p build:js build:test build:css',
         'build:css': 'npm-run-all mkdist sass bannerize:css',
         'watch:css': nameify('node-sass --output-style=nested --linefeed=lf src/plugin.scss -o dist -w src && mv dist/plugin.css dist/%s.css', context),
-        'bannerize:css': nameify('babel-node scripts/bannerize.js dist/%s.css', context),
+        'bannerize:css': nameify('bannerize dist/%s.css --banner=scripts/banner.ejs', context),
         'sass': nameify('node-sass --output-style=compressed --linefeed=lf src/plugin.scss -o dist && mv dist/plugin.css dist/%s.css', context),
       },
       devDependencies: {
