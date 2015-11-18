@@ -17,15 +17,24 @@ const init = function(grunt) {
 
     banner: grunt.file.read('scripts/banner.ejs'),
     pkg: grunt.file.readJSON('package.json'),
-    year: grunt.template.today('yyyy'),
+    year: new Date(),
+
+    babel: {
+      js: {
+        files: [{
+          expand: true,
+          cwd: 'src',
+          src: ['**/*.js'],
+          dest: 'es5',
+          ext: '.js'
+        }]
+      }
+    },
 
     browserify: {
 
       options: {
-        transform: [
-          'babelify',
-          'browserify-shim'
-        ]
+        transform: ['browserify-shim']
       },
 
       js: {
@@ -35,31 +44,16 @@ const init = function(grunt) {
             standalone: '<%%= pkg.name %>'
           }
         },
-        src: 'src/plugin.js',
+        src: 'es5/plugin.js',
         dest: 'dist/<%%= pkg.name %>.js'
       },
 
-      'watch-js': {
-        options: {
-          watch: true,
-          keepAlive: true
-        },
-        src: '<%%= browserify.js.src %>',
-        dest: '<%%= browserify.js.dest %>'
-      },
-
       test: {
+        options: {
+          transform: ['babelify', 'browserify-shim']
+        },
         src: 'test/**/*.test.js',
         dest: 'test/bundle.js'
-      },
-
-      'watch-test': {
-        options: {
-          watch: true,
-          keepAlive: true
-        },
-        src: '<%%= browserify.test.src %>',
-        dest: '<%%= browserify.test.dest %>'
       }
     },
 
@@ -74,24 +68,7 @@ const init = function(grunt) {
       },
 
       start: {
-        tasks: [
-          'connect:start',
-<% if (sass) { -%>
-          'contrib-watch',
-<% } -%>
-          'browserify:watch-js',
-          'browserify:watch-test'
-        ]
-      },
-
-      watch: {
-        tasks: [
-<% if (sass) { -%>
-          'contrib-watch',
-<% } -%>
-          'browserify:watch-js',
-          'browserify:watch-test'
-        ]
+        tasks: ['connect:start', 'watch']
       }
     },
 
@@ -156,9 +133,9 @@ const init = function(grunt) {
         src: '<%%= browserify.js.dest %>',
         dest: 'dist/<%%= pkg.name %>.min.js'
       }
-<% if (sass) { -%>
     },
 
+<% if (sass) { -%>
     usebanner: {
       options: {
         banner: '<%%= banner %>'
@@ -168,23 +145,25 @@ const init = function(grunt) {
       }
     },
 
-    'contrib-watch': {
+<% } -%>
+    watch: {
       css: {
         files: 'src/**/*.scss',
         tasks: ['sass:dist']
+      },
+      js: {
+        files: 'src/**/*.js',
+        tasks: ['babel:js', 'browserify:js']
+      },
+      test: {
+        files: ['src/**/*.js', 'test/**/*.js'],
+        tasks: ['browserify:test']
       }
-<% } -%>
     }
   });
 
   loadGruntTasks(grunt);
 
-<% if (sass) { -%>
-  // The grunt-contrib-watch task gets renamed so that "watch" can be used as
-  // an alias for "concurrent:watch".
-  grunt.renameTask('watch', 'contrib-watch');
-
-<% } -%>
   grunt.registerTask('build', [
     'clean:dist',
 <% if (sass) { -%>
@@ -197,7 +176,7 @@ const init = function(grunt) {
 <% if (sass) { -%>
   grunt.registerTask('build:css', ['sass:dist', 'usebanner:css']);
 <% } -%>
-  grunt.registerTask('build:js', ['browserify:js', 'uglify:js']);
+  grunt.registerTask('build:js', ['babel:js', 'browserify:js', 'uglify:js']);
   grunt.registerTask('build:test', ['browserify:test']);
   grunt.registerTask('default', ['build']);
   grunt.registerTask('docs', ['run:docs']);
@@ -219,10 +198,6 @@ const init = function(grunt) {
   });
 
   grunt.registerTask('test', ['test:detected']);
-  grunt.registerTask('watch', ['concurrent:watch']);
-  grunt.registerTask('watch:css', ['contrib-watch']);
-  grunt.registerTask('watch:js', ['browserify:watch-js']);
-  grunt.registerTask('watch:test', ['browserify:watch-test']);
 };
 
 export default init;

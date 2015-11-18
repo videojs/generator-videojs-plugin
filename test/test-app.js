@@ -24,7 +24,7 @@ describe('videojs-plugin:app', function() {
     assert.strictEqual(this.pkg.license, 'MIT');
     assert.strictEqual(this.pkg.name, 'videojs-common');
     assert.strictEqual(this.pkg.version, '0.0.0');
-    assert.strictEqual(this.pkg.main, 'src/plugin.js');
+    assert.strictEqual(this.pkg.main, 'es5/plugin.js');
     assert.ok(_.isArray(this.pkg.keywords));
     assert.ok(_.isPlainObject(this.pkg['browserify-shim']));
     assert.ok(_.isPlainObject(this.pkg.standard));

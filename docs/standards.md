@@ -52,6 +52,7 @@ Folder/Filename            | Optional | Description
 -------------------------- | -------- | -----------
 `dist/`                    |          | Created during builds and ignored by Git.
 `docs/`                    | ✓        | Any documentation beyond `README.md`.
+`es5/`                     |          | Babel-compiled `src/` scripts.
 `lang/`                    | ✓        | Any JSON language files for the plugin.
 `scripts/`                 | ✓        | Scripts used by npm, Grunt, or other tools; _not part of the source code!_
 `src/`                     |          | All source code.
@@ -81,16 +82,15 @@ __All tooling for a standard video.js plugin must be available through npm scrip
 
 There are many reasons for this rule:
 
-- Complicated build tools are not necessary for all plugins.
 - Where a separate build tool is preferred, npm scripts can easily act as aliases to build tasks (e.g., `"build": "grunt build"`).
-- CI servers and other tools can use npm - as they must anyway, in some capacity - without worrying about the underlying tooling.
+- CI servers and other tools can use npm (as they must anyway, in some capacity) without worrying about the underlying tooling.
 - Consistent npm script naming means contributors don't have to learn a new build tool or new set of commands when moving between plugin projects, lowering the barrier to contributions.
 
 ### Grunt, by Default
 
 By default, a Grunt-based workflow is provided by the generator. Its tasks closely match the npm scripts outlined below. By default, it will run `grunt test`.
 
-### npm Scripts
+### npm Core Scripts
 
 __The core set of npm scripts must match the table below.__
 
@@ -103,7 +103,9 @@ npm Script   | Grunt Equiv.       | Optional | Description
 `build:js`   | `grunt build:js`   |          | Builds the Browserify entry point.
 `build:test` | `grunt build:test` |          | Builds the test Browserify entry point.
 `clean`      | `grunt clean`      |          | Cleans up build artifacts.
+`docs`       | `grunt docs`       | ✓        | Documentation build.
 `lint`       | `grunt lint`       |          | Lints all `.js` file(s).
+`mkdirs`     | n/a                |          | Creates any necessary directories. Grunt doesn't need this.
 `start`      | `grunt start`      |          | Starts a development server at port `9999` (or closest open port) and runs `watch`.
 `test`       | `grunt test`       |          | Runs `lint`, `build`, and tests.
 `test:*`     | `grunt test:*`     |          | Browser-specific tests (e.g. `test:firefox`).
@@ -111,7 +113,7 @@ npm Script   | Grunt Equiv.       | Optional | Description
 `watch:css`  | `grunt watch:css`  | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
 `watch:js`   | `grunt watch:js`   |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
 `watch:test` | `grunt watch:test` |          | Triggers a build when the test entry point changes.
-`version`    | n/a                |          | Bumps the package version and creates a distributable, Bower-friendly, tag.
+`version`    | n/a                |          | Includes `preversion` and `postversion` scripts. Bumps the package version and creates a distributable, Bower-friendly, tag.
 
 __Note:__ While most of these scripts are run using `npm run *`, `start` and `test` are built-in npm scripts and can be run via `npm start` and `npm test`.
 

@@ -3,6 +3,18 @@
 var _ = require('lodash');
 var util = require('util');
 
+
+/**
+ * Convert an array of npm scripts into an object where the keys are the
+ * array elements and the values are the equivalent Grunt script values.
+ *
+ * @example
+ *   gruntify(['a', 'b']) === {a: "grunt a", b: "grunt b"}
+ * @private
+ * @param  {String} string
+ * @param  {Object} context
+ * @return {String}
+ */
 var gruntify = function(scripts) {
   var result = {};
   scripts.forEach(function(script) {
@@ -16,6 +28,7 @@ var gruntify = function(scripts) {
  *
  * @example
  *   nameify('foo %s bar %s', {packageName: 'baz'}) === 'foo baz bar baz'
+ * @private
  * @param  {String} string
  * @param  {Object} context
  * @return {String}
@@ -46,7 +59,7 @@ var PACKAGE = {
       author: context.author,
       license: context.licenseName,
       version: '0.0.0',
-      main: 'src/plugin.js',
+      main: 'es5/plugin.js',
       keywords: [
         'videojs',
         'videojs-plugin'
@@ -63,9 +76,9 @@ var PACKAGE = {
         ]
       },
       scripts: {
-        'docs': 'npm-run-all -p docs-toc docs-api',
-        'docs-api': 'documentation src/*.js -f html -o docs/api',
-        'docs-toc': 'doctoc README.md docs/*md',
+        'docs': 'npm-run-all -p docs:toc docs:api',
+        'docs:api': 'documentation src/*.js -f html -o docs/api',
+        'docs:toc': 'doctoc README.md docs/*md',
         'lint': 'standard .',
         'preversion': './scripts/npm-preversion.sh',
         'version': './scripts/npm-version.sh',
@@ -89,7 +102,7 @@ var PACKAGE = {
         'karma-opera-launcher': '^0.3.0',
         'karma-qunit': '^0.1.0',
         'karma-safari-launcher': '^0.1.0',
-        'npm-run-all': '^1.2.0',
+        'npm-run-all': '~1.2.0',
         'qunitjs': '^1.0.0',
         'sinon': '^1.0.0',
         'video.js': '^5.0.0',
@@ -127,13 +140,14 @@ var PACKAGE = {
       ]),
       devDependencies: {
         'grunt': '^0.4.0',
-        'grunt-browserify': '^4.0.1',
-        'grunt-concurrent': '^2.0.3',
+        'grunt-babel': '^5.0.0',
+        'grunt-browserify': '^4.0.0',
+        'grunt-concurrent': '^2.0.0',
         'grunt-contrib-clean': '^0.6.0',
-        'grunt-contrib-connect': '^0.11.2',
-        'grunt-contrib-uglify': '^0.9.2',
+        'grunt-contrib-connect': '^0.11.0',
+        'grunt-contrib-uglify': '^0.9.0',
         'grunt-karma': '^0.12.0',
-        'grunt-run': '^0.5.2',
+        'grunt-run': '^0.5.0',
         'load-grunt-tasks': '^3.1.0',
         'time-grunt': '^1.2.0'
       }
@@ -179,42 +193,48 @@ var PACKAGE = {
    */
   npm: function(context) {
     var result = {
+      browserify: {
+        transform: ['browserify-shim']
+      },
+
       scripts: {
-        'prebuild': 'npm run clean',
-        'build': 'npm-run-all -p build:js build:test',
-        'build:js': 'npm-run-all mkdist browserify:js bannerize:js uglify',
-        'build:test': 'npm-run-all mkdist browserify:test',
-        'clean': 'rm -rf dist && npm run mkdist',
-        'mkdist': 'mkdir -p dist',
-        'prestart': 'npm-run-all -p docs build',
+
+        // Core scripts
+        'build': 'npm-run-all -p build:*',
+        'build:js': 'npm-run-all mkdirs build:js:babel build:js:browserify build:js:bannerize build:js:uglify',
+        'build:test': 'npm-run-all mkdirs build:test:browserify',
+        'clean': 'rm -rf dist es5',
+        'mkdirs': 'mkdir -p dist es5',
         'start': 'npm-run-all -p serve watch',
-        'serve': 'babel-node scripts/server.js',
-        'pretest': 'npm-run-all lint build:test',
         'test': 'karma start test/karma/detected.js',
-        'watch': 'npm run mkdist && npm-run-all -p watch:*',
+        'watch': 'npm run mkdirs && npm-run-all -p watch:*',
         'watch:js': nameify('watchify src/plugin.js -v -o dist/%s.js', context),
         'watch:test': 'watchify test/plugin.test.js -v -o test/bundle.js',
-        'browserify:js': nameify('browserify src/plugin.js -s %s -o dist/%s.js', context),
-        'browserify:test': 'browserify test/plugin.test.js -o test/bundle.js',
-        'bannerize:js': nameify('bannerize dist/%s.js --banner=scripts/banner.ejs', context),
-        'uglify': nameify('uglifyjs dist/%s.js --comments --mangle --compress -o dist/%s.min.js', context)
+
+        // Meta-scripts
+        'prebuild': 'npm run clean',
+        'prestart': 'npm-run-all -p docs build',
+        'pretest': 'npm-run-all lint build:test',
+        'serve': 'babel-node scripts/server.js',
+
+        // Sub-scripts
+        'build:js:babel': 'babel src -d es5',
+        'build:js:browserify': nameify('browserify . -s %s -o dist/%s.js', context),
+        'build:js:bannerize': nameify('bannerize dist/%s.js --banner=scripts/banner.ejs', context),
+        'build:js:uglify': nameify('uglifyjs dist/%s.js --comments --mangle --compress -o dist/%s.min.js', context),
+        'build:test:browserify': 'browserify test/plugin.test.js -t babelify -o test/bundle.js'
       },
+
       devDependencies: {
         'bannerize': '^1.0.0',
         'connect': '^3.4.0',
         'cowsay': '^1.1.0',
-        'ejs': '^2.3.4',
+        'ejs': '^2.3.0',
         'minimist': '^1.2.0',
         'portscanner': '^1.0.0',
         'serve-static': '^1.10.0',
         'uglify-js': '^2.5.0',
         'watchify': '^3.6.0'
-      },
-      browserify: {
-        transform: [
-          'babelify',
-          'browserify-shim'
-        ]
       }
     };
 
@@ -241,11 +261,14 @@ var PACKAGE = {
   'npm+sass': function(context) {
     return {
       scripts: {
-        'build': 'npm-run-all -p build:js build:test build:css',
-        'build:css': 'npm-run-all mkdist sass bannerize:css',
+
+        // Core tasks
+        'build:css': 'npm-run-all mkdirs build:css:sass build:css:bannerize',
         'watch:css': nameify('node-sass --output-style=nested --linefeed=lf src/plugin.scss -o dist -w src && mv dist/plugin.css dist/%s.css', context),
-        'bannerize:css': nameify('bannerize dist/%s.css --banner=scripts/banner.ejs', context),
-        'sass': nameify('node-sass --output-style=compressed --linefeed=lf src/plugin.scss -o dist && mv dist/plugin.css dist/%s.css', context),
+
+        // Sub-scripts
+        'build:css:bannerize': nameify('bannerize dist/%s.css --banner=scripts/banner.ejs', context),
+        'build:css:sass': nameify('node-sass --output-style=compressed --linefeed=lf src/plugin.scss -o dist && mv dist/plugin.css dist/%s.css', context),
       },
       devDependencies: {
         'node-sass': '^3.4.0'
@@ -254,9 +277,11 @@ var PACKAGE = {
   }
 };
 
-module.exports = function packageJSON() {
-  var args = _.toArray(arguments);
-  var context = _.isObject(args[0]) ? args.shift() : null;
-  var key = args.join('+');
-  return PACKAGE[key](context);
+module.exports = function packageJSON(context, builder, sass) {
+  return _.merge(
+    {},
+    PACKAGE.common(context),
+    PACKAGE[builder](context),
+    sass ? PACKAGE[builder + '+sass'](context) : null
+  );
 };

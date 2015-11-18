@@ -366,18 +366,21 @@ module.exports = yeoman.generators.Base.extend({
      */
     package: function() {
       var builder = this.config.get('builder');
+      var sass = this.config.get('sass');
+      var pkgPath = this.destinationPath('package.json');
+      var current = this.fs.readJSON(pkgPath, {});
+      var generated = packageJSON(this.context, builder, sass);
 
-      var pkg = _.merge(
-        this.fs.readJSON(this.destinationPath('package.json'), {}),
-        packageJSON(this.context, 'common'),
-        packageJSON(this.context, builder)
-      );
+      // In the case of certain properties that would otherwise be over-
+      // written by the merge, make sure the existing package.json takes
+      // precedence.
+      var ignored = _.pick(current, ['version']);
+      var pkg = _.merge(current, generated, ignored);
 
-      if (this.config.get('sass')) {
-        _.merge(pkg, packageJSON(this.context, builder, 'sass'));
-      }
+      // Since we are targeting a single engine here - V8 - we can
+      // kinda-sort objects in alphabetic order.
 
-      this.fs.writeJSON(this.destinationPath('package.json'), pkg);
+      this.fs.writeJSON(pkgPath, pkg);
     }
   },
 

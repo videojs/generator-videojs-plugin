@@ -31,7 +31,8 @@ node_modules/
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt/
 
-# Common build-related directories
+# Build-related directories
 dist/
 docs/api/
+es5/
 test/bundle.js
