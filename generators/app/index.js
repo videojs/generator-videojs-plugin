@@ -206,7 +206,6 @@ module.exports = yeoman.generators.Base.extend({
     });
 
     this._filesToCopy = [
-      'docs/_standards.md',
       'scripts/_banner.ejs',
       'scripts/_npm-postversion.sh',
       'scripts/_npm-preversion.sh',

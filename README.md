@@ -5,7 +5,7 @@ This is a [Yeoman](http://yeoman.io) generator for [video.js](http://videojs.com
 To learn more about video.js plugins and this generator's standards and opinions, check out:
 
 - [video.js Plugins Guide](https://github.com/videojs/video.js/blob/master/docs/guides/plugins.md).
-- [Brightcove's video.js Plugin Standards](https://github.com/videojs/generator-videojs-plugin/generators/app/templates/docs/_standards.md).
+- [Brightcove's video.js Plugin Standards](docs/standards.md).
 
 ## Getting Started
 

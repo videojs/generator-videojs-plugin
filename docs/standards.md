@@ -39,7 +39,7 @@ Folder/Filename            | Optional | Description
 `src/plugin.js`            |          | Browserify entry point.
 `test/`                    |          | Unit tests.
 `test/karma/`              |          | Karma configuration files.
-`test/bundle.js`           |          | Built Browserify test bundle.
+`test/bundle.js`           |          | Built Browserify test bundle (ignored by Git).
 `test/plugin.test.js`      |          | Browserify entry point.
 `.editorconfig`            |          |
 `.gitignore`               |          |

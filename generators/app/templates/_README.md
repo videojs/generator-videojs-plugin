@@ -8,7 +8,7 @@ A plugin for video.js.
 1. Install dependencies: `npm install`
 1. Run a development server: `npm start`
 
-That's it! Refer to the [video.js plugin standards](docs/standards.md) for more detail.
+That's it! Refer to the [video.js plugin standards](https://github.com/videojs/generator-videojs-plugin/docs/standards.md) for more detail.
 
 ### Running Tests
 
@@ -19,7 +19,7 @@ That's it! Refer to the [video.js plugin standards](docs/standards.md) for more 
 ### Tag and Release
 
 1. Make sure everything is committed.
-1. `npm version *` where `*` is `major`, `minor`, `patch`, etc. [Read more about versioning.](docs/standards.md#versioning)
+1. `npm version *` where `*` is `major`, `minor`, `patch`, etc. [Read more about versioning.](https://github.com/videojs/generator-videojs-plugin/docs/standards.md#versioning)
 1. `npm publish`
 
 ## License

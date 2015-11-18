@@ -12,7 +12,6 @@ module.exports = {
   files: {
 
     common: [
-      'docs/standards.md',
       'scripts/banner.ejs',
       'scripts/npm-postversion.sh',
       'scripts/npm-preversion.sh',
