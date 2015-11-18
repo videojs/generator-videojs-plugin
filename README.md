@@ -7,23 +7,40 @@ To learn more about video.js plugins and this generator's standards and opinions
 - [video.js Plugins Guide](https://github.com/videojs/video.js/blob/master/docs/guides/plugins.md).
 - [Brightcove's video.js Plugin Standards](docs/standards.md).
 
+### Table of Contents
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Getting Started](#getting-started)
+  - [Options](#options)
+    - [Brightcove Defaults](#brightcove-defaults)
+    - [Private](#private)
+    - [Install](#install)
+    - [Prompt](#prompt)
+    - [Hurry](#hurry)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Getting Started
 
 If you don't know what Yeoman is or what generators are, check out the Yeoman [Getting Started](http://yeoman.io/learning/index.html) document. Long story short, make sure you have Yoeman and this generator installed globally:
 
-```bash
+```sh
 $ npm install -g yo generator-videojs-plugin
 ```
 
 Then, creating the foundation for your video.js plugin is as simple as:
 
-```bash
+```sh
 $ yo videojs-plugin
 ```
 
-Or - on a non-Windows environment - a shortcut is available:
+For the typing-phobic, a shortcut is available:
 
-```bash
+```sh
 $ vjsp
 ```
 

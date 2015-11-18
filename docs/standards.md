@@ -4,6 +4,28 @@ This document contains the standard rules of structure, tooling, and workflow us
 
 These rules are by no means required for community plugins. This document and the Yeoman generator it is part of are provided as open source for the good of the community. If you don't agree with these standards, by all means stick to your own preferences in your own plugin projects!
 
+### Table of Contents
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Use the Generator!](#use-the-generator)
+- [Packaging and Dependencies](#packaging-and-dependencies)
+  - [Entry Points](#entry-points)
+  - [Structure](#structure)
+- [Tooling](#tooling)
+  - [Grunt, by Default](#grunt-by-default)
+  - [npm Scripts](#npm-scripts)
+- [Coding Style](#coding-style)
+- [Testing](#testing)
+  - [Testing with Karma](#testing-with-karma)
+  - [Testing in a Browser](#testing-in-a-browser)
+- [Release](#release)
+  - [Versioning](#versioning)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Use the Generator!
 
 There is a Yeoman generator available for kicking off standard video.js plugin projects. It is [open source](https://github.com/videojs/generator-videojs-plugin) and [available on npm](https://www.npmjs.com/package/generator-videojs-plugin).
@@ -92,6 +114,14 @@ npm Script   | Grunt Equiv.       | Optional | Description
 `version`    | n/a                |          | Bumps the package version and creates a distributable, Bower-friendly, tag.
 
 __Note:__ While most of these scripts are run using `npm run *`, `start` and `test` are built-in npm scripts and can be run via `npm start` and `npm test`.
+
+## Coding Style
+
+__All standard video.js plugins must pass videojs-standard linting.__
+
+In an effort to reduce guess work, avoid bikeshedding on style, and simplify the code review process, we have a fork of the popular [standard](https://www.npmjs.com/package/standard) library, named [videojs-standard](https://www.npmjs.com/package/videojs-standard).
+
+Its coding conventions are enforced in standard video.js plugins via the `npm run lint` command (or `grunt:lint`), which gets auto-run anytime tests are run and before bumping a version with `npm version`.
 
 ## Testing
 

@@ -13,6 +13,7 @@
     "url": "https://github.com/videojs"
   },
   "scripts": {
+    "docs": "doctoc README.md docs/*.md",
     "test": "mocha"
   },
   "keywords": [
@@ -25,6 +26,7 @@
     "yosay": "^1.0.2"
   },
   "devDependencies": {
+    "doctoc": "^0.15.0",
     "mocha": "^2.3.3"
   }
 }

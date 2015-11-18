@@ -63,7 +63,9 @@ var PACKAGE = {
         ]
       },
       scripts: {
-        'docs': 'documentation src/*.js -f html -o docs/api',
+        'docs': 'npm-run-all -p docs-toc docs-api',
+        'docs-api': 'documentation src/*.js -f html -o docs/api',
+        'docs-toc': 'doctoc README.md docs/*md',
         'lint': 'standard .',
         'preversion': './scripts/npm-preversion.sh',
         'version': './scripts/npm-version.sh',
@@ -75,6 +77,7 @@ var PACKAGE = {
         'babelify': '^6.0.0',
         'browserify': '^11.0.0',
         'browserify-shim': '^3.0.0',
+        'doctoc': '^0.15.0',
         'documentation': '^3.0.0',
         'global': '^4.3.0',
         'karma': '^0.13.0',
