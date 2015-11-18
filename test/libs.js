@@ -36,6 +36,7 @@ module.exports = {
     ],
 
     oss: [
+      '.travis.yml',
       'LICENSE',
       'CONTRIBUTING.md'
     ],

@@ -40,6 +40,14 @@ var DEFAULTS = {
   }
 };
 
+/**
+ * Generates a new Karma config with a common set of base configuration.
+ *
+ * @param  {Object} custom
+ *         Configuration that will be deep-merged. Arrays will be
+ *         concatenated.
+ * @return {Object}
+ */
 module.exports = function(custom) {
   return _.merge(
     {},

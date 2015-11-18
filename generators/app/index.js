@@ -324,6 +324,10 @@ module.exports = yeoman.generators.Base.extend({
       var builder = this.config.get('builder');
       var sass = this.config.get('sass');
 
+      if (!this.config.get('priv')) {
+        this._filesToCopy.push('_.travis.yml');
+      }
+
       if (builder === 'grunt') {
         this._templatesToCopy.push('scripts/_grunt.js');
         this._filesToCopy.push('_Gruntfile.js');
@@ -376,9 +380,6 @@ module.exports = yeoman.generators.Base.extend({
       // precedence.
       var ignored = _.pick(current, ['version']);
       var pkg = _.merge(current, generated, ignored);
-
-      // Since we are targeting a single engine here - V8 - we can
-      // kinda-sort objects in alphabetic order.
 
       this.fs.writeJSON(pkgPath, pkg);
     }

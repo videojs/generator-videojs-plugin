@@ -1,21 +1,33 @@
 var common = require('./common');
 
+// Runs default testing configuration in multiple environments.
+
 module.exports = function(config) {
-  config.set(common({
 
-    frameworks: ['detectBrowsers'],
+  // Travis CI should run in its available Firefox headless browser.
+  if (process.env.TRAVIS) {
 
-    plugins: [
-      'karma-chrome-launcher',
-      'karma-detect-browsers',
-      'karma-firefox-launcher',
-      'karma-ie-launcher',
-      'karma-opera-launcher',
-      'karma-safari-launcher'
-    ],
+    config.set(common({
+      browsers: ['Firefox'],
+      plugins: ['karma-firefox-launcher']
+    }))
+  } else {
+    config.set(common({
 
-    detectBrowsers: {
-      usePhantomJS: false
-    }
-  }));
+      frameworks: ['detectBrowsers'],
+
+      plugins: [
+        'karma-chrome-launcher',
+        'karma-detect-browsers',
+        'karma-firefox-launcher',
+        'karma-ie-launcher',
+        'karma-opera-launcher',
+        'karma-safari-launcher'
+      ],
+
+      detectBrowsers: {
+        usePhantomJS: false
+      }
+    }));
+  }
 };

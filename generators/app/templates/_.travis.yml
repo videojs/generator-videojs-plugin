@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - 5
+  - 4
+  - 0.12
+
+# Set up a virtual screen for Firefox.
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
