@@ -198,31 +198,25 @@ var PACKAGE = {
       },
 
       scripts: {
-
-        // Core scripts
+        'prebuild': 'npm run clean',
         'build': 'npm-run-all -p build:*',
         'build:js': 'npm-run-all mkdirs build:js:babel build:js:browserify build:js:bannerize build:js:uglify',
+        'build:js:babel': 'babel src -d es5',
+        'build:js:bannerize': nameify('bannerize dist/%s.js --banner=scripts/banner.ejs', context),
+        'build:js:browserify': nameify('browserify . -s %s -o dist/%s.js', context),
+        'build:js:uglify': nameify('uglifyjs dist/%s.js --comments --mangle --compress -o dist/%s.min.js', context),
         'build:test': 'npm-run-all mkdirs build:test:browserify',
+        'build:test:browserify': 'browserify test/plugin.test.js -t babelify -o test/bundle.js',
         'clean': 'rm -rf dist es5',
         'mkdirs': 'mkdir -p dist es5',
+        'serve': 'babel-node scripts/server.js',
+        'prestart': 'npm-run-all -p docs build',
         'start': 'npm-run-all -p serve watch',
+        'pretest': 'npm-run-all lint build:test',
         'test': 'karma start test/karma/detected.js',
         'watch': 'npm run mkdirs && npm-run-all -p watch:*',
-        'watch:js': nameify('watchify src/plugin.js -v -o dist/%s.js', context),
-        'watch:test': 'watchify test/plugin.test.js -v -o test/bundle.js',
-
-        // Meta-scripts
-        'prebuild': 'npm run clean',
-        'prestart': 'npm-run-all -p docs build',
-        'pretest': 'npm-run-all lint build:test',
-        'serve': 'babel-node scripts/server.js',
-
-        // Sub-scripts
-        'build:js:babel': 'babel src -d es5',
-        'build:js:browserify': nameify('browserify . -s %s -o dist/%s.js', context),
-        'build:js:bannerize': nameify('bannerize dist/%s.js --banner=scripts/banner.ejs', context),
-        'build:js:uglify': nameify('uglifyjs dist/%s.js --comments --mangle --compress -o dist/%s.min.js', context),
-        'build:test:browserify': 'browserify test/plugin.test.js -t babelify -o test/bundle.js'
+        'watch:js': nameify('watchify src/plugin.js -t babelify -v -o dist/%s.js', context),
+        'watch:test': 'watchify test/plugin.test.js -t babelify -v -o test/bundle.js',
       },
 
       devDependencies: {
@@ -261,14 +255,10 @@ var PACKAGE = {
   'npm+sass': function(context) {
     return {
       scripts: {
-
-        // Core tasks
         'build:css': 'npm-run-all mkdirs build:css:sass build:css:bannerize',
-        'watch:css': nameify('node-sass --output-style=nested --linefeed=lf src/plugin.scss -o dist -w src && mv dist/plugin.css dist/%s.css', context),
-
-        // Sub-scripts
         'build:css:bannerize': nameify('bannerize dist/%s.css --banner=scripts/banner.ejs', context),
         'build:css:sass': nameify('node-sass --output-style=compressed --linefeed=lf src/plugin.scss -o dist && mv dist/plugin.css dist/%s.css', context),
+        'watch:css': nameify('node-sass --output-style=nested --linefeed=lf src/plugin.scss -o dist -w src && mv dist/plugin.css dist/%s.css', context),
       },
       devDependencies: {
         'node-sass': '^3.4.0'
