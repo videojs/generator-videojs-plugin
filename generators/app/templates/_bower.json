@@ -3,7 +3,12 @@
   "version": "0.0.0",
   "author": "<%= author %>",
   "license": "<%= licenseName %>",
-  "main": "dist/<%= packageName %>.min.js",
+  "main": [
+<% if (sass) { -%>
+    "dist/<%= packageName %>.css",
+<% } -%>
+    "dist/<%= packageName %>.min.js"
+  ],
   "keywords": [
     "videojs",
     "videojs-plugin"
