@@ -178,10 +178,15 @@ module.exports = yeoman.generators.Base.extend({
       var builder = this.config.get('builder');
       var prompts = [{
         name: 'name',
-        message: 'Enter the name of this plugin ("a-z" and "-" only; prefixed with "videojs-" automatically):',
+        message: 'Enter the name of this plugin ("a-z", "0-9" and "-" only; prefixed with "videojs-" automatically):',
         default: defaults.name,
         validate: function(input) {
-          return (/^[a-z][a-z-]+$/).test(input) || 'Names must start with a lower-case letter and contain only lower-case letters and hyphens.';
+          if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
+            return 'Names must start with a lower-case letter and contain only lower-case letters, digits, and hyphens.';
+          } else if (_.startsWith(input, 'videojs-')) {
+            return 'Plugins cannot start with "videojs-"; it will automatically be prepended!';
+          }
+          return true;
         }
       }, {
         name: 'author',
