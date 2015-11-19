@@ -419,7 +419,7 @@ module.exports = yeoman.generators.Base.extend({
       // written by the merge, make sure the existing package.json takes
       // precedence.
       var ignored = _.pick(this._currentPkgJSON, ['version']);
-      var pkg = _.merge(this._currentPkgJSON, generated, ignored);
+      var pkg = _.merge(this._currentPkgJSON || {}, generated, ignored);
 
       this.fs.writeJSON(this.destinationPath('package.json'), pkg);
     }
