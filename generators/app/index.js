@@ -22,6 +22,12 @@ var LICENSES = {
   priv: 'Private/Proprietary'
 };
 
+var toChoices = function(obj) {
+  return _.map(obj, function(value, key) {
+    return {name: value, value: key};
+  });
+};
+
 module.exports = yeoman.generators.Base.extend({
 
   /**
@@ -100,29 +106,61 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   /**
-   * Attempts to get a default author from either an existing Yeoman config
-   * or from Git, if none is found.
+   * Attempts to get default values for prompts. Async because it may call
+   * out to external processes (e.g. Git) to attempt to gather this info.
    *
-   * @method _getAuthor
+   * @method _getPromptDefaults
    * @private
    * @param  {Function} cb Callback called with author string.
    */
-  _getAuthor: function(cb) {
-    var author = this.config.get('author') || '';
-    var gitConfig;
+  _getPromptDefaults: function(cb) {
+    var configs = this.config.getAll();
+    var pkg = this._currentPkgJSON;
+    var defaults = {};
+    var git;
 
-    if (author) {
-      cb(author);
+    ['author', 'name', 'license'].forEach(function(key) {
+
+      // Look for configs in the configs object first. It takes precedence
+      // over everything!
+      if (configs.hasOwnProperty(key)) {
+        defaults[key] = configs[key];
+
+      // Look in the package.json (if one exists) for a way to determine
+      // a default value.
+      } else if (pkg && pkg.hasOwnProperty(key)) {
+        if (key === 'license') {
+
+          // The package.json stores a value from `LICENSES`, so in that
+          // case, we need to find the key instead of the value.
+          defaults.license = _.find(_.keys(LICENSES), function(k) {
+            return LICENSES[k] === pkg.license;
+          });
+        } else {
+          defaults[key] = pkg[key];
+        }
+      }
+    });
+
+    // Special handling to try to get the author from `git config`
+    if (!defaults.author) {
+
+      // Make sure it's a string, so we don't concat onto something like
+      // undefined and get undesirable strings!
+      defaults.author = '';
+
+      git = spawn('git', ['config', 'user.name']);
+
+      git.stdout.on('data', function(chunk) {
+        defaults.author += chunk;
+      });
+
+      git.on('close', function() {
+        defaults.author = defaults.author.trim();
+        cb(defaults);
+      });
     } else {
-      gitConfig = spawn('git', ['config', 'user.name']);
-
-      gitConfig.stdout.on('data', function(chunk) {
-        author += chunk;
-      });
-
-      gitConfig.on('close', function() {
-        cb(author.trim());
-      });
+      cb(defaults);
     }
   },
 
@@ -135,40 +173,37 @@ module.exports = yeoman.generators.Base.extend({
    * @return {Array}
    */
   _prompts: function(cb) {
-    this._getAuthor(function(author) {
-      var configs = this.config.getAll();
+    this._getPromptDefaults(function(defaults) {
+      var sass = this.config.get('sass');
+      var builder = this.config.get('builder');
       var prompts = [{
         name: 'name',
         message: 'Enter the name of this plugin ("a-z" and "-" only; prefixed with "videojs-" automatically):',
-        default: configs.name,
+        default: defaults.name,
         validate: function(input) {
           return (/^[a-z][a-z-]+$/).test(input) || 'Names must start with a lower-case letter and contain only lower-case letters and hyphens.';
         }
       }, {
         name: 'author',
         message: 'Enter the author of this plugin:',
-        default: author
+        default: defaults.author
       }, {
         type: 'list',
         name: 'license',
         message: 'Choose a license for your project',
-        default: configs.license || 'mit',
-        choices: _.map(LICENSES, function(value, key) {
-          return {name: value, value: key};
-        })
+        default: defaults.license || 'mit',
+        choices: toChoices(LICENSES)
       }, {
         type: 'confirm',
         name: 'sass',
         message: 'Do you need Sass styling?',
-        default: _.isUndefined(configs.sass) ? false : configs.sass
+        default: _.isUndefined(sass) ? false : sass
       }, {
         type: 'list',
         name: 'builder',
         message: 'What build tool do you want to use?',
-        default: configs.builder || 'grunt',
-        choices: _.map(BUILDERS, function(value, key) {
-          return {name: value, value: key};
-        })
+        default: builder || 'grunt',
+        choices: toChoices(BUILDERS)
       }];
 
       cb(prompts.filter(function(prompt) {
@@ -204,6 +239,8 @@ module.exports = yeoman.generators.Base.extend({
       type: 'boolean',
       defaults: false
     });
+
+    this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
 
     this._filesToCopy = [
       'scripts/_banner.ejs',
@@ -371,17 +408,15 @@ module.exports = yeoman.generators.Base.extend({
     package: function() {
       var builder = this.config.get('builder');
       var sass = this.config.get('sass');
-      var pkgPath = this.destinationPath('package.json');
-      var current = this.fs.readJSON(pkgPath, {});
       var generated = packageJSON(this.context, builder, sass);
 
       // In the case of certain properties that would otherwise be over-
       // written by the merge, make sure the existing package.json takes
       // precedence.
-      var ignored = _.pick(current, ['version']);
-      var pkg = _.merge(current, generated, ignored);
+      var ignored = _.pick(this._currentPkgJSON, ['version']);
+      var pkg = _.merge(this._currentPkgJSON, generated, ignored);
 
-      this.fs.writeJSON(pkgPath, pkg);
+      this.fs.writeJSON(this.destinationPath('package.json'), pkg);
     }
   },
 
