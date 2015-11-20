@@ -71,14 +71,15 @@ var PACKAGE = {
       },
       standard: {
         ignore: [
-          '**/dist/',
-          'docs'
+          'dist',
+          'docs',
+          'es5'
         ]
       },
       scripts: {
         'docs': 'npm-run-all -p docs:toc docs:api',
         'docs:api': 'documentation src/*.js -f html -o docs/api',
-        'docs:toc': 'doctoc README.md docs/*md',
+        'docs:toc': 'doctoc README.md docs/*.md',
         'lint': 'standard .',
         'preversion': './scripts/npm-preversion.sh',
         'version': './scripts/npm-version.sh',
@@ -223,7 +224,6 @@ var PACKAGE = {
         'bannerize': '^1.0.0',
         'connect': '^3.4.0',
         'cowsay': '^1.1.0',
-        'ejs': '^2.3.0',
         'minimist': '^1.2.0',
         'portscanner': '^1.0.0',
         'serve-static': '^1.10.0',
