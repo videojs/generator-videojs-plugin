@@ -79,7 +79,7 @@ var PACKAGE = {
       scripts: {
         'docs': 'npm-run-all -p docs:toc docs:api',
         'docs:api': 'documentation src/*.js -f html -o docs/api',
-        'docs:toc': 'doctoc README.md docs/*.md',
+        'docs:toc': 'doctoc README.md',
         'lint': 'standard .',
         'preversion': './scripts/npm-preversion.sh',
         'version': './scripts/npm-version.sh',
