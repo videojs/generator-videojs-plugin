@@ -136,6 +136,12 @@ module.exports = yeoman.generators.Base.extend({
           defaults.license = _.find(_.keys(LICENSES), function(k) {
             return LICENSES[k] === pkg.license;
           });
+        } else if (key === 'name') {
+          if (_.startsWith(pkg[key], 'videojs-')) {
+            defaults[key] = pkg[key].substr(8);
+          } else {
+            defaults[key] = pkg[key];
+          }
         } else {
           defaults[key] = pkg[key];
         }
