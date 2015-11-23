@@ -85,7 +85,7 @@ const init = function(grunt) {
     },
 
     karma: (() => {
-      var karma = {
+      let karma = {
         detected: {
           options: {
             configFile: 'test/karma/detected.js'
@@ -93,7 +93,7 @@ const init = function(grunt) {
         }
       };
 
-      KARMA_BROWSERS.forEach(function(browser) {
+      KARMA_BROWSERS.forEach(browser => {
         karma[browser] = {
           options: {
             configFile: `test/karma/${browser}.js`

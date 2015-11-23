@@ -419,13 +419,7 @@ module.exports = yeoman.generators.Base.extend({
     package: function() {
       var builder = this.config.get('builder');
       var sass = this.config.get('sass');
-      var generated = packageJSON(this.context, builder, sass);
-
-      // In the case of certain properties that would otherwise be over-
-      // written by the merge, make sure the existing package.json takes
-      // precedence.
-      var ignored = _.pick(this._currentPkgJSON, ['version']);
-      var pkg = _.merge(this._currentPkgJSON || {}, generated, ignored);
+      var pkg = packageJSON(this._currentPkgJSON, this.context, builder, sass);
 
       this.fs.writeJSON(this.destinationPath('package.json'), pkg);
     }

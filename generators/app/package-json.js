@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var util = require('util');
 
-
 /**
  * Convert an array of npm scripts into an object where the keys are the
  * array elements and the values are the equivalent Grunt script values.
@@ -41,9 +40,68 @@ var nameify = function(string, context) {
   return util.format.apply(util, args);
 };
 
+
+
+/**
+ * Takes advantage of the way V8 orders object properties - by their
+ * assignment order - to "sort" an object in alphabetic order.
+ *
+ * @param  {Object} source
+ * @return {Object}
+ *         A new ordered object.
+ */
+var alphabetizeObject = function(source) {
+  return _.pick(source, Object.keys(source).sort());
+};
+
+/**
+ * Identical to `alphabetizeObject`, but there is special handling to
+ * preserve the ordering of "pre" and "post" scripts next to their
+ * core scripts. For example:
+ *
+ *    "preversion": "...",
+ *    "version": "...",
+ *    "postversion": "..."
+ *
+ * @param  {Object} source
+ * @return {Object}
+ *         A new ordered object.
+ */
+var alphabetizeScripts = function(source) {
+  var keys = Object.keys(source);
+
+  var prePost = keys.filter(function(k) {
+    return _.startsWith(k, 'pre') || _.startsWith(k, 'post');
+  });
+
+  var order = _.difference(keys, prePost).sort();
+  var result = {};
+
+  // Inject the pre/post scripts into the order where they belong.
+  prePost.forEach(function(pp) {
+    var isPre = _.startsWith(pp, 'pre');
+    var core = pp.substr(isPre ? 3 : 4);
+    var i = order.indexOf(core);
+
+    // Insert pre-scripts in place of their related core script and
+    // post-scripts after their related core script.
+    if (i > -1) {
+      order.splice(isPre ? i : i + 1, 0, pp);
+
+    // If this is a pre/post script with no related core script, just
+    // stick it on the end. This is an unlikely case, though.
+    } else {
+      order.push(pp);
+    }
+  });
+
+  return _.pick(source, order);
+};
+
+
 var KARMA_BROWSERS = ['chrome', 'firefox', 'ie', 'opera', 'safari'];
 
-var PACKAGE = {
+var parts = {
 
   /**
    * Common package.json properties.
@@ -73,19 +131,19 @@ var PACKAGE = {
         ignore: [
           'dist',
           'docs',
-          'es5'
+          'es5',
+          'test/karma'
         ]
       },
       scripts: {
         'docs': 'npm-run-all -p docs:toc docs:api',
         'docs:api': 'documentation src/*.js -f html -o docs/api',
         'docs:toc': 'doctoc README.md',
-        'lint': 'standard scripts/*.js src/**/*.js test/**/*.test.js',
+        'lint': 'standard',
         'preversion': './scripts/npm-preversion.sh',
         'version': './scripts/npm-version.sh',
         'postversion': './scripts/npm-postversion.sh'
       },
-      dependencies: {},
       devDependencies: {
         'babel': '^5.8.0',
         'babelify': '^6.0.0',
@@ -267,11 +325,34 @@ var PACKAGE = {
   }
 };
 
-module.exports = function packageJSON(context, builder, sass) {
-  return _.merge(
+/**
+ * Create a package.json based on options.
+ *
+ * @param  {Object} current
+ *         Representation of current package.json.
+ *
+ * @param  {Object} context
+ *         Generator rendering context.
+ *
+ * @param  {String} builder
+ *         What build tool is being employed ("grunt" or "npm").
+ *
+ * @param  {Boolean} sass
+ *         Whether or not Sass is included.
+ *
+ * @return {Object}
+ */
+module.exports = function(current, context, builder, sass) {
+  var result = _.merge(
     {},
-    PACKAGE.common(context),
-    PACKAGE[builder](context),
-    sass ? PACKAGE[builder + '+sass'](context) : null
+    parts.common(context),
+    parts[builder](context),
+    sass ? parts[builder + '+sass'](context) : null,
+    current
   );
+
+  result.scripts = alphabetizeScripts(result.scripts);
+  result.devDependencies = alphabetizeObject(result.devDependencies);
+
+  return result;
 };

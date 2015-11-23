@@ -125,6 +125,8 @@ In an effort to reduce guess work, avoid bikeshedding on style, and simplify the
 
 Its coding conventions are enforced in standard video.js plugins via the `npm run lint` command (or `grunt:lint`), which gets auto-run anytime tests are run and before bumping a version with `npm version`.
 
+_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores a few script(s) which must be written in ES5._
+
 ## Testing
 
 __All standard video.js plugins must have tests.__
