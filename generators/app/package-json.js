@@ -80,7 +80,7 @@ var PACKAGE = {
         'docs': 'npm-run-all -p docs:toc docs:api',
         'docs:api': 'documentation src/*.js -f html -o docs/api',
         'docs:toc': 'doctoc README.md',
-        'lint': 'standard .',
+        'lint': 'standard scripts/*.js src/**/*.js test/**/*.test.js',
         'preversion': './scripts/npm-preversion.sh',
         'version': './scripts/npm-version.sh',
         'postversion': './scripts/npm-postversion.sh'
