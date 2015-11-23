@@ -28,7 +28,6 @@ describe('videojs-plugin:app', function() {
     assert.ok(_.isArray(this.pkg.keywords));
     assert.ok(_.isPlainObject(this.pkg['browserify-shim']));
     assert.ok(_.isPlainObject(this.pkg.standard));
-    assert.ok(_.isPlainObject(this.pkg.dependencies));
     assert.ok(_.isPlainObject(this.pkg.devDependencies));
   });
 
