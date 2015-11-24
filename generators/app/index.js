@@ -75,6 +75,7 @@ module.exports = yeoman.generators.Base.extend({
     var licenseNames = this._licenseNames;
 
     var defaults = {
+      docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       license: this._licenseDefault,
       sass: configs.hasOwnProperty('sass') ? configs.sass : false
     };
@@ -154,8 +155,13 @@ module.exports = yeoman.generators.Base.extend({
       }, {
         type: 'confirm',
         name: 'sass',
-        message: 'Do you need Sass styling?',
+        message: 'Do you want to include Sass styling?',
         default: defaults.sass
+      }, {
+        type: 'confirm',
+        name: 'docs',
+        message: 'Do you want to include documentation tooling?',
+        default: defaults.docs
       }].filter(function(prompt) {
         return !_.contains(toFilter, prompt.name);
       });
@@ -298,12 +304,13 @@ module.exports = yeoman.generators.Base.extend({
 
     this.context = {
       author: configs.author,
+      docs: configs.docs,
+      isPrivate: isPrivate,
       licenseName: this._licenseNames[configs.license],
       packageName: 'videojs-' + configs.name,
       pluginClassName: 'vjs-' + configs.name,
-      pluginName: configs.name,
       pluginFunctionName: _.camelCase(configs.name),
-      isPrivate: isPrivate,
+      pluginName: configs.name,
       sass: configs.sass,
       version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0',
       year: (new Date()).getFullYear(),

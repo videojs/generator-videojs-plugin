@@ -13,7 +13,6 @@ describe('videojs-plugin:app', function() {
     'build:js',
     'build:test',
     'clean',
-    'docs',
     'lint',
     'start',
     'test',
@@ -85,6 +84,28 @@ describe('videojs-plugin:app', function() {
 
     it('creates npm-specific and sass-specific files', function() {
       assert.file(libs.fileList('common', 'oss', 'sass'));
+    });
+  });
+
+  describe('docs', function() {
+
+    before(function(done) {
+      helpers.run(libs.generatorPath)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          docs: true
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
+
+    it('populates otherwise empty npm scripts', function() {
+      libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
+        'docs',
+        'docs:api',
+        'docs:toc'
+      ]));
     });
   });
 });

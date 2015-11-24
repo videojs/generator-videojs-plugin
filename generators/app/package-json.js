@@ -131,12 +131,9 @@ module.exports = function(current, context) {
       'build:test': 'npm-run-all mkdirs build:test:browserify',
       'build:test:browserify': 'browserify test/plugin.test.js -t babelify -o test/bundle.js',
       'clean': 'rm -rf dist es5',
-      'docs': 'npm-run-all -p docs:toc docs:api',
-      'docs:api': 'documentation src/*.js -f html -o docs/api',
-      'docs:toc': 'doctoc README.md',
       'lint': 'standard',
       'mkdirs': 'mkdir -p dist es5',
-      'prestart': 'npm-run-all -p docs build',
+      'prestart': 'npm-run-all build',
       'start': 'npm-run-all -p start:serve watch',
       'start:serve': 'babel-node scripts/server.js',
       'pretest': 'npm-run-all lint build:test',
@@ -156,8 +153,6 @@ module.exports = function(current, context) {
       'browserify-shim': '^3.0.0',
       'connect': '^3.4.0',
       'cowsay': '^1.1.0',
-      'doctoc': '^0.15.0',
-      'documentation': '^3.0.0',
       'global': '^4.3.0',
       'karma': '^0.13.0',
       'karma-browserify': '^4.4.0',
@@ -210,6 +205,21 @@ module.exports = function(current, context) {
 
     result.devDependencies = _.assign(result.devDependencies, {
       'node-sass': '^3.4.0'
+    });
+  }
+
+  // Support the documentation tooling option.
+  if (context.docs) {
+    result.scripts = _.assign(result.scripts, {
+      'docs': 'npm-run-all -p docs:toc docs:api',
+      'docs:api': 'documentation src/*.js -f html -o docs/api',
+      'docs:toc': 'doctoc README.md',
+      'prestart': 'npm-run-all -p docs build'
+    });
+
+    result.devDependencies = _.assign(result.devDependencies, {
+      'doctoc': '^0.15.0',
+      'documentation': '^3.0.0'
     });
   }
 
