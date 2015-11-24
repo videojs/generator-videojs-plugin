@@ -76,45 +76,38 @@ module.exports = yeoman.generators.Base.extend({
 
     var defaults = {
       license: this._licenseDefault,
-      sass: false
+      sass: configs.hasOwnProperty('sass') ? configs.sass : false
     };
 
     var git;
 
-    ['author', 'name', 'license', 'sass'].forEach(function(key) {
-
-      // Look for configs in the configs object first. It takes precedence
-      // over everything!
-      if (configs.hasOwnProperty(key)) {
+    ['author', 'license', 'name'].forEach(function(key) {
+      if (pkg && pkg.hasOwnProperty(key)) {
+        defaults[key] = pkg[key];
+      } else if (configs.hasOwnProperty(key)) {
         defaults[key] = configs[key];
-
-      // Look in the package.json (if one exists) for a way to determine
-      // a default value.
-      } else if (pkg && pkg.hasOwnProperty(key)) {
-        if (key === 'license') {
-
-          // The package.json stores a value from `_licenseNames`, so in that
-          // case, we need to find the key instead of the value.
-          defaults.license = _.find(_.keys(licenseNames), function(k) {
-            return licenseNames[k] === pkg.license;
-          });
-        } else if (key === 'name') {
-          if (_.startsWith(pkg[key], 'videojs-')) {
-            defaults[key] = pkg[key].substr(8);
-          } else {
-            defaults[key] = pkg[key];
-          }
-        } else {
-          defaults[key] = pkg[key];
-        }
       }
     });
 
-    // Special handling to try to get the author from `git config`
+    // Strip out the "videojs-" prefix from the name for the purposes of
+    // the prompt (otherwise it will be rejected by validation).
+    if (defaults.name && _.startsWith(pkg.name, 'videojs-')) {
+      defaults.name = pkg.name.substr(8);
+    }
+
+    // The package.json stores a value from `_licenseNames`, so in that
+    // case, we need to find the key instead of the value.
+    if (pkg && pkg.license && pkg.license === defaults.license) {
+      defaults.license = _.find(Object.keys(licenseNames), function(k) {
+        return licenseNames[k] === pkg.license;
+      });
+    }
+
+    // If we don't have an author yet, make one last-ditch effort to find
+    // the author's name with `git config`.
     if (!defaults.author) {
 
-      // Make sure it's a string, so we don't concat onto something like
-      // undefined and get undesirable strings!
+      // Make sure it's a string, so we can concat without worrying!
       defaults.author = '';
 
       git = spawn('git', ['config', 'user.name']);
