@@ -11,12 +11,11 @@ These rules are by no means required for community plugins. This document and th
 
 
 - [Use the Generator!](#use-the-generator)
+- [Rules Summary](#rules-summary)
 - [Packaging and Dependencies](#packaging-and-dependencies)
-  - [Entry Points](#entry-points)
   - [Structure](#structure)
 - [Tooling](#tooling)
-  - [Grunt, by Default](#grunt-by-default)
-  - [npm Scripts](#npm-scripts)
+  - [npm Core Scripts](#npm-core-scripts)
 - [Coding Style](#coding-style)
 - [Testing](#testing)
   - [Testing with Karma](#testing-with-karma)
@@ -30,21 +29,23 @@ These rules are by no means required for community plugins. This document and th
 
 There is a Yeoman generator available for kicking off standard video.js plugin projects. It is [open source](https://github.com/videojs/generator-videojs-plugin) and [available on npm](https://www.npmjs.com/package/generator-videojs-plugin).
 
+## Rules Summary
+
+All standard video.js plugins _must_:
+
+- ...be npm packages.
+- ...have tooling available through npm scripts.
+- ...implement the core set of npm scripts.
+- ...be written in ES6 and pass `videojs-standard` linting.
+- ...must have tests.
+
 ## Packaging and Dependencies
 
 __All standard video.js plugins must be npm packages.__
 
 Plugins _should_ be as self-contained as possible, so there are no direct dependencies (`"dependencies"` in `package.json`) by default. It is assumed that anything included as a direct dependency will be bundled into the final plugin asset(s) or otherwise shimmed into the project (e.g. via `browserify-shim`).
 
-Development dependencies (`"devDependencies"` in `package.json`) will include a number of defaults related to developing, building, and testing a standard video.js plugin. These vary based on options used to generate your plugin.
-
-### Entry Points
-
-The entry point for the package (`"main"` in `package.json`) and the plugin's Browserify bundle _should_ be `src/plugin.js`.
-
-If Sass is enabled, `src/plugin.scss` _should_ be the entry point for plugin styles.
-
-The entry point for the test Browserify bundle _should_ be `test/plugin.test.js`.
+Development dependencies (`"devDependencies"` in `package.json`) will include a number of defaults related to developing, building, and testing a standard video.js plugin.
 
 ### Structure
 
@@ -54,16 +55,16 @@ Folder/Filename            | Optional | Description
 `docs/`                    | ✓        | Any documentation beyond `README.md`.
 `es5/`                     |          | Babel-compiled `src/` scripts.
 `lang/`                    | ✓        | Any JSON language files for the plugin.
-`scripts/`                 | ✓        | Scripts used by npm, Grunt, or other tools; _not part of the source code!_
+`scripts/`                 | ✓        | Scripts used by npm; _not part of the source code!_
 `src/`                     |          | All source code.
 `src/scss/`                | ✓        | Sass source code/partials.
 `src/js/`                  | ✓        | JavaScript source code.
-`src/plugin.scss`          | ✓        | Sass entry point.
-`src/plugin.js`            |          | Browserify entry point.
+`src/plugin.scss`          | ✓        | Sass _entry point_.
+`src/plugin.js`            |          | Browserify _entry point_.
 `test/`                    |          | Unit tests.
 `test/karma/`              |          | Karma configuration files.
 `test/bundle.js`           |          | Built Browserify test bundle (ignored by Git).
-`test/plugin.test.js`      |          | Browserify entry point.
+`test/plugin.test.js`      |          | Browserify _entry point_.
 `.editorconfig`            |          |
 `.gitignore`               |          |
 `.npmignore`               |          |
@@ -71,7 +72,6 @@ Folder/Filename            | Optional | Description
 `CHANGELOG.md`             | ✓        | May be removed if not desired.
 `CONTRIBUTING.md`          | ✓        | Not present in closed-source plugins.
 `index.html`               |          | An example of usage of the plugin. This can be used with GitHub pages as well.
-`Gruntfile.js`             | ✓        |
 `LICENSE`                  | ✓        | Defaults to `MIT`.
 `package.json`             |          |
 `README.md`                |          | Documents which version(s) of video.js the plugin supports. Explains how to build/test.
@@ -80,40 +80,48 @@ Folder/Filename            | Optional | Description
 
 __All tooling for a standard video.js plugin must be available through npm scripts.__
 
-There are many reasons for this rule:
+While the generator, by default, provides a full suite of tools for building and publishing plugins, some developers may prefer to implement their build process with a tool like Gulp or Grunt. That's fine!
 
-- Where a separate build tool is preferred, npm scripts can easily act as aliases to build tasks (e.g., `"build": "grunt build"`).
+The only requirement is that you make the commands for your build tool of choice available via npm scripts. For example, if your build is kicked off with `grunt`, you should have the following in your `package.json`:
+
+```json
+"scripts": {
+  // ...
+  "build": "grunt",
+  // ...
+}
+```
+
+There are many reasons for standardizing on npm scripts:
+
+- It provides a unified interface while keeping implementation choice up to the individual developer or team.
+- Where a separate build tool is preferred, npm scripts can easily act as aliases to build tasks (e.g., `"start": "gulp start-server"`).
 - CI servers and other tools can use npm (as they must anyway, in some capacity) without worrying about the underlying tooling.
 - Consistent npm script naming means contributors don't have to learn a new build tool or new set of commands when moving between plugin projects, lowering the barrier to contributions.
 
-### Grunt, by Default
-
-By default, a Grunt-based workflow is provided by the generator. Its tasks closely match the npm scripts outlined below. By default, it will run `grunt test`.
-
 ### npm Core Scripts
 
-__The core set of npm scripts must match the table below.__
+__To be considered standard, a plugin must implement the core set of npm scripts.__
 
-All names are lower-case and use colons (`:`) as word-separators. Certain `pre*` and `post*` scripts will be created as well, but these are not documented here and are, therefore, subject to change.
+All names are lower-case and use colons (`:`) as sub-task separators (multiple colons separate multiple levels of sub-tasks). Certain `pre*` and `post*` scripts will be created as well, but these are not documented here and are, therefore, subject to change.
 
-npm Script   | Grunt Equiv.       | Optional | Description
------------- | ------------------ | -------- | -----------
-`build`      | `grunt build`      |          | Runs all build sub-tasks.
-`build:css`  | `grunt build:css`  | ✓        | Builds the Sass entry point.
-`build:js`   | `grunt build:js`   |          | Builds the Browserify entry point.
-`build:test` | `grunt build:test` |          | Builds the test Browserify entry point.
-`clean`      | `grunt clean`      |          | Cleans up build artifacts.
-`docs`       | `grunt docs`       | ✓        | Documentation build.
-`lint`       | `grunt lint`       |          | Lints all `.js` file(s).
-`mkdirs`     | n/a                |          | Creates any necessary directories. Grunt doesn't need this.
-`start`      | `grunt start`      |          | Starts a development server at port `9999` (or closest open port) and runs `watch`.
-`test`       | `grunt test`       |          | Runs `lint`, `build`, and tests.
-`test:*`     | `grunt test:*`     |          | Browser-specific tests (e.g. `test:firefox`).
-`watch`      | `grunt watch`      |          | Watches everything and runs appropriate tasks.
-`watch:css`  | `grunt watch:css`  | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
-`watch:js`   | `grunt watch:js`   |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
-`watch:test` | `grunt watch:test` |          | Triggers a build when the test entry point changes.
-`version`    | n/a                |          | Includes `preversion` and `postversion` scripts. Bumps the package version and creates a distributable, Bower-friendly, tag.
+npm Script   | Optional | Description
+------------ | -------- | -----------
+`build`      |          | Runs all build sub-tasks.
+`build:css`  | ✓        | Builds the Sass entry point.
+`build:js`   |          | Builds the Browserify entry point.
+`build:test` |          | Builds the test Browserify entry point.
+`clean`      |          | Cleans up _all_ build artifacts.
+`doc`        | ✓        | Performs documentation builds.
+`lint`       |          | Lints all `.js` ES6 source file(s).
+`start`      |          | Starts a development server at port `9999` (or closest open port) and runs `watch`.
+`test`       |          | Runs `lint`, builds tests, and runs tests in available browsers.
+`test:*`     | ✓        | Browser-specific tests (e.g. `test:firefox`).
+`watch`      |          | Watches everything and runs appropriate tasks.
+`watch:css`  | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
+`watch:js`   |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
+`watch:test` |          | Triggers a build when the test entry point changes.
+`version`    |          | Includes `preversion` and `postversion` scripts. Bumps the package version and creates a distributable, Bower-friendly, tag.
 
 __Note:__ While most of these scripts are run using `npm run *`, `start` and `test` are built-in npm scripts and can be run via `npm start` and `npm test`.
 
@@ -123,9 +131,9 @@ __All standard video.js plugins must pass videojs-standard linting.__
 
 In an effort to reduce guess work, avoid bikeshedding on style, and simplify the code review process, we have a fork of the popular [standard](https://www.npmjs.com/package/standard) library, named [videojs-standard](https://www.npmjs.com/package/videojs-standard).
 
-Its coding conventions are enforced in standard video.js plugins via the `npm run lint` command (or `grunt:lint`), which gets auto-run anytime tests are run and before bumping a version with `npm version`.
+Its coding conventions are enforced in standard video.js plugins via the `npm run lint` command, which gets auto-run anytime tests are run and before bumping a version with `npm version`.
 
-_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores a few script(s) which must be written in ES5._
+_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores built scripts and script(s) which must be written in ES5._
 
 ## Testing
 
