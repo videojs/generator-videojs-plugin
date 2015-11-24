@@ -75,14 +75,13 @@ module.exports = yeoman.generators.Base.extend({
     var licenseNames = this._licenseNames;
 
     var defaults = {
-      builder: 'grunt',
       license: this._licenseDefault,
       sass: false
     };
 
     var git;
 
-    ['author', 'builder', 'name', 'license', 'sass'].forEach(function(key) {
+    ['author', 'name', 'license', 'sass'].forEach(function(key) {
 
       // Look for configs in the configs object first. It takes precedence
       // over everything!
@@ -164,12 +163,6 @@ module.exports = yeoman.generators.Base.extend({
         name: 'sass',
         message: 'Do you need Sass styling?',
         default: defaults.sass
-      }, {
-        type: 'list',
-        name: 'builder',
-        message: 'What build tool do you want to use?',
-        default: defaults.builder,
-        choices: toChoices(this._builders)
       }].filter(function(prompt) {
         return !_.contains(toFilter, prompt.name);
       });
@@ -203,11 +196,6 @@ module.exports = yeoman.generators.Base.extend({
 
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
 
-    this._builders = {
-      grunt: 'Grunt',
-      npm: 'npm'
-    };
-
     this._licenseNames = {
       apache2: 'Apache-2.0',
       mit: 'MIT',
@@ -227,6 +215,7 @@ module.exports = yeoman.generators.Base.extend({
       'scripts/_npm-postversion.sh',
       'scripts/_npm-preversion.sh',
       'scripts/_npm-version.sh',
+      'scripts/_server.js',
       'test/karma/_chrome.js',
       'test/karma/_detected.js',
       'test/karma/_firefox.js',
@@ -293,7 +282,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this._createPrompts(function(prompts) {
       this.prompt(prompts, function(responses) {
-        _.extend(this._configsTemp, responses);
+        _.assign(this._configsTemp, responses);
         done();
       }.bind(this));
     }.bind(this));
@@ -323,19 +312,13 @@ module.exports = yeoman.generators.Base.extend({
       pluginFunctionName: _.camelCase(configs.name),
       isPrivate: isPrivate,
       sass: configs.sass,
+      version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0',
       year: (new Date()).getFullYear(),
     };
 
     if (!isPrivate) {
       this._filesToCopy.push('_.travis.yml');
       this._filesToCopy.push('_CONTRIBUTING.md');
-    }
-
-    if (configs.builder === 'grunt') {
-      this._templatesToCopy.push('scripts/_grunt.js');
-      this._filesToCopy.push('_Gruntfile.js');
-    } else {
-      this._filesToCopy.push('scripts/_server.js');
     }
 
     if (configs.sass) {
@@ -390,9 +373,7 @@ module.exports = yeoman.generators.Base.extend({
     package: function() {
       this.fs.writeJSON(this.destinationPath('package.json'), packageJSON(
         this._currentPkgJSON,
-        this.context,
-        this.config.get('builder'),
-        this.config.get('sass')
+        this.context
       ));
     }
   },
