@@ -75,47 +75,39 @@ module.exports = yeoman.generators.Base.extend({
     var licenseNames = this._licenseNames;
 
     var defaults = {
-      builder: 'grunt',
       license: this._licenseDefault,
-      sass: false
+      sass: configs.hasOwnProperty('sass') ? configs.sass : false
     };
 
     var git;
 
-    ['author', 'builder', 'name', 'license', 'sass'].forEach(function(key) {
-
-      // Look for configs in the configs object first. It takes precedence
-      // over everything!
-      if (configs.hasOwnProperty(key)) {
+    ['author', 'license', 'name'].forEach(function(key) {
+      if (pkg && pkg.hasOwnProperty(key)) {
+        defaults[key] = pkg[key];
+      } else if (configs.hasOwnProperty(key)) {
         defaults[key] = configs[key];
-
-      // Look in the package.json (if one exists) for a way to determine
-      // a default value.
-      } else if (pkg && pkg.hasOwnProperty(key)) {
-        if (key === 'license') {
-
-          // The package.json stores a value from `_licenseNames`, so in that
-          // case, we need to find the key instead of the value.
-          defaults.license = _.find(_.keys(licenseNames), function(k) {
-            return licenseNames[k] === pkg.license;
-          });
-        } else if (key === 'name') {
-          if (_.startsWith(pkg[key], 'videojs-')) {
-            defaults[key] = pkg[key].substr(8);
-          } else {
-            defaults[key] = pkg[key];
-          }
-        } else {
-          defaults[key] = pkg[key];
-        }
       }
     });
 
-    // Special handling to try to get the author from `git config`
+    // Strip out the "videojs-" prefix from the name for the purposes of
+    // the prompt (otherwise it will be rejected by validation).
+    if (defaults.name && _.startsWith(pkg.name, 'videojs-')) {
+      defaults.name = pkg.name.substr(8);
+    }
+
+    // The package.json stores a value from `_licenseNames`, so in that
+    // case, we need to find the key instead of the value.
+    if (pkg && pkg.license && pkg.license === defaults.license) {
+      defaults.license = _.find(Object.keys(licenseNames), function(k) {
+        return licenseNames[k] === pkg.license;
+      });
+    }
+
+    // If we don't have an author yet, make one last-ditch effort to find
+    // the author's name with `git config`.
     if (!defaults.author) {
 
-      // Make sure it's a string, so we don't concat onto something like
-      // undefined and get undesirable strings!
+      // Make sure it's a string, so we can concat without worrying!
       defaults.author = '';
 
       git = spawn('git', ['config', 'user.name']);
@@ -164,12 +156,6 @@ module.exports = yeoman.generators.Base.extend({
         name: 'sass',
         message: 'Do you need Sass styling?',
         default: defaults.sass
-      }, {
-        type: 'list',
-        name: 'builder',
-        message: 'What build tool do you want to use?',
-        default: defaults.builder,
-        choices: toChoices(this._builders)
       }].filter(function(prompt) {
         return !_.contains(toFilter, prompt.name);
       });
@@ -203,11 +189,6 @@ module.exports = yeoman.generators.Base.extend({
 
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
 
-    this._builders = {
-      grunt: 'Grunt',
-      npm: 'npm'
-    };
-
     this._licenseNames = {
       apache2: 'Apache-2.0',
       mit: 'MIT',
@@ -227,6 +208,7 @@ module.exports = yeoman.generators.Base.extend({
       'scripts/_npm-postversion.sh',
       'scripts/_npm-preversion.sh',
       'scripts/_npm-version.sh',
+      'scripts/_server.js',
       'test/karma/_chrome.js',
       'test/karma/_detected.js',
       'test/karma/_firefox.js',
@@ -293,7 +275,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this._createPrompts(function(prompts) {
       this.prompt(prompts, function(responses) {
-        _.extend(this._configsTemp, responses);
+        _.assign(this._configsTemp, responses);
         done();
       }.bind(this));
     }.bind(this));
@@ -323,19 +305,13 @@ module.exports = yeoman.generators.Base.extend({
       pluginFunctionName: _.camelCase(configs.name),
       isPrivate: isPrivate,
       sass: configs.sass,
+      version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0',
       year: (new Date()).getFullYear(),
     };
 
     if (!isPrivate) {
       this._filesToCopy.push('_.travis.yml');
       this._filesToCopy.push('_CONTRIBUTING.md');
-    }
-
-    if (configs.builder === 'grunt') {
-      this._templatesToCopy.push('scripts/_grunt.js');
-      this._filesToCopy.push('_Gruntfile.js');
-    } else {
-      this._filesToCopy.push('scripts/_server.js');
     }
 
     if (configs.sass) {
@@ -390,9 +366,7 @@ module.exports = yeoman.generators.Base.extend({
     package: function() {
       this.fs.writeJSON(this.destinationPath('package.json'), packageJSON(
         this._currentPkgJSON,
-        this.context,
-        this.config.get('builder'),
-        this.config.get('sass')
+        this.context
       ));
     }
   },

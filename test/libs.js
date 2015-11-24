@@ -16,6 +16,7 @@ module.exports = {
       'scripts/npm-postversion.sh',
       'scripts/npm-preversion.sh',
       'scripts/npm-version.sh',
+      'scripts/server.js',
       'test/karma/chrome.js',
       'test/karma/common.js',
       'test/karma/detected.js',
@@ -39,15 +40,6 @@ module.exports = {
       '.travis.yml',
       'LICENSE',
       'CONTRIBUTING.md'
-    ],
-
-    grunt: [
-      'scripts/grunt.js',
-      'Gruntfile.js'
-    ],
-
-    npm: [
-      'scripts/server.js'
     ],
 
     sass: [
@@ -93,22 +85,6 @@ module.exports = {
   },
 
   /**
-   * Determine if all npm scripts listed in the array appear to be grunt aliases.
-   *
-   * @param  {Object} scripts
-   * @param  {Array} checks
-   * @return {Boolean}
-   */
-  allAreGruntAliases: function(scripts, checks) {
-    checks.forEach(function(script) {
-      assert.ok(
-        _.startsWith(scripts[script], 'grunt'),
-        util.format('"%s" was a grunt alias', script)
-      );
-    });
-  },
-
-  /**
    * Determine if all npm scripts listed in the array are non-empty strings.
    *
    * @param  {Object} scripts
@@ -120,22 +96,6 @@ module.exports = {
       assert.ok(
         _.isString(scripts[script]) && (/\S/).test(scripts[script]),
         util.format('"%s" was a non-empty string', script)
-      );
-    });
-  },
-
-  /**
-   * Determine if all npm scripts listed exist (even if empty).
-   *
-   * @param  {Object} scripts
-   * @param  {Array} checks
-   * @return {Boolean}
-   */
-  allExist: function(scripts, checks) {
-    checks.forEach(function(script) {
-      assert.ok(
-        scripts.hasOwnProperty(script),
-        util.format('"%s" exists', script)
       );
     });
   }

@@ -8,40 +8,83 @@ var assert = require('yeoman-generator').assert;
 var helpers = require('yeoman-generator').test;
 
 describe('videojs-plugin:app', function() {
+  var scripts = [
+    'build',
+    'build:js',
+    'build:test',
+    'clean',
+    'docs',
+    'lint',
+    'start',
+    'test',
+    'test:chrome',
+    'test:firefox',
+    'test:ie',
+    'test:opera',
+    'test:safari',
+    'preversion',
+    'version',
+    'postversion',
+    'watch',
+    'watch:js',
+    'watch:test',
+  ];
 
-  before(function(done) {
-    helpers.run(libs.generatorPath)
-      .withOptions(libs.options())
-      .withPrompts({
-        name: 'common',
-        author: 'John Doe'
-      })
-      .on('end', libs.onEnd.bind(this, done));
+  describe('defaults', function() {
+
+    before(function(done) {
+      helpers.run(libs.generatorPath)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe'
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
+
+    it('sets basic package properties', function() {
+      assert.strictEqual(this.pkg.author, 'John Doe');
+      assert.strictEqual(this.pkg.license, 'MIT');
+      assert.strictEqual(this.pkg.name, 'videojs-wat');
+      assert.strictEqual(this.pkg.version, '0.0.0');
+      assert.strictEqual(this.pkg.main, 'es5/plugin.js');
+      assert.ok(_.isArray(this.pkg.keywords));
+      assert.ok(_.isPlainObject(this.pkg['browserify-shim']));
+      assert.ok(_.isPlainObject(this.pkg.standard));
+      assert.ok(_.isPlainObject(this.pkg.devDependencies));
+    });
+
+    it('has all scripts, even if they are empty', function() {
+      libs.allAreNonEmpty(this.pkg.scripts, scripts);
+    });
+
+    it('creates common default set of files', function() {
+      assert.file(libs.fileList('common', 'oss'));
+    });
   });
 
-  it('sets basic package properties', function() {
-    assert.strictEqual(this.pkg.author, 'John Doe');
-    assert.strictEqual(this.pkg.license, 'MIT');
-    assert.strictEqual(this.pkg.name, 'videojs-common');
-    assert.strictEqual(this.pkg.version, '0.0.0');
-    assert.strictEqual(this.pkg.main, 'es5/plugin.js');
-    assert.ok(_.isArray(this.pkg.keywords));
-    assert.ok(_.isPlainObject(this.pkg['browserify-shim']));
-    assert.ok(_.isPlainObject(this.pkg.standard));
-    assert.ok(_.isPlainObject(this.pkg.devDependencies));
-  });
+  describe('sass', function() {
 
-  it('has all scripts, even if they are empty', function() {
-    libs.allExist(this.pkg.scripts, [
-      'docs',
-      'lint',
-      'preversion',
-      'version',
-      'postversion'
-    ]);
-  });
+    before(function(done) {
+      helpers.run(libs.generatorPath)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          sass: true
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
 
-  it('creates common default set of files', function() {
-    assert.file(libs.fileList('common', 'oss', 'grunt'));
+    it('populates otherwise empty npm scripts', function() {
+      libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
+        'build:css',
+        'watch:css'
+      ]));
+    });
+
+    it('creates npm-specific and sass-specific files', function() {
+      assert.file(libs.fileList('common', 'oss', 'sass'));
+    });
   });
 });
