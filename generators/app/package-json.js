@@ -169,7 +169,7 @@ var parts = {
       }
     };
 
-    if (context.private) {
+    if (context.isPrivate) {
       pkg.private = true;
     }
 

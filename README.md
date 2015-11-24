@@ -16,7 +16,6 @@ To learn more about video.js plugins and this generator's standards and opinions
 - [Getting Started](#getting-started)
   - [Options](#options)
     - [Brightcove Defaults](#brightcove-defaults)
-    - [Private](#private)
     - [Install](#install)
     - [Prompt](#prompt)
     - [Hurry](#hurry)
@@ -53,12 +52,6 @@ You will be walked through several options and ultimately be presented with a wo
 Set certain values automatically for Brightcove-authored plugins. For example, all Brightcove plugins use the Apache-2.0 license; so, the license prompt is not presented to the user.
 
 Turn Brightcove defaults on with: `yo videojs-plugin --bcov`
-
-#### Private
-
-For those who want to create private/closed-source modules, this allows that. It will set both the `"private"` property of `package.json` and set the license to `"Private/Proprietary"` (suppressing the license prompt).
-
-Turn Brightcove defaults on with: `yo videojs-plugin --private`
 
 #### Install
 

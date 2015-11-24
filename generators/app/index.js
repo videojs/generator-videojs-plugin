@@ -10,25 +10,31 @@ var yosay = require('yosay');
 
 var packageJSON = require('./package-json');
 
-var BUILDERS = {
-  grunt: 'Grunt',
-  npm: 'npm'
-};
-
-var LICENSES = {
-  apache2: 'Apache-2.0',
-  mit: 'MIT',
-  none: 'None',
-  priv: 'Private/Proprietary'
-};
-
 var toChoices = function(obj) {
   return _.map(obj, function(value, key) {
     return {name: value, value: key};
   });
 };
 
+var validateName = function(input) {
+  if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
+    return 'Names must start with a lower-case letter and contain only lower-case letters (a-z), digits (0-9), and hyphens (-).';
+  } else if (_.startsWith(input, 'videojs-')) {
+    return 'Plugins cannot start with "videojs-"; it will automatically be prepended!';
+  }
+  return true;
+};
+
 module.exports = yeoman.generators.Base.extend({
+
+  /**
+   * Whether or not this plugin is privately licensed.
+   *
+   * @return {Boolean}
+   */
+  _isPrivate: function() {
+    return this.config.get('license') === 'private';
+  },
 
   /**
    * Removes the leading underscore from a template file name and
@@ -56,70 +62,27 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   /**
-   * Creates the rendering context for template files.
-   *
-   * @method _context
-   * @private
-   * @return {Object}
-   */
-  _context: function() {
-    var name = this.config.get('name');
-    return {
-      author: this.config.get('author'),
-      licenseName: LICENSES[this.config.get('license')],
-      packageName: 'videojs-' + name,
-      pluginClassName: 'vjs-' + name,
-      pluginName: name,
-      pluginFunctionName: name.replace(/-([a-z])/g, function(match, char) {
-        return char.toUpperCase();
-      }),
-      private: this.config.get('priv'),
-      sass: this.config.get('sass'),
-      year: (new Date()).getFullYear(),
-    };
-  },
-
-  /**
-   * Processes a single copy-able file.
-   *
-   * @method _cpfile
-   * @private
-   * @param {String} src
-   */
-  _cpfile: function(src) {
-    var source = this.templatePath(src);
-    var dest = this._dest(src);
-    this.fs.copy(source, dest);
-  },
-
-  /**
-   * Processes a single copy-able file as a template.
-   *
-   * @method _cptmpl
-   * @private
-   * @param {String} src
-   */
-  _cptmpl: function(src) {
-    var source = this.templatePath(src);
-    var dest = this._dest(src);
-    this.fs.copyTpl(source, dest, this.context);
-  },
-
-  /**
    * Attempts to get default values for prompts. Async because it may call
    * out to external processes (e.g. Git) to attempt to gather this info.
    *
    * @method _getPromptDefaults
    * @private
-   * @param  {Function} cb Callback called with author string.
+   * @param  {Function} callback Callback called with author string.
    */
-  _getPromptDefaults: function(cb) {
+  _getPromptDefaults: function(callback) {
     var configs = this.config.getAll();
     var pkg = this._currentPkgJSON;
-    var defaults = {};
+    var licenseNames = this._licenseNames;
+
+    var defaults = {
+      builder: 'grunt',
+      license: this._licenseDefault,
+      sass: false
+    };
+
     var git;
 
-    ['author', 'name', 'license'].forEach(function(key) {
+    ['author', 'builder', 'name', 'license', 'sass'].forEach(function(key) {
 
       // Look for configs in the configs object first. It takes precedence
       // over everything!
@@ -131,10 +94,10 @@ module.exports = yeoman.generators.Base.extend({
       } else if (pkg && pkg.hasOwnProperty(key)) {
         if (key === 'license') {
 
-          // The package.json stores a value from `LICENSES`, so in that
+          // The package.json stores a value from `_licenseNames`, so in that
           // case, we need to find the key instead of the value.
-          defaults.license = _.find(_.keys(LICENSES), function(k) {
-            return LICENSES[k] === pkg.license;
+          defaults.license = _.find(_.keys(licenseNames), function(k) {
+            return licenseNames[k] === pkg.license;
           });
         } else if (key === 'name') {
           if (_.startsWith(pkg[key], 'videojs-')) {
@@ -163,37 +126,29 @@ module.exports = yeoman.generators.Base.extend({
 
       git.on('close', function() {
         defaults.author = defaults.author.trim();
-        cb(defaults);
+        callback(defaults);
       });
     } else {
-      cb(defaults);
+      callback(defaults);
     }
   },
 
   /**
    * Gets prompts for the user.
    *
-   * @method _prompts
+   * @method _createPrompts
    * @private
-   * @param  {Function} cb Callback when prompts array is ready.
+   * @param  {Function} callback Callback when prompts array is ready.
    * @return {Array}
    */
-  _prompts: function(cb) {
+  _createPrompts: function(callback) {
     this._getPromptDefaults(function(defaults) {
-      var sass = this.config.get('sass');
-      var builder = this.config.get('builder');
+      var toFilter = this._promptsToFilter;
       var prompts = [{
         name: 'name',
-        message: 'Enter the name of this plugin ("a-z", "0-9" and "-" only; prefixed with "videojs-" automatically):',
+        message: 'Enter the name of this plugin (a-z/0-9/- only; will be prefixed with "videojs-"):',
         default: defaults.name,
-        validate: function(input) {
-          if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
-            return 'Names must start with a lower-case letter and contain only lower-case letters, digits, and hyphens.';
-          } else if (_.startsWith(input, 'videojs-')) {
-            return 'Plugins cannot start with "videojs-"; it will automatically be prepended!';
-          }
-          return true;
-        }
+        validate: validateName
       }, {
         name: 'author',
         message: 'Enter the author of this plugin:',
@@ -202,24 +157,24 @@ module.exports = yeoman.generators.Base.extend({
         type: 'list',
         name: 'license',
         message: 'Choose a license for your project',
-        default: defaults.license || 'mit',
-        choices: toChoices(LICENSES)
+        default: defaults.license,
+        choices: toChoices(this._licenseNames)
       }, {
         type: 'confirm',
         name: 'sass',
         message: 'Do you need Sass styling?',
-        default: _.isUndefined(sass) ? false : sass
+        default: defaults.sass
       }, {
         type: 'list',
         name: 'builder',
         message: 'What build tool do you want to use?',
-        default: builder || 'grunt',
-        choices: toChoices(BUILDERS)
-      }];
+        default: defaults.builder,
+        choices: toChoices(this._builders)
+      }].filter(function(prompt) {
+        return !_.contains(toFilter, prompt.name);
+      });
 
-      cb(prompts.filter(function(prompt) {
-        return !_.contains(this._promptsToFilter, prompt.name);
-      }, this));
+      callback(prompts);
     }.bind(this));
   },
 
@@ -236,11 +191,6 @@ module.exports = yeoman.generators.Base.extend({
       defaults: false
     });
 
-    this.option('private', {
-      type: 'boolean',
-      defaults: false
-    });
-
     this.option('skip-prompt', {
       type: 'boolean',
       defaults: false
@@ -252,6 +202,25 @@ module.exports = yeoman.generators.Base.extend({
     });
 
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
+
+    this._builders = {
+      grunt: 'Grunt',
+      npm: 'npm'
+    };
+
+    this._licenseNames = {
+      apache2: 'Apache-2.0',
+      mit: 'MIT',
+      none: 'None/Other',
+      private: 'Private/Closed Source'
+    };
+
+    this._licenseFiles = {
+      apache2: 'licenses/_apache2',
+      mit: 'licenses/_mit',
+    };
+
+    this._licenseDefault = 'mit';
 
     this._filesToCopy = [
       'scripts/_banner.ejs',
@@ -267,8 +236,7 @@ module.exports = yeoman.generators.Base.extend({
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
-      '_CHANGELOG.md',
-      '_CONTRIBUTING.md'
+      '_CHANGELOG.md'
     ];
 
     this._templatesToCopy = [
@@ -283,33 +251,25 @@ module.exports = yeoman.generators.Base.extend({
 
     this._promptsToFilter = [];
 
+    // The "hurry" option skips both prompts and installation.
     if (this.options.hurry) {
       this.options.skipPrompt = this.options.skipInstall = true;
     }
 
-    this.props = {
-      bcov: this.options.bcov === true || this.config.get('bcov') === true,
-      priv: this.options.private === true || this.config.get('priv') === true
+    this._configsTemp = {
+      bcov: this.options.bcov || !!this.config.get('bcov')
     };
 
-    // Handle general closed-source plugins.
-    if (this.props.priv) {
-      this._filesToCopy = _.without(this._filesToCopy, '_CONTRIBUTING.md');
-      this._promptsToFilter.push('license');
-      this.props.license = 'priv';
-    }
-
-    if (this.props.bcov) {
+    // Handle the Brightcove option/config.
+    if (this._configsTemp.bcov) {
 
       // All Brightcove plugins use the same author string.
       this._promptsToFilter.push('author');
-      this.props.author = 'Brightcove, Inc.';
+      this._configsTemp.author = 'Brightcove, Inc.';
 
-      // Open-source Brightcove plugins MUST use the Apache-2.0 license.
-      if (!this.props.priv) {
-        this._promptsToFilter.push('license');
-        this.props.license = 'apache2';
-      }
+      // Brightcove plugins are either Apache-2.0 or private/closed-source.
+      this._licenseNames = _.pick(this._licenseNames, 'apache2', 'private');
+      this._licenseDefault = 'apache2';
     }
   },
 
@@ -320,40 +280,67 @@ module.exports = yeoman.generators.Base.extend({
    */
   prompting: function() {
     var done;
-    var type = (this.props.bcov || this.props.priv ? 'a ' : 'an ') +
-      chalk.green([
-        this.props.bcov ? 'Brightcove ' : '',
-        this.props.priv ? 'closed' : 'open',
-        '-source'
-      ].join(''));
 
-    if (!this.options.hurry) {
-      this.log(yosay([
-        'Welcome to the ' + chalk.red('videojs-plugin') + ' generator!',
-        util.format('Let’s build %s plugin.', type)
-      ].join(' ')));
+    if (this.options.skipPrompt) {
+      return;
     }
 
-    if (!this.options.skipPrompt) {
-      done = this.async();
-      this._prompts(function(prompts) {
-        this.prompt(prompts, function(props) {
-          _.extend(this.props, props);
-          done();
-        }.bind(this));
+    this.log(yosay([
+      'Welcome to the ' + chalk.red('videojs-plugin') + ' generator!'
+    ].join(' ')));
+
+    done = this.async();
+
+    this._createPrompts(function(prompts) {
+      this.prompt(prompts, function(responses) {
+        _.extend(this._configsTemp, responses);
+        done();
       }.bind(this));
-    }
+    }.bind(this));
   },
 
   /**
-   * Store configs and generate template rendering context.
+   * Store configs, generate template rendering context, alter the setup for
+   * file structure.
    *
    * @method configuring
    */
   configuring: function() {
-    this.config.set(this.props);
-    delete this.props;
-    this.context = this._context();
+    var configs, isPrivate;
+
+    this.config.set(this._configsTemp);
+    delete this._configsTemp;
+
+    configs = this.config.getAll();
+    isPrivate = this._isPrivate();
+
+    this.context = {
+      author: configs.author,
+      licenseName: this._licenseNames[configs.license],
+      packageName: 'videojs-' + configs.name,
+      pluginClassName: 'vjs-' + configs.name,
+      pluginName: configs.name,
+      pluginFunctionName: _.camelCase(configs.name),
+      isPrivate: isPrivate,
+      sass: configs.sass,
+      year: (new Date()).getFullYear(),
+    };
+
+    if (!isPrivate) {
+      this._filesToCopy.push('_.travis.yml');
+      this._filesToCopy.push('_CONTRIBUTING.md');
+    }
+
+    if (configs.builder === 'grunt') {
+      this._templatesToCopy.push('scripts/_grunt.js');
+      this._filesToCopy.push('_Gruntfile.js');
+    } else {
+      this._filesToCopy.push('scripts/_server.js');
+    }
+
+    if (configs.sass) {
+      this._templatesToCopy.push('src/_plugin.scss');
+    }
   },
 
   /**
@@ -369,26 +356,13 @@ module.exports = yeoman.generators.Base.extend({
      * @function common
      */
     common: function() {
-      var builder = this.config.get('builder');
-      var sass = this.config.get('sass');
+      this._templatesToCopy.forEach(function(src) {
+        this.fs.copyTpl(this.templatePath(src), this._dest(src), this.context);
+      }, this);
 
-      if (!this.config.get('priv')) {
-        this._filesToCopy.push('_.travis.yml');
-      }
-
-      if (builder === 'grunt') {
-        this._templatesToCopy.push('scripts/_grunt.js');
-        this._filesToCopy.push('_Gruntfile.js');
-      } else if (builder === 'npm') {
-        this._filesToCopy.push('scripts/_server.js');
-      }
-
-      if (sass) {
-        this._templatesToCopy.push('src/_plugin.scss');
-      }
-
-      this._templatesToCopy.forEach(this._cptmpl, this);
-      this._filesToCopy.forEach(this._cpfile, this);
+      this._filesToCopy.forEach(function(src) {
+        this.fs.copy(this.templatePath(src), this._dest(src));
+      }, this);
     },
 
     /**
@@ -397,10 +371,7 @@ module.exports = yeoman.generators.Base.extend({
      * @function license
      */
     license: function() {
-      var file = {
-        apache2: 'licenses/_apache2',
-        mit: 'licenses/_mit',
-      }[this.config.get('license')];
+      var file = this._licenseFiles[this.config.get('license')];
 
       if (file) {
         this.fs.copyTpl(
@@ -417,11 +388,12 @@ module.exports = yeoman.generators.Base.extend({
      * @function package
      */
     package: function() {
-      var builder = this.config.get('builder');
-      var sass = this.config.get('sass');
-      var pkg = packageJSON(this._currentPkgJSON, this.context, builder, sass);
-
-      this.fs.writeJSON(this.destinationPath('package.json'), pkg);
+      this.fs.writeJSON(this.destinationPath('package.json'), packageJSON(
+        this._currentPkgJSON,
+        this.context,
+        this.config.get('builder'),
+        this.config.get('sass')
+      ));
     }
   },
 
@@ -441,10 +413,11 @@ module.exports = yeoman.generators.Base.extend({
    * @method end
    */
   end: function() {
-    if (!this.options.hurry) {
-      this.log(yosay(
-        'All done; ' + chalk.red(this.context.packageName) + ' is ready to go!'
-      ));
+    if (this.options.hurry) {
+      return;
     }
+    this.log(yosay(
+      'All done; ' + chalk.red(this.context.packageName) + ' is ready to go!'
+    ));
   }
 });

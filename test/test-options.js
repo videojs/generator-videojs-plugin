@@ -17,8 +17,7 @@ describe('videojs-plugin:app options', function() {
         }))
         .withPrompts({
           name: 'options-bcov',
-          author: 'ignored',
-          license: 'ignored'
+          author: 'ignored'
         })
         .on('end', libs.onEnd.bind(this, done));
     });
@@ -31,46 +30,23 @@ describe('videojs-plugin:app options', function() {
     });
   });
 
-  describe('--private', function() {
+  describe('--bcov + private license', function() {
     before(function(done) {
       helpers.run(libs.generatorPath)
         .withOptions(libs.options({
-          private: true
-        }))
-        .withPrompts({
-          name: 'options-private',
-          author: 'Jane Doe',
-          license: 'ignored'
-        })
-        .on('end', libs.onEnd.bind(this, done));
-    });
-
-    it('produces expected package properties and file(s)', function() {
-      assert.strictEqual(this.pkg.author, 'Jane Doe');
-      assert.strictEqual(this.pkg.license, 'Private/Proprietary');
-      assert.strictEqual(this.pkg.private, true);
-      assert.noFile(libs.fileList('oss'));
-    });
-  });
-
-  describe('--bcov + --private', function() {
-    before(function(done) {
-      helpers.run(libs.generatorPath)
-        .withOptions(libs.options({
-          bcov: true,
-          private: true
+          bcov: true
         }))
         .withPrompts({
           name: 'options-bcov-private',
           author: 'ignored',
-          license: 'ignored'
+          license: 'private'
         })
         .on('end', libs.onEnd.bind(this, done));
     });
 
     it('produces expected package properties and file(s)', function() {
-      assert.strictEqual(this.pkg.author, 'Brightcove, Inc.', 'enforces');
-      assert.strictEqual(this.pkg.license, 'Private/Proprietary');
+      assert.strictEqual(this.pkg.author, 'Brightcove, Inc.');
+      assert.strictEqual(this.pkg.license, 'Private/Closed Source');
       assert.strictEqual(this.pkg.private, true);
       assert.noFile(libs.fileList('oss'));
     });
