@@ -1,38 +1,39 @@
 'use strict';
 
-var _ = require('lodash');
-var chalk = require('chalk');
-var path = require('path');
-var spawn = require('child_process').spawn;
-var util = require('util');
-var yeoman = require('yeoman-generator');
-var yosay = require('yosay');
+import _ from 'lodash';
+import chalk from 'chalk';
+import path from 'path';
+import {spawn} from 'child_process';
+import tsml from 'tsml';
+import yeoman from 'yeoman-generator';
+import yosay from 'yosay';
 
-var packageJSON = require('./package-json');
+import packageJSON from './package-json';
 
-var toChoices = function(obj) {
-  return _.map(obj, function(value, key) {
-    return {name: value, value: key};
-  });
-};
-
-var validateName = function(input) {
+const validateName = (input) => {
   if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
-    return 'Names must start with a lower-case letter and contain only lower-case letters (a-z), digits (0-9), and hyphens (-).';
+    return tsml`
+      Names must start with a lower-case letter and cont
+      ain only lower-case letters (a-z), digits (0-9), a
+      nd hyphens (-).
+    `;
   } else if (_.startsWith(input, 'videojs-')) {
-    return 'Plugins cannot start with "videojs-"; it will automatically be prepended!';
+    return tsml`
+      Plugins cannot start with "videojs-"; it will auto
+      matically be prepended!
+    `;
   }
   return true;
 };
 
-module.exports = yeoman.generators.Base.extend({
+export default yeoman.generators.Base.extend({
 
   /**
    * Whether or not this plugin is privately licensed.
    *
    * @return {Boolean}
    */
-  _isPrivate: function() {
+  _isPrivate() {
     return this.config.get('license') === 'private';
   },
 
@@ -50,9 +51,9 @@ module.exports = yeoman.generators.Base.extend({
    * @param  {String} src
    * @return {String}
    */
-  _dest: function(src) {
-    var basename = path.basename(src);
-    var destname = src;
+  _dest(src) {
+    let basename = path.basename(src);
+    let destname = src;
 
     if (_.startsWith(basename, '_')) {
       destname = src.replace(basename, basename.substr(1));
@@ -69,21 +70,21 @@ module.exports = yeoman.generators.Base.extend({
    * @private
    * @param  {Function} callback Callback called with author string.
    */
-  _getPromptDefaults: function(callback) {
-    var configs = this.config.getAll();
-    var pkg = this._currentPkgJSON;
-    var licenseNames = this._licenseNames;
+  _getPromptDefaults(callback) {
+    let configs = this.config.getAll();
+    let pkg = this._currentPkgJSON || {};
+    let licenseNames = this._licenseNames;
 
-    var defaults = {
+    let defaults = {
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       license: this._licenseDefault,
       sass: configs.hasOwnProperty('sass') ? configs.sass : false
     };
 
-    var git;
+    let git;
 
-    ['author', 'license', 'name'].forEach(function(key) {
-      if (pkg && pkg.hasOwnProperty(key)) {
+    ['author', 'license', 'name'].forEach(key => {
+      if (pkg.hasOwnProperty(key)) {
         defaults[key] = pkg[key];
       } else if (configs.hasOwnProperty(key)) {
         defaults[key] = configs[key];
@@ -99,7 +100,7 @@ module.exports = yeoman.generators.Base.extend({
     // The package.json stores a value from `_licenseNames`, so in that
     // case, we need to find the key instead of the value.
     if (pkg && pkg.license && pkg.license === defaults.license) {
-      defaults.license = _.find(Object.keys(licenseNames), function(k) {
+      defaults.license = _.find(Object.keys(licenseNames), k => {
         return licenseNames[k] === pkg.license;
       });
     }
@@ -113,11 +114,9 @@ module.exports = yeoman.generators.Base.extend({
 
       git = spawn('git', ['config', 'user.name']);
 
-      git.stdout.on('data', function(chunk) {
-        defaults.author += chunk;
-      });
+      git.stdout.on('data', chunk => defaults.author += chunk);
 
-      git.on('close', function() {
+      git.on('close', () => {
         defaults.author = defaults.author.trim();
         callback(defaults);
       });
@@ -134,40 +133,40 @@ module.exports = yeoman.generators.Base.extend({
    * @param  {Function} callback Callback when prompts array is ready.
    * @return {Array}
    */
-  _createPrompts: function(callback) {
-    this._getPromptDefaults(function(defaults) {
-      var toFilter = this._promptsToFilter;
-      var prompts = [{
+  _createPrompts(callback) {
+    this._getPromptDefaults(defaults => {
+      callback([{
         name: 'name',
-        message: 'Enter the name of this plugin (a-z/0-9/- only; will be prefixed with "videojs-"):',
-        default: defaults.name,
+        message: tsml`
+          Enter the name of this plugin (a-z/0-9/- only
+          ; will be prefixed with "videojs-"):
+        `,
+        'default': defaults.name,
         validate: validateName
       }, {
         name: 'author',
         message: 'Enter the author of this plugin:',
-        default: defaults.author
+        'default': defaults.author
       }, {
         type: 'list',
         name: 'license',
         message: 'Choose a license for your project',
-        default: defaults.license,
-        choices: toChoices(this._licenseNames)
+        'default': defaults.license,
+        choices: _.map(this._licenseNames, (v, k) => {
+          return {name: v, value: k};
+        })
       }, {
         type: 'confirm',
         name: 'sass',
         message: 'Do you want to include Sass styling?',
-        default: defaults.sass
+        'default': defaults.sass
       }, {
         type: 'confirm',
         name: 'docs',
         message: 'Do you want to include documentation tooling?',
-        default: defaults.docs
-      }].filter(function(prompt) {
-        return !_.contains(toFilter, prompt.name);
-      });
-
-      callback(prompts);
-    }.bind(this));
+        'default': defaults.docs
+      }].filter(prompt => !_.contains(this._promptsToFilter, prompt.name)));
+    });
   },
 
   /**
@@ -175,8 +174,8 @@ module.exports = yeoman.generators.Base.extend({
    *
    * @method constructor
    */
-  constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+  constructor(...args) {
+    yeoman.generators.Base.apply(this, ...args);
 
     this.option('bcov', {
       type: 'boolean',
@@ -199,12 +198,12 @@ module.exports = yeoman.generators.Base.extend({
       apache2: 'Apache-2.0',
       mit: 'MIT',
       none: 'None/Other',
-      private: 'Private/Closed Source'
+      'private': 'Private/Closed Source'
     };
 
     this._licenseFiles = {
       apache2: 'licenses/_apache2',
-      mit: 'licenses/_mit',
+      mit: 'licenses/_mit'
     };
 
     this._licenseDefault = 'mit';
@@ -266,25 +265,23 @@ module.exports = yeoman.generators.Base.extend({
    *
    * @method prompting
    */
-  prompting: function() {
-    var done;
-
+  prompting() {
     if (this.options.skipPrompt) {
       return;
     }
 
-    this.log(yosay([
-      'Welcome to the ' + chalk.red('videojs-plugin') + ' generator!'
-    ].join(' ')));
+    this.log(yosay(tsml`
+      Welcome to the ${chalk.red('videojs-plugin')} generator!
+    `));
 
-    done = this.async();
+    let done = this.async();
 
-    this._createPrompts(function(prompts) {
-      this.prompt(prompts, function(responses) {
+    this._createPrompts(prompts => {
+      this.prompt(prompts, responses => {
         _.assign(this._configsTemp, responses);
         done();
-      }.bind(this));
-    }.bind(this));
+      });
+    });
   },
 
   /**
@@ -293,28 +290,24 @@ module.exports = yeoman.generators.Base.extend({
    *
    * @method configuring
    */
-  configuring: function() {
-    var configs, isPrivate;
-
+  configuring() {
     this.config.set(this._configsTemp);
     delete this._configsTemp;
 
-    configs = this.config.getAll();
-    isPrivate = this._isPrivate();
+    let configs = this.config.getAll();
+    let isPrivate = this._isPrivate();
 
-    this.context = {
-      author: configs.author,
-      docs: configs.docs,
-      isPrivate: isPrivate,
+    this.context = _.pick(configs, 'author', 'docs', 'isPrivate', 'sass');
+
+    _.assign(this.context, {
       licenseName: this._licenseNames[configs.license],
       packageName: 'videojs-' + configs.name,
       pluginClassName: 'vjs-' + configs.name,
       pluginFunctionName: _.camelCase(configs.name),
       pluginName: configs.name,
-      sass: configs.sass,
       version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0',
-      year: (new Date()).getFullYear(),
-    };
+      year: (new Date()).getFullYear()
+    });
 
     if (!isPrivate) {
       this._filesToCopy.push('_.travis.yml');
@@ -338,14 +331,14 @@ module.exports = yeoman.generators.Base.extend({
      *
      * @function common
      */
-    common: function() {
-      this._templatesToCopy.forEach(function(src) {
+    common() {
+      this._templatesToCopy.forEach(src => {
         this.fs.copyTpl(this.templatePath(src), this._dest(src), this.context);
-      }, this);
+      });
 
-      this._filesToCopy.forEach(function(src) {
+      this._filesToCopy.forEach(src => {
         this.fs.copy(this.templatePath(src), this._dest(src));
-      }, this);
+      });
     },
 
     /**
@@ -353,8 +346,8 @@ module.exports = yeoman.generators.Base.extend({
      *
      * @function license
      */
-    license: function() {
-      var file = this._licenseFiles[this.config.get('license')];
+    license() {
+      let file = this._licenseFiles[this.config.get('license')];
 
       if (file) {
         this.fs.copyTpl(
@@ -370,7 +363,7 @@ module.exports = yeoman.generators.Base.extend({
      *
      * @function package
      */
-    package: function() {
+    packageJSON() {
       this.fs.writeJSON(this.destinationPath('package.json'), packageJSON(
         this._currentPkgJSON,
         this.context
@@ -384,7 +377,7 @@ module.exports = yeoman.generators.Base.extend({
    *
    * @method install
    */
-  install: function() {
+  install() {
     this.npmInstall();
   },
 
@@ -393,12 +386,12 @@ module.exports = yeoman.generators.Base.extend({
    *
    * @method end
    */
-  end: function() {
+  end() {
     if (this.options.hurry) {
       return;
     }
-    this.log(yosay(
-      'All done; ' + chalk.red(this.context.packageName) + ' is ready to go!'
-    ));
+    this.log(yosay(tsml`
+      All done; ${chalk.red(this.context.packageName)} is ready to go!
+    `));
   }
 });

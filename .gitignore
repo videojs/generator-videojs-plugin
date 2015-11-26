@@ -1,1 +1,28 @@
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+._*
+
+# Editors
+*~
+*.swp
+*.tmproj
+*.tmproject
+*.sublime-*
+.idea/
+.project/
+.settings/
+.vscode/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
 node_modules/
+
+# Build-related directories
+generators/

@@ -13,7 +13,12 @@
     "url": "https://github.com/videojs"
   },
   "scripts": {
+    "prebuild": "npm run clean",
+    "build": "babel --ignore templates/**/* src/app -d generators/app && npm run build:copy",
+    "build:copy": "cp -r src/app/templates generators/app/templates",
+    "clean": "rm -rf generators && mkdir -p generators",
     "docs": "doctoc README.md docs/*.md",
+    "prepublish": "npm run build",
     "test": "mocha"
   },
   "keywords": [
@@ -26,7 +31,9 @@
     "yosay": "^1.0.2"
   },
   "devDependencies": {
+    "babel": "^5.8.34",
     "doctoc": "^0.15.0",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "tsml": "^1.0.1"
   }
 }
