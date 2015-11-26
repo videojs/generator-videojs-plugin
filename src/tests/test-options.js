@@ -1,17 +1,12 @@
-/* global describe, before, it */
-
-'use strict';
-
-var libs = require('./libs');
-var _ = require('lodash');
-var assert = require('yeoman-generator').assert;
-var helpers = require('yeoman-generator').test;
+import * as libs from './libs';
+import _ from 'lodash';
+import {assert, test as helpers} from 'yeoman-generator';
 
 describe('videojs-plugin:app options', function() {
 
   describe('--bcov', function() {
     before(function(done) {
-      helpers.run(libs.generatorPath)
+      helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options({
           bcov: true
         }))
@@ -32,7 +27,7 @@ describe('videojs-plugin:app options', function() {
 
   describe('--bcov + private license', function() {
     before(function(done) {
-      helpers.run(libs.generatorPath)
+      helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options({
           bcov: true
         }))

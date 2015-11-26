@@ -19,7 +19,8 @@
     "clean": "rm -rf generators && mkdir -p generators",
     "docs": "doctoc README.md docs/*.md",
     "prepublish": "npm run build",
-    "test": "mocha"
+    "pretest": "npm run build",
+    "test": "babel src/tests -d test && mocha"
   },
   "keywords": [
     "yeoman-generator"

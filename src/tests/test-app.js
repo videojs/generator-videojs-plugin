@@ -1,11 +1,6 @@
-/* global describe, before, it */
-
-'use strict';
-
-var libs = require('./libs');
-var _ = require('lodash');
-var assert = require('yeoman-generator').assert;
-var helpers = require('yeoman-generator').test;
+import * as libs from './libs';
+import _ from 'lodash';
+import {assert, test as helpers} from 'yeoman-generator';
 
 describe('videojs-plugin:app', function() {
   var scripts = [
@@ -32,7 +27,7 @@ describe('videojs-plugin:app', function() {
   describe('defaults', function() {
 
     before(function(done) {
-      helpers.run(libs.generatorPath)
+      helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
         .withPrompts({
           name: 'wat',
@@ -65,7 +60,7 @@ describe('videojs-plugin:app', function() {
   describe('sass', function() {
 
     before(function(done) {
-      helpers.run(libs.generatorPath)
+      helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
         .withPrompts({
           name: 'wat',
@@ -90,7 +85,7 @@ describe('videojs-plugin:app', function() {
   describe('docs', function() {
 
     before(function(done) {
-      helpers.run(libs.generatorPath)
+      helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
         .withPrompts({
           name: 'wat',

@@ -1,5 +1,3 @@
-'use strict';
-
 import _ from 'lodash';
 import util from 'util';
 
@@ -199,7 +197,7 @@ const packageJSON = (current, context) => {
   };
 
   if (context.isPrivate) {
-    result.private = true;
+    result['private'] = true;
   }
 
   // Create scripts for each Karma browser.

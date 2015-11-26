@@ -11,10 +11,11 @@ const defaults = {};
  * in place.
  *
  * @function onPlayerReady
+ * @param    {Player} player
  * @param    {Object} [options={}]
  */
-const onPlayerReady = function(options) {
-  this.addClass('<%= pluginClassName %>');
+const onPlayerReady = (player, options) => {
+  player.addClass('<%= pluginClassName %>');
 };
 
 /**
@@ -31,7 +32,7 @@ const onPlayerReady = function(options) {
  */
 const <%= pluginFunctionName %> = function(options) {
   this.ready(() => {
-    onPlayerReady.call(this, videojs.mergeOptions(defaults, options));
+    onPlayerReady(this, videojs.mergeOptions(defaults, options));
   });
 };
 

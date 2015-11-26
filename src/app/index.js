@@ -1,5 +1,3 @@
-'use strict';
-
 import _ from 'lodash';
 import chalk from 'chalk';
 import path from 'path';
@@ -174,8 +172,8 @@ export default yeoman.generators.Base.extend({
    *
    * @method constructor
    */
-  constructor(...args) {
-    yeoman.generators.Base.apply(this, ...args);
+  constructor() {
+    yeoman.generators.Base.apply(this, arguments);
 
     this.option('bcov', {
       type: 'boolean',
@@ -297,9 +295,10 @@ export default yeoman.generators.Base.extend({
     let configs = this.config.getAll();
     let isPrivate = this._isPrivate();
 
-    this.context = _.pick(configs, 'author', 'docs', 'isPrivate', 'sass');
+    this.context = _.pick(configs, 'author', 'docs', 'sass');
 
     _.assign(this.context, {
+      isPrivate: this._isPrivate(),
       licenseName: this._licenseNames[configs.license],
       packageName: 'videojs-' + configs.name,
       pluginClassName: 'vjs-' + configs.name,
