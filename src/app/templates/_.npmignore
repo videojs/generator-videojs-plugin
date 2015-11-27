@@ -1,3 +1,4 @@
 !docs/api/
 !dist/
+!dist-test/
 !es5/

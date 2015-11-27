@@ -1,6 +1,6 @@
 # Brightcove video.js Plugin Standards
 
-This document contains the standard rules of structure, tooling, and workflow used at [Brightcove](https://www.brightcove.com) in developing both open-source and proprietary plugins for [video.js](http://videojs.com).
+This document contains the standard rules of structure, automation, and workflow used at [Brightcove](https://www.brightcove.com) in developing both open-source and proprietary plugins for [video.js](http://videojs.com).
 
 These rules are by no means required for community plugins. This document and the Yeoman generator it is part of are provided as open source for the good of the community. If you don't agree with these standards, by all means stick to your own preferences in your own plugin projects!
 
@@ -14,10 +14,11 @@ These rules are by no means required for community plugins. This document and th
 - [Rules Summary](#rules-summary)
 - [Packaging and Dependencies](#packaging-and-dependencies)
   - [Structure](#structure)
-- [Tooling](#tooling)
+- [Automation](#automation)
   - [npm Core Scripts](#npm-core-scripts)
 - [Coding Style](#coding-style)
 - [Testing](#testing)
+  - [Writing Tests](#writing-tests)
   - [Testing with Karma](#testing-with-karma)
   - [Testing in a Browser](#testing-in-a-browser)
 - [Release](#release)
@@ -34,16 +35,16 @@ There is a Yeoman generator available for kicking off standard video.js plugin p
 All standard video.js plugins _must_:
 
 - ...be npm packages.
-- ...have tooling available through npm scripts.
+- ...have automation available through npm scripts.
 - ...implement the core set of npm scripts.
 - ...be written in ES6 and pass `videojs-standard` linting.
-- ...must have tests.
+- ...have tests.
 
 ## Packaging and Dependencies
 
 __All standard video.js plugins must be npm packages.__
 
-Plugins _should_ be as self-contained as possible, so there are no direct dependencies (`"dependencies"` in `package.json`) by default. It is assumed that anything included as a direct dependency will be bundled into the final plugin asset(s) or otherwise shimmed into the project (e.g. via `browserify-shim`).
+Plugins _should_ be as self-contained as possible, so there are no direct dependencies (`"dependencies"` in `package.json`) by default outside of video.js itself. It is assumed that anything included as a direct dependency will be bundled into the final plugin asset(s) or otherwise shimmed into the project (e.g. via `browserify-shim` as is the case with video.js).
 
 Development dependencies (`"devDependencies"` in `package.json`) will include a number of defaults related to developing, building, and testing a standard video.js plugin.
 
@@ -51,7 +52,8 @@ Development dependencies (`"devDependencies"` in `package.json`) will include a 
 
 Folder/Filename            | Optional | Description
 -------------------------- | -------- | -----------
-`dist/`                    |          | Created during builds and ignored by Git.
+`dist/`                    |          | Created during builds, ignored by Git.
+`dist-test/`               |          | Created during test builds, ignored by Git.
 `docs/`                    | ✓        | Any documentation beyond `README.md`.
 `es5/`                     |          | Babel-compiled `src/` scripts.
 `lang/`                    | ✓        | Any JSON language files for the plugin.
@@ -63,7 +65,6 @@ Folder/Filename            | Optional | Description
 `src/plugin.js`            |          | Browserify _entry point_.
 `test/`                    |          | Unit tests.
 `test/karma/`              |          | Karma configuration files.
-`test/bundle.js`           |          | Built Browserify test bundle (ignored by Git).
 `test/plugin.test.js`      |          | Browserify _entry point_.
 `.editorconfig`            |          |
 `.gitignore`               |          |
@@ -76,9 +77,9 @@ Folder/Filename            | Optional | Description
 `package.json`             |          |
 `README.md`                |          | Documents which version(s) of video.js the plugin supports. Explains how to build/test.
 
-## Tooling
+## Automation
 
-__All tooling for a standard video.js plugin must be available through npm scripts.__
+__All automation for a standard video.js plugin must be available through npm scripts.__
 
 While the generator, by default, provides a full suite of tools for building and publishing plugins, some developers may prefer to implement their build process with a tool like Gulp or Grunt. That's fine!
 
@@ -143,17 +144,52 @@ Testing is a critical element of any software project and it should be done in a
 
 By default, testing is achieved with [QUnit](https://qunitjs.com/) as the testing framework and [Karma](https://karma-runner.github.io/) as the runner.
 
+### Writing Tests
+
+The test entry point is `test/plugin.test.js`.
+
+For simple tests (and in the default generator output), this is sufficient and can hold all QUnit modules and tests.
+
+For complex plugins with multiple components, it might make sense to break up tests into multiple modules. The best way to achieve this without deviating too far from the generator setup is to use the entry point for broad environmental or plugin-level tests and create new modules which export function(s) for executing test modules. For example, a file `test/foo.test.js` might look like:
+
+```js
+import QUnit from 'qunit';
+
+const testFoo = function() {
+  QUnit.module('videojs-my-plugin/foo');
+
+  QUnit.test('test something', function(assert) {
+    // ...
+  });
+};
+
+export default foo;
+```
+
+Then in `test/plugin.test.js`:
+
+```js
+import QUnit from 'qunit';
+import testFoo from './foo.test';
+
+QUnit.module('videojs-my-plugin');
+
+// Plugin-level/environment tests go here...
+
+testFoo(); // Kick off "foo" tests
+```
+
+This pattern can be used to provide greater modularity in your test setup.
+
 ### Testing with Karma
 
-All the test tooling uses single-run Karma sessions. `npm test` will launch all the matching browsers which Karma supports and run tests in them. `npm run test:*` will test in a given browser (e.g. `chrome` or `firefox`).
+All the test automation uses single-run Karma sessions. `npm test` will launch all the matching browsers which Karma supports and run tests in them. `npm run test:*` will test in a given browser (e.g. `chrome` or `firefox`).
 
 ### Testing in a Browser
 
 During development, it may be more convenient to run your tests in a persistent, user-controlled browser tab (i.e. not through Karma). This can be achieved easily by running a development server with `npm start` and navigating to [`http://localhost:9999/test/`](http://localhost:9999/test/) (_note:_ port may vary, check console output).
 
 ## Release
-
-Open source plugins should be tagged and published to npm as their primary release method.
 
 ### Versioning
 
@@ -185,3 +221,7 @@ This process results in a `master` history that looks something like this:
 `C`: signifies a conventional commit.
 `V`: signifies a version bump commit.
 `T`: tagged commit, with `dist/` included.
+
+### Publishing
+
+Open source plugins should use the most basic publishing process available - `npm publish` - which should be run after versioning.

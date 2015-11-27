@@ -1,4 +1,4 @@
-var _ = require('lodash');
+var merge = require('lodash-compat/object/merge');
 
 var DEFAULTS = {
   basePath: '../..',
@@ -41,6 +41,19 @@ var DEFAULTS = {
 };
 
 /**
+ * Customizes target/source merging with lodash merge.
+ *
+ * @param  {Mixed} target
+ * @param  {Mixed} source
+ * @return {Mixed}
+ */
+var customizer = function(target, source) {
+  if (Array.isArray(target)) {
+    return target.concat(source);
+  }
+};
+
+/**
  * Generates a new Karma config with a common set of base configuration.
  *
  * @param  {Object} custom
@@ -49,14 +62,5 @@ var DEFAULTS = {
  * @return {Object}
  */
 module.exports = function(custom) {
-  return _.merge(
-    {},
-    custom,
-    DEFAULTS,
-    function(target, source) {
-      if (_.isArray(target)) {
-        return target.concat(source);
-      }
-    }
-  )
+  return merge({}, custom, DEFAULTS, customizer);
 };

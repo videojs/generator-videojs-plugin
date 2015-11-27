@@ -97,9 +97,14 @@ const packageJSON = (current, context) => {
     standard: {
       ignore: [
         'dist',
+        'dist-test',
         'docs',
         'es5',
-        'test/karma'
+        'test/karma',
+
+        // Scripts is ignored for now because videojs-standard does not
+        // make accomodations for things that are safe in Node.
+        'scripts'
       ]
     },
     scripts: {
@@ -137,12 +142,12 @@ const packageJSON = (current, context) => {
       'build:test:browserify': scriptify([
         'browserify test/plugin.test.js',
         '-t babelify',
-        '-o test/bundle.js'
+        '-o dist-test/%s.js'
       ]),
 
-      clean: 'rm -rf dist es5',
+      clean: 'rm -rf dist dist-test es5',
       lint: 'standard',
-      mkdirs: 'mkdir -p dist es5',
+      mkdirs: 'mkdir -p dist dist-test es5',
       prestart: 'npm-run-all build',
       start: 'npm-run-all -p start:serve watch',
       'start:serve': 'babel-node scripts/server.js',
@@ -165,6 +170,9 @@ const packageJSON = (current, context) => {
         '-v -o test/bundle.js'
       ])
     },
+    dependencies: {
+      'video.js': '^5.0.0'
+    },
     devDependencies: {
       babel: '^5.8.0',
       babelify: '^6.0.0',
@@ -183,6 +191,7 @@ const packageJSON = (current, context) => {
       'karma-opera-launcher': '^0.3.0',
       'karma-qunit': '^0.1.0',
       'karma-safari-launcher': '^0.1.0',
+      'lodash-compat': '^3.10.0',
       minimist: '^1.2.0',
       'npm-run-all': '~1.2.0',
       portscanner: '^1.0.0',
@@ -190,7 +199,6 @@ const packageJSON = (current, context) => {
       'serve-static': '^1.10.0',
       sinon: '^1.0.0',
       'uglify-js': '^2.5.0',
-      'video.js': '^5.0.0',
       'videojs-standard': '^3.7.0',
       watchify: '^3.6.0'
     }
