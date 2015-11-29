@@ -18,7 +18,6 @@ const FILES = {
     'test/karma/detected.js',
     'test/karma/firefox.js',
     'test/karma/ie.js',
-    'test/karma/opera.js',
     'test/karma/safari.js',
     'src/plugin.js',
     'test/index.html',

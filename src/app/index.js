@@ -216,7 +216,6 @@ export default yeoman.generators.Base.extend({
       'test/karma/_detected.js',
       'test/karma/_firefox.js',
       'test/karma/_ie.js',
-      'test/karma/_opera.js',
       'test/karma/_safari.js',
       '_.editorconfig',
       '_.gitignore',

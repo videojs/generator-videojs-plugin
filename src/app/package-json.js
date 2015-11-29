@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import util from 'util';
 
-const KARMA_BROWSERS = ['chrome', 'firefox', 'ie', 'opera', 'safari'];
+const KARMA_BROWSERS = ['chrome', 'firefox', 'ie', 'safari'];
 
 /**
  * Takes advantage of the way V8 orders object properties - by their
@@ -188,7 +188,6 @@ const packageJSON = (current, context) => {
       'karma-detect-browsers': '^2.0.0',
       'karma-firefox-launcher': '^0.1.0',
       'karma-ie-launcher': '^0.2.0',
-      'karma-opera-launcher': '^0.3.0',
       'karma-qunit': '^0.1.0',
       'karma-safari-launcher': '^0.1.0',
       'lodash-compat': '^3.10.0',

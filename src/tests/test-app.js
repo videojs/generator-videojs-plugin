@@ -14,7 +14,6 @@ describe('videojs-plugin:app', function() {
     'test:chrome',
     'test:firefox',
     'test:ie',
-    'test:opera',
     'test:safari',
     'preversion',
     'version',
