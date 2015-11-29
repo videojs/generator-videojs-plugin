@@ -232,7 +232,7 @@ const packageJSON = (current, context) => {
 
   // Support the Sass option.
   if (context.sass) {
-    result.scripts = _.assign(result.scripts, {
+    _.assign(result.scripts, {
       'build:css': 'npm-run-all mkdirs build:css:sass build:css:bannerize',
 
       'build:css:bannerize': scriptify([
@@ -256,23 +256,38 @@ const packageJSON = (current, context) => {
       ])
     });
 
-    result.devDependencies = _.assign(result.devDependencies, {
+    _.assign(result.devDependencies, {
       'node-sass': '^3.4.0'
     });
   }
 
   // Support the documentation tooling option.
   if (context.docs) {
-    result.scripts = _.assign(result.scripts, {
+    _.assign(result.scripts, {
       docs: 'npm-run-all -p docs:toc docs:api',
       'docs:api': 'documentation src/*.js -f html -o docs/api',
       'docs:toc': 'doctoc README.md',
       prestart: 'npm-run-all -p docs build'
     });
 
-    result.devDependencies = _.assign(result.devDependencies, {
+    _.assign(result.devDependencies, {
       doctoc: '^0.15.0',
       documentation: '^3.0.0'
+    });
+  }
+
+  // Include language support. Note that `mkdirs` does not need to change
+  // here because the videojs-languages package will create the destination
+  // directory if needed.
+  if (context.lang) {
+    _.assign(result.scripts, {
+      'build:lang': 'vjslang --dir dist/lang'
+    });
+
+    _.assign(result.devDependencies, {
+
+      // Version is * until it is released.
+      'videojs-languages': '*'
     });
   }
 

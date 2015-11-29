@@ -75,6 +75,7 @@ export default yeoman.generators.Base.extend({
 
     let defaults = {
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
+      lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
       sass: configs.hasOwnProperty('sass') ? configs.sass : false
     };
@@ -163,6 +164,11 @@ export default yeoman.generators.Base.extend({
         name: 'docs',
         message: 'Do you want to include documentation tooling?',
         'default': defaults.docs
+      }, {
+        type: 'confirm',
+        name: 'lang',
+        message: 'Do you need video.js language file infrastructure for internationalized strings?',
+        'default': defaults.lang
       }].filter(prompt => !_.contains(this._promptsToFilter, prompt.name)));
     });
   },
@@ -294,7 +300,12 @@ export default yeoman.generators.Base.extend({
     let configs = this.config.getAll();
     let isPrivate = this._isPrivate();
 
-    this.context = _.pick(configs, 'author', 'docs', 'sass');
+    this.context = _.pick(configs, [
+      'author',
+      'docs',
+      'lang',
+      'sass'
+    ]);
 
     _.assign(this.context, {
       isPrivate: this._isPrivate(),
@@ -310,6 +321,10 @@ export default yeoman.generators.Base.extend({
     if (!isPrivate) {
       this._filesToCopy.push('_.travis.yml');
       this._filesToCopy.push('_CONTRIBUTING.md');
+    }
+
+    if (configs.lang) {
+      this._filesToCopy.push('lang/_en.json');
     }
 
     if (configs.sass) {
