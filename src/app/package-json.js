@@ -140,7 +140,10 @@ const packageJSON = (current, context) => {
       'build:test': 'npm-run-all mkdirs build:test:browserify',
 
       'build:test:browserify': scriptify([
-        'browserify test/plugin.test.js',
+
+        // Uses `find` because Browserify does not support globstar
+        // (e.g. **/*.test.js) patterns via CLI.
+        'browserify  `find test -name \'*.test.js\'`',
         '-t babelify',
         '-o dist-test/%s.js'
       ]),
@@ -165,9 +168,12 @@ const packageJSON = (current, context) => {
       ]),
 
       'watch:test': scriptify([
-        'watchify test/plugin.test.js',
+
+        // Uses `find` because Browserify does not support globstar
+        // (e.g. **/*.test.js) patterns via CLI.
+        'watchify `find test -name \'*.test.js\'`',
         '-t babelify',
-        '-v -o test/bundle.js'
+        '-o dist-test/%s.js'
       ])
     },
     dependencies: {
