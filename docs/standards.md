@@ -12,7 +12,6 @@ This document and [the Yeoman generator](https://github.com/videojs/generator-vi
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Use the Generator!](#use-the-generator)
 - [Rules Summary](#rules-summary)
 - [Packaging and Dependencies](#packaging-and-dependencies)
   - [Structure](#structure)
@@ -25,6 +24,7 @@ This document and [the Yeoman generator](https://github.com/videojs/generator-vi
   - [Testing in a Browser](#testing-in-a-browser)
 - [Release](#release)
   - [Versioning](#versioning)
+  - [Publishing](#publishing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
