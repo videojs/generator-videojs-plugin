@@ -291,9 +291,7 @@ const packageJSON = (current, context) => {
     });
 
     _.assign(result.devDependencies, {
-
-      // Version is * until it is released.
-      'videojs-languages': '*'
+      'videojs-languages': '^1.0.0'
     });
   }
 
