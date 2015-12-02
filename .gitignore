@@ -25,5 +25,6 @@ npm-debug.log*
 node_modules/
 
 # Build-related directories
+es5/
+es5-test/
 generators/
-test/

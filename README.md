@@ -1,11 +1,11 @@
 # generator-videojs-plugin
 
-This is a [Yeoman](http://yeoman.io) generator for [video.js](http://videojs.com) plugins. It is based on the recommendations of the video.js core team as well as tools and conventions for developing plugins at [Brightcove](https://www.brightcove.com).
+This is a [Yeoman][yo] generator for [video.js][vjs] plugins. It is based on the recommendations of the video.js core team as well as tools and conventions for developing plugins at [Brightcove][bcov].
 
 To learn more about video.js plugins and this generator's standards and opinions, check out:
 
-- [video.js Plugins Guide](https://github.com/videojs/video.js/blob/master/docs/guides/plugins.md).
-- [Brightcove's video.js Plugin Standards](docs/standards.md).
+- [video.js Plugins Guide][plugins-guide].
+- [Brightcove's video.js Plugin Standards][standards].
 
 ### Table of Contents
 
@@ -19,13 +19,14 @@ To learn more about video.js plugins and this generator's standards and opinions
     - [Install](#install)
     - [Prompt](#prompt)
     - [Hurry](#hurry)
+- [Validation](#validation)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Getting Started
 
-If you don't know what Yeoman is or what generators are, check out the Yeoman [Getting Started](http://yeoman.io/learning/index.html) document. Long story short, make sure you have Yoeman and this generator installed globally:
+If you don't know what Yeoman is or what generators are, check out the Yeoman [Getting Started][getting-started] document. Long story short, make sure you have Yoeman and this generator installed globally:
 
 ```sh
 $ npm install -g yo generator-videojs-plugin
@@ -71,6 +72,27 @@ If you don't want to change configuration, but just want to update an existing p
 
 Turn prompts off with: `yo videojs-plugin --hurry`
 
+## Validation
+
+Also provided by this generator is a CLI application for validating a directory as following current [video.js Plugin Standards][standards]. Using it is very simple; run the following command:
+
+```sh
+$ vjspv
+```
+
+There are no options or arguments available or needed. This will run a series of [tape][tape] tests against the contents of `process.cwd()` (the current directory).
+
+_Note: this command can be used on any plugin project - not just those using the generator!_
+
 ## License
 
-[Apache 2.0](LICENSE)
+[Apache 2.0][license]
+
+[bcov]: https://www.brightcove.com/
+[getting-started]: http://yeoman.io/learning/index.html
+[license]: LICENSE
+[plugins-guide]: https://github.com/videojs/video.js/blob/master/docs/guides/plugins.md
+[standards]: docs/standards.md
+[tape]: https://www.npmjs.com/package/tape
+[vjs]: http://videojs.com/
+[yo]: http://yeoman.io/

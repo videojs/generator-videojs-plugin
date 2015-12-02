@@ -5,7 +5,10 @@
   "license": "Apache-2.0",
   "main": "generators/app/index.js",
   "bin": {
-    "vjsp": "bin/vjsp.sh"
+    "videojs-plugin": "bin/videojs-plugin.sh",
+    "videojs-plugin-validate": "bin/videojs-plugin-validate.js",
+    "vjsp": "bin/videojs-plugin.sh",
+    "vjspv": "bin/videojs-plugin-validate.js"
   },
   "repository": "videojs/generator-videojs-plugin",
   "author": {
@@ -14,27 +17,35 @@
   },
   "scripts": {
     "prebuild": "npm run clean",
-    "build": "babel --ignore templates/**/* src/app -d generators/app && npm run build:copy",
-    "build:copy": "cp -r src/app/templates generators/app/templates",
-    "clean": "rm -rf generators && mkdir -p generators",
+    "build": "npm-run-all -p build:*",
+    "build:generator": "babel --ignore templates/**/* src/app -d generators/app && npm run build:generator:copy",
+    "build:generator:copy": "cp -r src/app/templates generators/app/templates",
+    "build:test": "babel src/test -d es5-test",
+    "build:validate": "babel src/validate -o es5/validate.js",
+    "clean": "rm -rf generators es5 es5-test && mkdir -p generators es5 es5-test",
     "docs": "doctoc README.md docs/*.md",
     "prepublish": "npm run build",
     "pretest": "npm run build",
-    "test": "babel src/tests -d test && mocha"
+    "test": "mocha es5-test/*.test.js"
   },
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "videojs",
+    "videojs-plugin"
   ],
   "dependencies": {
     "chalk": "^1.0.0",
+    "faucet": "0.0.1",
     "lodash": "^3.10.1",
+    "npm-run-all": "~1.2.0",
+    "tape": "^4.2.2",
     "yeoman-generator": "^0.20.0",
     "yosay": "^1.0.2"
   },
   "devDependencies": {
     "babel": "^5.8.34",
     "doctoc": "^0.15.0",
-    "mocha": "^2.3.3",
+    "mocha": "^2.3.4",
     "tsml": "^1.0.1"
   }
 }
