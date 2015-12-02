@@ -1,5 +1,3 @@
-// A simple static file server for development convenience.
-
 import connect from 'connect';
 import cowsay from 'cowsay';
 import path from 'path';
