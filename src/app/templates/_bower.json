@@ -1,13 +1,13 @@
 {
-  "name": "<%= packageName %>",
+  "name": "<%= nameOf.package %>",
   "version": "0.0.0",
   "author": "<%= author %>",
-  "license": "<%= licenseName %>",
+  "license": "<%= nameOf.license %>",
   "main": [
 <% if (sass) { -%>
-    "dist/<%= packageName %>.css",
+    "dist/<%= nameOf.package %>.css",
 <% } -%>
-    "dist/<%= packageName %>.min.js"
+    "dist/<%= nameOf.package %>.min.js"
   ],
   "keywords": [
     "videojs",

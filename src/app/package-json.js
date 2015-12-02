@@ -66,20 +66,19 @@ const alphabetizeScripts = (source) => {
 const packageJSON = (current, context) => {
   current = current || {};
 
-  const pkgName = context.packageName;
-
   const scriptify = (str) => {
     str = Array.isArray(str) ? str.join(' ') : str;
 
     let tokens = str.match(/%s/g) || [];
 
-    return util.format(...[str].concat(tokens.map(() => pkgName)));
+    return util.format(...[str].concat(tokens.map(() => context.nameOf.package)));
   };
 
   let result = {
-    name: pkgName,
+    name: context.nameOf.package,
+    description: context.description,
     author: context.author,
-    license: context.licenseName,
+    license: context.nameOf.license,
     version: context.version,
     main: 'es5/plugin.js',
     keywords: [

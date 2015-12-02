@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title><%= packageName %> Unit Tests</title>
+  <title><%= nameOf.package %> Unit Tests</title>
   <link rel="stylesheet" href="/node_modules/qunitjs/qunit/qunit.css">
-  <% if (sass) { %><link href="/dist/<%= packageName %>.css" rel="stylesheet"><% } %>
+  <% if (sass) { %><link href="/dist/<%= nameOf.package %>.css" rel="stylesheet"><% } %>
 </head>
 <body>
   <div id="qunit"></div>
@@ -12,6 +12,6 @@
   <script src="/node_modules/sinon/pkg/sinon-ie.js"></script>
   <script src="/node_modules/qunitjs/qunit/qunit.js"></script>
   <script src="/node_modules/video.js/dist/video.js"></script>
-  <script src="/dist-test/<%= packageName %>.js"></script>
+  <script src="/dist-test/<%= nameOf.package %>.js"></script>
 </body>
 </html>

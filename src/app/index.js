@@ -82,7 +82,7 @@ export default yeoman.generators.Base.extend({
 
     let git;
 
-    ['author', 'license', 'name'].forEach(key => {
+    ['author', 'license', 'name', 'description'].forEach(key => {
       if (pkg.hasOwnProperty(key)) {
         defaults[key] = pkg[key];
       } else if (configs.hasOwnProperty(key)) {
@@ -142,6 +142,10 @@ export default yeoman.generators.Base.extend({
         `,
         'default': defaults.name,
         validate: validateName
+      }, {
+        name: 'description',
+        message: 'Enter a description for your plugin:',
+        'default': defaults.description
       }, {
         name: 'author',
         message: 'Enter the author of this plugin:',
@@ -302,6 +306,7 @@ export default yeoman.generators.Base.extend({
 
     this.context = _.pick(configs, [
       'author',
+      'description',
       'docs',
       'lang',
       'sass'
@@ -309,11 +314,13 @@ export default yeoman.generators.Base.extend({
 
     _.assign(this.context, {
       isPrivate: this._isPrivate(),
-      licenseName: this._licenseNames[configs.license],
-      packageName: 'videojs-' + configs.name,
-      pluginClassName: 'vjs-' + configs.name,
-      pluginFunctionName: _.camelCase(configs.name),
-      pluginName: configs.name,
+      nameOf: {
+        'class': `vjs-${configs.name}`,
+        'function': _.camelCase(configs.name),
+        license: this._licenseNames[configs.license],
+        'package': `videojs-${configs.name}`,
+        plugin: configs.name
+      },
       version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0',
       year: (new Date()).getFullYear()
     });
@@ -362,13 +369,15 @@ export default yeoman.generators.Base.extend({
     license() {
       let file = this._licenseFiles[this.config.get('license')];
 
-      if (file) {
-        this.fs.copyTpl(
-          this.templatePath(file),
-          this.destinationPath('LICENSE'),
-          this.context
-        );
+      if (!file) {
+        return;
       }
+
+      this.fs.copyTpl(
+        this.templatePath(file),
+        this.destinationPath('LICENSE'),
+        this.context
+      );
     },
 
     /**
@@ -404,7 +413,7 @@ export default yeoman.generators.Base.extend({
       return;
     }
     this.log(yosay(tsml`
-      All done; ${chalk.red(this.context.packageName)} is ready to go!
+      All done; ${chalk.red(this.context.nameOf.package)} is ready to go!
     `));
   }
 });

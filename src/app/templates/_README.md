@@ -1,4 +1,4 @@
-# <%= packageName %>
+# <%= nameOf.package %>
 
 A plugin for video.js. 
 
@@ -37,4 +37,4 @@ That's it! Refer to the [video.js plugin standards](https://github.com/videojs/g
 
 ## License
 
-<%= licenseName %>
+<%= nameOf.license %>
