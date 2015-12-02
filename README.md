@@ -1,4 +1,4 @@
-# generator-videojs-plugin [![Build Status](https://secure.travis-ci.org/dmlap/generator-videojs-plugin.png?branch=master)](https://travis-ci.org/dmlap/generator-videojs-plugin)
+# generator-videojs-plugin [![Build Status](https://secure.travis-ci.org/videojs/generator-videojs-plugin.png?branch=master)](https://travis-ci.org/videojs/generator-videojs-plugin)
 
 > [Yeoman](http://yeoman.io) generator for [video.js](http://www.videojs.com/) plugins.
 
