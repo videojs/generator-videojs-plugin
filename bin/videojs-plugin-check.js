@@ -4,11 +4,11 @@ var chalk = require('chalk');
 var glob = require('glob');
 var path = require('path');
 var parser = require('tap-parser');
-var test = require('tape');
+var tap = require('tap');
 
-var tap = test.createStream().pipe(parser());
+var tests = tap.unpipe(process.stdout).pipe(parser());
 
-tap.on('assert', function(assert) {
+tests.on('assert', function(assert) {
   var color = assert.ok ? 'green' : 'red';
   var prefix = assert.ok ? '✓' : '⨯';
   process.stdout.write(chalk[color](prefix + ' ' + assert.name) + '\n');
