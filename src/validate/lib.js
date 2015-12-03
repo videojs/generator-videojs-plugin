@@ -16,19 +16,9 @@ const statChecker = method => {
 const isDir = statChecker('isDirectory');
 const isFile = statChecker('isFile');
 
-const subtests = (t, obj) => {
-  let keys = Object.keys(obj);
-
-  keys.forEach((name, i) => {
-    let prefix = i === keys.length - 1 ? '└── ' : '├── ';
-    t.test(prefix + name, obj[name]);
-  });
-};
-
 export {
   isDir,
   isFile,
   isNonEmptyString,
-  isObject,
-  subtests
+  isObject
 };
