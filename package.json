@@ -35,10 +35,10 @@
   ],
   "dependencies": {
     "chalk": "^1.0.0",
-    "faucet": "0.0.1",
     "glob": "^6.0.1",
     "lodash": "^3.10.1",
     "npm-run-all": "~1.2.0",
+    "tap-parser": "^1.2.2",
     "tape": "^4.2.2",
     "yeoman-generator": "^0.20.0",
     "yosay": "^1.0.2"
