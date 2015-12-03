@@ -28,9 +28,6 @@ node_modules/
 # Yeoman meta-data
 .yo-rc.json
 
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt/
-
 # Build-related directories
 dist/
 dist-test/
