@@ -93,7 +93,7 @@ const packageJSON = (current, context) => {
       sinon: 'global:sinon',
       'video.js': 'global:videojs'
     },
-    standard: {
+    vjsstandard: {
       ignore: [
         'dist',
         'dist-test',
@@ -148,7 +148,7 @@ const packageJSON = (current, context) => {
       ]),
 
       clean: 'rm -rf dist dist-test es5',
-      lint: 'standard',
+      lint: 'vjsstandard',
       mkdirs: 'mkdir -p dist dist-test es5',
       prestart: 'npm-run-all build',
       start: 'npm-run-all -p start:serve watch',
@@ -203,7 +203,7 @@ const packageJSON = (current, context) => {
       'serve-static': '^1.10.0',
       sinon: '^1.0.0',
       'uglify-js': '^2.5.0',
-      'videojs-standard': '^3.7.0',
+      'videojs-standard': '^4.0.0',
       watchify: '^3.6.0'
     }
   };
