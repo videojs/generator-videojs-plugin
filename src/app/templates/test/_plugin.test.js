@@ -17,7 +17,10 @@ QUnit.test('the environment is sane', function(assert) {
 QUnit.module('<%= nameOf.package %>', {
 
   beforeEach() {
-    this.player = new Player(document.createElement('video'));
+    this.fixture = document.getElementById('qunit-fixture');
+    this.video = document.createElement('video');
+    this.fixture.appendChild(this.video);
+    this.player = new Player();
 
     // Mock the environment's timers because certain things - particularly
     // player readiness - are asynchronous in video.js 5.
@@ -25,6 +28,7 @@ QUnit.module('<%= nameOf.package %>', {
   },
 
   afterEach() {
+    this.player.dispose();
     this.clock.restore();
   }
 });
