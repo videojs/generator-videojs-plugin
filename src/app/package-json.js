@@ -269,7 +269,7 @@ const packageJSON = (current, context) => {
   // Support the documentation tooling option.
   if (context.docs) {
     _.assign(result.scripts, {
-      docs: 'npm-run-all -p docs:toc docs:api',
+      docs: 'npm-run-all -p docs:*',
       'docs:api': 'documentation src/*.js -f html -o docs/api',
       'docs:toc': 'doctoc README.md',
       prestart: 'npm-run-all -p docs build'

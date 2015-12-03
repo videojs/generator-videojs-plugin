@@ -13,7 +13,7 @@
   </video>
   <ul>
     <li><a href="/test/">Run unit tests in browser.</a></li>
-    <li><a href="/docs/api/">Read generated docs.</a></li>
+    <% if (docs) { %><li><a href="/docs/api/">Read generated docs.</a></li><% } %>
   </ul>
   <script src="/node_modules/video.js/dist/video.js"></script>
   <script src="/dist/<%= nameOf.package %>.js"></script>
