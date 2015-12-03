@@ -41,7 +41,7 @@ $ yo videojs-plugin
 For the keystroke-phobic, a shortcut is available:
 
 ```sh
-$ vjsp
+$ vjsplugin
 ```
 
 You will be walked through several options and finish with a working video.js plugin. Of course, this plugin won't do anything out of the box - that part is left to your creativity!
@@ -77,10 +77,10 @@ Turn prompts off with: `yo videojs-plugin --hurry`
 Also provided by this generator is a CLI application for validating a directory as following current [video.js Plugin Standards][standards]. Using it is very simple; run the following command:
 
 ```sh
-$ vjspv
+$ vjsplugincheck
 ```
 
-There are no options or arguments available or needed. This will run a series of [tape][tape] tests against the contents of `process.cwd()` (the current directory).
+There are no options or arguments available or needed. This will run a series of tests against the contents of `process.cwd()` (the current directory).
 
 _Note: this command can be used on any plugin project - not just those using the generator!_
 

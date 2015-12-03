@@ -14,7 +14,7 @@ tap.on('assert', function(assert) {
   process.stdout.write(chalk[color](prefix + ' ' + assert.name) + '\n');
 });
 
-glob(path.join(__dirname, '../es5-validate/*.test.js'), function(err, files) {
+glob(path.join(__dirname, '../es5-check/*.test.js'), function(err, files) {
   if (err) {
     throw err;
   }

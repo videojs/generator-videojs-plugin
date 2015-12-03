@@ -5,10 +5,8 @@
   "license": "Apache-2.0",
   "main": "generators/app/index.js",
   "bin": {
-    "videojs-plugin": "bin/videojs-plugin.sh",
-    "videojs-plugin-validate": "bin/videojs-plugin-validate.js",
-    "vjsp": "bin/videojs-plugin.sh",
-    "vjspv": "bin/videojs-plugin-validate.js"
+    "vjsplugin": "bin/videojs-plugin.sh",
+    "vjsplugincheck": "bin/videojs-plugin-check.js"
   },
   "repository": "videojs/generator-videojs-plugin",
   "author": {
@@ -18,11 +16,11 @@
   "scripts": {
     "prebuild": "npm run clean",
     "build": "npm-run-all -p build:*",
+    "build:check": "babel src/check -d es5-check",
     "build:generator": "babel --ignore templates/**/* src/app -d generators/app && npm run build:generator:copy",
     "build:generator:copy": "cp -r src/app/templates generators/app/templates",
     "build:test": "babel src/test -d es5-test",
-    "build:validate": "babel src/validate -d es5-validate",
-    "clean": "rm -rf generators es5-test es5-validate && mkdir -p generators es5-test es5-validate",
+    "clean": "rm -rf generators es5-test es5-check && mkdir -p generators es5-test es5-check",
     "docs": "doctoc README.md docs/*.md",
     "prepublish": "npm run build",
     "pretest": "npm run build",
