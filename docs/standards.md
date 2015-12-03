@@ -85,10 +85,8 @@ However, some developers may prefer to implement their build process with a tool
 
 ```json
 "scripts": {
-  // ...
   "build": "grunt",
   "build:js": "grunt js"
-  // ...
 }
 ```
 
