@@ -67,7 +67,7 @@ Folder/Filename            | Optional | Description
 `.editorconfig`            |          |
 `.gitignore`               |          |
 `.npmignore`               |          |
-`bower.json`               |          |
+`bower.json`               | ✓        |
 `CHANGELOG.md`             | ✓        | May be removed if not desired.
 `CONTRIBUTING.md`          | ✓        | Not present in closed-source plugins.
 `index.html`               |          | An example of usage of the plugin. This can be used with GitHub pages as well.

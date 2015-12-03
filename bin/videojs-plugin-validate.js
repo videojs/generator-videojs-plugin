@@ -1,7 +1,15 @@
 #!/usr/bin/env node
 
-var test = require('tape');
 var faucet = require('faucet');
+var glob = require('glob');
+var path = require('path');
+var test = require('tape');
 
 test.createStream().pipe(faucet()).pipe(process.stdout);
-require('../es5/validate.js');
+
+glob(path.join(__dirname, '../es5-validate/*.test.js'), function(err, files) {
+  if (err) {
+    throw err;
+  }
+  files.forEach(require);
+});

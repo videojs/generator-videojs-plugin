@@ -21,8 +21,8 @@
     "build:generator": "babel --ignore templates/**/* src/app -d generators/app && npm run build:generator:copy",
     "build:generator:copy": "cp -r src/app/templates generators/app/templates",
     "build:test": "babel src/test -d es5-test",
-    "build:validate": "babel src/validate -o es5/validate.js",
-    "clean": "rm -rf generators es5 es5-test && mkdir -p generators es5 es5-test",
+    "build:validate": "babel src/validate -d es5-validate",
+    "clean": "rm -rf generators es5-test es5-validate && mkdir -p generators es5-test es5-validate",
     "docs": "doctoc README.md docs/*.md",
     "prepublish": "npm run build",
     "pretest": "npm run build",
@@ -36,6 +36,7 @@
   "dependencies": {
     "chalk": "^1.0.0",
     "faucet": "0.0.1",
+    "glob": "^6.0.1",
     "lodash": "^3.10.1",
     "npm-run-all": "~1.2.0",
     "tape": "^4.2.2",
