@@ -12,6 +12,7 @@ QUnit.test('the environment is sane', function(assert) {
   assert.strictEqual(typeof Array.isArray, 'function', 'es5 exists');
   assert.strictEqual(typeof sinon, 'object', 'sinon exists');
   assert.strictEqual(typeof videojs, 'function', 'videojs exists');
+  assert.strictEqual(typeof plugin, 'function', 'plugin is a function');
 });
 
 QUnit.module('<%= nameOf.package %>', {
@@ -20,7 +21,7 @@ QUnit.module('<%= nameOf.package %>', {
     this.fixture = document.getElementById('qunit-fixture');
     this.video = document.createElement('video');
     this.fixture.appendChild(this.video);
-    this.player = new Player();
+    this.player = videojs(this.video);
 
     // Mock the environment's timers because certain things - particularly
     // player readiness - are asynchronous in video.js 5.
@@ -28,17 +29,16 @@ QUnit.module('<%= nameOf.package %>', {
   },
 
   afterEach() {
-    this.player.dispose();
+
+    // The clock _must_ be restored before disposing the player; otherwise,
+    // certain timeout listeners that happen inside video.js may throw errors.
     this.clock.restore();
+    this.player.dispose();
   }
 });
 
 QUnit.test('registers itself with video.js', function(assert) {
-  assert.ok(
-    typeof plugin,
-    'function',
-    '<%= nameOf.package %> plugin is a function'
-  );
+  assert.expect(2);
 
   assert.strictEqual(
     Player.prototype.<%= nameOf.function %>,

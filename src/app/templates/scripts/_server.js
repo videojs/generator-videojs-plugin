@@ -26,9 +26,9 @@ portscanner.findAPortNotInUse(PORT, MAX_PORT, HOST, (error, port) => {
     throw error;
   }
 
-  console.log(cowsay.say({
+  process.stdout.write(cowsay.say({
     text: `${verbs[Math.floor(Math.random() * 5)]} on ${HOST}:${port}`
-  }));
+  }) + '\n\n');
 
   app.listen(port);
 });
