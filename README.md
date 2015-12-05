@@ -26,7 +26,7 @@ To learn more about video.js plugins and this generator's standards and opinions
 
 ## Getting Started
 
-If you don't know what Yeoman is or what generators are, check out the Yeoman [Getting Started][getting-started] document. Long story short, make sure you have Yoeman and this generator installed globally:
+If you don't know what Yeoman is or what generators are, check out the Yeoman [Getting Started][getting-started] document. Long story short, make sure you have Yeoman and this generator installed globally:
 
 ```sh
 $ npm install -g yo generator-videojs-plugin

@@ -1,6 +1,6 @@
 # <%= nameOf.package %>
 
-A plugin for video.js. 
+<%= description %>
 
 ### Table of Contents
 
@@ -37,4 +37,4 @@ That's it! Refer to the [video.js plugin standards](https://github.com/videojs/g
 
 ## License
 
-<%= nameOf.license %>
+<%= nameOf.license %>. Copyright (c) <%= author %>
