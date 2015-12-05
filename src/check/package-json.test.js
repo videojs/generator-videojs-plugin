@@ -1,9 +1,9 @@
-import {isNonEmptyString, isObject} from './lib';
+import {isNonEmptyString, isPlainObject} from './lib';
 import tap from 'tap';
 
 const pkg = require(`${process.cwd()}/package.json`);
 
-const scripts = [
+const coreScripts = [
   'build',
   'build:js',
   'build:test',
@@ -17,7 +17,7 @@ const scripts = [
   'version'
 ];
 
-tap.ok(typeof pkg === 'object', 'package.json exists');
+tap.ok(isPlainObject(pkg), 'package.json exists');
 tap.ok(isNonEmptyString(pkg.name), 'package.json has "name" property');
 
 tap.ok(
@@ -26,13 +26,13 @@ tap.ok(
 );
 
 tap.ok(
-  isObject(pkg.author) || isNonEmptyString(pkg.author),
+  isPlainObject(pkg.author) || isNonEmptyString(pkg.author),
   'package.json has "author" property'
 );
 
-tap.ok(isObject(pkg.scripts), 'package.json has "scripts" object');
+tap.ok(isPlainObject(pkg.scripts), 'package.json has "scripts" object');
 
-scripts.forEach(script => {
+coreScripts.forEach(script => {
   tap.ok(
     isNonEmptyString(pkg.scripts[script]),
     `package.json "scripts" has "${script}" script`

@@ -15,6 +15,8 @@ This document and [the Yeoman generator](https://github.com/videojs/generator-vi
 - [Rules Summary](#rules-summary)
 - [Packaging and Dependencies](#packaging-and-dependencies)
   - [Structure](#structure)
+    - [Optional?](#optional)
+    - [Generated?](#generated)
 - [Automation](#automation)
   - [npm Core Scripts](#npm-core-scripts)
 - [Coding Style](#coding-style)
@@ -24,6 +26,8 @@ This document and [the Yeoman generator](https://github.com/videojs/generator-vi
   - [Testing in a Browser](#testing-in-a-browser)
 - [Release](#release)
   - [Versioning](#versioning)
+    - [Not Supporting Bower](#not-supporting-bower)
+    - [Supporting Bower](#supporting-bower)
   - [Publishing](#publishing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
