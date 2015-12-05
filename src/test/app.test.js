@@ -53,8 +53,14 @@ describe('videojs-plugin:app', function() {
       libs.allAreNonEmpty(this.pkg.scripts, scripts);
     });
 
+    it('populates versioning scripts for bower', function() {
+      ['preversion', 'version', 'postversion'].forEach(s => {
+        assert.strictEqual(this.pkg.scripts[s], `./scripts/npm-${s}-for-bower.sh`);
+      });
+    });
+
     it('creates common default set of files', function() {
-      assert.file(libs.fileList('common', 'oss'));
+      assert.file(libs.fileList('common', 'oss', 'bower'));
     });
   });
 
@@ -104,6 +110,31 @@ describe('videojs-plugin:app', function() {
         'docs:api',
         'docs:toc'
       ]));
+    });
+  });
+
+  describe('bower turned off', function() {
+
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin',
+          bower: false
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
+
+    it('does not create bower-specific files', function() {
+      assert.noFile(libs.fileList('bower'));
+    });
+
+    it('does not populate versioning scripts for bower', function() {
+      ['preversion', 'version', 'postversion'].forEach(s => {
+        assert.notStrictEqual(this.pkg.scripts[s], `./scripts/npm-${s}-for-bower.sh`);
+      });
     });
   });
 });

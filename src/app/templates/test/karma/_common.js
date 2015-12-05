@@ -5,7 +5,9 @@ var DEFAULTS = {
   frameworks: ['browserify', 'qunit'],
 
   files: [
-    'dist/<%= nameOf.package %>.css',
+<% if (sass) { -%>
+      'dist/<%= nameOf.package %>.css',
+<% } -%>
     'node_modules/sinon/pkg/sinon.js',
     'node_modules/sinon/pkg/sinon-ie.js',
     'node_modules/video.js/dist/video.js',

@@ -155,9 +155,9 @@ const packageJSON = (current, context) => {
       'start:serve': 'babel-node scripts/server.js',
       pretest: 'npm-run-all lint build:test',
       test: 'karma start test/karma/detected.js',
-      preversion: './scripts/npm-preversion.sh',
-      version: './scripts/npm-version.sh',
-      postversion: './scripts/npm-postversion.sh',
+      preversion: 'npm test',
+      version: 'npm run build',
+      postversion: 'git push origin master && git push origin --tags',
       watch: 'npm run mkdirs && npm-run-all -p watch:*',
 
       'watch:js': scriptify([
@@ -291,6 +291,14 @@ const packageJSON = (current, context) => {
 
     _.assign(result.devDependencies, {
       'videojs-languages': '^1.0.0'
+    });
+  }
+
+  if (context.bower) {
+    _.assign(result.scripts, {
+      preversion: './scripts/npm-preversion-for-bower.sh',
+      version: './scripts/npm-version-for-bower.sh',
+      postversion: './scripts/npm-postversion-for-bower.sh',
     });
   }
 

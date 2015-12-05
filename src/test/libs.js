@@ -9,9 +9,6 @@ const FILES = {
 
   common: [
     'scripts/banner.ejs',
-    'scripts/npm-postversion.sh',
-    'scripts/npm-preversion.sh',
-    'scripts/npm-version.sh',
     'scripts/server.js',
     'test/karma/chrome.js',
     'test/karma/common.js',
@@ -25,7 +22,6 @@ const FILES = {
     '.editorconfig',
     '.gitignore',
     '.npmignore',
-    'bower.json',
     'CHANGELOG.md',
     'index.html',
     'README.md'
@@ -39,6 +35,13 @@ const FILES = {
 
   sass: [
     'src/plugin.scss'
+  ],
+
+  bower: [
+    'scripts/npm-postversion-for-bower.sh',
+    'scripts/npm-preversion-for-bower.sh',
+    'scripts/npm-version-for-bower.sh',
+    'bower.json'
   ]
 };
 

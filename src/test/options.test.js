@@ -12,7 +12,8 @@ describe('videojs-plugin:app options', function() {
         }))
         .withPrompts({
           name: 'options-bcov',
-          author: 'ignored'
+          author: 'ignored',
+          description: 'doesn\'t matter'
         })
         .on('end', libs.onEnd.bind(this, done));
     });
@@ -34,6 +35,7 @@ describe('videojs-plugin:app options', function() {
         .withPrompts({
           name: 'options-bcov-private',
           author: 'ignored',
+          description: 'doesn\'t matter',
           license: 'private'
         })
         .on('end', libs.onEnd.bind(this, done));

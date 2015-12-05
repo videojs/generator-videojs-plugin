@@ -37,6 +37,7 @@ All standard video.js plugins _must_:
 - ...implement the core set of npm scripts.
 - ...be written in ES6 and pass `videojs-standard` linting.
 - ...have tests.
+- ...never check build artifacts into the repository.
 
 ## Packaging and Dependencies
 
@@ -67,7 +68,7 @@ Folder/Filename            | Optional? | Generated? | Description
 `.editorconfig`            |           | ✓          |
 `.gitignore`               |           | ✓          |
 `.npmignore`               |           | ✓          |
-`bower.json`               | ✓         | ✓          |
+`bower.json`               | ✓         | ?          |
 `CHANGELOG.md`             | ✓         | ✓          | May be removed if not desired.
 `CONTRIBUTING.md`          | ✓         | ?          | Not present in closed-source plugins.
 `index.html`               | ✓         | ✓          | An example of usage of the plugin. This can be used with GitHub pages as well.
@@ -132,7 +133,7 @@ npm Script   | Optional | Description
 `watch:css`  | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
 `watch:js`   |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
 `watch:test` |          | Triggers a build when the test entry point changes.
-`version`    |          | Includes `preversion` and `postversion` scripts. Bumps the package version and creates a distributable, Bower-friendly, tag.
+`version`    |          | Includes `preversion` and `postversion` scripts. Bumps the package version and creates a tag. Special handling if Bower support is enabled!
 
 ## Coding Style
 
@@ -180,9 +181,17 @@ During development, it may be more convenient to run your tests manually in a br
 
 ### Versioning
 
-__All standard video.js plugins must support Bower, but never check in build artifacts to source control.__
+__Standard video.js plugins may support Bower, but must never check in build artifacts to source control.__
 
-It is generally considered a best practice to not check build artifacts into source control. However, because Bower only clones repositories and offers no mechanism for scripting, the video.js plugin standard must define a workflow for bumping versions without checking `dist/` into the repository's `master` history!
+#### Not Supporting Bower
+
+This is the easy case, but not the default in the generator. In this case, no tricky versioning workflow needs to be followed; however, tests are run before versioning and the build is run during versioning.
+
+After the tag is created, `master` is automatically pushed to `origin/master` and tags are pushed to `origin`. If your repository is set up differently, modify the script (or remove it if you prefer that step to be manual).
+
+#### Supporting Bower
+
+It is generally considered a best practice to not check build artifacts (`dist/` etc.) into source control. However, because Bower only clones repositories and offers no mechanism for scripting, we must define a workflow for bumping versions without checking `dist/` into the repository's `master` history!
 
 This assumes use of the `npm version` command:
 

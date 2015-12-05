@@ -74,9 +74,7 @@ export default yeoman.generators.Base.extend({
     let licenseNames = this._licenseNames;
 
     let defaults = {
-      author: '',
-      name: '',
-      description: '',
+      bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
@@ -176,6 +174,11 @@ export default yeoman.generators.Base.extend({
         name: 'lang',
         message: 'Do you need video.js language file infrastructure for internationalized strings?',
         'default': defaults.lang
+      }, {
+        type: 'confirm',
+        name: 'bower',
+        message: 'Do you want to support Bower (adds special versioning handling)?',
+        'default': defaults.bower
       }].filter(prompt => !_.contains(this._promptsToFilter, prompt.name)));
     });
   },
@@ -221,9 +224,6 @@ export default yeoman.generators.Base.extend({
 
     this._filesToCopy = [
       'scripts/_banner.ejs',
-      'scripts/_npm-postversion.sh',
-      'scripts/_npm-preversion.sh',
-      'scripts/_npm-version.sh',
       'scripts/_server.js',
       'test/karma/_chrome.js',
       'test/karma/_detected.js',
@@ -241,7 +241,6 @@ export default yeoman.generators.Base.extend({
       'test/karma/_common.js',
       'test/_index.html',
       'test/_plugin.test.js',
-      '_bower.json',
       '_index.html',
       '_README.md'
     ];
@@ -309,6 +308,7 @@ export default yeoman.generators.Base.extend({
 
     this.context = _.pick(configs, [
       'author',
+      'bower',
       'description',
       'docs',
       'lang',
@@ -339,6 +339,13 @@ export default yeoman.generators.Base.extend({
 
     if (configs.sass) {
       this._templatesToCopy.push('src/_plugin.scss');
+    }
+
+    if (configs.bower) {
+      this._filesToCopy.push('scripts/_npm-postversion-for-bower.sh');
+      this._filesToCopy.push('scripts/_npm-preversion-for-bower.sh');
+      this._filesToCopy.push('scripts/_npm-version-for-bower.sh');
+      this._templatesToCopy.push('_bower.json');
     }
   },
 
