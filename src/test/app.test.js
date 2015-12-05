@@ -30,7 +30,8 @@ describe('videojs-plugin:app', function() {
         .withOptions(libs.options())
         .withPrompts({
           name: 'wat',
-          author: 'John Doe'
+          author: 'John Doe',
+          description: 'wat is the plugin'
         })
         .on('end', libs.onEnd.bind(this, done));
     });
@@ -39,11 +40,12 @@ describe('videojs-plugin:app', function() {
       assert.strictEqual(this.pkg.author, 'John Doe');
       assert.strictEqual(this.pkg.license, 'MIT');
       assert.strictEqual(this.pkg.name, 'videojs-wat');
+      assert.strictEqual(this.pkg.description, 'wat is the plugin');
       assert.strictEqual(this.pkg.version, '0.0.0');
       assert.strictEqual(this.pkg.main, 'es5/plugin.js');
       assert.ok(_.isArray(this.pkg.keywords));
       assert.ok(_.isPlainObject(this.pkg['browserify-shim']));
-      assert.ok(_.isPlainObject(this.pkg.standard));
+      assert.ok(_.isPlainObject(this.pkg.vjsstandard));
       assert.ok(_.isPlainObject(this.pkg.devDependencies));
     });
 
@@ -64,6 +66,7 @@ describe('videojs-plugin:app', function() {
         .withPrompts({
           name: 'wat',
           author: 'John Doe',
+          description: 'wat is the plugin',
           sass: true
         })
         .on('end', libs.onEnd.bind(this, done));
@@ -89,6 +92,7 @@ describe('videojs-plugin:app', function() {
         .withPrompts({
           name: 'wat',
           author: 'John Doe',
+          description: 'wat is the plugin',
           docs: true
         })
         .on('end', libs.onEnd.bind(this, done));

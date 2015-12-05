@@ -74,6 +74,9 @@ export default yeoman.generators.Base.extend({
     let licenseNames = this._licenseNames;
 
     let defaults = {
+      author: '',
+      name: '',
+      description: '',
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
