@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const isNonEmptyString = v => typeof v === 'string' && /\S/.test(v);
+const isNonEmptyString = v => typeof v === 'string' && (/\S/).test(v);
 const isObject = o => !!o && typeof o === 'object';
 
 const statChecker = method => {

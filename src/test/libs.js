@@ -1,7 +1,6 @@
 import fs from 'fs';
 import _ from 'lodash';
 import path from 'path';
-import util from 'util';
 import {assert} from 'yeoman-generator';
 
 // Files that are expected to exist in certain conditions.
@@ -65,8 +64,8 @@ export const fileList = function(...list) {
  * @param  {...Object} Same as Object.assign
  * @return {Object}
  */
-export const options = function(...options) {
-  return _.assign(...[{skipInstall: true}].concat(options));
+export const options = function(...args) {
+  return _.assign(...[{skipInstall: true}].concat(args));
 };
 
 /**
@@ -92,6 +91,7 @@ export const onEnd = function(done) {
 export const allAreNonEmpty = function(scripts, checks) {
   checks.forEach(script => {
     let s = scripts[script];
+
     assert.ok(
       typeof s === 'string' && (/\S/).test(s),
       `"${script}" was a non-empty string`

@@ -13,6 +13,15 @@
     "name": "VideoJS",
     "url": "https://github.com/videojs"
   },
+  "vjsstandard": {
+    "ignore": [
+      "bin",
+      "docs",
+      "es5-check",
+      "es5-test",
+      "src/app/templates"
+    ]
+  },
   "scripts": {
     "prebuild": "npm run clean",
     "build": "npm-run-all -p build:*",

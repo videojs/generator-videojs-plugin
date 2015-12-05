@@ -75,25 +75,25 @@ const packageJSON = (current, context) => {
   };
 
   let result = {
-    name: context.nameOf.package,
-    description: context.description,
-    author: context.author,
-    license: context.nameOf.license,
-    version: context.version,
-    main: 'es5/plugin.js',
-    keywords: [
+    'name': context.nameOf.package,
+    'description': context.description,
+    'author': context.author,
+    'license': context.nameOf.license,
+    'version': context.version,
+    'main': 'es5/plugin.js',
+    'keywords': [
       'videojs',
       'videojs-plugin'
     ],
-    browserify: {
+    'browserify': {
       transform: ['browserify-shim']
     },
     'browserify-shim': {
-      qunit: 'global:QUnit',
-      sinon: 'global:sinon',
+      'qunit': 'global:QUnit',
+      'sinon': 'global:sinon',
       'video.js': 'global:videojs'
     },
-    vjsstandard: {
+    'vjsstandard': {
       ignore: [
         'dist',
         'dist-test',
@@ -106,9 +106,9 @@ const packageJSON = (current, context) => {
         'scripts'
       ]
     },
-    scripts: {
-      prebuild: 'npm run clean',
-      build: 'npm-run-all -p build:*',
+    'scripts': {
+      'prebuild': 'npm run clean',
+      'build': 'npm-run-all -p build:*',
 
       'build:js': scriptify([
         'npm-run-all',
@@ -147,18 +147,18 @@ const packageJSON = (current, context) => {
         '-o dist-test/%s.js'
       ]),
 
-      clean: 'rm -rf dist dist-test es5',
-      lint: 'vjsstandard',
-      mkdirs: 'mkdir -p dist dist-test es5',
-      prestart: 'npm-run-all build',
-      start: 'npm-run-all -p start:serve watch',
+      'clean': 'rm -rf dist dist-test es5',
+      'lint': 'vjsstandard',
+      'mkdirs': 'mkdir -p dist dist-test es5',
+      'prestart': 'npm-run-all build',
+      'start': 'npm-run-all -p start:serve watch',
       'start:serve': 'babel-node scripts/server.js',
-      pretest: 'npm-run-all lint build:test',
-      test: 'karma start test/karma/detected.js',
-      preversion: 'npm test',
-      version: 'npm run build',
-      postversion: 'git push origin master && git push origin --tags',
-      watch: 'npm run mkdirs && npm-run-all -p watch:*',
+      'pretest': 'npm-run-all lint build:test',
+      'test': 'karma start test/karma/detected.js',
+      'preversion': 'npm test',
+      'version': 'npm run build',
+      'postversion': 'git push origin master && git push origin --tags',
+      'watch': 'npm run mkdirs && npm-run-all -p watch:*',
 
       'watch:js': scriptify([
         'watchify src/plugin.js',
@@ -175,19 +175,19 @@ const packageJSON = (current, context) => {
         '-o dist-test/%s.js'
       ])
     },
-    dependencies: {
+    'dependencies': {
       'video.js': '^5.0.0'
     },
-    devDependencies: {
-      babel: '^5.8.0',
-      babelify: '^6.0.0',
-      bannerize: '^1.0.0',
-      browserify: '^11.0.0',
+    'devDependencies': {
+      'babel': '^5.8.0',
+      'babelify': '^6.0.0',
+      'bannerize': '^1.0.0',
+      'browserify': '^11.0.0',
       'browserify-shim': '^3.0.0',
-      connect: '^3.4.0',
-      cowsay: '^1.1.0',
-      global: '^4.3.0',
-      karma: '^0.13.0',
+      'connect': '^3.4.0',
+      'cowsay': '^1.1.0',
+      'global': '^4.3.0',
+      'karma': '^0.13.0',
       'karma-browserify': '^4.4.0',
       'karma-chrome-launcher': '^0.2.0',
       'karma-detect-browsers': '^2.0.0',
@@ -196,20 +196,20 @@ const packageJSON = (current, context) => {
       'karma-qunit': '^0.1.0',
       'karma-safari-launcher': '^0.1.0',
       'lodash-compat': '^3.10.0',
-      minimist: '^1.2.0',
+      'minimist': '^1.2.0',
       'npm-run-all': '~1.2.0',
-      portscanner: '^1.0.0',
-      qunitjs: '^1.0.0',
+      'portscanner': '^1.0.0',
+      'qunitjs': '^1.0.0',
       'serve-static': '^1.10.0',
-      sinon: '^1.0.0',
+      'sinon': '^1.0.0',
       'uglify-js': '^2.5.0',
       'videojs-standard': '^4.0.0',
-      watchify: '^3.6.0'
+      'watchify': '^3.6.0'
     }
   };
 
   if (context.isPrivate) {
-    result['private'] = true;
+    result.private = true;
   }
 
   // Create scripts for each Karma browser.
@@ -269,10 +269,10 @@ const packageJSON = (current, context) => {
   // Support the documentation tooling option.
   if (context.docs) {
     _.assign(result.scripts, {
-      docs: 'npm-run-all -p docs:*',
+      'docs': 'npm-run-all -p docs:*',
       'docs:api': 'documentation src/*.js -f html -o docs/api',
       'docs:toc': 'doctoc README.md',
-      prestart: 'npm-run-all -p docs build'
+      'prestart': 'npm-run-all -p docs build'
     });
 
     _.assign(result.devDependencies, {
@@ -298,7 +298,7 @@ const packageJSON = (current, context) => {
     _.assign(result.scripts, {
       preversion: './scripts/npm-preversion-for-bower.sh',
       version: './scripts/npm-version-for-bower.sh',
-      postversion: './scripts/npm-postversion-for-bower.sh',
+      postversion: './scripts/npm-postversion-for-bower.sh'
     });
   }
 

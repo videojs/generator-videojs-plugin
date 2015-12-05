@@ -141,21 +141,21 @@ export default yeoman.generators.Base.extend({
           Enter the name of this plugin (a-z/0-9/- only
           ; will be prefixed with "videojs-"):
         `,
-        'default': defaults.name,
+        default: defaults.name,
         validate: validateName
       }, {
         name: 'description',
         message: 'Enter a description for your plugin:',
-        'default': defaults.description
+        default: defaults.description
       }, {
         name: 'author',
         message: 'Enter the author of this plugin:',
-        'default': defaults.author
+        default: defaults.author
       }, {
         type: 'list',
         name: 'license',
         message: 'Choose a license for your project',
-        'default': defaults.license,
+        default: defaults.license,
         choices: _.map(this._licenseNames, (v, k) => {
           return {name: v, value: k};
         })
@@ -163,22 +163,25 @@ export default yeoman.generators.Base.extend({
         type: 'confirm',
         name: 'sass',
         message: 'Do you want to include Sass styling?',
-        'default': defaults.sass
+        default: defaults.sass
       }, {
         type: 'confirm',
         name: 'docs',
         message: 'Do you want to include documentation tooling?',
-        'default': defaults.docs
+        default: defaults.docs
       }, {
         type: 'confirm',
         name: 'lang',
-        message: 'Do you need video.js language file infrastructure for internationalized strings?',
-        'default': defaults.lang
+        message: tsml`
+          Do you need video.js language file infrastructure for internat
+          ionalized strings?
+        `,
+        default: defaults.lang
       }, {
         type: 'confirm',
         name: 'bower',
         message: 'Do you want to support Bower (adds special versioning handling)?',
-        'default': defaults.bower
+        default: defaults.bower
       }].filter(prompt => !_.contains(this._promptsToFilter, prompt.name)));
     });
   },
@@ -212,7 +215,7 @@ export default yeoman.generators.Base.extend({
       apache2: 'Apache-2.0',
       mit: 'MIT',
       none: 'None/Other',
-      'private': 'Private/Closed Source'
+      private: 'Private/Closed Source'
     };
 
     this._licenseFiles = {
@@ -318,10 +321,10 @@ export default yeoman.generators.Base.extend({
     _.assign(this.context, {
       isPrivate: this._isPrivate(),
       nameOf: {
-        'class': `vjs-${configs.name}`,
-        'function': _.camelCase(configs.name),
+        class: `vjs-${configs.name}`,
+        function: _.camelCase(configs.name),
         license: this._licenseNames[configs.license],
-        'package': `videojs-${configs.name}`,
+        package: `videojs-${configs.name}`,
         plugin: configs.name
       },
       version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0',

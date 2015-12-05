@@ -1,9 +1,11 @@
+/* global before, describe, it */
+
 import * as libs from './libs';
 import _ from 'lodash';
 import {assert, test as helpers} from 'yeoman-generator';
 
 describe('videojs-plugin:app', function() {
-  var scripts = [
+  const scripts = [
     'build',
     'build:js',
     'build:test',
@@ -20,7 +22,7 @@ describe('videojs-plugin:app', function() {
     'postversion',
     'watch',
     'watch:js',
-    'watch:test',
+    'watch:test'
   ];
 
   describe('defaults', function() {

@@ -1,3 +1,5 @@
+/* global before, describe, it */
+
 import * as libs from './libs';
 import _ from 'lodash';
 import {assert, test as helpers} from 'yeoman-generator';
