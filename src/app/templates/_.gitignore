@@ -22,9 +22,14 @@ logs
 npm-debug.log*
 
 # Dependency directories
+bower_components/
 node_modules/
 
+# Yeoman meta-data
+.yo-rc.json
+
 # Build-related directories
-es5-check/
-es5-test/
-generators/
+dist/
+dist-test/
+docs/api/
+es5/

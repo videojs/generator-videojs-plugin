@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title><%= nameOf.package %> Demo</title>
+  <link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
+<% if (sass) { -%>
+  <link href="/dist/<%= nameOf.package %>.css" rel="stylesheet">
+<% } -%>
+</head>
+<body>
+  <video id="<%= nameOf.package %>-player" class="video-js vjs-default-skin" controls>
+    <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
+    <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
+  </video>
+  <ul>
+    <li><a href="/test/">Run unit tests in browser.</a></li>
+    <% if (docs) { %><li><a href="/docs/api/">Read generated docs.</a></li><% } %>
+  </ul>
+  <script src="/node_modules/video.js/dist/video.js"></script>
+  <script src="/dist/<%= nameOf.package %>.js"></script>
+  <script>
+    (function(window, videojs) {
+      var player = window.player = videojs('<%= nameOf.package %>-player');
+      player.<%= nameOf.function %>();
+    }(window, window.videojs));
+  </script>
+</body>
+</html>
