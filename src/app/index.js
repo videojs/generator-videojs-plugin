@@ -214,8 +214,7 @@ export default yeoman.generators.Base.extend({
     this._licenseNames = {
       apache2: 'Apache-2.0',
       mit: 'MIT',
-      none: 'None/Other',
-      private: 'Private/Closed Source'
+      private: 'UNLICENSED'
     };
 
     this._licenseFiles = {
