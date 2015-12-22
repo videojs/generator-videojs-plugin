@@ -45,7 +45,7 @@ describe('videojs-plugin:app options', function() {
 
     it('produces expected package properties and file(s)', function() {
       assert.strictEqual(this.pkg.author, 'Brightcove, Inc.');
-      assert.strictEqual(this.pkg.license, 'Private/Closed Source');
+      assert.strictEqual(this.pkg.license, 'UNLICENSED');
       assert.strictEqual(this.pkg.private, true);
       assert.noFile(libs.fileList('oss'));
     });
