@@ -226,7 +226,6 @@ export default yeoman.generators.Base.extend({
 
     this._filesToCopy = [
       'scripts/_banner.ejs',
-      'scripts/_server.js',
       'test/karma/_chrome.js',
       'test/karma/_detected.js',
       'test/karma/_firefox.js',

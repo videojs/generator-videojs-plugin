@@ -8,7 +8,6 @@ const FILES = {
 
   common: [
     'scripts/banner.ejs',
-    'scripts/server.js',
     'test/karma/chrome.js',
     'test/karma/common.js',
     'test/karma/detected.js',
