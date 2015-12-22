@@ -106,6 +106,10 @@ const packageJSON = (current, context) => {
         'scripts'
       ]
     },
+    'files': [
+      'dist/**/*.*',
+      'es5/**/*.js'
+    ],
     'scripts': {
       'prebuild': 'npm run clean',
       'build': 'npm-run-all -p build:*',
@@ -268,6 +272,8 @@ const packageJSON = (current, context) => {
 
   // Support the documentation tooling option.
   if (context.docs) {
+    result.files.push('docs');
+
     _.assign(result.scripts, {
       'docs': 'npm-run-all -p docs:*',
       'docs:api': 'documentation src/*.js -f html -o docs/api',
@@ -302,6 +308,7 @@ const packageJSON = (current, context) => {
     });
   }
 
+  result.files.sort();
   result.scripts = alphabetizeScripts(result.scripts);
   result.devDependencies = alphabetizeObject(result.devDependencies);
 
