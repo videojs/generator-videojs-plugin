@@ -191,6 +191,7 @@ const packageJSON = (current, context) => {
     'files': [
       'dist/',
       'dist-test/',
+      'docs/',
       'es5/',
       'scripts/',
       'src/',
@@ -279,7 +280,6 @@ const packageJSON = (current, context) => {
 
   // Support the documentation tooling option.
   if (context.docs) {
-    result.files.push('docs');
 
     _.assign(result.scripts, {
       'docs': 'npm-run-all -p docs:*',
