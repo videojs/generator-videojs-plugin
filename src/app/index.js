@@ -398,10 +398,13 @@ export default yeoman.generators.Base.extend({
      * @function package
      */
     packageJSON() {
-      this.fs.writeJSON(this.destinationPath('package.json'), packageJSON(
-        this._currentPkgJSON,
-        this.context
-      ));
+      let json = packageJSON(this._currentPkgJSON, this.context);
+
+      // We want to use normal JSON.stringify here because we want to
+      // preserve whatever ordering existed in the _currentPkgJSON object.
+      let contents = JSON.stringify(json, null, 2);
+
+      this.fs.write(this.destinationPath('package.json'), contents);
     }
   },
 

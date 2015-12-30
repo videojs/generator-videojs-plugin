@@ -82,49 +82,9 @@ const packageJSON = (current, context) => {
 
   let result = _.assign({}, current, {
     'name': context.nameOf.package,
-    'description': context.description,
-    'author': context.author,
-    'license': context.nameOf.license,
     'version': context.version,
+    'description': context.description,
     'main': 'es5/plugin.js',
-
-    // Always include the two minimum keywords with whatever exists in the
-    // current keywords array.
-    'keywords': _.union(['videojs', 'videojs-plugin'], current.keywords).sort(),
-
-    'browserify': {
-      transform: ['browserify-shim']
-    },
-
-    'browserify-shim': {
-      'qunit': 'global:QUnit',
-      'sinon': 'global:sinon',
-      'video.js': 'global:videojs'
-    },
-
-    'vjsstandard': {
-      ignore: [
-        'dist',
-        'dist-test',
-        'docs',
-        'es5',
-        'test/karma',
-
-        // Scripts is ignored for now because videojs-standard does not
-        // make accomodations for things that are safe in Node.
-        'scripts'
-      ]
-    },
-
-    'files': [
-      'dist/',
-      'dist-test/',
-      'es5/',
-      'scripts/',
-      'src/',
-      'test/',
-      'index.html'
-    ],
 
     'scripts': _.assign({}, current.scripts, {
       'prebuild': 'npm run clean',
@@ -196,6 +156,47 @@ const packageJSON = (current, context) => {
         '-o dist-test/%s.js'
       ])
     }),
+
+    // Always include the two minimum keywords with whatever exists in the
+    // current keywords array.
+    'keywords': _.union(['videojs', 'videojs-plugin'], current.keywords).sort(),
+
+    'author': context.author,
+    'license': context.nameOf.license,
+
+    'browserify': {
+      transform: ['browserify-shim']
+    },
+
+    'browserify-shim': {
+      'qunit': 'global:QUnit',
+      'sinon': 'global:sinon',
+      'video.js': 'global:videojs'
+    },
+
+    'vjsstandard': {
+      ignore: [
+        'dist',
+        'dist-test',
+        'docs',
+        'es5',
+        'test/karma',
+
+        // Scripts is ignored for now because videojs-standard does not
+        // make accomodations for things that are safe in Node.
+        'scripts'
+      ]
+    },
+
+    'files': [
+      'dist/',
+      'dist-test/',
+      'es5/',
+      'scripts/',
+      'src/',
+      'test/',
+      'index.html'
+    ],
 
     'dependencies': _.assign({}, current.dependencies, {
       'video.js': '^5.0.0'
