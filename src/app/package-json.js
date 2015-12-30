@@ -106,6 +106,15 @@ const packageJSON = (current, context) => {
         'scripts'
       ]
     },
+    'files': [
+      'dist/',
+      'dist-test/',
+      'es5/',
+      'scripts/',
+      'src/',
+      'test/',
+      'index.html'
+    ],
     'scripts': {
       'prebuild': 'npm run clean',
       'build': 'npm-run-all -p build:*',
@@ -210,6 +219,8 @@ const packageJSON = (current, context) => {
 
   if (context.isPrivate) {
     result.private = true;
+  } else {
+    result.files.push('CONTRIBUTING.md');
   }
 
   // Create scripts for each Karma browser.
@@ -268,6 +279,8 @@ const packageJSON = (current, context) => {
 
   // Support the documentation tooling option.
   if (context.docs) {
+    result.files.push('docs');
+
     _.assign(result.scripts, {
       'docs': 'npm-run-all -p docs:*',
       'docs:api': 'documentation src/*.js -f html -o docs/api',
@@ -295,6 +308,8 @@ const packageJSON = (current, context) => {
   }
 
   if (context.bower) {
+    result.files.push('bower.json');
+
     _.assign(result.scripts, {
       preversion: './scripts/npm-preversion-for-bower.sh',
       version: './scripts/npm-version-for-bower.sh',
@@ -302,6 +317,7 @@ const packageJSON = (current, context) => {
     });
   }
 
+  result.files.sort();
   result.scripts = alphabetizeScripts(result.scripts);
   result.devDependencies = alphabetizeObject(result.devDependencies);
 
