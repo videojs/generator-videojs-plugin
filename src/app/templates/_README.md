@@ -2,39 +2,76 @@
 
 <%= description %>
 
-### Table of Contents
+<% if (docs) { -%>
+## Table of Contents
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- START doctoc -->
+<!-- END doctoc -->
+<% } -%>
+## Installation
 
+```sh
+npm install --save <%= nameOf.package %>
+```
+<% if (bower) { -%>
 
-- [Getting Started](#getting-started)
-  - [Running Tests](#running-tests)
-  - [Tag and Release](#tag-and-release)
-- [License](#license)
+The npm installation is preferred, but Bower works, too.
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+```sh
+bower install  --save <%= nameOf.package %>
+```
+<% } -%>
 
-## Getting Started
+## Usage
 
-1. Clone this repository!
-1. Install dependencies: `npm install`
-1. Run a development server: `npm start`
+To include <%= nameOf.package %> on your website or web application, use any of the following methods.
 
-That's it! Refer to the [video.js plugin standards](https://github.com/videojs/generator-videojs-plugin/docs/standards.md) for more detail.
+### `<script>` Tag
 
-### Running Tests
+This is the simplest case. Get the script in whatever way you prefer and include the plugin _after_ you include [video.js][videojs], so that the `videojs` global is available.
 
-- In all available and supported browsers: `npm test`
-- In a specific browser: `npm run test:chrome`, `npm run test:firefox`, etc.
-- While development server is running, navigate to [`http://localhost:9999/test/`](http://localhost:9999/test/) (_note:_ port may vary, check console output)
+```html
+<script src="//path/to/video.min.js"></script>
+<script src="//path/to/<%= nameOf.package %>.min.js"></script>
+<script>
+  var player = videojs('my-video');
 
-### Tag and Release
+  player.<%= nameOf.function %>();
+</script>
+```
 
-1. Make sure everything is committed.
-1. `npm version *` where `*` is `major`, `minor`, `patch`, etc. [Read more about versioning.](https://github.com/videojs/generator-videojs-plugin/docs/standards.md#versioning)
-1. `npm publish`
+### Browserify
+
+When using with Browserify, install <%= nameOf.package %> via npm and `require` the plugin as you would any other module.
+
+```js
+var videojs = require('video.js');
+
+// The actual plugin function is exported by this module, but it is also
+// attached to the `Player.prototype`; so, there is no need to assign it
+// to a variable.
+require('<%= nameOf.package %>');
+
+var player = videojs('my-video');
+
+player.<%= nameOf.function %>();
+```
+
+### RequireJS/AMD
+
+When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
+
+```js
+require(['video.js', '<%= nameOf.package %>'], function(videojs) {
+  var player = videojs('my-video');
+
+  player.<%= nameOf.function %>();
+});
+```
 
 ## License
 
 <%= nameOf.license %>. Copyright (c) <%= author %>
+
+
+[videojs]: http://videojs.com/
