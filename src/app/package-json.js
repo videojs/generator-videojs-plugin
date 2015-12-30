@@ -66,7 +66,13 @@ const alphabetizeScripts = (source) => {
 const packageJSON = (current, context) => {
   current = current || {};
 
-  const scriptify = (str) => {
+  /**
+   * Replaces all "%s" tokens with the name of the package in a given string.
+   *
+   * @param  {String} str
+   * @return {String}
+   */
+  let scriptify = (str) => {
     str = Array.isArray(str) ? str.join(' ') : str;
 
     let tokens = str.match(/%s/g) || [];
@@ -74,25 +80,28 @@ const packageJSON = (current, context) => {
     return util.format(...[str].concat(tokens.map(() => context.nameOf.package)));
   };
 
-  let result = {
+  let result = _.assign({}, current, {
     'name': context.nameOf.package,
     'description': context.description,
     'author': context.author,
     'license': context.nameOf.license,
     'version': context.version,
     'main': 'es5/plugin.js',
-    'keywords': [
-      'videojs',
-      'videojs-plugin'
-    ],
+
+    // Always include the two minimum keywords with whatever exists in the
+    // current keywords array.
+    'keywords': _.union(['videojs', 'videojs-plugin'], current.keywords).sort(),
+
     'browserify': {
       transform: ['browserify-shim']
     },
+
     'browserify-shim': {
       'qunit': 'global:QUnit',
       'sinon': 'global:sinon',
       'video.js': 'global:videojs'
     },
+
     'vjsstandard': {
       ignore: [
         'dist',
@@ -106,6 +115,7 @@ const packageJSON = (current, context) => {
         'scripts'
       ]
     },
+
     'files': [
       'dist/',
       'dist-test/',
@@ -115,7 +125,8 @@ const packageJSON = (current, context) => {
       'test/',
       'index.html'
     ],
-    'scripts': {
+
+    'scripts': _.assign({}, current.scripts, {
       'prebuild': 'npm run clean',
       'build': 'npm-run-all -p build:*',
 
@@ -184,11 +195,13 @@ const packageJSON = (current, context) => {
         '-t babelify',
         '-o dist-test/%s.js'
       ])
-    },
-    'dependencies': {
+    }),
+
+    'dependencies': _.assign({}, current.dependencies, {
       'video.js': '^5.0.0'
-    },
-    'devDependencies': {
+    }),
+
+    'devDependencies': _.assign({}, current.devDependencies, {
       'babel': '^5.8.0',
       'babelify': '^6.0.0',
       'bannerize': '^1.0.0',
@@ -215,8 +228,8 @@ const packageJSON = (current, context) => {
       'uglify-js': '^2.5.0',
       'videojs-standard': '^4.0.0',
       'watchify': '^3.6.0'
-    }
-  };
+    })
+  });
 
   if (context.isPrivate) {
     result.private = true;
@@ -231,21 +244,6 @@ const packageJSON = (current, context) => {
       'karma start test/karma/' + browser + '.js'
     ].join(' && ');
   });
-
-  // Both "scripts" and "devDependencies" get merged with the current
-  // package.json values, but the properties coming from the generator
-  // take precedence because it should be the single source of truth.
-  result.scripts = _.assign(
-    {},
-    current.scripts,
-    result.scripts
-  );
-
-  result.devDependencies = _.assign(
-    {},
-    current.devDependencies,
-    result.devDependencies
-  );
 
   // Support the Sass option.
   if (context.sass) {
@@ -320,6 +318,7 @@ const packageJSON = (current, context) => {
 
   result.files.sort();
   result.scripts = alphabetizeScripts(result.scripts);
+  result.dependencies = alphabetizeObject(result.dependencies);
   result.devDependencies = alphabetizeObject(result.devDependencies);
 
   return result;
