@@ -107,8 +107,13 @@ const packageJSON = (current, context) => {
       ]
     },
     'files': [
-      'dist/**/*.*',
-      'es5/**/*.js'
+      'dist/',
+      'dist-test/',
+      'es5/',
+      'scripts/',
+      'src/',
+      'test/',
+      'index.html'
     ],
     'scripts': {
       'prebuild': 'npm run clean',
@@ -214,6 +219,8 @@ const packageJSON = (current, context) => {
 
   if (context.isPrivate) {
     result.private = true;
+  } else {
+    result.files.push('CONTRIBUTING.md');
   }
 
   // Create scripts for each Karma browser.
@@ -301,6 +308,8 @@ const packageJSON = (current, context) => {
   }
 
   if (context.bower) {
+    result.files.push('bower.json');
+
     _.assign(result.scripts, {
       preversion: './scripts/npm-preversion-for-bower.sh',
       version: './scripts/npm-version-for-bower.sh',
