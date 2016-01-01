@@ -69,32 +69,35 @@ export const options = function(...args) {
 };
 
 /**
- * Function to call when "before all" setup is complete.
+ * Function to call when `before` setup is complete.
  *
- * This expects to be bound: onEnd.bind(this, done);
+ * This function expects to be bound to a RunContext: `onEnd.bind(this)`;
  *
  * @function onEnd
- * @param    {Function} done
+ * @param    {Function} [done]
  */
 export const onEnd = function(done) {
   this.pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-  done();
+  if (typeof done === 'function') {
+    done();
+  }
 };
 
 /**
- * Determine if all npm scripts listed in the array are non-empty strings.
+ * Assert that all keys listed in an array match non-empty values
+ * in an object.
  *
- * @param  {Object} scripts
- * @param  {Array} checks
+ * @param  {Object} obj
+ * @param  {Array}  checks
  * @return {Boolean}
  */
-export const allAreNonEmpty = function(scripts, checks) {
-  checks.forEach(script => {
-    let s = scripts[script];
+export const allAreNonEmpty = function(obj, checks) {
+  checks.forEach(key => {
+    let s = obj[key];
 
     assert.ok(
       typeof s === 'string' && (/\S/).test(s),
-      `"${script}" was a non-empty string`
+      `"${key}" was a non-empty string`
     );
   });
 };

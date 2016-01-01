@@ -1,8 +1,10 @@
 /* global before, describe, it */
 
-import * as libs from './libs';
 import _ from 'lodash';
 import {assert, test as helpers} from 'yeoman-generator';
+
+import * as libs from './libs';
+import packageJSON from '../generators/app/package-json';
 
 describe('videojs-plugin:app', function() {
   const scripts = [
@@ -139,4 +141,59 @@ describe('videojs-plugin:app', function() {
       });
     });
   });
+
+  describe('package.json merging', function() {
+    let result = packageJSON({
+      a: 1,
+      description: '',
+      b: 2,
+      name: '',
+      c: 3,
+      keywords: ['foo', 'bar']
+    }, {
+      author: 'Jane Doe',
+      bower: false,
+      description: 'This is the description',
+      docs: false,
+      isPrivate: false,
+      lang: false,
+      sass: false,
+      nameOf: {
+        class: 'vjs-test',
+        function: 'test',
+        license: 'MIT',
+        package: `videojs-test`,
+        plugin: 'test'
+      },
+      version: '1.2.3',
+      year: '2016'
+    });
+
+    it('overrides properties as expected', function() {
+      assert.strictEqual(result.description, 'This is the description');
+      assert.strictEqual(result.name, 'videojs-test');
+      assert.strictEqual(result.version, '1.2.3');
+    });
+
+    it('retains any pre-existing ordering of keys', function() {
+      let keys = Object.keys(result);
+
+      assert.strictEqual(keys[0], 'a');
+      assert.strictEqual(keys[1], 'description');
+      assert.strictEqual(keys[2], 'b');
+      assert.strictEqual(keys[3], 'name');
+      assert.strictEqual(keys[4], 'c');
+      assert.strictEqual(keys[5], 'keywords');
+      assert.strictEqual(keys[6], 'version');
+      assert.strictEqual(keys[7], 'main');
+    });
+
+    it('only adds keywords, does not remove any, and alphabetizes', function() {
+      assert.strictEqual(result.keywords[0], 'bar');
+      assert.strictEqual(result.keywords[1], 'foo');
+      assert.strictEqual(result.keywords[2], 'videojs');
+      assert.strictEqual(result.keywords[3], 'videojs-plugin');
+    });
+  });
 });
+
