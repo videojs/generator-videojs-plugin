@@ -117,19 +117,10 @@ const packageJSON = (current, context) => {
       ]),
 
       'build:test': 'npm-run-all mkdirs build:test:browserify',
-
-      'build:test:browserify': scriptify([
-
-        // Uses `find` because Browserify does not support globstar
-        // (e.g. **/*.test.js) patterns via CLI.
-        'browserify  `find test -name \'*.test.js\'`',
-        '-t babelify',
-        '-o dist-test/%s.js'
-      ]),
-
-      'clean': 'rm -rf dist dist-test es5',
+      'build:test:browserify': 'node scripts/build-test-browserify.js',
+      'clean': 'node -e "require(\'shelljs\').rm(\'-rf\',[\'dist\',\'dist-test\',\'es5\'])"',
       'lint': 'vjsstandard',
-      'mkdirs': 'mkdir -p dist dist-test es5',
+      'mkdirs': 'node -e "require(\'shelljs\').mkdir(\'-p\',[\'dist\',\'dist-test\',\'es5\'])"',
       'prepublish': 'npm run build',
       'prestart': 'npm run build',
       'start': 'npm-run-all -p start:serve watch',
@@ -211,6 +202,7 @@ const packageJSON = (current, context) => {
       'browserify-shim': '^3.0.0',
       'connect': '^3.4.0',
       'cowsay': '^1.1.0',
+      'glob': '^6.0.3',
       'global': '^4.3.0',
       'karma': '^0.13.0',
       'karma-browserify': '^4.4.0',
@@ -226,6 +218,7 @@ const packageJSON = (current, context) => {
       'portscanner': '^1.0.0',
       'qunitjs': '^1.0.0',
       'serve-static': '^1.10.0',
+      'shelljs': '^0.5.3',
       'sinon': '^1.0.0',
       'uglify-js': '^2.5.0',
       'videojs-standard': '^4.0.0',
@@ -261,7 +254,7 @@ const packageJSON = (current, context) => {
         '--output-style=compressed',
         '--linefeed=lf',
         'src/plugin.scss -o dist && ',
-        'mv dist/plugin.css dist/%s.css'
+        'node -e "require(\'shelljs\').mv(\'dist/plugin.css\',\'dist/%s.css\')"'
       ]),
 
       'watch:css': scriptify([
@@ -269,7 +262,7 @@ const packageJSON = (current, context) => {
         '--output-style=nested',
         '--linefeed=lf',
         'src/plugin.scss -o dist -w src &&',
-        'mv dist/plugin.css dist/%s.css'
+        'node -e "require(\'shelljs\').mv(\'dist/plugin.css\',\'dist/%s.css\')"'
       ])
     });
 
