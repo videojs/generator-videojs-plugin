@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import tsml from 'tsml';
 import util from 'util';
 
 const KARMA_BROWSERS = ['chrome', 'firefox', 'ie', 'safari'];
@@ -118,9 +119,13 @@ const packageJSON = (current, context) => {
 
       'build:test': 'npm-run-all mkdirs build:test:browserify',
       'build:test:browserify': 'node scripts/build-test-browserify.js',
-      'clean': 'node -e "require(\'shelljs\').rm(\'-rf\',[\'dist\',\'dist-test\',\'es5\'])"',
+      'clean': tsml`
+        node -e "require(\'shelljs\').rm(\'-rf\',[\'dist\',\'dist-test\',\'es5\'])"
+      `,
       'lint': 'vjsstandard',
-      'mkdirs': 'node -e "require(\'shelljs\').mkdir(\'-p\',[\'dist\',\'dist-test\',\'es5\'])"',
+      'mkdirs': tsml`
+        node -e "require(\'shelljs\').mkdir(\'-p\',[\'dist\',\'dist-test\',\'es5\'])"
+      `,
       'prepublish': 'npm run build',
       'prestart': 'npm run build',
       'start': 'npm-run-all -p start:serve watch',
