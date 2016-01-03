@@ -231,7 +231,8 @@ export default yeoman.generators.Base.extend({
     ];
 
     this._templatesToCopy = [
-      'scripts/_build-test-browserify.js',
+      'scripts/_build-test.js',
+      'scripts/_watch-test.js',
       'src/_plugin.js',
       'test/karma/_common.js',
       'test/_index.html',

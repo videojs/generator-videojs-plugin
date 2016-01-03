@@ -93,7 +93,6 @@ const packageJSON = (current, context) => {
 
       'build:js': scriptify([
         'npm-run-all',
-        'mkdirs',
         'build:js:babel',
         'build:js:browserify',
         'build:js:bannerize',
@@ -117,25 +116,25 @@ const packageJSON = (current, context) => {
         '-o dist/%s.min.js'
       ]),
 
-      'build:test': 'npm-run-all mkdirs build:test:browserify',
-      'build:test:browserify': 'node scripts/build-test-browserify.js',
+      'build:test': 'node scripts/build-test.js',
       'clean': tsml`
-        node -e "require(\'shelljs\').rm(\'-rf\',[\'dist\',\'dist-test\',\'es5\'])"
+        node -e "
+          var s=require(\'shelljs\'),d=[\'dist\',\'dist-test\',\'es5\'];
+          s.rm(\'-rf\',d);
+          s.mkdir(\'-p\',d);
+        "
       `,
       'lint': 'vjsstandard',
-      'mkdirs': tsml`
-        node -e "require(\'shelljs\').mkdir(\'-p\',[\'dist\',\'dist-test\',\'es5\'])"
-      `,
       'prepublish': 'npm run build',
       'prestart': 'npm run build',
-      'start': 'npm-run-all -p start:serve watch',
+      'start': 'npm-run-all -p start:* watch:*',
       'start:serve': 'babel-node scripts/server.js',
       'pretest': 'npm-run-all lint build:test',
       'test': 'karma start test/karma/detected.js',
       'preversion': 'npm test',
       'version': 'npm run build',
       'postversion': 'git push origin master && git push origin --tags',
-      'watch': 'npm run mkdirs && npm-run-all -p watch:*',
+      'watch': 'npm-run-all -p watch:*',
 
       'watch:js': scriptify([
         'watchify src/plugin.js',
@@ -143,14 +142,7 @@ const packageJSON = (current, context) => {
         '-v -o dist/%s.js'
       ]),
 
-      'watch:test': scriptify([
-
-        // Uses `find` because Browserify does not support globstar
-        // (e.g. **/*.test.js) patterns via CLI.
-        'watchify `find test -name \'*.test.js\'`',
-        '-t babelify',
-        '-o dist-test/%s.js'
-      ])
+      'watch:test': 'node scripts/watch-test.js'
     }),
 
     // Always include the two minimum keywords with whatever exists in the
@@ -280,10 +272,10 @@ const packageJSON = (current, context) => {
   if (context.docs) {
 
     _.assign(result.scripts, {
-      'docs': 'npm-run-all -p docs:*',
+      'docs': 'npm-run-all docs:*',
       'docs:api': 'documentation src/*.js -f html -o docs/api',
       'docs:toc': 'doctoc README.md',
-      'prestart': 'npm-run-all -p docs build'
+      'prestart': 'npm-run-all docs build'
     });
 
     _.assign(result.devDependencies, {
