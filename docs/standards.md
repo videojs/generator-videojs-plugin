@@ -128,7 +128,7 @@ npm Script   | Optional | Description
 `build:lang` | ✓        | Builds language files.
 `build:test` |          | Builds the test Browserify entry point.
 `clean`      |          | Cleans up _all_ build artifacts.
-`doc`        | ✓        | Performs documentation tasks.
+`docs`       | ✓        | Performs documentation tasks.
 `lint`       |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
 `start`      |          | Starts a development server at port `9999` (or closest open port) and runs `watch`.
 `test`       |          | Runs `lint`, builds tests, and runs tests in available browsers.
