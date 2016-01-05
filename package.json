@@ -5,7 +5,6 @@
   "license": "Apache-2.0",
   "main": "generators/app/index.js",
   "bin": {
-    "vjsplugin": "bin/videojs-plugin.sh",
     "vjsplugincheck": "bin/videojs-plugin-check.js"
   },
   "repository": "videojs/generator-videojs-plugin",
