@@ -273,14 +273,14 @@ const packageJSON = (current, context) => {
 
     _.assign(result.scripts, {
       'docs': 'npm-run-all docs:*',
-      'docs:api': 'documentation src/*.js -f html -o docs/api',
+      'docs:api': 'jsdoc src -r -d docs/api',
       'docs:toc': 'doctoc README.md',
       'prestart': 'npm-run-all docs build'
     });
 
     _.assign(result.devDependencies, {
       doctoc: '^0.15.0',
-      documentation: '^3.0.0'
+      jsdoc: '^3.4.0'
     });
   }
 
