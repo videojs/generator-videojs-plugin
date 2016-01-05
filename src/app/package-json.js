@@ -165,7 +165,7 @@ const packageJSON = (current, context) => {
     'license': context.nameOf.license,
 
     'browserify': {
-      transform: ['browserify-shim']
+      transform: ['browserify-shim', 'babelify']
     },
 
     'browserify-shim': {
