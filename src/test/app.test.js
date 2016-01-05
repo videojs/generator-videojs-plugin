@@ -60,8 +60,8 @@ describe('videojs-plugin:app', function() {
     });
 
     it('populates versioning scripts for bower', function() {
-      ['preversion', 'version', 'postversion'].forEach(s => {
-        assert.strictEqual(this.pkg.scripts[s], `./scripts/npm-${s}-for-bower.sh`);
+      ['version', 'postversion'].forEach(s => {
+        assert.strictEqual(this.pkg.scripts[s], `./scripts/npm-${s}-for-bower.js`);
       });
     });
 
@@ -138,8 +138,8 @@ describe('videojs-plugin:app', function() {
     });
 
     it('does not populate versioning scripts for bower', function() {
-      ['preversion', 'version', 'postversion'].forEach(s => {
-        assert.notStrictEqual(this.pkg.scripts[s], `./scripts/npm-${s}-for-bower.sh`);
+      ['version', 'postversion'].forEach(s => {
+        assert.notStrictEqual(this.pkg.scripts[s], `./scripts/npm-${s}-for-bower.js`);
       });
     });
   });

@@ -124,6 +124,7 @@ const packageJSON = (current, context) => {
           s.mkdir(\'-p\',d);
         "
       `,
+
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
       'prestart': 'npm run build',
@@ -133,7 +134,6 @@ const packageJSON = (current, context) => {
       'test': 'karma start test/karma/detected.js',
       'preversion': 'npm test',
       'version': 'npm run build',
-      'postversion': 'git push origin master && git push origin --tags',
       'watch': 'npm-run-all -p watch:*',
 
       'watch:js': scriptify([
@@ -211,7 +211,7 @@ const packageJSON = (current, context) => {
       'karma-safari-launcher': '^0.1.0',
       'lodash-compat': '^3.10.0',
       'minimist': '^1.2.0',
-      'npm-run-all': '~1.2.0',
+      'npm-run-all': '^1.2.0',
       'portscanner': '^1.0.0',
       'qunitjs': '^1.0.0',
       'serve-static': '^1.10.0',
@@ -301,9 +301,8 @@ const packageJSON = (current, context) => {
     result.files.push('bower.json');
 
     _.assign(result.scripts, {
-      preversion: './scripts/npm-preversion-for-bower.sh',
-      version: './scripts/npm-version-for-bower.sh',
-      postversion: './scripts/npm-postversion-for-bower.sh'
+      version: 'node scripts/npm-version-for-bower.js',
+      postversion: 'node scripts/npm-postversion-for-bower.js'
     });
   }
 
