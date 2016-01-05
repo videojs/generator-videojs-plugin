@@ -340,7 +340,6 @@ export default yeoman.generators.Base.extend({
     }
 
     if (configs.bower) {
-      this._filesToCopy.push('scripts/_npm-postversion-for-bower.js');
       this._filesToCopy.push('scripts/_npm-version-for-bower.js');
       this._templatesToCopy.push('_bower.json');
     }

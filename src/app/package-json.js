@@ -302,7 +302,7 @@ const packageJSON = (current, context) => {
 
     _.assign(result.scripts, {
       version: 'node scripts/npm-version-for-bower.js',
-      postversion: 'node scripts/npm-postversion-for-bower.js'
+      postversion: 'git reset --hard HEAD~1'
     });
   }
 
