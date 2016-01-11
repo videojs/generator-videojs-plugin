@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import tsml from 'tsml';
+import * as tsts from 'tsts';
 import util from 'util';
 
 const KARMA_BROWSERS = ['chrome', 'firefox', 'ie', 'safari'];
@@ -117,7 +117,7 @@ const packageJSON = (current, context) => {
       ]),
 
       'build:test': 'node scripts/build-test.js',
-      'clean': tsml`
+      'clean': tsts.squash`
         node -e "
           var s=require(\'shelljs\'),d=[\'dist\',\'dist-test\',\'es5\'];
           s.rm(\'-rf\',d);
