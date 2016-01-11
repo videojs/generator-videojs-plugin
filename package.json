@@ -48,13 +48,14 @@
     "npm-run-all": "~1.2.0",
     "tap": "^2.3.1",
     "tap-parser": "^1.2.2",
-    "tsml": "^1.0.1",
+    "tsmlj": "^1.0.0",
     "yeoman-generator": "^0.20.0",
     "yosay": "^1.0.2"
   },
   "devDependencies": {
     "babel": "^5.8.34",
     "doctoc": "^0.15.0",
+    "fs-extra": "^0.26.4",
     "mocha": "^2.3.4",
     "videojs-standard": "^4.0.0"
   }

@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import chalk from 'chalk';
 import path from 'path';
-import {spawn} from 'child_process';
-import tsml from 'tsml';
+import tsmlj from 'tsmlj';
 import yeoman from 'yeoman-generator';
 import yosay from 'yosay';
 
@@ -10,15 +9,14 @@ import packageJSON from './package-json';
 
 const validateName = (input) => {
   if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
-    return tsml`
-      Names must start with a lower-case letter and cont
-      ain only lower-case letters (a-z), digits (0-9), a
-      nd hyphens (-).
+    return tsmlj`
+      Names must start with a lower-case letter and contain
+      only lower-case letters (a-z), digits (0-9), and hyphens (-).
     `;
   } else if (_.startsWith(input, 'videojs-')) {
-    return tsml`
-      Plugins cannot start with "videojs-"; it will auto
-      matically be prepended!
+    return tsmlj`
+      Plugins cannot start with "videojs-"; it will automatically
+      be prepended!
     `;
   }
   return true;
@@ -66,9 +64,9 @@ export default yeoman.generators.Base.extend({
    *
    * @method _getPromptDefaults
    * @private
-   * @param  {Function} callback Callback called with author string.
+   * @return {Object}
    */
-  _getPromptDefaults(callback) {
+  _getPromptDefaults() {
     let configs = this.config.getAll();
     let pkg = this._currentPkgJSON || {};
     let licenseNames = this._licenseNames;
@@ -80,8 +78,6 @@ export default yeoman.generators.Base.extend({
       license: this._licenseDefault,
       sass: configs.hasOwnProperty('sass') ? configs.sass : false
     };
-
-    let git;
 
     ['author', 'license', 'name', 'description'].forEach(key => {
       if (pkg.hasOwnProperty(key)) {
@@ -105,24 +101,20 @@ export default yeoman.generators.Base.extend({
       });
     }
 
-    // If we don't have an author yet, make one last-ditch effort to find
-    // the author's name with `git config`.
-    if (!defaults.author) {
+    let name = this.user.git.name();
 
-      // Make sure it's a string, so we can concat without worrying!
-      defaults.author = '';
+    // Build up an author string from git if possible as a last-ditch effort.
+    if (!defaults.author && name) {
+      let email = this.user.git.email();
 
-      git = spawn('git', ['config', 'user.name']);
+      defaults.author = name;
 
-      git.stdout.on('data', chunk => defaults.author += chunk);
-
-      git.on('close', () => {
-        defaults.author = defaults.author.trim();
-        callback(defaults);
-      });
-    } else {
-      callback(defaults);
+      if (email) {
+        defaults.author += ` <${email}>`;
+      }
     }
+
+    return defaults;
   },
 
   /**
@@ -130,60 +122,60 @@ export default yeoman.generators.Base.extend({
    *
    * @method _createPrompts
    * @private
-   * @param  {Function} callback Callback when prompts array is ready.
    * @return {Array}
    */
-  _createPrompts(callback) {
-    this._getPromptDefaults(defaults => {
-      callback([{
-        name: 'name',
-        message: tsml`
-          Enter the name of this plugin (a-z/0-9/- only
-          ; will be prefixed with "videojs-"):
-        `,
-        default: defaults.name,
-        validate: validateName
-      }, {
-        name: 'description',
-        message: 'Enter a description for your plugin:',
-        default: defaults.description
-      }, {
-        name: 'author',
-        message: 'Enter the author of this plugin:',
-        default: defaults.author
-      }, {
-        type: 'list',
-        name: 'license',
-        message: 'Choose a license for your project',
-        default: defaults.license,
-        choices: _.map(this._licenseNames, (v, k) => {
-          return {name: v, value: k};
-        })
-      }, {
-        type: 'confirm',
-        name: 'sass',
-        message: 'Do you want to include Sass styling?',
-        default: defaults.sass
-      }, {
-        type: 'confirm',
-        name: 'docs',
-        message: 'Do you want to include documentation tooling?',
-        default: defaults.docs
-      }, {
-        type: 'confirm',
-        name: 'lang',
-        message: tsml`
-          Do you need video.js language file infrastructure for internat
-          ionalized strings?
-        `,
-        default: defaults.lang
-      }, {
-        type: 'confirm',
-        name: 'bower',
-        message: 'Do you want to support Bower (adds special versioning handling)?',
-        default: defaults.bower
-      }].filter(prompt => !_.contains(this._promptsToFilter, prompt.name)));
-    });
+  _getPrompts() {
+    let defaults = this._getPromptDefaults(defaults);
+    let prompts = [{
+      name: 'name',
+      message: tsmlj`
+        Enter the name of this plugin (a-z/0-9/- only; will be
+        prefixed with "videojs-"):
+      `,
+      default: defaults.name,
+      validate: validateName
+    }, {
+      name: 'description',
+      message: 'Enter a description for your plugin:',
+      default: defaults.description
+    }, {
+      name: 'author',
+      message: 'Enter the author of this plugin:',
+      default: defaults.author
+    }, {
+      type: 'list',
+      name: 'license',
+      message: 'Choose a license for your project',
+      default: defaults.license,
+      choices: _.map(this._licenseNames, (v, k) => {
+        return {name: v, value: k};
+      })
+    }, {
+      type: 'confirm',
+      name: 'sass',
+      message: 'Do you want to include Sass styling?',
+      default: defaults.sass
+    }, {
+      type: 'confirm',
+      name: 'docs',
+      message: 'Do you want to include documentation tooling?',
+      default: defaults.docs
+    }, {
+      type: 'confirm',
+      name: 'lang',
+      message: tsmlj`
+        Do you need video.js language file infrastructure for
+        internationalized strings?
+      `,
+      default: defaults.lang
+    }, {
+      type: 'confirm',
+      name: 'bower',
+      message: 'Do you want to support Bower (adds special versioning handling)?',
+      default: defaults.bower
+    }];
+
+    return prompts.filter(p => !_.contains(this._promptsToFilter, p.name));
   },
 
   /**
@@ -268,6 +260,12 @@ export default yeoman.generators.Base.extend({
       // Brightcove plugins are either Apache-2.0 or private/closed-source.
       this._licenseNames = _.pick(this._licenseNames, 'apache2', 'private');
       this._licenseDefault = 'apache2';
+
+    // Make sure we filter out the author prompt if there is a current
+    // package.json file with an object for the author field.
+    } else if (this._currentPkgJSON && _.isPlainObject(this._currentPkgJSON.author)) {
+      this._promptsToFilter.push('author');
+      this._configsTemp.author = this._currentPkgJSON.author;
     }
   },
 
@@ -281,17 +279,13 @@ export default yeoman.generators.Base.extend({
       return;
     }
 
-    this.log(yosay(tsml`
-      Welcome to the ${chalk.red('videojs-plugin')} generator!
-    `));
+    this.log(yosay(`Welcome to the ${chalk.red('videojs-plugin')} generator!`));
 
     let done = this.async();
 
-    this._createPrompts(prompts => {
-      this.prompt(prompts, responses => {
-        _.assign(this._configsTemp, responses);
-        done();
-      });
+    this.prompt(this._getPrompts(), responses => {
+      _.assign(this._configsTemp, responses);
+      done();
     });
   },
 
@@ -427,7 +421,7 @@ export default yeoman.generators.Base.extend({
     if (this.options.hurry) {
       return;
     }
-    this.log(yosay(tsml`
+    this.log(yosay(tsmlj`
       All done; ${chalk.red(this.context.nameOf.package)} is ready to go!
     `));
   }
