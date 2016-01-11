@@ -1,6 +1,8 @@
 /* global before, describe, it */
 
 import _ from 'lodash';
+import fs from 'fs-extra';
+import path from 'path';
 import {assert, test as helpers} from 'yeoman-generator';
 
 import * as libs from './libs';
@@ -142,6 +144,41 @@ describe('videojs-plugin:app', function() {
     });
   });
 
+  describe('existing package.json with author object', function() {
+
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .inTmpDir(function(dir) {
+          fs.copySync(path.join(__dirname, '../fixtures/author'), dir);
+        })
+        .withOptions(libs.options({force: true}))
+        .withPrompts({
+          name: 'nomen',
+          author: 'ignore me',
+          description: 'it is a plugin'
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
+
+    it('does not change the value of the author field', function() {
+      let author = this.pkg.author;
+
+      assert.ok(_.isPlainObject(author), 'the author is still an object');
+
+      assert.strictEqual(
+        author.name,
+        'John Doe',
+        'the author\'s name is correct'
+      );
+
+      assert.strictEqual(
+        author.email,
+        'john@doe.com',
+        'the author\'s email is correct'
+      );
+    });
+  });
+
   describe('package.json merging', function() {
     let result = packageJSON({
       a: 1,
@@ -196,4 +233,3 @@ describe('videojs-plugin:app', function() {
     });
   });
 });
-
