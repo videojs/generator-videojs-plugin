@@ -1,9 +1,9 @@
-// Sass for <%= nameOf.package %>
+// Sass for <%= pluginName %>
 
 .video-js {
 
   // This class is added to the video.js element by the plugin by default.
-  &.<%= nameOf.class %> {
+  &.<%= className %> {
     display: block;
   }
 }

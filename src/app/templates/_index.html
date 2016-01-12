@@ -2,14 +2,14 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title><%= nameOf.package %> Demo</title>
+  <title><%= pluginName %> Demo</title>
   <link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
 <% if (sass) { -%>
-  <link href="/dist/<%= nameOf.package %>.css" rel="stylesheet">
+  <link href="/dist/<%= pluginName %>.css" rel="stylesheet">
 <% } -%>
 </head>
 <body>
-  <video id="<%= nameOf.package %>-player" class="video-js vjs-default-skin" controls>
+  <video id="<%= pluginName %>-player" class="video-js vjs-default-skin" controls>
     <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
     <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
   </video>
@@ -18,11 +18,11 @@
     <% if (docs) { %><li><a href="/docs/api/">Read generated docs.</a></li><% } %>
   </ul>
   <script src="/node_modules/video.js/dist/video.js"></script>
-  <script src="/dist/<%= nameOf.package %>.js"></script>
+  <script src="/dist/<%= pluginName %>.js"></script>
   <script>
     (function(window, videojs) {
-      var player = window.player = videojs('<%= nameOf.package %>-player');
-      player.<%= nameOf.function %>();
+      var player = window.player = videojs('<%= pluginName %>-player');
+      player.<%= functionName %>();
     }(window, window.videojs));
   </script>
 </body>

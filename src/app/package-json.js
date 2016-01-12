@@ -68,7 +68,7 @@ const packageJSON = (current, context) => {
   current = current || {};
 
   /**
-   * Replaces all "%s" tokens with the name of the package in a given string.
+   * Replaces all "%s" tokens with the name of the plugin in a given string.
    *
    * @param  {String} str
    * @return {String}
@@ -78,11 +78,11 @@ const packageJSON = (current, context) => {
 
     let tokens = str.match(/%s/g) || [];
 
-    return util.format(...[str].concat(tokens.map(() => context.nameOf.package)));
+    return util.format(...[str].concat(tokens.map(() => context.pluginName)));
   };
 
   let result = _.assign({}, current, {
-    'name': context.nameOf.package,
+    'name': context.packageName,
     'version': context.version,
     'description': context.description,
     'main': 'es5/plugin.js',
@@ -150,7 +150,7 @@ const packageJSON = (current, context) => {
     'keywords': _.union(['videojs', 'videojs-plugin'], current.keywords).sort(),
 
     'author': context.author,
-    'license': context.nameOf.license,
+    'license': context.licenseName,
 
     'browserify': {
       transform: ['browserify-shim']

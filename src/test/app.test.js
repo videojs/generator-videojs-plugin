@@ -71,6 +71,25 @@ describe('videojs-plugin:app', function() {
     });
   });
 
+  describe('scoped package support', function() {
+
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          scope: 'herp',
+          name: 'derp',
+          author: 'John Doe',
+          description: 'it herps and derps'
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
+
+    it('includes the package name in scope', function() {
+      assert.strictEqual(this.pkg.name, '@herp/videojs-derp');
+    });
+  });
+
   describe('sass', function() {
 
     before(function(done) {
@@ -192,18 +211,16 @@ describe('videojs-plugin:app', function() {
     }, {
       author: 'Jane Doe',
       bower: false,
+      className: 'vjs-test',
       description: 'This is the description',
       docs: false,
+      functionName: 'test',
       isPrivate: false,
       lang: false,
+      licenseName: 'MIT',
+      packageName: `videojs-test`,
+      pluginName: 'test',
       sass: false,
-      nameOf: {
-        class: 'vjs-test',
-        function: 'test',
-        license: 'MIT',
-        package: `videojs-test`,
-        plugin: 'test'
-      },
       version: '1.2.3',
       year: '2016'
     });
