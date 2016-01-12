@@ -130,7 +130,7 @@ const packageJSON = (current, context) => {
       'prestart': 'npm run build',
       'start': 'npm-run-all -p start:* watch:*',
       'start:serve': 'babel-node scripts/server.js',
-      'pretest': 'npm-run-all lint build:test',
+      'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma/detected.js',
       'preversion': 'npm test',
       'version': 'npm run build',
