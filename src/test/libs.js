@@ -22,14 +22,14 @@ const FILES = {
     '.gitignore',
     '.npmignore',
     'CHANGELOG.md',
+    'CONTRIBUTING.md',
     'index.html',
     'README.md'
   ],
 
   oss: [
     '.travis.yml',
-    'LICENSE',
-    'CONTRIBUTING.md'
+    'LICENSE'
   ],
 
   sass: [

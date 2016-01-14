@@ -74,11 +74,11 @@ Folder/Filename            | Optional? | Generated? | Description
 `.npmignore`               |           | ✓          |
 `bower.json`               | ✓         | ?          |
 `CHANGELOG.md`             | ✓         | ✓          | May be removed if not desired.
-`CONTRIBUTING.md`          | ✓         | ?          | Not present in closed-source plugins.
+`CONTRIBUTING.md`          | ✓         | ✓          | Documents how developers can work on the plugin.
 `index.html`               | ✓         | ✓          | An example of usage of the plugin. This can be used with GitHub pages as well.
 `LICENSE`                  | ✓         | ?          | Defaults to `MIT`.
 `package.json`             |           | ✓          |
-`README.md`                |           | ✓          | Documents which version(s) of video.js the plugin supports. Explains how to build/test.
+`README.md`                |           | ✓          | Documents what the plugin does and how to use it as a general user.
 
 #### Optional?
 
