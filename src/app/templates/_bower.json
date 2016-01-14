@@ -1,6 +1,5 @@
 {
   "name": "<%= nameOf.package %>",
-  "version": "0.0.0",
   "author": "<%= author %>",
   "license": "<%= nameOf.license %>",
   "main": [

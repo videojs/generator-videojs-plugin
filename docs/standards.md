@@ -137,7 +137,7 @@ npm Script   | Optional | Description
 `watch:css`  | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
 `watch:js`   |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
 `watch:test` |          | Triggers a build when the test entry point changes.
-`version`    |          | Includes `preversion` and `postversion` scripts. Bumps the package version and creates a tag. Special handling if Bower support is enabled!
+`version`    | ✓        | Special handling if Bower support is enabled.
 
 ## Coding Style
 
@@ -187,30 +187,23 @@ During development, it may be more convenient to run your tests manually in a br
 
 __Standard video.js plugins may support Bower, but must never check in build artifacts to source control.__
 
-#### Not Supporting Bower
-
-This is the easy case, but not the default in the generator. In this case, no tricky versioning workflow needs to be followed; however, tests are run before versioning and the build is run during versioning.
-
-After the tag is created, `master` is automatically pushed to `origin/master` and tags are pushed to `origin`. If your repository is set up differently, modify the script (or remove it if you prefer that step to be manual).
+Regardless of Bower support (detailed below), the `"preversion"` script will run `npm test` to enforce code quality and unit test passage before allowing the version to be bumped.
 
 #### Supporting Bower
 
 It is generally considered a best practice to not check build artifacts (`dist/` etc.) into source control. However, because Bower only clones repositories and offers no mechanism for scripting, we must define a workflow for bumping versions without checking `dist/` into the repository's `master` history!
 
-This assumes use of the `npm version` command:
+Assuming use of the `npm version` command on the `master` branch:
 
-1. The npm `"preversion"` script will:
-  1. Verify that the project is a Git repository and that there are not unstaged/uncommitted changes. Either condition will cause the rest of the workflow to fail.
-  1. Run tests to enforce code quality before allowing the version to be bumped.
+1. `"preversion"` script is run as outlined above.
 1. _npm automatically bumps the `package.json` version._
 1. The npm `"version"` script will run:
-  1. `package.json` is staged, committed, and pushed. The effect of this is that the `package.json` change exists in the history of `master`.
-  1. Run `npm run build`, so that the new version number gets picked up in built assets.
-  1. The `dist/` directory will be force-staged. Normally, it is ignored, but it needs to exist in the tag for Bower to install things properly.
-1. _npm automatically commits and tags._ This commit will contain only the `dist/` dir (the `package.json` bump is the parent commit).
+  1. `package.json` is staged and committed. The effect of this is that the `package.json` change exists in the history of `master` (or whichever branch you run `npm version` on).
+  1. Run `npm run build` so the new version number gets picked up in built assets.
+  1. The `dist/` directory will be _force-added_. Normally, it is ignored, but it needs to exist in the tag for Bower to install things properly.
+1. _npm automatically commits and tags._ This commit's changeset will contain only the `dist/` dir (the `package.json` bump is the parent commit).
 1. The npm `"postversion"` script will run:
-  1. `master` is hard-reset to the state of `origin/master`. This avoids `dist/` being added to `master`'s history - tagged commits will be children of commits on `master`.
-  1. Tags are pushed to `origin`.
+  1. `master` is reset backward by one commit. This avoids `dist/` being added to `master`'s history. Tagged commits will be children of commits on `master`.
 
 This process results in a `master` history that looks something like this:
 
@@ -223,6 +216,10 @@ This process results in a `master` history that looks something like this:
 `C`: signifies a conventional commit.
 `V`: signifies a version bump commit.
 `T`: tagged commit, with `dist/` included.
+
+#### Not Supporting Bower
+
+This is the easy case, but not the default in the generator. In this case, no tricky versioning workflow needs to be followed; however, tests are run before versioning and the build is run during versioning.
 
 ### Publishing
 

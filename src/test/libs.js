@@ -37,9 +37,7 @@ const FILES = {
   ],
 
   bower: [
-    'scripts/npm-postversion-for-bower.sh',
-    'scripts/npm-preversion-for-bower.sh',
-    'scripts/npm-version-for-bower.sh',
+    'scripts/npm-version-for-bower.js',
     'bower.json'
   ]
 };

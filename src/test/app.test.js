@@ -60,9 +60,10 @@ describe('videojs-plugin:app', function() {
     });
 
     it('populates versioning scripts for bower', function() {
-      ['preversion', 'version', 'postversion'].forEach(s => {
-        assert.strictEqual(this.pkg.scripts[s], `./scripts/npm-${s}-for-bower.sh`);
-      });
+      assert.strictEqual(
+        this.pkg.scripts.version,
+        'node scripts/npm-version-for-bower.js'
+      );
     });
 
     it('creates common default set of files', function() {
@@ -138,9 +139,10 @@ describe('videojs-plugin:app', function() {
     });
 
     it('does not populate versioning scripts for bower', function() {
-      ['preversion', 'version', 'postversion'].forEach(s => {
-        assert.notStrictEqual(this.pkg.scripts[s], `./scripts/npm-${s}-for-bower.sh`);
-      });
+      assert.notStrictEqual(
+        this.pkg.scripts.version,
+        'node scripts/npm-version-for-bower.js'
+      );
     });
   });
 

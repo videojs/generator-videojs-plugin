@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import * as tsts from 'tsts';
 import util from 'util';
 
 const KARMA_BROWSERS = ['chrome', 'firefox', 'ie', 'safari'];
@@ -92,7 +93,6 @@ const packageJSON = (current, context) => {
 
       'build:js': scriptify([
         'npm-run-all',
-        'mkdirs',
         'build:js:babel',
         'build:js:browserify',
         'build:js:bannerize',
@@ -116,30 +116,25 @@ const packageJSON = (current, context) => {
         '-o dist/%s.min.js'
       ]),
 
-      'build:test': 'npm-run-all mkdirs build:test:browserify',
+      'build:test': 'node scripts/build-test.js',
+      'clean': tsts.squash`
+        node -e "
+          var s=require(\'shelljs\'),d=[\'dist\',\'dist-test\',\'es5\'];
+          s.rm(\'-rf\',d);
+          s.mkdir(\'-p\',d);
+        "
+      `,
 
-      'build:test:browserify': scriptify([
-
-        // Uses `find` because Browserify does not support globstar
-        // (e.g. **/*.test.js) patterns via CLI.
-        'browserify  `find test -name \'*.test.js\'`',
-        '-t babelify',
-        '-o dist-test/%s.js'
-      ]),
-
-      'clean': 'rm -rf dist dist-test es5',
       'lint': 'vjsstandard',
-      'mkdirs': 'mkdir -p dist dist-test es5',
       'prepublish': 'npm run build',
       'prestart': 'npm run build',
-      'start': 'npm-run-all -p start:serve watch',
+      'start': 'npm-run-all -p start:* watch:*',
       'start:serve': 'babel-node scripts/server.js',
-      'pretest': 'npm-run-all lint build:test',
+      'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma/detected.js',
       'preversion': 'npm test',
       'version': 'npm run build',
-      'postversion': 'git push origin master && git push origin --tags',
-      'watch': 'npm run mkdirs && npm-run-all -p watch:*',
+      'watch': 'npm-run-all -p watch:*',
 
       'watch:js': scriptify([
         'watchify src/plugin.js',
@@ -147,14 +142,7 @@ const packageJSON = (current, context) => {
         '-v -o dist/%s.js'
       ]),
 
-      'watch:test': scriptify([
-
-        // Uses `find` because Browserify does not support globstar
-        // (e.g. **/*.test.js) patterns via CLI.
-        'watchify `find test -name \'*.test.js\'`',
-        '-t babelify',
-        '-o dist-test/%s.js'
-      ])
+      'watch:test': 'node scripts/watch-test.js'
     }),
 
     // Always include the two minimum keywords with whatever exists in the
@@ -211,6 +199,7 @@ const packageJSON = (current, context) => {
       'browserify-shim': '^3.0.0',
       'connect': '^3.4.0',
       'cowsay': '^1.1.0',
+      'glob': '^6.0.3',
       'global': '^4.3.0',
       'karma': '^0.13.0',
       'karma-browserify': '^4.4.0',
@@ -222,10 +211,11 @@ const packageJSON = (current, context) => {
       'karma-safari-launcher': '^0.1.0',
       'lodash-compat': '^3.10.0',
       'minimist': '^1.2.0',
-      'npm-run-all': '~1.2.0',
+      'npm-run-all': '^1.2.0',
       'portscanner': '^1.0.0',
       'qunitjs': '^1.0.0',
       'serve-static': '^1.10.0',
+      'shelljs': '^0.5.3',
       'sinon': '^1.0.0',
       'uglify-js': '^2.5.0',
       'videojs-standard': '^4.0.0',
@@ -261,7 +251,7 @@ const packageJSON = (current, context) => {
         '--output-style=compressed',
         '--linefeed=lf',
         'src/plugin.scss -o dist && ',
-        'mv dist/plugin.css dist/%s.css'
+        'node -e "require(\'shelljs\').mv(\'dist/plugin.css\',\'dist/%s.css\')"'
       ]),
 
       'watch:css': scriptify([
@@ -269,7 +259,7 @@ const packageJSON = (current, context) => {
         '--output-style=nested',
         '--linefeed=lf',
         'src/plugin.scss -o dist -w src &&',
-        'mv dist/plugin.css dist/%s.css'
+        'node -e "require(\'shelljs\').mv(\'dist/plugin.css\',\'dist/%s.css\')"'
       ])
     });
 
@@ -282,15 +272,15 @@ const packageJSON = (current, context) => {
   if (context.docs) {
 
     _.assign(result.scripts, {
-      'docs': 'npm-run-all -p docs:*',
-      'docs:api': 'documentation src/*.js -f html -o docs/api',
+      'docs': 'npm-run-all docs:*',
+      'docs:api': 'jsdoc src -r -d docs/api',
       'docs:toc': 'doctoc README.md',
-      'prestart': 'npm-run-all -p docs build'
+      'prestart': 'npm-run-all docs build'
     });
 
     _.assign(result.devDependencies, {
       doctoc: '^0.15.0',
-      documentation: '^3.0.0'
+      jsdoc: '^3.4.0'
     });
   }
 
@@ -311,9 +301,8 @@ const packageJSON = (current, context) => {
     result.files.push('bower.json');
 
     _.assign(result.scripts, {
-      preversion: './scripts/npm-preversion-for-bower.sh',
-      version: './scripts/npm-version-for-bower.sh',
-      postversion: './scripts/npm-postversion-for-bower.sh'
+      version: 'node scripts/npm-version-for-bower.js',
+      postversion: 'git reset --hard HEAD~1'
     });
   }
 

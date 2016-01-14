@@ -5,7 +5,6 @@
   "license": "Apache-2.0",
   "main": "generators/app/index.js",
   "bin": {
-    "vjsplugin": "bin/videojs-plugin.sh",
     "vjsplugincheck": "bin/videojs-plugin-check.js"
   },
   "repository": "videojs/generator-videojs-plugin",
@@ -23,13 +22,12 @@
     ]
   },
   "scripts": {
-    "prebuild": "npm run clean",
+    "prebuild": "node -e \"var s=require('shelljs'),d=['generators','es5-check','es5-test'];s.rm('-rf',d);s.mkdir('-p',d)\"",
     "build": "npm-run-all -p build:*",
     "build:check": "babel src/check -d es5-check",
     "build:generator": "babel --ignore templates/**/* src/app -d generators/app && npm run build:generator:copy",
-    "build:generator:copy": "cp -r src/app/templates generators/app/templates",
+    "build:generator:copy": "node -e \"require('shelljs').cp('-r', 'src/app/templates', 'generators/app')\"",
     "build:test": "babel src/test -d es5-test",
-    "clean": "rm -rf generators es5-test es5-check && mkdir -p generators es5-test es5-check",
     "docs": "doctoc README.md docs/*.md",
     "lint": "vjsstandard",
     "prepublish": "npm run build",
@@ -48,7 +46,7 @@
     "npm-run-all": "~1.2.0",
     "tap": "^2.3.1",
     "tap-parser": "^1.2.2",
-    "tsmlj": "^1.0.0",
+    "tsts": "^1.0.1",
     "yeoman-generator": "^0.20.0",
     "yosay": "^1.0.2"
   },
@@ -57,6 +55,7 @@
     "doctoc": "^0.15.0",
     "fs-extra": "^0.26.4",
     "mocha": "^2.3.4",
+    "shelljs": "^0.5.3",
     "videojs-standard": "^4.0.0"
   }
 }

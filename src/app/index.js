@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import chalk from 'chalk';
 import path from 'path';
-import tsmlj from 'tsmlj';
+import * as tsts from 'tsts';
 import yeoman from 'yeoman-generator';
 import yosay from 'yosay';
 
@@ -9,12 +9,12 @@ import packageJSON from './package-json';
 
 const validateName = (input) => {
   if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
-    return tsmlj`
+    return tsts.join`
       Names must start with a lower-case letter and contain
       only lower-case letters (a-z), digits (0-9), and hyphens (-).
     `;
   } else if (_.startsWith(input, 'videojs-')) {
-    return tsmlj`
+    return tsts.join`
       Plugins cannot start with "videojs-"; it will automatically
       be prepended!
     `;
@@ -128,7 +128,7 @@ export default yeoman.generators.Base.extend({
     let defaults = this._getPromptDefaults(defaults);
     let prompts = [{
       name: 'name',
-      message: tsmlj`
+      message: tsts.join`
         Enter the name of this plugin (a-z/0-9/- only; will be
         prefixed with "videojs-"):
       `,
@@ -163,7 +163,7 @@ export default yeoman.generators.Base.extend({
     }, {
       type: 'confirm',
       name: 'lang',
-      message: tsmlj`
+      message: tsts.join`
         Do you need video.js language file infrastructure for
         internationalized strings?
       `,
@@ -231,6 +231,8 @@ export default yeoman.generators.Base.extend({
     ];
 
     this._templatesToCopy = [
+      'scripts/_build-test.js',
+      'scripts/_watch-test.js',
       'src/_plugin.js',
       'test/karma/_common.js',
       'test/_index.html',
@@ -338,9 +340,7 @@ export default yeoman.generators.Base.extend({
     }
 
     if (configs.bower) {
-      this._filesToCopy.push('scripts/_npm-postversion-for-bower.sh');
-      this._filesToCopy.push('scripts/_npm-preversion-for-bower.sh');
-      this._filesToCopy.push('scripts/_npm-version-for-bower.sh');
+      this._filesToCopy.push('scripts/_npm-version-for-bower.js');
       this._templatesToCopy.push('_bower.json');
     }
   },
@@ -421,7 +421,7 @@ export default yeoman.generators.Base.extend({
     if (this.options.hurry) {
       return;
     }
-    this.log(yosay(tsmlj`
+    this.log(yosay(tsts.join`
       All done; ${chalk.red(this.context.nameOf.package)} is ready to go!
     `));
   }
