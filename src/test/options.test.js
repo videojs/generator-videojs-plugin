@@ -1,7 +1,6 @@
 /* global before, describe, it */
 
 import * as libs from './libs';
-import _ from 'lodash';
 import {assert, test as helpers} from 'yeoman-generator';
 
 describe('videojs-plugin:app options', function() {
@@ -23,7 +22,6 @@ describe('videojs-plugin:app options', function() {
     it('produces expected package properties and file(s)', function() {
       assert.strictEqual(this.pkg.author, 'Brightcove, Inc.');
       assert.strictEqual(this.pkg.license, 'Apache-2.0');
-      assert.ok(_.isUndefined(this.pkg.private));
       assert.file(libs.fileList('oss'));
     });
   });
@@ -46,7 +44,6 @@ describe('videojs-plugin:app options', function() {
     it('produces expected package properties and file(s)', function() {
       assert.strictEqual(this.pkg.author, 'Brightcove, Inc.');
       assert.strictEqual(this.pkg.license, 'UNLICENSED');
-      assert.strictEqual(this.pkg.private, true);
       assert.noFile(libs.fileList('oss'));
     });
   });

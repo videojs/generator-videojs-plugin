@@ -177,14 +177,15 @@ const packageJSON = (current, context) => {
     },
 
     'files': [
-      'dist/',
+      'CONTRIBUTING.md',
       'dist-test/',
+      'dist/',
       'docs/',
       'es5/',
+      'index.html',
       'scripts/',
       'src/',
-      'test/',
-      'index.html'
+      'test/'
     ],
 
     'dependencies': _.assign({}, current.dependencies, {
@@ -222,12 +223,6 @@ const packageJSON = (current, context) => {
       'watchify': '^3.6.0'
     })
   });
-
-  if (context.isPrivate) {
-    result.private = true;
-  } else {
-    result.files.push('CONTRIBUTING.md');
-  }
 
   // Create scripts for each Karma browser.
   KARMA_BROWSERS.forEach(function(browser) {

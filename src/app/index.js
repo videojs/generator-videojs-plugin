@@ -238,6 +238,7 @@ export default yeoman.generators.Base.extend({
       'test/_index.html',
       'test/_plugin.test.js',
       '_index.html',
+      '_CONTRIBUTING.md',
       '_README.md'
     ];
 
@@ -328,7 +329,6 @@ export default yeoman.generators.Base.extend({
 
     if (!isPrivate) {
       this._filesToCopy.push('_.travis.yml');
-      this._filesToCopy.push('_CONTRIBUTING.md');
     }
 
     if (configs.lang) {
