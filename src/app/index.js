@@ -46,13 +46,17 @@ export default yeoman.generators.Base.extend({
   },
 
   /**
-   * Gets the name of the scope including the "@" symbol.
+   * Gets the name of the scope including the "@" symbol. Will not prepend
+   * the "@" if it is already included.
    *
    * @param  {String} scope
    * @return {String}
    */
   _getScope(scope) {
-    return scope && typeof scope === 'string' ? `@${scope}` : '';
+    if (!scope || typeof scope !== 'string') {
+      return '';
+    }
+    return scope.charAt(0) === '@' ? scope : `@${scope}`;
   },
 
   /**
