@@ -11,7 +11,7 @@ glob('test/**/*.test.js', function(err, files) {
   }).transform('babelify');
 
   var bundle = function() {
-    b.bundle().pipe(fs.createWriteStream('dist-test/<%= nameOf.package %>.js'));
+    b.bundle().pipe(fs.createWriteStream('dist-test/<%= pluginName %>.js'));
   };
 
   b.on('log', function(msg) {

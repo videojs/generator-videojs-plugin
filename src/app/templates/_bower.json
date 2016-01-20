@@ -1,12 +1,12 @@
 {
-  "name": "<%= nameOf.package %>",
+  "name": "<%= pluginName %>",
   "author": "<%= author %>",
-  "license": "<%= nameOf.license %>",
+  "license": "<%= licenseName %>",
   "main": [
 <% if (sass) { -%>
-    "dist/<%= nameOf.package %>.css",
+    "dist/<%= pluginName %>.css",
 <% } -%>
-    "dist/<%= nameOf.package %>.min.js"
+    "dist/<%= pluginName %>.min.js"
   ],
   "keywords": [
     "videojs",

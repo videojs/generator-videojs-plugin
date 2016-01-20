@@ -6,7 +6,7 @@ var DEFAULTS = {
 
   files: [
 <% if (sass) { -%>
-    'dist/<%= nameOf.package %>.css',
+    'dist/<%= pluginName %>.css',
 <% } -%>
     'node_modules/sinon/pkg/sinon.js',
     'node_modules/sinon/pkg/sinon-ie.js',

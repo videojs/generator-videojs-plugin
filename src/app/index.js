@@ -5,22 +5,9 @@ import * as tsts from 'tsts';
 import yeoman from 'yeoman-generator';
 import yosay from 'yosay';
 
+import {PREFIX} from './constants';
 import packageJSON from './package-json';
-
-const validateName = (input) => {
-  if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
-    return tsts.join`
-      Names must start with a lower-case letter and contain
-      only lower-case letters (a-z), digits (0-9), and hyphens (-).
-    `;
-  } else if (_.startsWith(input, 'videojs-')) {
-    return tsts.join`
-      Plugins cannot start with "videojs-"; it will automatically
-      be prepended!
-    `;
-  }
-  return true;
-};
+import * as validators from './validators';
 
 export default yeoman.generators.Base.extend({
 
@@ -59,6 +46,74 @@ export default yeoman.generators.Base.extend({
   },
 
   /**
+   * Gets the name of the scope including the "@" symbol. Will not prepend
+   * the "@" if it is already included.
+   *
+   * @param  {String} scope
+   * @return {String}
+   */
+  _getScope(scope) {
+    if (!scope || typeof scope !== 'string') {
+      return '';
+    }
+    return scope.charAt(0) === '@' ? scope : `@${scope}`;
+  },
+
+  /**
+   * Gets the name of the plugin (without scope) including the "videojs-"
+   * prefix.
+   *
+   * @param  {String} name
+   * @return {String}
+   */
+  _getPluginName(name) {
+    return name && typeof name === 'string' ? PREFIX + name : '';
+  },
+
+  /**
+   * Gets the full package name, taking scope into account.
+   *
+   * @param  {String} name
+   * @param  {String} [scope='']
+   * @return {String}
+   */
+  _getPackageName(name, scope = '') {
+    scope = this._getScope(scope);
+    name = this._getPluginName(name);
+    return scope ? `${scope}/${name}` : name;
+  },
+
+  /**
+   * Gets the scope of the plugin (without scope or "videojs-" prefix).
+   *
+   * @param  {String} name
+   * @return {String}
+   */
+  _getScopeFromPackageName(name) {
+    if (!name) {
+      return '';
+    }
+
+    let match = name.match(/^@([^/]+)\//);
+
+    return match ? match[1] : '';
+  },
+
+  /**
+   * Gets the core/default - that is, without scope or "videojs-"
+   * prefix - name of the plugin.
+   *
+   * @param  {String} name
+   * @return {String}
+   */
+  _getDefaultNameFromPackageName(name) {
+    if (!name) {
+      return '';
+    }
+    return name.split('/').reverse()[0].replace(PREFIX, '');
+  },
+
+  /**
    * Attempts to get default values for prompts. Async because it may call
    * out to external processes (e.g. Git) to attempt to gather this info.
    *
@@ -87,11 +142,13 @@ export default yeoman.generators.Base.extend({
       }
     });
 
+    // At this point, the `defaults.name` may still have the full scope and
+    // prefix included; so, we get the scope now.
+    defaults.scope = this._getScopeFromPackageName(defaults.name);
+
     // Strip out the "videojs-" prefix from the name for the purposes of
     // the prompt (otherwise it will be rejected by validation).
-    if (defaults.name && _.startsWith(pkg.name, 'videojs-')) {
-      defaults.name = pkg.name.substr(8);
-    }
+    defaults.name = this._getDefaultNameFromPackageName(defaults.name);
 
     // The package.json stores a value from `_licenseNames`, so in that
     // case, we need to find the key instead of the value.
@@ -127,13 +184,18 @@ export default yeoman.generators.Base.extend({
   _getPrompts() {
     let defaults = this._getPromptDefaults(defaults);
     let prompts = [{
+      name: 'scope',
+      message: 'Enter a package scope, if any, for npm (optional):',
+      default: defaults.scope,
+      validate: validators.scope
+    }, {
       name: 'name',
       message: tsts.join`
         Enter the name of this plugin (a-z/0-9/- only; will be
-        prefixed with "videojs-"):
+        prefixed with "${PREFIX}"):
       `,
       default: defaults.name,
-      validate: validateName
+      validate: validators.name
     }, {
       name: 'description',
       message: 'Enter a description for your plugin:',
@@ -282,13 +344,41 @@ export default yeoman.generators.Base.extend({
       return;
     }
 
-    this.log(yosay(`Welcome to the ${chalk.red('videojs-plugin')} generator!`));
+    this.log(yosay(`Welcome to the ${chalk.green(`${PREFIX}plugin`)} generator!`));
 
     let done = this.async();
 
     this.prompt(this._getPrompts(), responses => {
       _.assign(this._configsTemp, responses);
       done();
+    });
+  },
+
+  /**
+   * Generates a context object used for providing data to EJS file templates.
+   *
+   * @param {Object} [configs]
+   *        Optionally provide custom configs.
+   *
+   * @return {Object}
+   */
+  _getContext(configs = this.config.getAll()) {
+    return _.assign(_.pick(configs, [
+      'author',
+      'bower',
+      'description',
+      'docs',
+      'lang',
+      'sass'
+    ]), {
+      className: `vjs-${configs.name}`,
+      functionName: _.camelCase(configs.name),
+      isPrivate: this._isPrivate(),
+      licenseName: this._licenseNames[configs.license],
+      packageName: this._getPackageName(configs.name, configs.scope),
+      pluginName: this._getPackageName(configs.name),
+      version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0',
+      year: (new Date()).getFullYear()
     });
   },
 
@@ -303,31 +393,10 @@ export default yeoman.generators.Base.extend({
     delete this._configsTemp;
 
     let configs = this.config.getAll();
-    let isPrivate = this._isPrivate();
 
-    this.context = _.pick(configs, [
-      'author',
-      'bower',
-      'description',
-      'docs',
-      'lang',
-      'sass'
-    ]);
+    this.context = this._getContext();
 
-    _.assign(this.context, {
-      isPrivate: this._isPrivate(),
-      nameOf: {
-        class: `vjs-${configs.name}`,
-        function: _.camelCase(configs.name),
-        license: this._licenseNames[configs.license],
-        package: `videojs-${configs.name}`,
-        plugin: configs.name
-      },
-      version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0',
-      year: (new Date()).getFullYear()
-    });
-
-    if (!isPrivate) {
+    if (!this._isPrivate()) {
       this._filesToCopy.push('_.travis.yml');
     }
 
@@ -422,7 +491,7 @@ export default yeoman.generators.Base.extend({
       return;
     }
     this.log(yosay(tsts.join`
-      All done; ${chalk.red(this.context.nameOf.package)} is ready to go!
+      All done; ${chalk.green(this.context.pluginName)} is ready to go!
     `));
   }
 });
