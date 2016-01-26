@@ -86,6 +86,7 @@ const packageJSON = (current, context) => {
     'version': context.version,
     'description': context.description,
     'main': 'es5/plugin.js',
+    'browser': 'src/plugin.js',
 
     'scripts': _.assign({}, current.scripts, {
       'prebuild': 'npm run clean',
@@ -107,7 +108,10 @@ const packageJSON = (current, context) => {
       ]),
 
       'build:js:browserify': scriptify([
-        'browserify . -s %s -o dist/%s.js'
+        'browserify .',
+        '-t babelify',
+        '-s ' + context.functionName,
+        '-o dist/%s.js'
       ]),
 
       'build:js:uglify': scriptify([
@@ -137,7 +141,8 @@ const packageJSON = (current, context) => {
       'watch': 'npm-run-all -p watch:*',
 
       'watch:js': scriptify([
-        'watchify src/plugin.js',
+        'watchify .',
+        '-s ' + context.functionName,
         '-t babelify',
         '-v -o dist/%s.js'
       ]),
