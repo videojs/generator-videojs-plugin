@@ -3,9 +3,6 @@ import fs from 'fs';
 const isNonEmptyString = v =>
   typeof v === 'string' && (/\S/).test(v);
 
-const isPlainObject = o =>
-  Object.prototype.toString.call(o) === '[object Object]';
-
 const statChecker = method => {
   return p => {
     try {
@@ -22,6 +19,5 @@ const isFile = statChecker('isFile');
 export {
   isDir,
   isFile,
-  isNonEmptyString,
-  isPlainObject
+  isNonEmptyString
 };
