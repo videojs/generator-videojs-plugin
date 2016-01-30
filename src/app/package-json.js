@@ -26,8 +26,6 @@ const DEFAULTS = {
     'karma-ie-launcher': '^0.2.0',
     'karma-qunit': '^0.1.0',
     'karma-safari-launcher': '^0.1.0',
-    'lodash-compat': '^3.10.0',
-    'minimist': '^1.2.0',
     'mkdirp': '^0.5.1',
     'npm-run-all': '^1.2.0',
     'portscanner': '^1.0.0',
