@@ -249,6 +249,14 @@ const packageJSON = (current, context) => {
 
   // Support the Sass option.
   if (context.sass) {
+    let sassCommand = [
+      'node-sass',
+      'src/plugin.scss',
+      'dist/%s.css',
+      '--output-style=compressed',
+      '--linefeed=lf'
+    ];
+
     _.assign(result.scripts, {
       'build:css': 'npm-run-all mkdirs build:css:sass build:css:bannerize',
 
@@ -256,21 +264,8 @@ const packageJSON = (current, context) => {
         'bannerize dist/%s.css --banner=scripts/banner.ejs'
       ]),
 
-      'build:css:sass': scriptify([
-        'node-sass',
-        '--output-style=compressed',
-        '--linefeed=lf',
-        'src/plugin.scss -o dist && ',
-        'mv dist/plugin.css dist/%s.css'
-      ]),
-
-      'watch:css': scriptify([
-        'node-sass',
-        '--output-style=nested',
-        '--linefeed=lf',
-        'src/plugin.scss -o dist -w src &&',
-        'mv dist/plugin.css dist/%s.css'
-      ])
+      'build:css:sass': scriptify(sassCommand),
+      'watch:css': scriptify(sassCommand.concat('-w src'))
     });
 
     _.assign(result.devDependencies, {
