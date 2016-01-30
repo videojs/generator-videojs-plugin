@@ -6,5 +6,5 @@ glob('test/**/*.test.js', function(err, files) {
   browserify(files)
     .transform('babelify')
     .bundle()
-    .pipe(fs.createWriteStream('dist-test/<%= pluginName %>.js'));
+    .pipe(fs.createWriteStream('test/dist/bundle.js'));
 });
