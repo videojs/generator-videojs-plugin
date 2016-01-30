@@ -1,18 +1,18 @@
-var shell = require('shelljs');
+var execSync = require('child_process').execSync;
 var VERSION = require('../package.json').version;
 
-// A small wrapper around shell.exec to ensure that we exit the process
-// properly if any step fails.
-var exec = function() {
-  var result = shell.exec.apply(shell, arguments);
-  process.stdout.write(result.output);
-  if (result.code !== 0) {
-    process.exit(result.code);
+[
+  'git add package.json',
+  'git commit -m "' + VERSION + '"',
+  'npm run build',
+  'git add -f dist'
+].forEach(function(cmd) {
+  try {
+    process.stdout.write(execSync(cmd));
+  } catch (x) {
+    if (x.stderr) {
+      process.stderr.write(x.stderr);
+    }
+    process.exit(x.status || 1);
   }
-  return result;
-};
-
-exec('git add package.json');
-exec('git commit -m "' + VERSION + '"');
-exec('npm run build');
-exec('git add -f dist');
+});

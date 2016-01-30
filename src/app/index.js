@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import chalk from 'chalk';
 import path from 'path';
-import * as tsts from 'tsts';
+import tsmlj from 'tsmlj';
 import yeoman from 'yeoman-generator';
 import yosay from 'yosay';
 
@@ -190,7 +190,7 @@ export default yeoman.generators.Base.extend({
       validate: validators.scope
     }, {
       name: 'name',
-      message: tsts.join`
+      message: tsmlj`
         Enter the name of this plugin (a-z/0-9/- only; will be
         prefixed with "${PREFIX}"):
       `,
@@ -225,7 +225,7 @@ export default yeoman.generators.Base.extend({
     }, {
       type: 'confirm',
       name: 'lang',
-      message: tsts.join`
+      message: tsmlj`
         Do you need video.js language file infrastructure for
         internationalized strings?
       `,
@@ -490,7 +490,7 @@ export default yeoman.generators.Base.extend({
     if (this.options.hurry) {
       return;
     }
-    this.log(yosay(tsts.join`
+    this.log(yosay(tsmlj`
       All done; ${chalk.green(this.context.pluginName)} is ready to go!
     `));
   }
