@@ -19,7 +19,6 @@ const DEFAULTS = {
     'glob': '^6.0.3',
     'global': '^4.3.0',
     'karma': '^0.13.0',
-    'karma-browserify': '^4.4.0',
     'karma-chrome-launcher': '^0.2.0',
     'karma-detect-browsers': '^2.0.0',
     'karma-firefox-launcher': '^0.1.0',
