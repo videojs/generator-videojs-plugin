@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import tsmlj from 'tsmlj';
-import util from 'util';
 
 const KARMA_BROWSERS = ['Chrome', 'Firefox', 'IE', 'Safari'];
 
@@ -109,10 +108,7 @@ const packageJSON = (current, context) => {
    */
   let scriptify = (str) => {
     str = Array.isArray(str) ? str.join(' ') : str;
-
-    let tokens = str.match(/%s/g) || [];
-
-    return util.format(...[str].concat(tokens.map(() => context.pluginName)));
+    return str.replace(/%s/g, context.pluginName);
   };
 
   let result = _.assign({}, current, {
@@ -187,6 +183,13 @@ const packageJSON = (current, context) => {
       'qunit': 'global:QUnit',
       'sinon': 'global:sinon',
       'video.js': 'global:videojs'
+    },
+
+    // These objects are used as a reference to the browser-global providers.
+    'style': scriptify('dist/%s.css'),
+    'videojs-plugin': {
+      style: scriptify('dist/%s.css'),
+      script: scriptify('dist/%s.min.js')
     },
 
     'vjsstandard': {
