@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import tsts from 'tsts';
+import tsmlj from 'tsmlj';
 import {PREFIX} from './constants';
 
 /**
@@ -12,14 +12,14 @@ import {PREFIX} from './constants';
 const name = input => {
 
   if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
-    return tsts.join`
+    return tsmlj`
       Names must start with a lower-case letter and contain
       only lower-case letters (a-z), digits (0-9), and hyphens (-).
     `;
   }
 
   if (_.startsWith(input, PREFIX)) {
-    return tsts.join`
+    return tsmlj`
       Plugins cannot start with "${PREFIX}"; it will automatically
       be prepended!
     `;
@@ -41,7 +41,7 @@ const scope = input => {
   }
 
   if (input && _.endsWith(input, '/')) {
-    return tsts.join`
+    return tsmlj`
       Do not include a trailing "/" in your package scope,
       it will be automatically added.
     `;

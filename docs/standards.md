@@ -56,7 +56,6 @@ Development dependencies (`"devDependencies"` in `package.json`) will include ma
 Folder/Filename            | Optional? | Generated? | Description
 -------------------------- | --------- | ---------- | -----------
 `dist/`                    |           |            | Created during builds, ignored by Git.
-`dist-test/`               |           |            | Created during test builds, ignored by Git.
 `docs/`                    | ✓         |            | Any documentation beyond `README.md`.
 `es5/`                     |           |            | Babel-compiled `src/` scripts.
 `lang/`                    | ✓         | ?          | Any JSON language files for the plugin.
@@ -67,7 +66,8 @@ Folder/Filename            | Optional? | Generated? | Description
 `src/plugin.scss`          | ✓         | ?          | Sass _entry point_.
 `src/plugin.js`            |           | ✓          | Browserify _entry point_.
 `test/`                    |           | ✓          | Unit tests.
-`test/karma/`              |           | ✓          | Karma configuration files.
+`test/dist/`               |           |            | Created during test builds, ignored by Git.
+`test/karma.conf.js`       |           | ✓          | Karma configuration file.
 `test/plugin.test.js`      |           | ✓          | Browserify _entry point_.
 `.editorconfig`            |           | ✓          |
 `.gitignore`               |           | ✓          |
@@ -171,7 +171,7 @@ src/foo.js :: test/foo.test.js
 src/bar.js :: test/bar.test.js
 ```
 
-When the `build:test` script is executed, all `*.test.js` files within `test` and sub-directories will be built into the output script (`dist-test/${pluginName}.js`).
+When the `build:test` script is executed, all `*.test.js` files within `test` and sub-directories will be built into the output script (`test/dist/bundle.js`).
 
 ### Testing with Karma
 
@@ -179,7 +179,7 @@ All the test automation uses single-run Karma sessions. `npm test` will launch a
 
 ### Testing in a Browser
 
-During development, it may be more convenient to run your tests manually in a browser tab (i.e. not through Karma). This can be achieved easily by running a development server with `npm start` and navigating to [`http://localhost:9999/test/`](http://localhost:9999/test/) (_note:_ the port may vary, check console output).
+During development, it may be more convenient to run your tests manually in a browser tab (i.e. through QUnit directly, not Karma). This can be achieved easily by running a development server with `npm start` and navigating to [`http://localhost:9999/test/`](http://localhost:9999/test/).
 
 ## Release
 

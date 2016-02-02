@@ -1,8 +1,41 @@
 import _ from 'lodash';
-import * as tsts from 'tsts';
-import util from 'util';
+import tsmlj from 'tsmlj';
 
-const KARMA_BROWSERS = ['chrome', 'firefox', 'ie', 'safari'];
+const KARMA_BROWSERS = ['Chrome', 'Firefox', 'IE', 'Safari'];
+
+const DEFAULTS = {
+  dependencies: {
+    'video.js': '^5.6.0'
+  },
+  devDependencies: {
+    'babel': '^5.8.0',
+    'babelify': '^6.0.0',
+    'bannerize': '^1.0.0',
+    'browserify': '^11.0.0',
+    'browserify-shim': '^3.0.0',
+    'connect': '^3.4.0',
+    'cowsay': '^1.1.0',
+    'glob': '^6.0.3',
+    'global': '^4.3.0',
+    'karma': '^0.13.0',
+    'karma-chrome-launcher': '^0.2.0',
+    'karma-detect-browsers': '^2.0.0',
+    'karma-firefox-launcher': '^0.1.0',
+    'karma-ie-launcher': '^0.2.0',
+    'karma-qunit': '^0.1.0',
+    'karma-safari-launcher': '^0.1.0',
+    'mkdirp': '^0.5.1',
+    'npm-run-all': '^1.2.0',
+    'portscanner': '^1.0.0',
+    'qunitjs': '^1.0.0',
+    'rimraf': '^2.5.1',
+    'serve-static': '^1.10.0',
+    'sinon': '^1.0.0',
+    'uglify-js': '^2.5.0',
+    'videojs-standard': '^4.0.0',
+    'watchify': '^3.6.0'
+  }
+};
 
 /**
  * Takes advantage of the way V8 orders object properties - by their
@@ -75,10 +108,7 @@ const packageJSON = (current, context) => {
    */
   let scriptify = (str) => {
     str = Array.isArray(str) ? str.join(' ') : str;
-
-    let tokens = str.match(/%s/g) || [];
-
-    return util.format(...[str].concat(tokens.map(() => context.pluginName)));
+    return str.replace(/%s/g, context.pluginName);
   };
 
   let result = _.assign({}, current, {
@@ -117,21 +147,14 @@ const packageJSON = (current, context) => {
       ]),
 
       'build:test': 'node scripts/build-test.js',
-      'clean': tsts.squash`
-        node -e "
-          var s=require(\'shelljs\'),d=[\'dist\',\'dist-test\',\'es5\'];
-          s.rm(\'-rf\',d);
-          s.mkdir(\'-p\',d);
-        "
-      `,
-
+      'clean': 'rimraf dist test/dist es5 && mkdirp dist test/dist es5',
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
       'prestart': 'npm run build',
       'start': 'npm-run-all -p start:* watch:*',
-      'start:serve': 'babel-node scripts/server.js',
+      'start:serve': 'node scripts/server.js',
       'pretest': 'npm-run-all lint build',
-      'test': 'karma start test/karma/detected.js',
+      'test': 'karma start test/karma.conf.js',
       'preversion': 'npm test',
       'version': 'npm run build',
       'watch': 'npm-run-all -p watch:*',
@@ -162,23 +185,26 @@ const packageJSON = (current, context) => {
       'video.js': 'global:videojs'
     },
 
+    // These objects are used as a reference to the browser-global providers.
+    'style': scriptify('dist/%s.css'),
+    'videojs-plugin': {
+      style: scriptify('dist/%s.css'),
+      script: scriptify('dist/%s.min.js')
+    },
+
     'vjsstandard': {
       ignore: [
         'dist',
-        'dist-test',
         'docs',
         'es5',
-        'test/karma',
-
-        // Scripts is ignored for now because videojs-standard does not
-        // make accomodations for things that are safe in Node.
+        'test/dist',
+        'test/karma.conf.js',
         'scripts'
       ]
     },
 
     'files': [
       'CONTRIBUTING.md',
-      'dist-test/',
       'dist/',
       'docs/',
       'es5/',
@@ -188,74 +214,42 @@ const packageJSON = (current, context) => {
       'test/'
     ],
 
-    'dependencies': _.assign({}, current.dependencies, {
-      'video.js': '^5.0.0'
-    }),
+    'dependencies': _.assign({}, current.dependencies, DEFAULTS.dependencies),
 
-    'devDependencies': _.assign({}, current.devDependencies, {
-      'babel': '^5.8.0',
-      'babelify': '^6.0.0',
-      'bannerize': '^1.0.0',
-      'browserify': '^11.0.0',
-      'browserify-shim': '^3.0.0',
-      'connect': '^3.4.0',
-      'cowsay': '^1.1.0',
-      'glob': '^6.0.3',
-      'global': '^4.3.0',
-      'karma': '^0.13.0',
-      'karma-browserify': '^4.4.0',
-      'karma-chrome-launcher': '^0.2.0',
-      'karma-detect-browsers': '^2.0.0',
-      'karma-firefox-launcher': '^0.1.0',
-      'karma-ie-launcher': '^0.2.0',
-      'karma-qunit': '^0.1.0',
-      'karma-safari-launcher': '^0.1.0',
-      'lodash-compat': '^3.10.0',
-      'minimist': '^1.2.0',
-      'npm-run-all': '^1.2.0',
-      'portscanner': '^1.0.0',
-      'qunitjs': '^1.0.0',
-      'serve-static': '^1.10.0',
-      'shelljs': '^0.5.3',
-      'sinon': '^1.0.0',
-      'uglify-js': '^2.5.0',
-      'videojs-standard': '^4.0.0',
-      'watchify': '^3.6.0'
-    })
+    'devDependencies': _.assign(
+      {},
+      current.devDependencies,
+      DEFAULTS.devDependencies
+    )
   });
 
   // Create scripts for each Karma browser.
-  KARMA_BROWSERS.forEach(function(browser) {
-    result.scripts['test:' + browser] = [
-      'npm run pretest',
-      'karma start test/karma/' + browser + '.js'
-    ].join(' && ');
+  KARMA_BROWSERS.forEach(browser => {
+    result.scripts[`test:${browser.toLowerCase()}`] = tsmlj`
+      npm run pretest &&
+      karma start test/karma.conf.js --browsers ${browser}
+    `;
   });
 
   // Support the Sass option.
   if (context.sass) {
+    let sassCommand = [
+      'node-sass',
+      'src/plugin.scss',
+      'dist/%s.css',
+      '--output-style=compressed',
+      '--linefeed=lf'
+    ];
+
     _.assign(result.scripts, {
-      'build:css': 'npm-run-all mkdirs build:css:sass build:css:bannerize',
+      'build:css': 'npm-run-all build:css:sass build:css:bannerize',
 
       'build:css:bannerize': scriptify([
         'bannerize dist/%s.css --banner=scripts/banner.ejs'
       ]),
 
-      'build:css:sass': scriptify([
-        'node-sass',
-        '--output-style=compressed',
-        '--linefeed=lf',
-        'src/plugin.scss -o dist && ',
-        'node -e "require(\'shelljs\').mv(\'dist/plugin.css\',\'dist/%s.css\')"'
-      ]),
-
-      'watch:css': scriptify([
-        'node-sass',
-        '--output-style=nested',
-        '--linefeed=lf',
-        'src/plugin.scss -o dist -w src &&',
-        'node -e "require(\'shelljs\').mv(\'dist/plugin.css\',\'dist/%s.css\')"'
-      ])
+      'build:css:sass': scriptify(sassCommand),
+      'watch:css': scriptify(sassCommand.concat('-w src'))
     });
 
     _.assign(result.devDependencies, {

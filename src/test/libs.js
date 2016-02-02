@@ -9,12 +9,7 @@ const FILES = {
   common: [
     'scripts/banner.ejs',
     'scripts/server.js',
-    'test/karma/chrome.js',
-    'test/karma/common.js',
-    'test/karma/detected.js',
-    'test/karma/firefox.js',
-    'test/karma/ie.js',
-    'test/karma/safari.js',
+    'test/karma.conf.js',
     'src/plugin.js',
     'test/index.html',
     'test/plugin.test.js',
