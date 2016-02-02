@@ -23,10 +23,7 @@ describe('videojs-plugin:app', function() {
     'test:safari',
     'preversion',
     'version',
-    'postversion',
-    'watch',
-    'watch:js',
-    'watch:test'
+    'postversion'
   ];
 
   describe('defaults', function() {
@@ -111,8 +108,7 @@ describe('videojs-plugin:app', function() {
 
     it('populates otherwise empty npm scripts', function() {
       libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
-        'build:css',
-        'watch:css'
+        'build:css'
       ]));
     });
 

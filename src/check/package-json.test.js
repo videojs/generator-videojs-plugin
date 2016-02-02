@@ -12,9 +12,6 @@ const coreScripts = [
   'lint',
   'start',
   'test',
-  'watch',
-  'watch:js',
-  'watch:test',
   'version'
 ];
 

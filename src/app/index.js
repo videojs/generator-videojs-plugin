@@ -298,7 +298,6 @@ export default yeoman.generators.Base.extend({
 
     this._templatesToCopy = [
       'scripts/_build-test.js',
-      'scripts/_watch-test.js',
       'src/_plugin.js',
       'test/_karma.conf.js',
       'test/_index.html',
