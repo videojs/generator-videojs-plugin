@@ -13,9 +13,8 @@ const DEFAULTS = {
     'bannerize': '^1.0.0',
     'browserify': '^13.0.0',
     'browserify-shim': '^3.0.0',
+    'budo': '^8.0.0',
     'chg': '^0.3.2',
-    'connect': '^3.4.0',
-    'cowsay': '^1.1.0',
     'glob': '^6.0.3',
     'global': '^4.3.0',
     'karma': '^0.13.0',
@@ -27,14 +26,11 @@ const DEFAULTS = {
     'karma-safari-launcher': '^0.1.0',
     'mkdirp': '^0.5.1',
     'npm-run-all': '^1.2.0',
-    'portscanner': '^1.0.0',
     'qunitjs': '^1.0.0',
     'rimraf': '^2.5.1',
-    'serve-static': '^1.10.0',
     'sinon': '^1.0.0',
     'uglify-js': '^2.5.0',
-    'videojs-standard': '^4.0.0',
-    'watchify': '^3.6.0'
+    'videojs-standard': '^4.0.0'
   }
 };
 
@@ -151,23 +147,12 @@ const packageJSON = (current, context) => {
       'clean': 'rimraf dist test/dist es5 && mkdirp dist test/dist es5',
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
-      'prestart': 'npm run build',
-      'start': 'npm-run-all -p start:* watch:*',
-      'start:serve': 'node scripts/server.js',
+      'start': 'node scripts/server.js',
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
       'preversion': 'npm test',
       'version': 'node scripts/version.js',
-      'postversion': 'node scripts/postversion.js',
-      'watch': 'npm-run-all -p watch:*',
-
-      'watch:js': scriptify([
-        'watchify src/plugin.js',
-        '-t babelify',
-        '-v -o dist/%s.js'
-      ]),
-
-      'watch:test': 'node scripts/watch-test.js'
+      'postversion': 'node scripts/postversion.js'
     }),
 
     // Always include the two minimum keywords with whatever exists in the
@@ -239,14 +224,6 @@ const packageJSON = (current, context) => {
 
   // Support the Sass option.
   if (context.sass) {
-    let sassCommand = [
-      'node-sass',
-      'src/plugin.scss',
-      'dist/%s.css',
-      '--output-style=compressed',
-      '--linefeed=lf'
-    ];
-
     _.assign(result.scripts, {
       'build:css': 'npm-run-all build:css:sass build:css:bannerize',
 
@@ -254,8 +231,13 @@ const packageJSON = (current, context) => {
         'bannerize dist/%s.css --banner=scripts/banner.ejs'
       ]),
 
-      'build:css:sass': scriptify(sassCommand),
-      'watch:css': scriptify(sassCommand.concat('-w src'))
+      'build:css:sass': scriptify([
+        'node-sass',
+        'src/plugin.scss',
+        'dist/%s.css',
+        '--output-style=compressed',
+        '--linefeed=lf'
+      ])
     });
 
     result.devDependencies['node-sass'] = '^3.4.0';
@@ -267,8 +249,7 @@ const packageJSON = (current, context) => {
     _.assign(result.scripts, {
       'docs': 'npm-run-all docs:*',
       'docs:api': 'jsdoc src -r -d docs/api',
-      'docs:toc': 'doctoc README.md',
-      'prestart': 'npm-run-all docs build'
+      'docs:toc': 'doctoc README.md'
     });
 
     _.assign(result.devDependencies, {
