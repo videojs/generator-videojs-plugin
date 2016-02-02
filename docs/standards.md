@@ -26,8 +26,8 @@ This document and [the Yeoman generator](https://github.com/videojs/generator-vi
   - [Testing in a Browser](#testing-in-a-browser)
 - [Release](#release)
   - [Versioning](#versioning)
-    - [Not Supporting Bower](#not-supporting-bower)
-    - [Supporting Bower](#supporting-bower)
+    - [CHANGELOG](#changelog)
+    - [Bower](#bower)
   - [Publishing](#publishing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -120,25 +120,26 @@ __All standard video.js plugins must implement the core set of npm scripts.__
 
 All names are lower-case and use colons (`:`) as sub-task separators (multiple colons separate multiple levels of sub-tasks). Other scripts (e.g., sub-sub-tasks and `pre*`/`post*` scripts) will be created as well, but these are not documented here as they are not considered core scripts and are subject to change.
 
-npm Script   | Optional | Description
------------- | -------- | -----------
-`build`      |          | Runs all build sub-tasks.
-`build:css`  | ✓        | Builds the Sass entry point.
-`build:js`   |          | Builds the Browserify entry point.
-`build:lang` | ✓        | Builds language files.
-`build:test` |          | Builds the test Browserify entry point.
-`change`     | ✓        | Adds a free-form text entry to the CHANGELOG.
-`clean`      |          | Cleans up _all_ build artifacts.
-`docs`       | ✓        | Performs documentation tasks.
-`lint`       |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
-`start`      |          | Starts a development server at port `9999` (or closest open port) and runs `watch`.
-`test`       |          | Runs `lint`, builds tests, and runs tests in available browsers.
-`test:*`     | ✓        | Browser-specific tests (e.g. `test:firefox`).
-`watch`      |          | Watches everything and runs appropriate tasks.
-`watch:css`  | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
-`watch:js`   |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
-`watch:test` |          | Triggers a build when the test entry point changes.
-`version`    | ✓        | Special handling if Bower support is enabled.
+npm Script    | Optional | Description
+------------- | -------- | -----------
+`build`       |          | Runs all build sub-tasks.
+`build:css`   | ✓        | Builds the Sass entry point.
+`build:js`    |          | Builds the Browserify entry point.
+`build:lang`  | ✓        | Builds language files.
+`build:test`  |          | Builds the test Browserify entry point.
+`change`      | ✓        | Adds a free-form text entry to the CHANGELOG.
+`clean`       |          | Cleans up _all_ build artifacts.
+`docs`        | ✓        | Performs documentation tasks.
+`lint`        |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
+`start`       |          | Starts a development server at port `9999` (or closest open port) and runs `watch`.
+`test`        |          | Runs `lint`, builds tests, and runs tests in available browsers.
+`test:*`      | ✓        | Browser-specific tests (e.g. `test:firefox`).
+`watch`       |          | Watches everything and runs appropriate tasks.
+`watch:css`   | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
+`watch:js`    |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
+`watch:test`  |          | Triggers a build when the test entry point changes.
+`version`     |          |
+`postversion` |          |
 
 ## Coding Style
 
@@ -186,21 +187,34 @@ During development, it may be more convenient to run your tests manually in a br
 
 ### Versioning
 
-__Standard video.js plugins may support Bower, but must never check in build artifacts to source control.__
+__Standard video.js plugins may support Bower, but must never check in build artifacts to the main branch history in source control.__
 
 Regardless of Bower support (detailed below), the `"preversion"` script will run `npm test` to enforce code quality and unit test passage before allowing the version to be bumped.
 
-#### Supporting Bower
+The `"version"` script runs `scripts/version.js`, which handles two special situations/configurations: the presence of CHANGELOG tooling and support for Bower.
 
-It is generally considered a best practice to not check build artifacts (`dist/` etc.) into source control. However, because Bower only clones repositories and offers no mechanism for scripting, we must define a workflow for bumping versions without checking `dist/` into the repository's `master` history!
+The `"postversion"` script runs `scripts/postversion.js`, which completes the Bower support tasks.
 
-Assuming use of the `npm version` command on the `master` branch:
+#### CHANGELOG
+
+The `"version"` script will determine whether or not a project has CHANGELOG tooling by the presence of a `CHANGELOG.md` file, the `chg` project dependency, and the presence of the `"change"` script.
+
+If all conditions are met, the process will create a new "release" entry in the `CHANGELOG.md`, promoting anything under "HEAD" to a new heading matching the new project version.
+
+#### Bower
+
+The `"version"` script determines Bower support by the presence of a `bower.json` file.
+
+It is generally considered a best practice to not check build artifacts (`dist/`, `es5/`, etc.) into source control. However, because Bower only clones repositories and offers no mechanism for scripting, we must define a workflow for bumping versions without checking `dist/` into the repository's `master` history!
+
+Assuming a project is on the `master` branch (though this is not required), the process looks like:
 
 1. `"preversion"` script is run as outlined above.
 1. _npm automatically bumps the `package.json` version._
 1. The npm `"version"` script will run:
-  1. `package.json` is staged and committed. The effect of this is that the `package.json` change exists in the history of `master` (or whichever branch you run `npm version` on).
-  1. Run `npm run build` so the new version number gets picked up in built assets.
+  1. CHANGELOG handling is performed as outlined previously.
+  1. `package.json` is staged and committed. The effect of this is that the `package.json` change exists in the history of `master`.
+  1. `npm run build` so the new version number gets picked up in build artifacts.
   1. The `dist/` directory will be _force-added_. Normally, it is ignored, but it needs to exist in the tag for Bower to install things properly.
 1. _npm automatically commits and tags._ This commit's changeset will contain only the `dist/` dir (the `package.json` bump is the parent commit).
 1. The npm `"postversion"` script will run:
@@ -217,10 +231,6 @@ This process results in a `master` history that looks something like this:
 `C`: signifies a conventional commit.
 `V`: signifies a version bump commit.
 `T`: tagged commit, with `dist/` included.
-
-#### Not Supporting Bower
-
-This is the easy case, but not the default in the generator. In this case, no tricky versioning workflow needs to be followed; however, tests are run before versioning and the build is run during versioning.
 
 ### Publishing
 

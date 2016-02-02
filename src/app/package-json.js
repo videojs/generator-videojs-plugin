@@ -158,6 +158,7 @@ const packageJSON = (current, context) => {
       'test': 'karma start test/karma.conf.js',
       'preversion': 'npm test',
       'version': 'node scripts/version.js',
+      'postversion': 'node scripts/postversion.js',
       'watch': 'npm-run-all -p watch:*',
 
       'watch:js': scriptify([
@@ -286,7 +287,6 @@ const packageJSON = (current, context) => {
 
   if (context.bower) {
     result.files.push('bower.json');
-    result.scripts.postversion = 'git reset --hard HEAD~1';
   }
 
   result.files.sort();

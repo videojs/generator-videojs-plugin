@@ -287,6 +287,7 @@ export default yeoman.generators.Base.extend({
 
     this._filesToCopy = [
       'scripts/_banner.ejs',
+      'scripts/_postversion.js',
       'scripts/_server.js',
       'scripts/_version.js',
       '_.editorconfig',

@@ -59,10 +59,15 @@ describe('videojs-plugin:app', function() {
       libs.allAreNonEmpty(this.pkg.scripts, scripts);
     });
 
-    it('populates versioning script', function() {
+    it('populates versioning scripts', function() {
       assert.strictEqual(
         this.pkg.scripts.version,
         'node scripts/version.js'
+      );
+
+      assert.strictEqual(
+        this.pkg.scripts.postversion,
+        'node scripts/postversion.js'
       );
     });
 
