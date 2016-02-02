@@ -73,7 +73,7 @@ Folder/Filename            | Optional? | Generated? | Description
 `.gitignore`               |           | ✓          |
 `.npmignore`               |           | ✓          |
 `bower.json`               | ✓         | ?          |
-`CHANGELOG.md`             | ✓         | ✓          | May be removed if not desired.
+`CHANGELOG.md`             | ✓         | ?          |
 `CONTRIBUTING.md`          | ✓         | ✓          | Documents how developers can work on the plugin.
 `index.html`               | ✓         | ✓          | An example of usage of the plugin. This can be used with GitHub pages as well.
 `LICENSE`                  | ✓         | ?          | Defaults to `MIT`.
@@ -127,6 +127,7 @@ npm Script   | Optional | Description
 `build:js`   |          | Builds the Browserify entry point.
 `build:lang` | ✓        | Builds language files.
 `build:test` |          | Builds the test Browserify entry point.
+`change`     | ✓        | Adds a free-form text entry to the CHANGELOG.
 `clean`      |          | Cleans up _all_ build artifacts.
 `docs`       | ✓        | Performs documentation tasks.
 `lint`       |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
