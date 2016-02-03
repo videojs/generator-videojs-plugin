@@ -59,10 +59,15 @@ describe('videojs-plugin:app', function() {
       libs.allAreNonEmpty(this.pkg.scripts, scripts);
     });
 
-    it('populates versioning scripts for bower', function() {
+    it('populates versioning scripts', function() {
       assert.strictEqual(
         this.pkg.scripts.version,
-        'node scripts/npm-version-for-bower.js'
+        'node scripts/version.js'
+      );
+
+      assert.strictEqual(
+        this.pkg.scripts.postversion,
+        'node scripts/postversion.js'
       );
     });
 
@@ -155,13 +160,6 @@ describe('videojs-plugin:app', function() {
 
     it('does not create bower-specific files', function() {
       assert.noFile(libs.fileList('bower'));
-    });
-
-    it('does not populate versioning scripts for bower', function() {
-      assert.notStrictEqual(
-        this.pkg.scripts.version,
-        'node scripts/npm-version-for-bower.js'
-      );
     });
   });
 

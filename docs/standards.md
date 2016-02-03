@@ -1,4 +1,4 @@
-# Brightcove video.js Plugin Standards
+# video.js Plugin Standards
 
 When we refer to "standard video.js plugins" we are not referring to any official, codified standard (e.g. ECMAScript or HTML5). Rather, we are referring to the rules used internally at [Brightcove](https://www.brightcove.com) in developing both open-source and proprietary plugins for [video.js](http://videojs.com).
 
@@ -26,8 +26,8 @@ This document and [the Yeoman generator](https://github.com/videojs/generator-vi
   - [Testing in a Browser](#testing-in-a-browser)
 - [Release](#release)
   - [Versioning](#versioning)
-    - [Not Supporting Bower](#not-supporting-bower)
-    - [Supporting Bower](#supporting-bower)
+    - [CHANGELOG](#changelog)
+    - [Bower](#bower)
   - [Publishing](#publishing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -41,7 +41,7 @@ All standard video.js plugins _must_:
 - ...implement the core set of npm scripts.
 - ...be written in ES6 and pass `videojs-standard` linting.
 - ...have tests.
-- ...never check build artifacts into the repository.
+- ...never check build artifacts into `master` branch (or equivalent) history the repository.
 
 ## Packaging and Dependencies
 
@@ -73,7 +73,7 @@ Folder/Filename            | Optional? | Generated? | Description
 `.gitignore`               |           | ✓          |
 `.npmignore`               |           | ✓          |
 `bower.json`               | ✓         | ?          |
-`CHANGELOG.md`             | ✓         | ✓          | May be removed if not desired.
+`CHANGELOG.md`             | ✓         | ?          |
 `CONTRIBUTING.md`          | ✓         | ✓          | Documents how developers can work on the plugin.
 `index.html`               | ✓         | ✓          | An example of usage of the plugin. This can be used with GitHub pages as well.
 `LICENSE`                  | ✓         | ?          | Defaults to `MIT`.
@@ -120,24 +120,26 @@ __All standard video.js plugins must implement the core set of npm scripts.__
 
 All names are lower-case and use colons (`:`) as sub-task separators (multiple colons separate multiple levels of sub-tasks). Other scripts (e.g., sub-sub-tasks and `pre*`/`post*` scripts) will be created as well, but these are not documented here as they are not considered core scripts and are subject to change.
 
-npm Script   | Optional | Description
------------- | -------- | -----------
-`build`      |          | Runs all build sub-tasks.
-`build:css`  | ✓        | Builds the Sass entry point.
-`build:js`   |          | Builds the Browserify entry point.
-`build:lang` | ✓        | Builds language files.
-`build:test` |          | Builds the test Browserify entry point.
-`clean`      |          | Cleans up _all_ build artifacts.
-`docs`       | ✓        | Performs documentation tasks.
-`lint`       |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
-`start`      |          | Starts a development server at port `9999` (or closest open port) and runs `watch`.
-`test`       |          | Runs `lint`, builds tests, and runs tests in available browsers.
-`test:*`     | ✓        | Browser-specific tests (e.g. `test:firefox`).
-`watch`      |          | Watches everything and runs appropriate tasks.
-`watch:css`  | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
-`watch:js`   |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
-`watch:test` |          | Triggers a build when the test entry point changes.
-`version`    | ✓        | Special handling if Bower support is enabled.
+npm Script    | Optional | Description
+------------- | -------- | -----------
+`build`       |          | Runs all build sub-tasks.
+`build:css`   | ✓        | Builds the Sass entry point.
+`build:js`    |          | Builds the Browserify entry point.
+`build:lang`  | ✓        | Builds language files.
+`build:test`  |          | Builds the test Browserify entry point.
+`change`      | ✓        | Triggers a prompt to add an entry to the `CHANGELOG.md`. Can also be used like so: `npm run change -- "Describe some exciting new feature."`.
+`clean`       |          | Cleans up _all_ build artifacts.
+`docs`        | ✓        | Performs documentation tasks.
+`lint`        |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
+`start`       |          | Starts a development server at port `9999` (or closest open port) and runs `watch`.
+`test`        |          | Runs `lint`, builds tests, and runs tests in available browsers.
+`test:*`      | ✓        | Browser-specific tests (e.g. `test:firefox`).
+`watch`       |          | Watches everything and runs appropriate tasks.
+`watch:css`   | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
+`watch:js`    |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
+`watch:test`  |          | Triggers a build when the test entry point changes.
+`version`     |          | [see below](#versioning)
+`postversion` |          | [see below](#versioning)
 
 ## Coding Style
 
@@ -147,13 +149,13 @@ In an effort to reduce guess work, improve maintainability, avoid stylistic bike
 
 Its coding conventions are enforced in standard video.js plugins via the `npm run lint` command.
 
-_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores built scripts and any script(s) which must be written in ES5._
+_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores build artifacts and `scripts/`, which are written in ES5._
 
 ## Testing
 
 __All standard video.js plugins must have tests.__
 
-Testing is a critical element of any software project and it should be done in an environment as similar to production as possible. To that end, video.js tests should be run in a browser.
+Testing is a critical element of any software project and it should be done in an environment as similar to production as possible. To that end, video.js plugin tests should be run in a browser.
 
 Testing is performed with [QUnit](https://qunitjs.com/) as the testing framework and [Karma](https://karma-runner.github.io/) as the runner.
 
@@ -185,21 +187,34 @@ During development, it may be more convenient to run your tests manually in a br
 
 ### Versioning
 
-__Standard video.js plugins may support Bower, but must never check in build artifacts to source control.__
+__Standard video.js plugins may support Bower, but must never check in build artifacts to the main branch history in source control.__
 
 Regardless of Bower support (detailed below), the `"preversion"` script will run `npm test` to enforce code quality and unit test passage before allowing the version to be bumped.
 
-#### Supporting Bower
+The `"version"` script runs `scripts/version.js`, which handles two special situations/configurations: the presence of CHANGELOG tooling and support for Bower.
 
-It is generally considered a best practice to not check build artifacts (`dist/` etc.) into source control. However, because Bower only clones repositories and offers no mechanism for scripting, we must define a workflow for bumping versions without checking `dist/` into the repository's `master` history!
+The `"postversion"` script runs `scripts/postversion.js`, which completes the Bower support tasks.
 
-Assuming use of the `npm version` command on the `master` branch:
+#### CHANGELOG
+
+The `"version"` script will determine whether or not a project has CHANGELOG tooling by the presence of a `CHANGELOG.md` file, the `chg` project dependency, and the presence of the `"change"` script.
+
+If all conditions are met, the process will create a new "release" entry in the `CHANGELOG.md`, promoting anything under "HEAD" to a new heading matching the new project version.
+
+#### Bower
+
+The `"version"` script determines Bower support by the presence of a `bower.json` file.
+
+It is generally considered a best practice to not check build artifacts (`dist/`, `es5/`, etc.) into source control. However, because Bower only clones repositories and offers no mechanism for scripting, we must define a workflow for bumping versions without checking `dist/` into the repository's `master` history!
+
+Assuming a project is on the `master` branch (though this is not required), the process looks like:
 
 1. `"preversion"` script is run as outlined above.
 1. _npm automatically bumps the `package.json` version._
 1. The npm `"version"` script will run:
-  1. `package.json` is staged and committed. The effect of this is that the `package.json` change exists in the history of `master` (or whichever branch you run `npm version` on).
-  1. Run `npm run build` so the new version number gets picked up in built assets.
+  1. CHANGELOG handling is performed as outlined previously.
+  1. `package.json` is staged and committed. The effect of this is that the `package.json` change exists in the history of `master`.
+  1. `npm run build` so the new version number gets picked up in build artifacts.
   1. The `dist/` directory will be _force-added_. Normally, it is ignored, but it needs to exist in the tag for Bower to install things properly.
 1. _npm automatically commits and tags._ This commit's changeset will contain only the `dist/` dir (the `package.json` bump is the parent commit).
 1. The npm `"postversion"` script will run:
@@ -216,10 +231,6 @@ This process results in a `master` history that looks something like this:
 `C`: signifies a conventional commit.
 `V`: signifies a version bump commit.
 `T`: tagged commit, with `dist/` included.
-
-#### Not Supporting Bower
-
-This is the easy case, but not the default in the generator. In this case, no tricky versioning workflow needs to be followed; however, tests are run before versioning and the build is run during versioning.
 
 ### Publishing
 

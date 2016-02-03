@@ -8,7 +8,9 @@ const FILES = {
 
   common: [
     'scripts/banner.ejs',
+    'scripts/postversion.js',
     'scripts/server.js',
+    'scripts/version.js',
     'test/karma.conf.js',
     'src/plugin.js',
     'test/index.html',
@@ -32,7 +34,6 @@ const FILES = {
   ],
 
   bower: [
-    'scripts/npm-version-for-bower.js',
     'bower.json'
   ]
 };

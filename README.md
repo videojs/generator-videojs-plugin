@@ -1,11 +1,11 @@
 # generator-videojs-plugin
 
-This is a [Yeoman][yo] generator for [video.js][vjs] plugins. It is based on the recommendations of the video.js core team as well as tools and conventions for developing plugins at [Brightcove][bcov].
+This is an opinionated [Yeoman][yo] generator for [video.js][vjs] plugins. It is based on the recommendations of the video.js core team as well as tools and conventions for developing plugins at [Brightcove][bcov].
 
 To learn more about video.js plugins and this generator's standards and opinions, check out:
 
 - [video.js Plugins Guide][plugins-guide].
-- [Brightcove's video.js Plugin Standards][standards].
+- [video.js Plugin Standards][standards].
 
 ### Table of Contents
 
@@ -15,10 +15,12 @@ To learn more about video.js plugins and this generator's standards and opinions
 
 - [Getting Started](#getting-started)
   - [Options](#options)
-    - [Brightcove Defaults](#brightcove-defaults)
     - [Install](#install)
     - [Prompt](#prompt)
     - [Hurry](#hurry)
+    - [Brightcove Defaults](#brightcove-defaults)
+- [Updating an Existing Project](#updating-an-existing-project)
+  - [Recommendations](#recommendations)
 - [Validation](#validation)
 - [License](#license)
 
@@ -42,12 +44,6 @@ You will be walked through several options and finish with a working, buildable,
 
 ### Options
 
-#### Brightcove Defaults
-
-Set certain values automatically for Brightcove-authored plugins. For example, all open-source Brightcove plugins use the Apache-2.0 license; so, the license prompt is not presented to the user.
-
-Turn Brightcove defaults on with: `yo videojs-plugin --bcov`
-
 #### Install
 
 By default, the generator will run `npm install` after it is finished. This can be a slow process and you may not always need it; so, it can be disabled (this option is provided by Yeoman itself, but it's useful and worth documenting here).
@@ -65,6 +61,34 @@ Turn prompts off with: `yo videojs-plugin --skip-prompt`
 If you don't want to change configuration, but just want to update an existing plugin and skip all the other stuff (prompts, installation, "yosay"s), you can use this option to do that. _You may need to run the installation manually if dependencies changed!_
 
 Turn prompts off with: `yo videojs-plugin --hurry`
+
+#### Brightcove Defaults
+
+Set certain values automatically for Brightcove-authored plugins. Has the following effects:
+
+- Sets the author to `"Brightcove, Inc."`
+- Limits open-source license options to `Apache-2.0` only.
+
+Turn on these Brightcove defaults with: `yo videojs-plugin --bcov`
+
+## Updating an Existing Project
+
+Running a Yeoman generator in an empty directory poses no difficulties; however, running it against an existing project can cause conflicts. Yeoman provides a mechanism, which can be confusing because it's not clearly documented, for resolving these conflicts. It will prompt you to choose one of: 
+
+- `Y`: yes (default)
+- `n`: no
+- `a`: yes to all
+- `x`: exit
+- `d`: diff
+- `h`: help
+
+### Recommendations
+
+Most of what this generator does is localized to the `package.json` file. Luckily, the generator does a good job of merging your existing contents with the generated contents. In general, it's safe to select `Y` for the `package.json` in your project.
+
+Other files you'll usually want to select `n` on - particularly those files plugin authors will edit the most: anything in `src/` or `test/`.
+
+However, files that are _not_ commonly edited by plugin authors may deserve a diff check (`d`) if you've made changes to these sorts of files. For example, anything in `scripts/`.
 
 ## Validation
 

@@ -11,8 +11,9 @@ const DEFAULTS = {
     'babel': '^5.8.0',
     'babelify': '^6.0.0',
     'bannerize': '^1.0.0',
-    'browserify': '^11.0.0',
+    'browserify': '^13.0.0',
     'browserify-shim': '^3.0.0',
+    'chg': '^0.3.2',
     'connect': '^3.4.0',
     'cowsay': '^1.1.0',
     'glob': '^6.0.3',
@@ -156,7 +157,8 @@ const packageJSON = (current, context) => {
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
       'preversion': 'npm test',
-      'version': 'npm run build',
+      'version': 'node scripts/version.js',
+      'postversion': 'node scripts/postversion.js',
       'watch': 'npm-run-all -p watch:*',
 
       'watch:js': scriptify([
@@ -231,6 +233,10 @@ const packageJSON = (current, context) => {
     `;
   });
 
+  if (context.changelog) {
+    result.scripts.change = 'chg add';
+  }
+
   // Support the Sass option.
   if (context.sass) {
     let sassCommand = [
@@ -252,9 +258,7 @@ const packageJSON = (current, context) => {
       'watch:css': scriptify(sassCommand.concat('-w src'))
     });
 
-    _.assign(result.devDependencies, {
-      'node-sass': '^3.4.0'
-    });
+    result.devDependencies['node-sass'] = '^3.4.0';
   }
 
   // Support the documentation tooling option.
@@ -277,22 +281,12 @@ const packageJSON = (current, context) => {
   // here because the videojs-languages package will create the destination
   // directory if needed.
   if (context.lang) {
-    _.assign(result.scripts, {
-      'build:lang': 'vjslang --dir dist/lang'
-    });
-
-    _.assign(result.devDependencies, {
-      'videojs-languages': '^1.0.0'
-    });
+    result.scripts['build:lang'] = 'vjslang --dir dist/lang';
+    result.devDependencies['videojs-languages'] = '^1.0.0';
   }
 
   if (context.bower) {
     result.files.push('bower.json');
-
-    _.assign(result.scripts, {
-      version: 'node scripts/npm-version-for-bower.js',
-      postversion: 'git reset --hard HEAD~1'
-    });
   }
 
   result.files.sort();

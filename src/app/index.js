@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import chalk from 'chalk';
+import chg from 'chg';
+import fs from 'fs';
 import path from 'path';
 import tsmlj from 'tsmlj';
 import yeoman from 'yeoman-generator';
@@ -128,6 +130,7 @@ export default yeoman.generators.Base.extend({
 
     let defaults = {
       bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
+      changelog: configs.hasOwnProperty('changelog') ? !!configs.changelog : true,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
@@ -214,6 +217,11 @@ export default yeoman.generators.Base.extend({
       })
     }, {
       type: 'confirm',
+      name: 'changelog',
+      message: 'Do you want to include CHANGELOG tool?',
+      default: defaults.changelog
+    }, {
+      type: 'confirm',
       name: 'sass',
       message: 'Do you want to include Sass styling?',
       default: defaults.sass
@@ -280,11 +288,12 @@ export default yeoman.generators.Base.extend({
 
     this._filesToCopy = [
       'scripts/_banner.ejs',
+      'scripts/_postversion.js',
       'scripts/_server.js',
+      'scripts/_version.js',
       '_.editorconfig',
       '_.gitignore',
-      '_.npmignore',
-      '_CHANGELOG.md'
+      '_.npmignore'
     ];
 
     this._templatesToCopy = [
@@ -361,6 +370,7 @@ export default yeoman.generators.Base.extend({
     return _.assign(_.pick(configs, [
       'author',
       'bower',
+      'changelog',
       'description',
       'docs',
       'lang',
@@ -404,7 +414,6 @@ export default yeoman.generators.Base.extend({
     }
 
     if (configs.bower) {
-      this._filesToCopy.push('scripts/_npm-version-for-bower.js');
       this._templatesToCopy.push('_bower.json');
     }
   },
@@ -415,6 +424,19 @@ export default yeoman.generators.Base.extend({
    * @property {Object} writing
    */
   writing: {
+
+    /**
+     * Initializes a CHANGELOG.md file if one does not exist.
+     *
+     * @function changelog
+     */
+    changelog() {
+      try {
+        fs.statSync(this._dest('CHANGELOG.md'));
+      } catch (x) {
+        chg.init(null, this.async());
+      }
+    },
 
     /**
      * Writes common files.
