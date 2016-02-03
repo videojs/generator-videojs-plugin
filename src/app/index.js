@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import chalk from 'chalk';
 import chg from 'chg';
+import fs from 'fs';
 import path from 'path';
 import tsmlj from 'tsmlj';
 import yeoman from 'yeoman-generator';
@@ -425,12 +426,16 @@ export default yeoman.generators.Base.extend({
   writing: {
 
     /**
-     * Initializes a CHANGELOG.md file.
+     * Initializes a CHANGELOG.md file if one does not exist.
      *
      * @function changelog
      */
     changelog() {
-      chg.init(null, this.async());
+      try {
+        fs.statSync(this._dest('CHANGELOG.md'));
+      } catch (x) {
+        chg.init(null, this.async());
+      }
     },
 
     /**
