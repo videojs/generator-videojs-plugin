@@ -1,6 +1,6 @@
 # generator-videojs-plugin
 
-This is a [Yeoman][yo] generator for [video.js][vjs] plugins. It is based on the recommendations of the video.js core team as well as tools and conventions for developing plugins at [Brightcove][bcov].
+This is an opinionated [Yeoman][yo] generator for [video.js][vjs] plugins. It is based on the recommendations of the video.js core team as well as tools and conventions for developing plugins at [Brightcove][bcov].
 
 To learn more about video.js plugins and this generator's standards and opinions, check out:
 
@@ -19,6 +19,8 @@ To learn more about video.js plugins and this generator's standards and opinions
     - [Prompt](#prompt)
     - [Hurry](#hurry)
     - [Brightcove Defaults](#brightcove-defaults)
+- [Updating an Existing Project](#updating-an-existing-project)
+  - [Recommendations](#recommendations)
 - [Validation](#validation)
 - [License](#license)
 
@@ -68,6 +70,25 @@ Set certain values automatically for Brightcove-authored plugins. Has the follow
 - Limits open-source license options to `Apache-2.0` only.
 
 Turn on these Brightcove defaults with: `yo videojs-plugin --bcov`
+
+## Updating an Existing Project
+
+Running a Yeoman generator in an empty directory poses no difficulties; however, running it against an existing project can cause conflicts. Yeoman provides a mechanism, which can be confusing because it's not clearly documented, for resolving these conflicts. It will prompt you to choose one of: 
+
+- `Y`: yes (default)
+- `n`: no
+- `a`: yes to all
+- `x`: exit
+- `d`: diff
+- `h`: help
+
+### Recommendations
+
+Most of what this generator does is localized to the `package.json` file. Luckily, the generator does a good job of merging your existing contents with the generated contents. In general, it's safe to select `Y` for the `package.json` in your project.
+
+Other files you'll usually want to select `n` on - particularly those files plugin authors will edit the most: anything in `src/` or `test/`.
+
+However, files that are _not_ commonly edited by plugin authors may deserve a diff check (`d`) if you've made changes to these sorts of files. For example, anything in `scripts/`.
 
 ## Validation
 
