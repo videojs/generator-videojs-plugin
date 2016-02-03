@@ -34,10 +34,15 @@ var server = budo({
  *         Can be an array of commands, which will be run in order.
  * @param  {String|Array} [outfile]
  *         If not given, triggers a hard reload.
+ * @param  {String} [message]
  */
-var execAndReload = function(cmd, outfile) {
+var recompile = function(cmd, outfile, message) {
   cmd = normalize(cmd);
   outfile = normalize(outfile);
+
+  if (message) {
+    console.log('Re-compiling %s', message);
+  }
 
   exec(cmd.join(' && '), function(err, stdout) {
     if (err) {
@@ -52,13 +57,20 @@ var execAndReload = function(cmd, outfile) {
   });
 };
 
+/**
+ * A collection of functions which are mapped to strings that are used to
+ * generate RegExp objects. If a filepath matches the RegExp, the function
+ * will be used to handle that watched file.
+ *
+ * @type {Object}
+ */
 var handlers = {
 
   /**
    * Handler for JavaScript source.
    *
+   * @param  {String} event
    * @param  {String} file
-   * @return {Function|Undefined}
    */
   '^src/.+\.js$': function(event, file) {
     var outfiles = [
@@ -67,25 +79,43 @@ var handlers = {
       'test/dist/bundle.js'
     ];
 
-    console.log('Re-compiling JavaScript and tests');
-    execAndReload(['npm run build:js', 'npm run build:test'], outfiles);
+    recompile(
+      ['npm run build:js', 'npm run build:test'],
+      outfiles
+      'javascript and tests'
+    );
   },
 
+  /**
+   * Handler for JavaScript tests.
+   *
+   * @param  {String} event
+   * @param  {String} file
+   */
   '^test/.+\.test\.js$': function(event, file) {
-    console.log('Re-compiling tests');
-    execAndReload('npm run build:test', 'test/dist/bundle.js');
+    recompile('npm run build:test', 'test/dist/bundle.js', 'tests');
   },
 
+  /**
+   * Handler for language JSON files.
+   *
+   * @param  {String} event
+   * @param  {String} file
+   */
   '^lang/.+\.json$': function(event, file) {
     var outfile = util.format('dist/lang/%s.js', path.basename(file, '.json'));
 
-    console.log('Re-compiling languages');
-    execAndReload('npm run build:lang', outfile);
+    recompile('npm run build:lang', outfile, 'languages');
   },
 
+  /**
+   * Handler for Sass source.
+   *
+   * @param  {String} event
+   * @param  {String} file
+   */
   '^src/.+\.scss$': function(event, file) {
-    console.log('Re-compiling Sass');
-    execAndReload('npm run build:css', nameify('dist/%s.css'));
+    recompile('npm run build:css', nameify('dist/%s.css'), 'sass');
   }
 };
 
