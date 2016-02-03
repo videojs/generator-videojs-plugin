@@ -8,7 +8,18 @@ var util = require('util');
 
 var pkg = require(path.join(__dirname, '../package.json'));
 
-var pluginName = pkg.name.split('/').reverse()[0];
+// Replace "%s" tokens with the plugin name in a string.
+var nameify = function(str) {
+  return str.replace(/%s/g, pkg.name.split('/').reverse()[0]);
+};
+
+// Normalize strings to arrays and filter out empties.
+var normalize = function(obj) {
+  if (typeof obj === 'string') {
+    obj = [obj];
+  }
+  return obj.filter(Boolean);
+};
 
 var server = budo({
   port: 9999,
@@ -16,20 +27,24 @@ var server = budo({
 });
 
 /**
- * Execute a CLI command and reload the given file.
+ * Execute CLI command(s) and reload the given file(s) or everything if none
+ * are given.
  *
- * @param  {String} script
- * @param  {String} outfile
+ * @param  {String|Array} cmd
+ *         Can be an array of commands, which will be run in order.
+ * @param  {String|Array} [outfile]
+ *         If not given, triggers a hard reload.
  */
-var execAndReload = function(script, outfile) {
-  exec(script, function(err, stdout) {
+var execAndReload = function(cmd, outfile) {
+  cmd = normalize(cmd);
+  outfile = normalize(outfile);
+
+  exec(cmd.join(' && '), function(err, stdout) {
     if (err) {
       console.error(err.stack);
-      return;
-    }
-    if (outfile) {
-      console.log('Reloading "%s"', outfile);
-      server.reload(outfile);
+    } else if (outfile.length) {
+      console.log('Reloading "%s"', outfile.join('", "'));
+      outfile.forEach(server.reload);
     } else {
       console.log('Hard reload!');
       server.reload();
@@ -37,46 +52,64 @@ var execAndReload = function(script, outfile) {
   });
 };
 
-// Functions that handle different files by their extension.
-var watchers = {
+var handlers = {
 
-  js: function(event, file) {
+  /**
+   * Handler for JavaScript source.
+   *
+   * @param  {String} file
+   * @return {Function|Undefined}
+   */
+  '^src/.+\.js$': function(event, file) {
+    var outfiles = [
+      nameify('dist/%s.js'),
+      nameify('dist/%s.min.js'),
+      'test/dist/bundle.js'
+    ];
 
-    // Regardless of whether a source file or a test file changed, we want to
-    // re-compile and reload test files.
-    var tasks = ['npm run build:test'];
-    var outfile = 'test/dist/bundle.js';
-    var message = 'Re-compiling tests';
-
-    // If this was _not_ a test file change, we need to re-compile and
-    // reload the JavaScript as well, but since this is a change in two
-    // bundles, we need to do a full reload.
-    if (file.substr(0, 4) === 'src/') {
-      tasks.push('npm run build:js');
-      outfile = null;
-      message += ' and JavaScript';
-    }
-
-    console.log(message);
-    execAndReload(tasks.join(' && '), outfile);
+    console.log('Re-compiling JavaScript and tests');
+    execAndReload(['npm run build:js', 'npm run build:test'], outfiles);
   },
 
-  json: function(event, file) {
+  '^test/.+\.test\.js$': function(event, file) {
+    console.log('Re-compiling tests');
+    execAndReload('npm run build:test', 'test/dist/bundle.js');
+  },
+
+  '^lang/.+\.json$': function(event, file) {
     var outfile = util.format('dist/lang/%s.js', path.basename(file, '.json'));
 
     console.log('Re-compiling languages');
     execAndReload('npm run build:lang', outfile);
   },
 
-  scss: function(event, file) {
-    var outfile = util.format('dist/%s.css', pluginName);
-
+  '^src/.+\.scss$': function(event, file) {
     console.log('Re-compiling Sass');
-    execAndReload('npm run build:css', outfile);
+    execAndReload('npm run build:css', nameify('dist/%s.css'));
+  }
+};
+
+/**
+ * Finds the first handler function for the file that matches a RegExp
+ * derived from the keys.
+ *
+ * @param  {String} file
+ * @return {Function|Undefined}
+ */
+var findHandler = function(file) {
+  var keys = Object.keys(handlers);
+  var regex;
+
+  for (var i = 0; i < keys.length; i++) {
+    regex = new RegExp(keys[i]);
+    if (regex.test(file)) {
+      return handlers[keys[i]];
+    }
   }
 };
 
 server
+  .live()
   .watch([
     'index.html',
     'lang/*.json',
@@ -84,16 +117,15 @@ server
     'test/**/*.test.js',
     'test/index.html'
   ])
-  .live()
   .on('watch', function(event, file) {
-    var watcher = watchers[path.extname(file).substr(1)];
+    var handler = findHandler(file);
 
-    console.log('Detected a "%s" in "%s"', event, file);
+    console.log('Detected a "%s" event in "%s"', event, file);
 
-    if (watcher) {
-      watcher(event, file);
+    if (handler) {
+      handler(event, file);
     } else {
-      console.log('Hard reload!', event, file);
+      console.log('Unmatched file, hard reload!', event, file);
       server.reload();
     }
   });
