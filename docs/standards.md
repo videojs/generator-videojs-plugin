@@ -1,4 +1,4 @@
-# Brightcove video.js Plugin Standards
+# video.js Plugin Standards
 
 When we refer to "standard video.js plugins" we are not referring to any official, codified standard (e.g. ECMAScript or HTML5). Rather, we are referring to the rules used internally at [Brightcove](https://www.brightcove.com) in developing both open-source and proprietary plugins for [video.js](http://videojs.com).
 
@@ -41,7 +41,7 @@ All standard video.js plugins _must_:
 - ...implement the core set of npm scripts.
 - ...be written in ES6 and pass `videojs-standard` linting.
 - ...have tests.
-- ...never check build artifacts into the repository.
+- ...never check build artifacts into `master` branch (or equivalent) history the repository.
 
 ## Packaging and Dependencies
 
@@ -127,7 +127,7 @@ npm Script    | Optional | Description
 `build:js`    |          | Builds the Browserify entry point.
 `build:lang`  | ✓        | Builds language files.
 `build:test`  |          | Builds the test Browserify entry point.
-`change`      | ✓        | Adds a free-form text entry to the CHANGELOG.
+`change`      | ✓        | Triggers a prompt to add an entry to the `CHANGELOG.md`. Can also be used like so: `npm run change -- "Describe some exciting new feature."`.
 `clean`       |          | Cleans up _all_ build artifacts.
 `docs`        | ✓        | Performs documentation tasks.
 `lint`        |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
@@ -138,8 +138,8 @@ npm Script    | Optional | Description
 `watch:css`   | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
 `watch:js`    |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
 `watch:test`  |          | Triggers a build when the test entry point changes.
-`version`     |          |
-`postversion` |          |
+`version`     |          | [see below](#versioning)
+`postversion` |          | [see below](#versioning)
 
 ## Coding Style
 
@@ -149,13 +149,13 @@ In an effort to reduce guess work, improve maintainability, avoid stylistic bike
 
 Its coding conventions are enforced in standard video.js plugins via the `npm run lint` command.
 
-_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores built scripts and any script(s) which must be written in ES5._
+_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores build artifacts and `scripts/`, which are written in ES5._
 
 ## Testing
 
 __All standard video.js plugins must have tests.__
 
-Testing is a critical element of any software project and it should be done in an environment as similar to production as possible. To that end, video.js tests should be run in a browser.
+Testing is a critical element of any software project and it should be done in an environment as similar to production as possible. To that end, video.js plugin tests should be run in a browser.
 
 Testing is performed with [QUnit](https://qunitjs.com/) as the testing framework and [Karma](https://karma-runner.github.io/) as the runner.
 
