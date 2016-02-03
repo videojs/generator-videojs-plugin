@@ -5,7 +5,7 @@ This is a [Yeoman][yo] generator for [video.js][vjs] plugins. It is based on the
 To learn more about video.js plugins and this generator's standards and opinions, check out:
 
 - [video.js Plugins Guide][plugins-guide].
-- [Brightcove's video.js Plugin Standards][standards].
+- [video.js Plugin Standards][standards].
 
 ### Table of Contents
 
@@ -15,10 +15,10 @@ To learn more about video.js plugins and this generator's standards and opinions
 
 - [Getting Started](#getting-started)
   - [Options](#options)
-    - [Brightcove Defaults](#brightcove-defaults)
     - [Install](#install)
     - [Prompt](#prompt)
     - [Hurry](#hurry)
+    - [Brightcove Defaults](#brightcove-defaults)
 - [Validation](#validation)
 - [License](#license)
 
@@ -42,12 +42,6 @@ You will be walked through several options and finish with a working, buildable,
 
 ### Options
 
-#### Brightcove Defaults
-
-Set certain values automatically for Brightcove-authored plugins. For example, all open-source Brightcove plugins use the Apache-2.0 license; so, the license prompt is not presented to the user.
-
-Turn Brightcove defaults on with: `yo videojs-plugin --bcov`
-
 #### Install
 
 By default, the generator will run `npm install` after it is finished. This can be a slow process and you may not always need it; so, it can be disabled (this option is provided by Yeoman itself, but it's useful and worth documenting here).
@@ -65,6 +59,15 @@ Turn prompts off with: `yo videojs-plugin --skip-prompt`
 If you don't want to change configuration, but just want to update an existing plugin and skip all the other stuff (prompts, installation, "yosay"s), you can use this option to do that. _You may need to run the installation manually if dependencies changed!_
 
 Turn prompts off with: `yo videojs-plugin --hurry`
+
+#### Brightcove Defaults
+
+Set certain values automatically for Brightcove-authored plugins. Has the following effects:
+
+- Sets the author to `"Brightcove, Inc."`
+- Limits open-source license options to `Apache-2.0` only.
+
+Turn on these Brightcove defaults with: `yo videojs-plugin --bcov`
 
 ## Validation
 
