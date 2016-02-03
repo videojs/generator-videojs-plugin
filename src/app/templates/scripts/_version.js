@@ -58,11 +58,13 @@ if (hasBower()) {
   ]);
 }
 
-exec(commands.join(' && '), function(err, stdout, stderr) {
-  if (err) {
-    process.stdout.write(err.stack);
-    process.exit(err.status || 1);
-  } else {
-    process.stdout.write(stdout);
-  }
-});
+if (commands.length) {
+  exec(commands.join(' && '), function(err, stdout, stderr) {
+    if (err) {
+      process.stdout.write(err.stack);
+      process.exit(err.status || 1);
+    } else {
+      process.stdout.write(stdout);
+    }
+  });
+}
