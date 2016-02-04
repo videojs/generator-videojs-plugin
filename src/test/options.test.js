@@ -1,5 +1,6 @@
 /* global before, describe, it */
 
+import _ from 'lodash';
 import * as libs from './libs';
 import {assert, test as helpers} from 'yeoman-generator';
 
@@ -45,6 +46,26 @@ describe('videojs-plugin:app options', function() {
       assert.strictEqual(this.pkg.author, 'Brightcove, Inc.');
       assert.strictEqual(this.pkg.license, 'UNLICENSED');
       assert.noFile(libs.fileList('oss'));
+    });
+  });
+
+  describe('--spellbook', function() {
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options({
+          spellbook: true
+        }))
+        .withPrompts({
+          name: 'options-spellbook',
+          author: 'nobody',
+          description: 'nothing'
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
+
+    it('produces expected package properties and file(s)', function() {
+      assert.file(libs.fileList('spellbook'));
+      assert.noFile(_.difference(libs.fileList('common'), libs.fileList('spellbook')));
     });
   });
 });

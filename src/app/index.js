@@ -255,6 +255,27 @@ export default yeoman.generators.Base.extend({
   },
 
   /**
+   * Makes adjustments in preparation for spellbook.
+   *
+   * @method _spellbookify
+   */
+  _spellbookify() {
+    _.pull(
+      this._filesToCopy,
+      'scripts/_banner.ejs',
+      'scripts/_postversion.js',
+      'scripts/_server.js',
+      'scripts/_version.js'
+    );
+
+    _.pull(
+      this._templatesToCopy,
+      'scripts/_build-test.js',
+      'test/_karma.conf.js'
+    );
+  },
+
+  /**
    * Sets up the generator.
    *
    * @method constructor
@@ -273,6 +294,11 @@ export default yeoman.generators.Base.extend({
     });
 
     this.option('hurry', {
+      type: 'boolean',
+      defaults: false
+    });
+
+    this.option('spellbook', {
       type: 'boolean',
       defaults: false
     });
@@ -323,7 +349,8 @@ export default yeoman.generators.Base.extend({
     }
 
     this._configsTemp = {
-      bcov: this.options.bcov || !!this.config.get('bcov')
+      bcov: this.options.bcov || !!this.config.get('bcov'),
+      spellbook: this.options.spellbook || !!this.config.get('spellbook')
     };
 
     // Handle the Brightcove option/config.
@@ -411,6 +438,10 @@ export default yeoman.generators.Base.extend({
 
     if (!this._isPrivate()) {
       this._filesToCopy.push('_.travis.yml');
+    }
+
+    if (configs.spellbook) {
+      this._spellbookify();
     }
 
     if (configs.lang) {

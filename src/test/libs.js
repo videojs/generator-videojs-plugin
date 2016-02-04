@@ -33,6 +33,19 @@ const FILES = {
     'src/plugin.scss'
   ],
 
+  spellbook: [
+    'src/plugin.js',
+    'test/index.html',
+    'test/plugin.test.js',
+    '.editorconfig',
+    '.gitignore',
+    '.npmignore',
+    'CHANGELOG.md',
+    'CONTRIBUTING.md',
+    'index.html',
+    'README.md'
+  ],
+
   bower: [
     'bower.json'
   ]
