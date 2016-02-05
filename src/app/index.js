@@ -264,13 +264,13 @@ export default yeoman.generators.Base.extend({
       this._filesToCopy,
       'scripts/_banner.ejs',
       'scripts/_postversion.js',
-      'scripts/_server.js',
       'scripts/_version.js'
     );
 
     _.pull(
       this._templatesToCopy,
       'scripts/_build-test.js',
+      'scripts/_server.js',
       'test/_karma.conf.js'
     );
   },
@@ -409,7 +409,8 @@ export default yeoman.generators.Base.extend({
       'docs',
       'ghooks',
       'lang',
-      'sass'
+      'sass',
+      'spellbook'
     ]), {
       className: `vjs-${configs.name}`,
       functionName: _.camelCase(configs.name),
