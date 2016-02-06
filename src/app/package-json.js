@@ -8,10 +8,14 @@ const DEFAULTS = {
     'video.js': '^5.6.0'
   },
   devDependencies: {
+
+    // Sticking with Babel 5 for now. No significantly compelling reason to upgrade.
     'babel': '^5.8.0',
     'babelify': '^6.0.0',
     'bannerize': '^1.0.0',
-    'browserify': '^13.0.0',
+
+    // browserify-shim wants browserify < 13.
+    'browserify': '^12.0.0',
     'browserify-shim': '^3.0.0',
     'budo': '^8.0.0',
     'glob': '^6.0.3',
