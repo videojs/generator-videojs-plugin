@@ -14,7 +14,6 @@ const DEFAULTS = {
     'browserify': '^13.0.0',
     'browserify-shim': '^3.0.0',
     'budo': '^8.0.0',
-    'chg': '^0.3.2',
     'glob': '^6.0.3',
     'global': '^4.3.0',
     'karma': '^0.13.0',
@@ -219,6 +218,7 @@ const packageJSON = (current, context) => {
   });
 
   if (context.changelog) {
+    result.devDependencies.chg = '^0.3.2';
     result.scripts.change = 'chg add';
   }
 
