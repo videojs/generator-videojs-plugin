@@ -1,27 +1,21 @@
-var babelify = require('babelify');
-var shim = require('browserify-shim');
-var budo = require('budo');
-var exec = require('child_process').exec;
-var glob = require('glob');
-var path = require('path');
-var util = require('util');
+import budo from 'budo';
+import {exec} from 'child_process';
+import path from 'path';
+import util from 'util';
 
-var pkg = require(path.join(__dirname, '../package.json'));
+/* eslint no-console: 0 */
+
+const pkg = require(path.join(__dirname, '../package.json'));
 
 // Replace "%s" tokens with the plugin name in a string.
-var nameify = function(str) {
-  return str.replace(/%s/g, pkg.name.split('/').reverse()[0]);
-};
+const nameify = (str) =>
+  str.replace(/%s/g, pkg.name.split('/').reverse()[0]);
 
 // Normalize strings to arrays and filter out empties.
-var normalize = function(obj) {
-  if (typeof obj === 'string') {
-    obj = [obj];
-  }
-  return obj.filter(Boolean);
-};
+const normalize = (obj) =>
+  (typeof obj === 'string' ? [obj] : obj).filter(Boolean);
 
-var server = budo({
+const server = budo({
   port: 9999,
   stream: process.stdout
 });
@@ -36,7 +30,7 @@ var server = budo({
  *         If not given, triggers a hard reload.
  * @param  {String} [message]
  */
-var recompile = function(cmd, outfile, message) {
+const recompile = (cmd, outfile, message) => {
   cmd = normalize(cmd);
   outfile = normalize(outfile);
 
@@ -44,7 +38,7 @@ var recompile = function(cmd, outfile, message) {
     console.log('Re-compiling %s', message);
   }
 
-  exec(cmd.join(' && '), function(err, stdout) {
+  exec(cmd.join(' && '), (err, stdout) => {
     if (err) {
       console.error(err.stack);
     } else if (outfile.length) {
@@ -64,7 +58,7 @@ var recompile = function(cmd, outfile, message) {
  *
  * @type {Object}
  */
-var handlers = {
+const handlers = {
 
   /**
    * Handler for JavaScript source.
@@ -72,8 +66,8 @@ var handlers = {
    * @param  {String} event
    * @param  {String} file
    */
-  '^src/.+\.js$': function(event, file) {
-    var outfiles = [
+  '^src/.+\.js$'(event, file) {
+    const outfiles = [
       nameify('dist/%s.js'),
       nameify('dist/%s.min.js'),
       'test/dist/bundle.js'
@@ -81,7 +75,7 @@ var handlers = {
 
     recompile(
       ['npm run build:js', 'npm run build:test'],
-      outfiles
+      outfiles,
       'javascript and tests'
     );
   },
@@ -92,7 +86,7 @@ var handlers = {
    * @param  {String} event
    * @param  {String} file
    */
-  '^test/.+\.test\.js$': function(event, file) {
+  '^test/.+\.test\.js$'(event, file) {
     recompile('npm run build:test', 'test/dist/bundle.js', 'tests');
   },
 
@@ -102,8 +96,8 @@ var handlers = {
    * @param  {String} event
    * @param  {String} file
    */
-  '^lang/.+\.json$': function(event, file) {
-    var outfile = util.format('dist/lang/%s.js', path.basename(file, '.json'));
+  '^lang/.+\.json$'(event, file) {
+    const outfile = util.format('dist/lang/%s.js', path.basename(file, '.json'));
 
     recompile('npm run build:lang', outfile, 'languages');
   },
@@ -114,7 +108,7 @@ var handlers = {
    * @param  {String} event
    * @param  {String} file
    */
-  '^src/.+\.scss$': function(event, file) {
+  '^src/.+\.scss$'(event, file) {
     recompile('npm run build:css', nameify('dist/%s.css'), 'sass');
   }
 };
@@ -126,12 +120,12 @@ var handlers = {
  * @param  {String} file
  * @return {Function|Undefined}
  */
-var findHandler = function(file) {
-  var keys = Object.keys(handlers);
-  var regex;
+const findHandler = (file) => {
+  const keys = Object.keys(handlers);
 
-  for (var i = 0; i < keys.length; i++) {
-    regex = new RegExp(keys[i]);
+  for (let i = 0; i < keys.length; i++) {
+    let regex = new RegExp(keys[i]);
+
     if (regex.test(file)) {
       return handlers[keys[i]];
     }
@@ -147,8 +141,8 @@ server
     'test/**/*.test.js',
     'test/index.html'
   ])
-  .on('watch', function(event, file) {
-    var handler = findHandler(file);
+  .on('watch', (event, file) => {
+    const handler = findHandler(file);
 
     console.log('Detected a "%s" event in "%s"', event, file);
 

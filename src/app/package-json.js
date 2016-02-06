@@ -146,16 +146,16 @@ const packageJSON = (current, context) => {
         '-o dist/%s.min.js'
       ]),
 
-      'build:test': 'node scripts/build-test.js',
+      'build:test': 'babel-node scripts/build-test.js',
       'clean': 'rimraf dist test/dist es5 && mkdirp dist test/dist es5',
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
-      'start': 'node scripts/server.js',
+      'start': 'babel-node scripts/server.js',
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
       'preversion': 'npm test',
-      'version': 'node scripts/version.js',
-      'postversion': 'node scripts/postversion.js'
+      'version': 'babel-node scripts/version.js',
+      'postversion': 'babel-node scripts/postversion.js'
     }),
 
     // Always include the two minimum keywords with whatever exists in the
@@ -188,8 +188,7 @@ const packageJSON = (current, context) => {
         'docs',
         'es5',
         'test/dist',
-        'test/karma.conf.js',
-        'scripts'
+        'test/karma.conf.js'
       ]
     },
 

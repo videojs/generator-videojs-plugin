@@ -145,7 +145,7 @@ In an effort to reduce guess work, improve maintainability, avoid stylistic bike
 
 Its coding conventions are enforced in standard video.js plugins via the `npm run lint` command.
 
-_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores build artifacts and `scripts/`, which are written in ES5._
+_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores build artifacts, which are written in ES5._
 
 ## Testing
 
