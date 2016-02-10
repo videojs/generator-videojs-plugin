@@ -1,7 +1,16 @@
+import Promise from 'bluebird';
+import browserify from 'browserify';
 import budo from 'budo';
-import {exec} from 'child_process';
+import fs from 'fs';
+import glob from 'glob';
+import mkdirp from 'mkdirp';
+<% if (sass) { -%>
+import sass from 'node-sass';
+<% } -%>
 import path from 'path';
-import util from 'util';
+<% if (lang) { -%>
+import vjslangs from 'videojs-languages';
+<% } -%>
 
 /* eslint no-console: 0 */
 
@@ -11,44 +20,63 @@ const pkg = require(path.join(__dirname, '../package.json'));
 const nameify = (str) =>
   str.replace(/%s/g, pkg.name.split('/').reverse()[0]);
 
-// Normalize strings to arrays and filter out empties.
-const normalize = (obj) =>
-  (typeof obj === 'string' ? [obj] : obj).filter(Boolean);
+const srces = {
+<% if (sass) { -%>
+  css: 'src/plugin.scss',
+<% } -%>
+  js: 'src/plugin.js',
+<% if (lang) { -%>
+  langs: 'lang/*.json',
+<% } -%>
+  tests: glob.sync('test/**/*.test.js')
+};
+
+const dests = {
+<% if (sass) { -%>
+  css: nameify('dist/%s.css'),
+<% } -%>
+  js: nameify('dist/%s.js'),
+<% if (lang) { -%>
+  langs: 'dist/lang',
+<% } -%>
+  tests: 'test/dist/bundle.js'
+};
+
+const bundlers = {
+
+  js: browserify({
+    debug: true,
+    entries: [srces.js],
+    standalone: nameify('%s'),
+    transform: [
+      'babelify',
+      'browserify-shim',
+      'browserify-versionify'
+    ]
+  }),
+
+  tests: browserify({
+    debug: true,
+    entries: srces.tests,
+    transform: [
+      'babelify',
+      'browserify-shim',
+      'browserify-versionify'
+    ]
+  })
+};
+
+const bundle = (name) =>
+  bundlers[name].bundle().pipe(fs.createWriteStream(dests[name]));
 
 const server = budo({
   port: 9999,
   stream: process.stdout
 });
 
-/**
- * Execute CLI command(s) and reload the given file(s) or everything if none
- * are given.
- *
- * @param  {String|Array} cmd
- *         Can be an array of commands, which will be run in order.
- * @param  {String|Array} [outfile]
- *         If not given, triggers a hard reload.
- * @param  {String} [message]
- */
-const recompile = (cmd, outfile, message) => {
-  cmd = normalize(cmd);
-  outfile = normalize(outfile);
-
-  if (message) {
-    console.log('Re-compiling %s', message);
-  }
-
-  exec(cmd.join(' && '), (err, stdout) => {
-    if (err) {
-      console.error(err.stack);
-    } else if (outfile.length) {
-      console.log('Reloading "%s"', outfile.join('", "'));
-      outfile.forEach(server.reload);
-    } else {
-      console.log('Hard reload!');
-      server.reload();
-    }
-  });
+const reload = () => {
+  console.log('reloading');
+  server.reload();
 };
 
 /**
@@ -59,6 +87,36 @@ const recompile = (cmd, outfile, message) => {
  * @type {Object}
  */
 const handlers = {
+<% if (lang) { -%>
+
+  /**
+   * Handler for language JSON files.
+   *
+   * @param  {String} event
+   * @param  {String} file
+   */
+  '^lang/.+\.json$'(event, file) {
+    console.log('re-compiling languages');
+    vjslangs(srces.langs, dests.langs);
+    reload();
+  },
+<% } -%>
+<% if (sass) { -%>
+
+  /**
+   * Handler for Sass source.
+   *
+   * @param  {String} event
+   * @param  {String} file
+   */
+  '^src/.+\.scss$'(event, file) {
+    console.log('re-compiling sass');
+    let result = sass.renderSync({file: srces.css, outputStyle: 'compressed'});
+
+    fs.writeFileSync(dests.css, result.css);
+    reload();
+  },
+<% } -%>
 
   /**
    * Handler for JavaScript source.
@@ -67,17 +125,16 @@ const handlers = {
    * @param  {String} file
    */
   '^src/.+\.js$'(event, file) {
-    const outfiles = [
-      nameify('dist/%s.js'),
-      nameify('dist/%s.min.js'),
-      'test/dist/bundle.js'
-    ];
+    console.log('re-bundling javascript and tests');
+    let js = new Promise((resolve, reject) => {
+      bundle('js').on('finish', resolve).on('error', reject);
+    });
 
-    recompile(
-      ['npm run build:js', 'npm run build:test'],
-      outfiles,
-      'javascript and tests'
-    );
+    let tests = new Promise((resolve, reject) => {
+      bundle('tests').on('finish', resolve).on('error', reject);
+    });
+
+    Promise.all([js, tests]).then(reload);
   },
 
   /**
@@ -87,29 +144,8 @@ const handlers = {
    * @param  {String} file
    */
   '^test/.+\.test\.js$'(event, file) {
-    recompile('npm run build:test', 'test/dist/bundle.js', 'tests');
-  },
-
-  /**
-   * Handler for language JSON files.
-   *
-   * @param  {String} event
-   * @param  {String} file
-   */
-  '^lang/.+\.json$'(event, file) {
-    const outfile = util.format('dist/lang/%s.js', path.basename(file, '.json'));
-
-    recompile('npm run build:lang', outfile, 'languages');
-  },
-
-  /**
-   * Handler for Sass source.
-   *
-   * @param  {String} event
-   * @param  {String} file
-   */
-  '^src/.+\.scss$'(event, file) {
-    recompile('npm run build:css', nameify('dist/%s.css'), 'sass');
+    console.log('re-bundling tests');
+    bundle('tests').on('finish', reload);
   }
 };
 
@@ -132,24 +168,34 @@ const findHandler = (file) => {
   }
 };
 
+mkdirp('dist');
+bundle('js');
+bundle('tests');
+
 server
   .live()
   .watch([
     'index.html',
+<% if (lang) { -%>
     'lang/*.json',
+<% } -%>
+<% if (sass) { -%>
     'src/**/*.{scss,js}',
+<% } else { -%>
+    'src/**/*.js',
+<% } -%>
     'test/**/*.test.js',
     'test/index.html'
   ])
   .on('watch', (event, file) => {
     const handler = findHandler(file);
 
-    console.log('Detected a "%s" event in "%s"', event, file);
+    console.log(`detected a "${event}" event in "${file}"`);
 
     if (handler) {
       handler(event, file);
     } else {
-      console.log('Unmatched file, hard reload!', event, file);
-      server.reload();
+      console.log(`detected a "${event}" event in unmatched file "${file}"`);
+      reload();
     }
   });
