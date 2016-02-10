@@ -17,6 +17,7 @@ const DEFAULTS = {
     // browserify-shim wants browserify < 13.
     'browserify': '^12.0.0',
     'browserify-shim': '^3.0.0',
+    'browserify-versionify': '^1.0.6',
     'budo': '^8.0.0',
     'glob': '^6.0.3',
     'global': '^4.3.0',
@@ -166,7 +167,10 @@ const packageJSON = (current, context) => {
     'license': context.licenseName,
 
     'browserify': {
-      transform: ['browserify-shim']
+      transform: [
+        'browserify-shim',
+        'browserify-versionify'
+      ]
     },
 
     'browserify-shim': {
