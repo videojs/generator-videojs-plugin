@@ -59,12 +59,12 @@ describe('videojs-plugin:app', function() {
     it('populates versioning scripts', function() {
       assert.strictEqual(
         this.pkg.scripts.version,
-        'node scripts/version.js'
+        'babel-node scripts/version.js'
       );
 
       assert.strictEqual(
         this.pkg.scripts.postversion,
-        'node scripts/postversion.js'
+        'babel-node scripts/postversion.js'
       );
     });
 
