@@ -7,7 +7,7 @@ var path = require('path');
 var sh = require('shelljs');
 
 var configs = {
-  v1: {
+  v2: {
     files: [
       'test/karma',
       'scripts/npm-postversion-for-bower.sh',
