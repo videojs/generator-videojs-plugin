@@ -10,30 +10,31 @@ const DEFAULTS = {
   devDependencies: {
 
     // Sticking with Babel 5 for now. No significantly compelling reason to upgrade.
-    'babel': '^5.8.0',
-    'babelify': '^6.0.0',
-    'bannerize': '^1.0.0',
+    'babel': '^5.8.35',
+    'babelify': '^6.4.0',
+    'bannerize': '^1.0.2',
+    'bluebird': '^3.2.2',
 
     // browserify-shim wants browserify < 13.
-    'browserify': '^12.0.0',
-    'browserify-shim': '^3.0.0',
+    'browserify': '^12.0.2',
+    'browserify-shim': '^3.8.12',
     'browserify-versionify': '^1.0.6',
-    'budo': '^8.0.0',
+    'budo': '^8.0.4',
     'glob': '^6.0.3',
     'global': '^4.3.0',
-    'karma': '^0.13.0',
-    'karma-chrome-launcher': '^0.2.0',
-    'karma-detect-browsers': '^2.0.0',
-    'karma-firefox-launcher': '^0.1.0',
+    'karma': '^0.13.19',
+    'karma-chrome-launcher': '^0.2.2',
+    'karma-detect-browsers': '^2.0.2',
+    'karma-firefox-launcher': '^0.1.7',
     'karma-ie-launcher': '^0.2.0',
-    'karma-qunit': '^0.1.0',
-    'karma-safari-launcher': '^0.1.0',
+    'karma-qunit': '^0.1.9',
+    'karma-safari-launcher': '^0.1.1',
     'mkdirp': '^0.5.1',
-    'npm-run-all': '^1.2.0',
-    'qunitjs': '^1.0.0',
+    'npm-run-all': '^1.5.1',
+    'qunitjs': '^1.21.0',
     'rimraf': '^2.5.1',
-    'sinon': '^1.0.0',
-    'uglify-js': '^2.5.0',
+    'sinon': '~1.14.0',
+    'uglify-js': '^2.6.1',
     'videojs-standard': '^4.0.0'
   }
 };
@@ -247,7 +248,7 @@ const packageJSON = (current, context) => {
       ])
     });
 
-    result.devDependencies['node-sass'] = '^3.4.0';
+    result.devDependencies['node-sass'] = '^3.4.2';
   }
 
   // Support the documentation tooling option.
