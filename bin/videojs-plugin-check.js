@@ -12,7 +12,7 @@ var tap = require('tap');
 tap.unpipe(process.stdout).pipe(parser()).on('assert', function(assert) {
   var color = assert.ok ? 'green' : 'red';
   var prefix = assert.ok ? '✓' : '⨯';
-  process.stdout.write(chalk[color](prefix + ' ' + assert.name) + '\n');
+  console.log(chalk[color](prefix + ' ' + assert.name));
 });
 
 glob(path.join(__dirname, '../es5-check/*.test.js'), function(err, files) {
