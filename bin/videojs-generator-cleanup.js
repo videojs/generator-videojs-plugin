@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var fs = require('fs-extra');
 var _ = require('lodash');
 var path = require('path');
+var semver = require('semver');
 var sh = require('shelljs');
 
 var configs = {
@@ -33,10 +34,8 @@ var configs = {
   }
 };
 
-var major = Number(require('../package.json').version.split('.')[0]);
-
+var major = semver.major(require('../package.json').version);
 var config = configs['v' + major];
-
 var files, filename, pkg;
 
 if (!config) {
