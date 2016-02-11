@@ -66,136 +66,130 @@ const bundlers = {
   })
 };
 
-const bundle = (name) =>
-  bundlers[name].bundle().pipe(fs.createWriteStream(dests[name]));
-
-const server = budo({
-  port: 9999,
-  stream: process.stdout
-});
-
-const reload = () => {
-  console.log('reloading');
-  server.reload();
-};
-
-/**
- * A collection of functions which are mapped to strings that are used to
- * generate RegExp objects. If a filepath matches the RegExp, the function
- * will be used to handle that watched file.
- *
- * @type {Object}
- */
-const handlers = {
-<% if (lang) { -%>
-
-  /**
-   * Handler for language JSON files.
-   *
-   * @param  {String} event
-   * @param  {String} file
-   */
-  '^lang/.+\.json$'(event, file) {
-    console.log('re-compiling languages');
-    vjslangs(srces.langs, dests.langs);
-    reload();
-  },
-<% } -%>
-<% if (sass) { -%>
-
-  /**
-   * Handler for Sass source.
-   *
-   * @param  {String} event
-   * @param  {String} file
-   */
-  '^src/.+\.scss$'(event, file) {
-    console.log('re-compiling sass');
-    let result = sass.renderSync({file: srces.css, outputStyle: 'compressed'});
-
-    fs.writeFileSync(dests.css, result.css);
-    reload();
-  },
-<% } -%>
-
-  /**
-   * Handler for JavaScript source.
-   *
-   * @param  {String} event
-   * @param  {String} file
-   */
-  '^src/.+\.js$'(event, file) {
-    console.log('re-bundling javascript and tests');
-    let js = new Promise((resolve, reject) => {
-      bundle('js').on('finish', resolve).on('error', reject);
-    });
-
-    let tests = new Promise((resolve, reject) => {
-      bundle('tests').on('finish', resolve).on('error', reject);
-    });
-
-    Promise.all([js, tests]).then(reload);
-  },
-
-  /**
-   * Handler for JavaScript tests.
-   *
-   * @param  {String} event
-   * @param  {String} file
-   */
-  '^test/.+\.test\.js$'(event, file) {
-    console.log('re-bundling tests');
-    bundle('tests').on('finish', reload);
-  }
-};
-
-/**
- * Finds the first handler function for the file that matches a RegExp
- * derived from the keys.
- *
- * @param  {String} file
- * @return {Function|Undefined}
- */
-const findHandler = (file) => {
-  const keys = Object.keys(handlers);
-
-  for (let i = 0; i < keys.length; i++) {
-    let regex = new RegExp(keys[i]);
-
-    if (regex.test(file)) {
-      return handlers[keys[i]];
-    }
-  }
-};
-
-mkdirp('dist');
-bundle('js');
-bundle('tests');
-
-server
-  .live()
-  .watch([
-    'index.html',
-<% if (lang) { -%>
-    'lang/*.json',
-<% } -%>
-<% if (sass) { -%>
-    'src/**/*.{scss,js}',
-<% } else { -%>
-    'src/**/*.js',
-<% } -%>
-    'test/**/*.test.js',
-    'test/index.html'
-  ])
-  .on('watch', (event, file) => {
-    const handler = findHandler(file);
-
-    console.log(`detected a "${event}" event in "${file}"`);
-
-    if (handler) {
-      handler(event, file);
-    } else {
-      console.log(`detected a "${event}" event in unmatched file "${file}"`);
-      reload();
-    }
+const bundle = (name) => {
+  return new Promise((resolve, reject) => {
+    bundlers[name]
+      .bundle()
+      .pipe(fs.createWriteStream(dests[name]))
+      .on('finish', resolve)
+      .on('error', reject);
   });
+};
+
+mkdirp.sync('dist');
+
+// Start the server _after_ the initial bundling is done.
+Promise.all([bundle('js'), bundle('tests')]).then(() => {
+  const server = budo({
+    port: 9999,
+    stream: process.stdout
+  });
+
+  /**
+   * A collection of functions which are mapped to strings that are used to
+   * generate RegExp objects. If a filepath matches the RegExp, the function
+   * will be used to handle that watched file.
+   *
+   * @type {Object}
+   */
+  const handlers = {
+<% if (lang) { -%>
+
+    /**
+     * Handler for language JSON files.
+     *
+     * @param  {String} event
+     * @param  {String} file
+     */
+    '^lang/.+\.json$'(event, file) {
+      console.log('re-compiling languages');
+      vjslangs(srces.langs, dests.langs);
+      reload();
+    },
+<% } -%>
+<% if (sass) { -%>
+
+    /**
+     * Handler for Sass source.
+     *
+     * @param  {String} event
+     * @param  {String} file
+     */
+    '^src/.+\.scss$'(event, file) {
+      console.log('re-compiling sass');
+      let result = sass.renderSync({file: srces.css, outputStyle: 'compressed'});
+
+      fs.writeFileSync(dests.css, result.css);
+      reload();
+    },
+<% } -%>
+
+    /**
+     * Handler for JavaScript source.
+     *
+     * @param  {String} event
+     * @param  {String} file
+     */
+    '^src/.+\.js$'(event, file) {
+      console.log('re-bundling javascript and tests');
+      Promise.all([bundle('js'), bundle('tests')]).then(reload);
+    },
+
+    /**
+     * Handler for JavaScript tests.
+     *
+     * @param  {String} event
+     * @param  {String} file
+     */
+    '^test/.+\.test\.js$'(event, file) {
+      console.log('re-bundling tests');
+      bundle('tests').then(reload);
+    }
+  };
+
+  /**
+   * Finds the first handler function for the file that matches a RegExp
+   * derived from the keys.
+   *
+   * @param  {String} file
+   * @return {Function|Undefined}
+   */
+  const findHandler = (file) => {
+    const keys = Object.keys(handlers);
+
+    for (let i = 0; i < keys.length; i++) {
+      let regex = new RegExp(keys[i]);
+
+      if (regex.test(file)) {
+        return handlers[keys[i]];
+      }
+    }
+  };
+
+  server
+    .live()
+    .watch([
+      'index.html',
+<% if (lang) { -%>
+      'lang/*.json',
+<% } -%>
+<% if (sass) { -%>
+      'src/**/*.{scss,js}',
+<% } else { -%>
+      'src/**/*.js',
+<% } -%>
+      'test/**/*.test.js',
+      'test/index.html'
+    ])
+    .on('watch', (event, file) => {
+      const handler = findHandler(file);
+
+      console.log(`detected a "${event}" event in "${file}"`);
+
+      if (handler) {
+        handler(event, file);
+      } else {
+        reload();
+      }
+    });
+});
