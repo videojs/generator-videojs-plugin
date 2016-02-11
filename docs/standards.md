@@ -131,13 +131,9 @@ npm Script    | Optional | Description
 `clean`       |          | Cleans up _all_ build artifacts.
 `docs`        | ✓        | Performs documentation tasks.
 `lint`        |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
-`start`       |          | Starts a development server at port `9999` (or closest open port) and runs `watch`.
+`start`       |          | Starts a development server at port `9999` (or closest open port) with live reload and automatic background builds.
 `test`        |          | Runs `lint`, builds tests, and runs tests in available browsers.
 `test:*`      | ✓        | Browser-specific tests (e.g. `test:firefox`).
-`watch`       |          | Watches everything and runs appropriate tasks.
-`watch:css`   | ✓        | Triggers a build when the Sass entry point changes (without banner comment).
-`watch:js`    |          | Triggers a build when the Browserify entry point changes (without banner comment or minification).
-`watch:test`  |          | Triggers a build when the test entry point changes.
 `version`     |          | [see below](#versioning)
 `postversion` |          | [see below](#versioning)
 
@@ -149,7 +145,7 @@ In an effort to reduce guess work, improve maintainability, avoid stylistic bike
 
 Its coding conventions are enforced in standard video.js plugins via the `npm run lint` command.
 
-_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores build artifacts and `scripts/`, which are written in ES5._
+_`videojs-standard` assumes all code it evaluates is written in ES6. Therefore, it ignores build artifacts, which are written in ES5._
 
 ## Testing
 

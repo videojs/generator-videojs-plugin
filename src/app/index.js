@@ -289,7 +289,6 @@ export default yeoman.generators.Base.extend({
     this._filesToCopy = [
       'scripts/_banner.ejs',
       'scripts/_postversion.js',
-      'scripts/_server.js',
       'scripts/_version.js',
       '_.editorconfig',
       '_.gitignore',
@@ -298,7 +297,7 @@ export default yeoman.generators.Base.extend({
 
     this._templatesToCopy = [
       'scripts/_build-test.js',
-      'scripts/_watch-test.js',
+      'scripts/_server.js',
       'src/_plugin.js',
       'test/_karma.conf.js',
       'test/_index.html',

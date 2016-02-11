@@ -39,4 +39,7 @@ const <%= functionName %> = function(options) {
 // Register the plugin with video.js.
 videojs.plugin('<%= functionName %>', <%= functionName %>);
 
+// Include the version number.
+<%= functionName %>.VERSION = '__VERSION__';
+
 export default <%= functionName %>;

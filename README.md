@@ -21,7 +21,9 @@ To learn more about video.js plugins and this generator's standards and opinions
     - [Brightcove Defaults](#brightcove-defaults)
 - [Updating an Existing Project](#updating-an-existing-project)
   - [Recommendations](#recommendations)
-- [Validation](#validation)
+- [Extra Tools](#extra-tools)
+  - [Cleanup with `vjsgenclean`](#cleanup-with-vjsgenclean)
+  - [Validation with `vjsplugincheck`](#validation-with-vjsplugincheck)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -90,17 +92,29 @@ Other files you'll usually want to select `n` on - particularly those files plug
 
 However, files that are _not_ commonly edited by plugin authors may deserve a diff check (`d`) if you've made changes to these sorts of files. For example, anything in `scripts/`.
 
-## Validation
+## Extra Tools
 
-Also provided by this generator is a CLI application for validating a directory as following current [video.js Plugin Standards][standards]. Using it is very simple; run the following command:
+This generator provides some simple CLI programs that go beyond the basic generator behavior.
+
+These programs can be used on any plugin project - not just those using the generator! They do not provide prompts or accept arguments or options; they do one thing only. The only expectation is that they are run in the project root of a video.js plugin (`process.cwd()`).
+
+### Cleanup with `vjsgenclean`
+
+The generator is non-destructive: it will only add to or update your project. This script will _remove_ files and `package.json` fields that were removed since the previous major version of the generator.
+
+For example, if `1.x` produced the file `foo/bar.js`, but `2.x` does not, this script will delete it.
+
+```sh
+$ vjsgenclean
+```
+
+### Validation with `vjsplugincheck`
+
+This script supports validating a directory as following current [video.js Plugin Standards][standards]. Using it is very simple; run the following command:
 
 ```sh
 $ vjsplugincheck
 ```
-
-There are no options or arguments available or needed. This will run a series of tests against the contents of `process.cwd()` (the current directory).
-
-_Note: this command can be used on any plugin project - not just those using the generator!_
 
 ## License
 

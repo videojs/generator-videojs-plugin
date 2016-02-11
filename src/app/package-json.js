@@ -8,33 +8,34 @@ const DEFAULTS = {
     'video.js': '^5.6.0'
   },
   devDependencies: {
-    'babel': '^5.8.0',
-    'babelify': '^6.0.0',
-    'bannerize': '^1.0.0',
-    'browserify': '^13.0.0',
-    'browserify-shim': '^3.0.0',
-    'chg': '^0.3.2',
-    'connect': '^3.4.0',
-    'cowsay': '^1.1.0',
+
+    // Sticking with Babel 5 for now. No significantly compelling reason to upgrade.
+    'babel': '^5.8.35',
+    'babelify': '^6.4.0',
+    'bannerize': '^1.0.2',
+    'bluebird': '^3.2.2',
+
+    // browserify-shim wants browserify < 13.
+    'browserify': '^12.0.2',
+    'browserify-shim': '^3.8.12',
+    'browserify-versionify': '^1.0.6',
+    'budo': '^8.0.4',
     'glob': '^6.0.3',
     'global': '^4.3.0',
-    'karma': '^0.13.0',
-    'karma-chrome-launcher': '^0.2.0',
-    'karma-detect-browsers': '^2.0.0',
-    'karma-firefox-launcher': '^0.1.0',
+    'karma': '^0.13.19',
+    'karma-chrome-launcher': '^0.2.2',
+    'karma-detect-browsers': '^2.0.2',
+    'karma-firefox-launcher': '^0.1.7',
     'karma-ie-launcher': '^0.2.0',
-    'karma-qunit': '^0.1.0',
-    'karma-safari-launcher': '^0.1.0',
+    'karma-qunit': '^0.1.9',
+    'karma-safari-launcher': '^0.1.1',
     'mkdirp': '^0.5.1',
-    'npm-run-all': '^1.2.0',
-    'portscanner': '^1.0.0',
-    'qunitjs': '^1.0.0',
+    'npm-run-all': '^1.5.1',
+    'qunitjs': '^1.21.0',
     'rimraf': '^2.5.1',
-    'serve-static': '^1.10.0',
-    'sinon': '^1.0.0',
-    'uglify-js': '^2.5.0',
-    'videojs-standard': '^4.0.0',
-    'watchify': '^3.6.0'
+    'sinon': '~1.14.0',
+    'uglify-js': '^2.6.1',
+    'videojs-standard': '^4.0.0'
   }
 };
 
@@ -147,27 +148,16 @@ const packageJSON = (current, context) => {
         '-o dist/%s.min.js'
       ]),
 
-      'build:test': 'node scripts/build-test.js',
+      'build:test': 'babel-node scripts/build-test.js',
       'clean': 'rimraf dist test/dist es5 && mkdirp dist test/dist es5',
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
-      'prestart': 'npm run build',
-      'start': 'npm-run-all -p start:* watch:*',
-      'start:serve': 'node scripts/server.js',
+      'start': 'babel-node scripts/server.js',
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
       'preversion': 'npm test',
-      'version': 'node scripts/version.js',
-      'postversion': 'node scripts/postversion.js',
-      'watch': 'npm-run-all -p watch:*',
-
-      'watch:js': scriptify([
-        'watchify src/plugin.js',
-        '-t babelify',
-        '-v -o dist/%s.js'
-      ]),
-
-      'watch:test': 'node scripts/watch-test.js'
+      'version': 'babel-node scripts/version.js',
+      'postversion': 'babel-node scripts/postversion.js'
     }),
 
     // Always include the two minimum keywords with whatever exists in the
@@ -178,7 +168,10 @@ const packageJSON = (current, context) => {
     'license': context.licenseName,
 
     'browserify': {
-      transform: ['browserify-shim']
+      transform: [
+        'browserify-shim',
+        'browserify-versionify'
+      ]
     },
 
     'browserify-shim': {
@@ -200,8 +193,7 @@ const packageJSON = (current, context) => {
         'docs',
         'es5',
         'test/dist',
-        'test/karma.conf.js',
-        'scripts'
+        'test/karma.conf.js'
       ]
     },
 
@@ -234,19 +226,12 @@ const packageJSON = (current, context) => {
   });
 
   if (context.changelog) {
+    result.devDependencies.chg = '^0.3.2';
     result.scripts.change = 'chg add';
   }
 
   // Support the Sass option.
   if (context.sass) {
-    let sassCommand = [
-      'node-sass',
-      'src/plugin.scss',
-      'dist/%s.css',
-      '--output-style=compressed',
-      '--linefeed=lf'
-    ];
-
     _.assign(result.scripts, {
       'build:css': 'npm-run-all build:css:sass build:css:bannerize',
 
@@ -254,11 +239,16 @@ const packageJSON = (current, context) => {
         'bannerize dist/%s.css --banner=scripts/banner.ejs'
       ]),
 
-      'build:css:sass': scriptify(sassCommand),
-      'watch:css': scriptify(sassCommand.concat('-w src'))
+      'build:css:sass': scriptify([
+        'node-sass',
+        'src/plugin.scss',
+        'dist/%s.css',
+        '--output-style=compressed',
+        '--linefeed=lf'
+      ])
     });
 
-    result.devDependencies['node-sass'] = '^3.4.0';
+    result.devDependencies['node-sass'] = '^3.4.2';
   }
 
   // Support the documentation tooling option.
@@ -267,8 +257,7 @@ const packageJSON = (current, context) => {
     _.assign(result.scripts, {
       'docs': 'npm-run-all docs:*',
       'docs:api': 'jsdoc src -r -d docs/api',
-      'docs:toc': 'doctoc README.md',
-      'prestart': 'npm-run-all docs build'
+      'docs:toc': 'doctoc README.md'
     });
 
     _.assign(result.devDependencies, {
