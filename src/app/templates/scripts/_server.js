@@ -83,7 +83,7 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
   const server = budo({
     port: 9999,
     stream: process.stdout
-  });
+  }).on('reload', (f) => console.log('reloading %s', f || 'everything'));
 
   /**
    * A collection of functions which are mapped to strings that are used to
@@ -104,7 +104,7 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
     '^lang/.+\.json$'(event, file) {
       console.log('re-compiling languages');
       vjslangs(srces.langs, dests.langs);
-      reload();
+      server.reload();
     },
 <% } -%>
 <% if (sass) { -%>
@@ -120,7 +120,7 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
       let result = sass.renderSync({file: srces.css, outputStyle: 'compressed'});
 
       fs.writeFileSync(dests.css, result.css);
-      reload();
+      server.reload();
     },
 <% } -%>
 
@@ -132,7 +132,7 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
      */
     '^src/.+\.js$'(event, file) {
       console.log('re-bundling javascript and tests');
-      Promise.all([bundle('js'), bundle('tests')]).then(reload);
+      Promise.all([bundle('js'), bundle('tests')]).then(() => server.reload());
     },
 
     /**
@@ -143,7 +143,7 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
      */
     '^test/.+\.test\.js$'(event, file) {
       console.log('re-bundling tests');
-      bundle('tests').then(reload);
+      bundle('tests').then(() => server.reload());
     }
   };
 
@@ -189,7 +189,7 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
       if (handler) {
         handler(event, file);
       } else {
-        reload();
+        server.reload();
       }
     });
 });
