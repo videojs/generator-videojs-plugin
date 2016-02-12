@@ -10,6 +10,7 @@ var sh = require('shelljs');
 var configs = {
   v2: {
     files: [
+      'dist-test',
       'test/karma',
       'scripts/npm-postversion-for-bower.sh',
       'scripts/npm-preversion-for-bower.sh',
@@ -25,6 +26,7 @@ var configs = {
       'devDependencies.serve-static',
       'devDependencies.watchify',
       'scripts.mkdirs',
+      'scripts.prestart',
       'scripts.start:serve',
       'scripts.watch',
       'scripts.watch:css',
