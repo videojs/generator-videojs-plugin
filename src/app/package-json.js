@@ -20,7 +20,6 @@ const DEFAULTS = {
     'browserify-shim': '^3.8.12',
     'browserify-versionify': '^1.0.6',
     'budo': '^8.0.4',
-    'ghooks': '^1.1.1',
     'glob': '^6.0.3',
     'global': '^4.3.0',
     'karma': '^0.13.19',
@@ -119,12 +118,6 @@ const packageJSON = (current, context) => {
     'version': context.version,
     'description': context.description,
     'main': 'es5/plugin.js',
-
-    'config': {
-      'ghooks': {
-        'pre-push': 'npm test'
-      }
-    },
 
     'scripts': _.assign({}, current.scripts, {
       'prebuild': 'npm run clean',
@@ -283,6 +276,15 @@ const packageJSON = (current, context) => {
 
   if (context.bower) {
     result.files.push('bower.json');
+  }
+
+  if (context.ghooks) {
+    result.devDependencies.ghooks = '^1.1.1';
+    result.config = {
+      ghooks: {
+        'pre-push': 'npm test'
+      }
+    };
   }
 
   result.files.sort();
