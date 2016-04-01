@@ -248,7 +248,7 @@ export default yeoman.generators.Base.extend({
       type: 'confirm',
       name: 'ghooks',
       message: 'Do you want to include ghooks and automatically "npm test" on push?',
-      'default': defaults.ghooks
+      default: defaults.ghooks
     }];
 
     return prompts.filter(p => !_.contains(this._promptsToFilter, p.name));
