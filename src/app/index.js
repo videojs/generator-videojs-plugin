@@ -132,6 +132,7 @@ export default yeoman.generators.Base.extend({
       bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
       changelog: configs.hasOwnProperty('changelog') ? !!configs.changelog : true,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
+      ghooks: this._ghooksDefault,
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
       sass: configs.hasOwnProperty('sass') ? configs.sass : false
@@ -290,6 +291,8 @@ export default yeoman.generators.Base.extend({
     };
 
     this._licenseDefault = 'mit';
+
+    this._ghooksDefault = true;
 
     this._filesToCopy = [
       'scripts/_banner.ejs',
