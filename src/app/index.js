@@ -132,6 +132,7 @@ export default yeoman.generators.Base.extend({
       bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
       changelog: configs.hasOwnProperty('changelog') ? !!configs.changelog : true,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
+      ghooks: this._ghooksDefault,
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
       sass: configs.hasOwnProperty('sass') ? configs.sass : false
@@ -243,6 +244,11 @@ export default yeoman.generators.Base.extend({
       name: 'bower',
       message: 'Do you want to support Bower (adds special versioning handling)?',
       default: defaults.bower
+    }, {
+      type: 'confirm',
+      name: 'ghooks',
+      message: 'Do you want to include ghooks and automatically "npm test" on push?',
+      default: defaults.ghooks
     }];
 
     return prompts.filter(p => !_.contains(this._promptsToFilter, p.name));
@@ -285,6 +291,8 @@ export default yeoman.generators.Base.extend({
     };
 
     this._licenseDefault = 'mit';
+
+    this._ghooksDefault = true;
 
     this._filesToCopy = [
       'scripts/_banner.ejs',
@@ -372,6 +380,7 @@ export default yeoman.generators.Base.extend({
       'changelog',
       'description',
       'docs',
+      'ghooks',
       'lang',
       'sass'
     ]), {

@@ -278,6 +278,15 @@ const packageJSON = (current, context) => {
     result.files.push('bower.json');
   }
 
+  if (context.ghooks) {
+    result.devDependencies.ghooks = '^1.1.1';
+    result.config = {
+      ghooks: {
+        'pre-push': 'npm test'
+      }
+    };
+  }
+
   result.files.sort();
   result.scripts = alphabetizeScripts(result.scripts);
   result.dependencies = alphabetizeObject(result.dependencies);
