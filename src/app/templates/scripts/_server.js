@@ -3,6 +3,7 @@ import browserify from 'browserify';
 import budo from 'budo';
 import fs from 'fs';
 import glob from 'glob';
+import _ from 'lodash';
 import mkdirp from 'mkdirp';
 <% if (sass) { -%>
 import sass from 'node-sass';
@@ -67,16 +68,28 @@ const bundlers = {
 };
 
 const bundle = (name) => {
-  return new Promise((resolve, reject) => {
-    bundlers[name]
-      .bundle()
-      .pipe(fs.createWriteStream(dests[name]))
-      .on('finish', resolve)
-      .on('error', reject);
-  });
+  if (name === 'lang') {
+    vjslangs(srces.langs, dests.langs);
+  } else if (name === 'sass') {
+    fs.writeFileSync(
+      dests.css,
+      sass.renderSync({file: srces.css, outputStyle: 'compressed'}).css
+    );
+  } else if (bundlers.hasOwnProperty(name)) {
+    return new Promise((resolve, reject) => {
+      bundlers[name]
+        .bundle()
+        .pipe(fs.createWriteStream(dests[name]))
+        .on('finish', resolve)
+        .on('error', reject);
+    });
+  }
 };
 
 mkdirp.sync('dist');
+
+<% if (lang) { %>bundle('lang');<% } -%>
+<% if (sass) { %>bundle('sass');<% } -%>
 
 // Start the server _after_ the initial bundling is done.
 Promise.all([bundle('js'), bundle('tests')]).then(() => {
@@ -101,11 +114,11 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
      * @param  {String} event
      * @param  {String} file
      */
-    '^lang/.+\.json$'(event, file) {
+    '^lang/.+\.json$': _.debounce((event, file) => {
       console.log('re-compiling languages');
-      vjslangs(srces.langs, dests.langs);
+      bundle('lang');
       server.reload();
-    },
+    }),
 <% } -%>
 <% if (sass) { -%>
 
@@ -115,36 +128,23 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
      * @param  {String} event
      * @param  {String} file
      */
-    '^src/.+\.scss$'(event, file) {
+    '^src/.+\.scss$': _.debounce((event, file) => {
       console.log('re-compiling sass');
-      let result = sass.renderSync({file: srces.css, outputStyle: 'compressed'});
-
-      fs.writeFileSync(dests.css, result.css);
+      bundle('sass');
       server.reload();
-    },
+    }),
 <% } -%>
 
     /**
-     * Handler for JavaScript source.
+     * Handler for JavaScript source and tests.
      *
      * @param  {String} event
      * @param  {String} file
      */
-    '^src/.+\.js$'(event, file) {
-      console.log('re-bundling javascript and tests');
+    '^[st][re][cs]t?/.+\.js$': _.debounce((event, file) => {
+      console.log('bundling javascript and tests');
       Promise.all([bundle('js'), bundle('tests')]).then(() => server.reload());
-    },
-
-    /**
-     * Handler for JavaScript tests.
-     *
-     * @param  {String} event
-     * @param  {String} file
-     */
-    '^test/.+\.test\.js$'(event, file) {
-      console.log('re-bundling tests');
-      bundle('tests').then(() => server.reload());
-    }
+    })
   };
 
   /**
@@ -158,9 +158,9 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
     const keys = Object.keys(handlers);
 
     for (let i = 0; i < keys.length; i++) {
-      let regex = new RegExp(keys[i]);
+      const regexp = new RegExp(keys[i]);
 
-      if (regex.test(file)) {
+      if (regexp.test(file)) {
         return handlers[keys[i]];
       }
     }
@@ -178,7 +178,8 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
 <% } else { -%>
       'src/**/*.js',
 <% } -%>
-      'test/**/*.test.js',
+      'test/**/*.js',
+      '!test/dist/**/*.js',
       'test/index.html'
     ])
     .on('watch', (event, file) => {
