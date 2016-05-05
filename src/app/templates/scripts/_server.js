@@ -43,7 +43,35 @@ const dests = {
   tests: 'test/dist/bundle.js'
 };
 
-const bundlers = {
+const tasks = {
+<% if (lang) { -%>
+
+  lang(resolve) {
+    vjslangs(srces.langs, dests.langs);
+    resolve();
+  },
+<% } -%>
+<% if (sass) { -%>
+
+  sass(resolve, reject) {
+    sass.render({
+      file: srces.css,
+      outputStyle: 'compressed'
+    }, (err, result) => {
+      if (err) {
+        reject(err.message);
+      } else {
+        fs.writeFile(dests.css, result.css, (err) => {
+          if (err) {
+            reject(err.message);
+          } else {
+            resolve();
+          }
+        });
+      }
+    });
+  },
+<% } -%>
 
   js: browserify({
     debug: true,
@@ -67,32 +95,42 @@ const bundlers = {
   })
 };
 
-const bundle = (name) => {
-  if (name === 'lang') {
-    vjslangs(srces.langs, dests.langs);
-  } else if (name === 'sass') {
-    fs.writeFileSync(
-      dests.css,
-      sass.renderSync({file: srces.css, outputStyle: 'compressed'}).css
-    );
-  } else if (bundlers.hasOwnProperty(name)) {
-    return new Promise((resolve, reject) => {
-      bundlers[name]
+/**
+ * Runs one of the builds from the tasks object.
+ *
+ * @param  {String} name
+ *         Should match a key from the `tasks` object.
+ *
+ * @return {Promise}
+ */
+const build = (name) => {
+  if (Array.isArray(name)) {
+    return Promise.all(name.map(build));
+  }
+
+  // This returns a Promise even in the case of synchronous tasks because
+  // a consistent contract is useful. Ideally, we'll make the synchronous
+  // tasks asynchronous, but it's not critical.
+  return new Promise((resolve, reject) => {
+    if (typeof tasks[name] === 'function') {
+      tasks[name](resolve, reject);
+    } else {
+      tasks[name]
         .bundle()
         .pipe(fs.createWriteStream(dests[name]))
         .on('finish', resolve)
         .on('error', reject);
-    });
-  }
+    }
+  });
 };
 
 mkdirp.sync('dist');
 
-<% if (lang) { %>bundle('lang');<% } -%>
-<% if (sass) { %>bundle('sass');<% } -%>
+<% if (lang) { %>build('lang');<% } -%>
+<% if (sass) { %>build('sass');<% } -%>
 
 // Start the server _after_ the initial bundling is done.
-Promise.all([bundle('js'), bundle('tests')]).then(() => {
+build(['js', 'tests']).then(() => {
   const server = budo({
     port: 9999,
     stream: process.stdout
@@ -116,7 +154,7 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
      */
     '^lang/.+\.json$': _.debounce((event, file) => {
       console.log('re-compiling languages');
-      bundle('lang');
+      build('lang');
       server.reload();
     }),
 <% } -%>
@@ -130,7 +168,7 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
      */
     '^src/.+\.scss$': _.debounce((event, file) => {
       console.log('re-compiling sass');
-      bundle('sass');
+      build('sass');
       server.reload();
     }),
 <% } -%>
@@ -141,9 +179,9 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
      * @param  {String} event
      * @param  {String} file
      */
-    '^[st][re][cs]t?/.+\.js$': _.debounce((event, file) => {
+    '^(src|test)/.+\.js$': _.debounce((event, file) => {
       console.log('bundling javascript and tests');
-      Promise.all([bundle('js'), bundle('tests')]).then(() => server.reload());
+      build(['js', 'tests']).then(() => server.reload());
     })
   };
 
