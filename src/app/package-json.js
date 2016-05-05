@@ -3,40 +3,75 @@ import tsmlj from 'tsmlj';
 
 const KARMA_BROWSERS = ['Chrome', 'Firefox', 'IE', 'Safari'];
 
-const DEFAULTS = {
-  dependencies: {
-    'video.js': '^5.6.0'
-  },
-  devDependencies: {
-
-    // Sticking with Babel 5 for now. No significantly compelling reason to upgrade.
-    'babel': '^5.8.35',
-    'babelify': '^6.4.0',
-    'bannerize': '^1.0.2',
-    'bluebird': '^3.2.2',
-
-    // browserify-shim wants browserify < 13.
-    'browserify': '^12.0.2',
-    'browserify-shim': '^3.8.12',
-    'browserify-versionify': '^1.0.6',
-    'budo': '^8.0.4',
-    'glob': '^6.0.3',
-    'global': '^4.3.0',
-    'karma': '^0.13.19',
-    'karma-chrome-launcher': '^0.2.2',
-    'karma-detect-browsers': '^2.0.2',
-    'karma-firefox-launcher': '^0.1.7',
-    'karma-ie-launcher': '^0.2.0',
-    'karma-qunit': '^0.1.9',
-    'karma-safari-launcher': '^0.1.1',
-    'mkdirp': '^0.5.1',
-    'npm-run-all': '^1.5.1',
-    'qunitjs': '^1.21.0',
-    'rimraf': '^2.5.1',
-    'sinon': '~1.14.0',
-    'uglify-js': '^2.6.1',
-    'videojs-standard': '^4.0.0'
+/**
+ * Add/remove a property from an object based on the truthiness of the value.
+ *
+ * Intended to be invoked with the target object as `this`.
+ *
+ * @param {Mixed} val
+ * @param {String} key
+ */
+const addRemoveField = function(val, key) {
+  if (val) {
+    this[key] = val;
+  } else {
+    delete this[key];
   }
+};
+
+/**
+ * Updates a package.json object to use videojs-spellbook.
+ *
+ * @param  {Object} pkg
+ * @param  {Object} context
+ */
+const spellbookify = (pkg, context) => {
+
+  _.each({
+    browserify: null
+  }, addRemoveField, pkg);
+
+  _.each({
+    'babel': null,
+    'babelify': null,
+    'bannerize': null,
+    'bluebird': null,
+    'browserify': null,
+    'browserify-shim': null,
+    'browserify-versionify': null,
+    'budo': null,
+    'glob': null,
+    'mkdirp': null,
+    'node-sass': null,
+    'rimraf': null,
+    'uglify-js': null,
+    'videojs-languages': null,
+    'videojs-spellbook': 'git+ssh://git@github.com:videojs/spellbook.git'
+  }, addRemoveField, pkg.devDependencies);
+
+  _.each({
+    'build:css': context.sass ? 'cast build-css' : null,
+    'build:css:bannerize': null,
+    'build:css:sass': null,
+    'build:js': 'cast build-js',
+    'build:js:babel': null,
+    'build:js:bannerize': null,
+    'build:js:browserify': null,
+    'build:js:uglify': null,
+    'build:lang': context.lang ? 'cast build-langs' : null,
+    'build:test': 'cast build-tests',
+    'clean': 'cast clean',
+    'start': 'cast server',
+    'test': 'cast test',
+    'preversion': 'cast test',
+    'version': 'cast version',
+    'postversion': 'cast postversion'
+  }, addRemoveField, pkg.scripts);
+
+  KARMA_BROWSERS.forEach(browser => {
+    browser = browser.toLowerCase();
+    pkg.scripts[`test:${browser}`] = `cast test ${browser}`;
+  });
 };
 
 /**
@@ -108,18 +143,23 @@ const packageJSON = (current, context) => {
    * @param  {String} str
    * @return {String}
    */
-  let scriptify = (str) => {
-    str = Array.isArray(str) ? str.join(' ') : str;
-    return str.replace(/%s/g, context.pluginName);
-  };
+  const nameify = (str) => str.replace(/%s/g, context.pluginName);
 
-  let result = _.assign({}, current, {
+  /**
+   * Joins and `nameify`s an array of strings.
+   *
+   * @param  {Array} arr
+   * @return {String}
+   */
+  const scriptify = (arr) => nameify(arr.join(' '));
+
+  const result = _.merge({}, current, {
     'name': context.packageName,
     'version': context.version,
     'description': context.description,
     'main': 'es5/plugin.js',
 
-    'scripts': _.assign({}, current.scripts, {
+    'scripts': {
       'prebuild': 'npm run clean',
       'build': 'npm-run-all -p build:*',
 
@@ -158,11 +198,11 @@ const packageJSON = (current, context) => {
       'preversion': 'npm test',
       'version': 'babel-node scripts/version.js',
       'postversion': 'babel-node scripts/postversion.js'
-    }),
+    },
 
     // Always include the two minimum keywords with whatever exists in the
     // current keywords array.
-    'keywords': _.union(['videojs', 'videojs-plugin'], current.keywords).sort(),
+    'keywords': _.union(['videojs', 'videojs-plugin'], current.keywords),
 
     'author': context.author,
     'license': context.licenseName,
@@ -181,10 +221,10 @@ const packageJSON = (current, context) => {
     },
 
     // These objects are used as a reference to the browser-global providers.
-    'style': scriptify('dist/%s.css'),
+    'style': nameify('dist/%s.css'),
     'videojs-plugin': {
-      style: scriptify('dist/%s.css'),
-      script: scriptify('dist/%s.min.js')
+      style: nameify('dist/%s.css'),
+      script: nameify('dist/%s.min.js')
     },
 
     'vjsstandard': {
@@ -208,13 +248,40 @@ const packageJSON = (current, context) => {
       'test/'
     ],
 
-    'dependencies': _.assign({}, current.dependencies, DEFAULTS.dependencies),
+    'dependencies': {
+      'video.js': '^5.6.0'
+    },
 
-    'devDependencies': _.assign(
-      {},
-      current.devDependencies,
-      DEFAULTS.devDependencies
-    )
+    'devDependencies': {
+
+      // Sticking with Babel 5 for now. No significantly compelling reason to upgrade.
+      'babel': '^5.8.35',
+      'babelify': '^6.4.0',
+      'bannerize': '^1.0.2',
+      'bluebird': '^3.2.2',
+
+      // browserify-shim wants browserify < 13.
+      'browserify': '^12.0.2',
+      'browserify-shim': '^3.8.12',
+      'browserify-versionify': '^1.0.6',
+      'budo': '^8.0.4',
+      'glob': '^6.0.3',
+      'global': '^4.3.0',
+      'karma': '^0.13.19',
+      'karma-chrome-launcher': '^0.2.2',
+      'karma-detect-browsers': '^2.0.2',
+      'karma-firefox-launcher': '^0.1.7',
+      'karma-ie-launcher': '^0.2.0',
+      'karma-qunit': '^0.1.9',
+      'karma-safari-launcher': '^0.1.1',
+      'mkdirp': '^0.5.1',
+      'npm-run-all': '^1.5.1',
+      'qunitjs': '^1.21.0',
+      'rimraf': '^2.5.1',
+      'sinon': '~1.14.0',
+      'uglify-js': '^2.6.1',
+      'videojs-standard': '^4.0.0'
+    }
   });
 
   // Create scripts for each Karma browser.
@@ -274,6 +341,7 @@ const packageJSON = (current, context) => {
     result.devDependencies['videojs-languages'] = '^1.0.0';
   }
 
+  // Support Bower.
   if (context.bower) {
     result.files.push('bower.json');
   }
@@ -287,7 +355,15 @@ const packageJSON = (current, context) => {
     };
   }
 
+  // Support the spellbook flag.
+  if (context.spellbook) {
+    spellbookify(result, context);
+  }
+
+  // Sort arrays and objects.
   result.files.sort();
+  result.keywords.sort();
+  result.vjsstandard.ignore.sort();
   result.scripts = alphabetizeScripts(result.scripts);
   result.dependencies = alphabetizeObject(result.dependencies);
   result.devDependencies = alphabetizeObject(result.devDependencies);
