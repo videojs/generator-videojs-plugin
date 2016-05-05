@@ -3,6 +3,7 @@ import browserify from 'browserify';
 import budo from 'budo';
 import fs from 'fs';
 import glob from 'glob';
+import _ from 'lodash';
 import mkdirp from 'mkdirp';
 <% if (sass) { -%>
 import sass from 'node-sass';
@@ -42,7 +43,35 @@ const dests = {
   tests: 'test/dist/bundle.js'
 };
 
-const bundlers = {
+const tasks = {
+<% if (lang) { -%>
+
+  lang(resolve) {
+    vjslangs(srces.langs, dests.langs);
+    resolve();
+  },
+<% } -%>
+<% if (sass) { -%>
+
+  sass(resolve, reject) {
+    sass.render({
+      file: srces.css,
+      outputStyle: 'compressed'
+    }, (err, result) => {
+      if (err) {
+        reject(err.message);
+      } else {
+        fs.writeFile(dests.css, result.css, (err) => {
+          if (err) {
+            reject(err.message);
+          } else {
+            resolve();
+          }
+        });
+      }
+    });
+  },
+<% } -%>
 
   js: browserify({
     debug: true,
@@ -66,20 +95,42 @@ const bundlers = {
   })
 };
 
-const bundle = (name) => {
+/**
+ * Runs one of the builds from the tasks object.
+ *
+ * @param  {String} name
+ *         Should match a key from the `tasks` object.
+ *
+ * @return {Promise}
+ */
+const build = (name) => {
+  if (Array.isArray(name)) {
+    return Promise.all(name.map(build));
+  }
+
+  // This returns a Promise even in the case of synchronous tasks because
+  // a consistent contract is useful. Ideally, we'll make the synchronous
+  // tasks asynchronous, but it's not critical.
   return new Promise((resolve, reject) => {
-    bundlers[name]
-      .bundle()
-      .pipe(fs.createWriteStream(dests[name]))
-      .on('finish', resolve)
-      .on('error', reject);
+    if (typeof tasks[name] === 'function') {
+      tasks[name](resolve, reject);
+    } else {
+      tasks[name]
+        .bundle()
+        .pipe(fs.createWriteStream(dests[name]))
+        .on('finish', resolve)
+        .on('error', reject);
+    }
   });
 };
 
 mkdirp.sync('dist');
 
+<% if (lang) { %>build('lang');<% } -%>
+<% if (sass) { %>build('sass');<% } -%>
+
 // Start the server _after_ the initial bundling is done.
-Promise.all([bundle('js'), bundle('tests')]).then(() => {
+build(['js', 'tests']).then(() => {
   const server = budo({
     port: 9999,
     stream: process.stdout
@@ -101,11 +152,11 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
      * @param  {String} event
      * @param  {String} file
      */
-    '^lang/.+\.json$'(event, file) {
+    '^lang/.+\.json$': _.debounce((event, file) => {
       console.log('re-compiling languages');
-      vjslangs(srces.langs, dests.langs);
+      build('lang');
       server.reload();
-    },
+    }),
 <% } -%>
 <% if (sass) { -%>
 
@@ -115,36 +166,23 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
      * @param  {String} event
      * @param  {String} file
      */
-    '^src/.+\.scss$'(event, file) {
+    '^src/.+\.scss$': _.debounce((event, file) => {
       console.log('re-compiling sass');
-      let result = sass.renderSync({file: srces.css, outputStyle: 'compressed'});
-
-      fs.writeFileSync(dests.css, result.css);
+      build('sass');
       server.reload();
-    },
+    }),
 <% } -%>
 
     /**
-     * Handler for JavaScript source.
+     * Handler for JavaScript source and tests.
      *
      * @param  {String} event
      * @param  {String} file
      */
-    '^src/.+\.js$'(event, file) {
-      console.log('re-bundling javascript and tests');
-      Promise.all([bundle('js'), bundle('tests')]).then(() => server.reload());
-    },
-
-    /**
-     * Handler for JavaScript tests.
-     *
-     * @param  {String} event
-     * @param  {String} file
-     */
-    '^test/.+\.test\.js$'(event, file) {
-      console.log('re-bundling tests');
-      bundle('tests').then(() => server.reload());
-    }
+    '^(src|test)/.+\.js$': _.debounce((event, file) => {
+      console.log('bundling javascript and tests');
+      build(['js', 'tests']).then(() => server.reload());
+    })
   };
 
   /**
@@ -158,9 +196,9 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
     const keys = Object.keys(handlers);
 
     for (let i = 0; i < keys.length; i++) {
-      let regex = new RegExp(keys[i]);
+      const regexp = new RegExp(keys[i]);
 
-      if (regex.test(file)) {
+      if (regexp.test(file)) {
         return handlers[keys[i]];
       }
     }
@@ -178,7 +216,8 @@ Promise.all([bundle('js'), bundle('tests')]).then(() => {
 <% } else { -%>
       'src/**/*.js',
 <% } -%>
-      'test/**/*.test.js',
+      'test/**/*.js',
+      '!test/dist/**/*.js',
       'test/index.html'
     ])
     .on('watch', (event, file) => {

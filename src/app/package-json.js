@@ -5,7 +5,7 @@ const KARMA_BROWSERS = ['Chrome', 'Firefox', 'IE', 'Safari'];
 
 const DEFAULTS = {
   dependencies: {
-    'video.js': '^5.6.0'
+    'video.js': '^5.10.1'
   },
   devDependencies: {
 
@@ -29,6 +29,7 @@ const DEFAULTS = {
     'karma-ie-launcher': '^0.2.0',
     'karma-qunit': '^0.1.9',
     'karma-safari-launcher': '^0.1.1',
+    'lodash': '^4.11.2',
     'mkdirp': '^0.5.1',
     'npm-run-all': '^1.5.1',
     'qunitjs': '^1.21.0',
