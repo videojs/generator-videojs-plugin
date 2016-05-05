@@ -25,6 +25,7 @@ var configs = {
       'devDependencies.portscanner',
       'devDependencies.serve-static',
       'devDependencies.watchify',
+      'scripts.build:test:browserify',
       'scripts.mkdirs',
       'scripts.prestart',
       'scripts.start:serve',
