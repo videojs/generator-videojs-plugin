@@ -390,8 +390,7 @@ export default yeoman.generators.Base.extend({
       licenseName: this._licenseNames[configs.license],
       packageName: this._getPackageName(configs.name, configs.scope),
       pluginName: this._getPackageName(configs.name),
-      version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0',
-      year: (new Date()).getFullYear()
+      version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0'
     });
   },
 

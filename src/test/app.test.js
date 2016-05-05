@@ -215,8 +215,7 @@ describe('videojs-plugin:app', function() {
       packageName: `videojs-test`,
       pluginName: 'test',
       sass: false,
-      version: '1.2.3',
-      year: '2016'
+      version: '1.2.3'
     });
 
     it('overrides properties as expected', function() {
