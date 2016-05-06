@@ -140,7 +140,7 @@ const packageJSON = (current, context) => {
       ]),
 
       'build:js:browserify': scriptify([
-        'browserify . -s %s -o dist/%s.js'
+        'browserify . -t browserify-shim browserify-versionify -s %s -o dist/%s.js'
       ]),
 
       'build:js:uglify': scriptify([
@@ -167,13 +167,6 @@ const packageJSON = (current, context) => {
 
     'author': context.author,
     'license': context.licenseName,
-
-    'browserify': {
-      transform: [
-        'browserify-shim',
-        'browserify-versionify'
-      ]
-    },
 
     'browserify-shim': {
       'qunit': 'global:QUnit',
