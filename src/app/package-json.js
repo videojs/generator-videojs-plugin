@@ -140,7 +140,7 @@ const packageJSON = (current, context) => {
       ]),
 
       'build:js:browserify': scriptify([
-        'browserify . -t browserify-shim browserify-versionify -s %s -o dist/%s.js'
+        'browserify . -t browserify-shim -t browserify-versionify -s %s -o dist/%s.js'
       ]),
 
       'build:js:uglify': scriptify([
