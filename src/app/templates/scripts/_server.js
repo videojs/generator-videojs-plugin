@@ -125,7 +125,6 @@ const build = (name) => {
 };
 
 mkdirp.sync('dist');
-
 <% if (lang) { %>build('lang');<% } -%>
 <% if (sass) { %>build('sass');<% } -%>
 
