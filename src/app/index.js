@@ -132,7 +132,7 @@ export default yeoman.generators.Base.extend({
       bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
       changelog: configs.hasOwnProperty('changelog') ? !!configs.changelog : true,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
-      ghooks: this._ghooksDefault,
+      ghooks: true,
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
       sass: configs.hasOwnProperty('sass') ? configs.sass : false
@@ -277,6 +277,21 @@ export default yeoman.generators.Base.extend({
       defaults: false
     });
 
+    this.option('limit-to', {
+      desc: tsmlj`
+        Limit files to be updated by passing any comma-separated combination
+        of: dotfiles, pkg, and scripts
+      `,
+      type: 'string',
+      defaults: ''
+    });
+
+    this.option('limit-to-meta', {
+      desc: 'Only update "meta files" - dotfiles, package.json, and scripts.',
+      type: 'boolean',
+      defaults: false
+    });
+
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
 
     this._licenseNames = {
@@ -291,8 +306,6 @@ export default yeoman.generators.Base.extend({
     };
 
     this._licenseDefault = 'mit';
-
-    this._ghooksDefault = true;
 
     this._filesToCopy = [
       'scripts/_banner.ejs',
@@ -325,6 +338,51 @@ export default yeoman.generators.Base.extend({
     this._configsTemp = {
       bcov: this.options.bcov || !!this.config.get('bcov')
     };
+
+    // Defines the files that are allowed for various `--limit-to` options.
+    this._limits = {
+      dotfiles: {
+        files: [
+          '_.editorconfig',
+          '_.gitignore',
+          '_.npmignore',
+          '_.travis.yml'
+        ],
+        templates: [
+          'bower.json'
+        ]
+      },
+
+      // These are empty because package.json has special handling.
+      pkg: {
+        files: [],
+        templates: []
+      },
+      scripts: {
+        files: [
+          'scripts/_banner.ejs',
+          'scripts/_postversion.js',
+          'scripts/_version.js'
+        ],
+        templates: [
+          'scripts/_build-test.js',
+          'scripts/_server.js'
+        ]
+      }
+    };
+
+    // this._limitTo will always be an array of the requested keys that are
+    // valid (i.e. found in the this._limits object).
+    if (this.options.limitToMeta) {
+      this._limitTo = Object.keys(this._limits);
+    } else if (this.options.limitTo) {
+      this._limitTo = _.intersection(
+        this.options.limitTo.split(',').map(s => s.trim()).filter(_.identity),
+        Object.keys(this._limits)
+      );
+    } else {
+      this._limitTo = [];
+    }
 
     // Handle the Brightcove option/config.
     if (this._configsTemp.bcov) {
@@ -404,24 +462,30 @@ export default yeoman.generators.Base.extend({
     this.config.set(this._configsTemp);
     delete this._configsTemp;
 
-    let configs = this.config.getAll();
-
     this.context = this._getContext();
 
     if (!this._isPrivate()) {
       this._filesToCopy.push('_.travis.yml');
     }
 
-    if (configs.lang) {
+    if (this.context.lang) {
       this._filesToCopy.push('lang/_en.json');
     }
 
-    if (configs.sass) {
+    if (this.context.sass) {
       this._templatesToCopy.push('src/_plugin.scss');
     }
 
-    if (configs.bower) {
+    if (this.context.bower) {
       this._templatesToCopy.push('_bower.json');
+    }
+
+    if (this._limitTo && this._limitTo.length) {
+      const files = _.union(...this._limitTo.map(k => this._limits[k].files));
+      const templates = _.union(...this._limitTo.map(k => this._limits[k].templates));
+
+      this._filesToCopy = _.intersection(this._filesToCopy, files);
+      this._templatesToCopy = _.intersection(this._templatesToCopy, templates);
     }
   },
 
@@ -438,6 +502,13 @@ export default yeoman.generators.Base.extend({
      * @function changelog
      */
     changelog() {
+
+      // There is no _limitTo setting that includes CHANGELOG.md, so we only
+      // need to check for it existing to know to skip this.
+      if (!this.context.changelog || this._limitTo.length) {
+        return;
+      }
+
       try {
         fs.statSync(this._dest('CHANGELOG.md'));
       } catch (x) {
@@ -468,7 +539,9 @@ export default yeoman.generators.Base.extend({
     license() {
       let file = this._licenseFiles[this.config.get('license')];
 
-      if (!file) {
+      // There is no _limitTo setting that includes LICENSE, so we only
+      // need to check for it existing to know to skip this.
+      if (!file || this._limitTo.length) {
         return;
       }
 
@@ -485,6 +558,13 @@ export default yeoman.generators.Base.extend({
      * @function package
      */
     packageJSON() {
+
+      // The only time we don't want to write package.json is when there are
+      // any _limitTo values and "pkg" is not one of them.
+      if (this._limitTo.length && !_.includes(this._limitTo, 'pkg')) {
+        return;
+      }
+
       let json = packageJSON(this._currentPkgJSON, this.context);
 
       // We want to use normal JSON.stringify here because we want to

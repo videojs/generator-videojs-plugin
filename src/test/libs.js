@@ -6,8 +6,9 @@ import {assert} from 'yeoman-generator';
 // Files that are expected to exist in certain conditions.
 const FILES = {
 
-  common: [
+  'common': [
     'scripts/banner.ejs',
+    'scripts/build-test.js',
     'scripts/postversion.js',
     'scripts/server.js',
     'scripts/version.js',
@@ -21,20 +22,48 @@ const FILES = {
     'CHANGELOG.md',
     'CONTRIBUTING.md',
     'index.html',
+    'package.json',
     'README.md'
   ],
 
-  oss: [
+  'oss': [
     '.travis.yml',
     'LICENSE'
   ],
 
-  sass: [
+  'sass': [
     'src/plugin.scss'
   ],
 
-  bower: [
+  'bower': [
     'bower.json'
+  ],
+
+  // limit-to options
+  'dotfiles': [
+    '.editorconfig',
+    '.gitignore',
+    '.npmignore'
+  ],
+
+  'dotfiles:bower': [
+    'bower.json'
+  ],
+
+  'dotfiles:oss': [
+    '.travis.yml'
+  ],
+
+  'pkg': [
+    'package.json'
+  ],
+
+  'scripts': [
+    'scripts/banner.ejs',
+    'scripts/build-test.js',
+    'scripts/postversion.js',
+    'scripts/server.js',
+    'scripts/version.js'
   ]
 };
 
@@ -71,7 +100,14 @@ export const options = function(...args) {
  * @param    {Function} [done]
  */
 export const onEnd = function(done) {
-  this.pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+  // There are cases where a package.json will not be created.
+  try {
+    this.pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+  } catch (x) {
+    this.pkg = null;
+  }
+
   if (typeof done === 'function') {
     done();
   }
