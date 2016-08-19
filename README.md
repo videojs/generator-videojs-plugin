@@ -2,6 +2,11 @@
 
 This is an opinionated [Yeoman][yo] generator for [video.js][vjs] plugins. It is based on the recommendations of the video.js core team as well as tools and conventions for developing plugins at [Brightcove][bcov].
 
+Lead Maintainer: Pat O'Neill [@misteroneill](https://github.com/misteroneill)
+
+Maintenance Status: Stable
+
+
 To learn more about video.js plugins and this generator's standards and opinions, check out:
 
 - [video.js Plugins Guide][plugins-guide].
