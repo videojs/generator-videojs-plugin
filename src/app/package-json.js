@@ -279,11 +279,16 @@ const packageJSON = (current, context) => {
     result.files.push('bower.json');
   }
 
-  if (context.ghooks) {
-    result.devDependencies.ghooks = '^1.1.1';
+  // In case ghooks was previously installed, but is now "none", we can
+  // remove it from the package.json entirely.
+  if (context.ghooks === 'none') {
+    delete result.devDependencies.ghooks;
+    delete result.config.ghooks;
+  } else {
+    result.devDependencies.ghooks = '^1.3.2';
     result.config = {
       ghooks: {
-        'pre-push': 'npm test'
+        'pre-push': `npm run ${context.ghooks}`
       }
     };
   }
