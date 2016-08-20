@@ -61,9 +61,9 @@ const tasks = {
       if (err) {
         reject(err.message);
       } else {
-        fs.writeFile(dests.css, result.css, (err) => {
-          if (err) {
-            reject(err.message);
+        fs.writeFile(dests.css, result.css, (errr) => {
+          if (errr) {
+            reject(errr.message);
           } else {
             resolve();
           }

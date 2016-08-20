@@ -193,6 +193,7 @@ const packageJSON = (current, context) => {
         'dist',
         'docs',
         'es5',
+        'scripts',
         'test/dist',
         'test/karma.conf.js'
       ]
