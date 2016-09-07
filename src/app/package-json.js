@@ -20,6 +20,7 @@ const DEFAULTS = {
     // browserify-shim wants browserify < 13.
     'browserify': '^12.0.2',
     'browserify-shim': '^3.8.12',
+    'bundle-collapser': '^1.2.1',
     'budo': '^8.0.4',
     'glob': '^6.0.3',
     'global': '^4.3.0',
@@ -130,6 +131,7 @@ const packageJSON = (current, context) => {
         'build:js:babel',
         'build:js:browserify',
         'build:js:bannerize',
+        'build:js:collapse',
         'build:js:uglify'
       ]),
 
@@ -150,8 +152,13 @@ const packageJSON = (current, context) => {
         'browserify . -g browserify-shim -s %s -o dist/%s.js'
       ]),
 
+      'build:js:collapse': scriptify([
+        'bundle-collapser dist/%s.js',
+        '-o dist/%s.min.js'
+      ]),
+
       'build:js:uglify': scriptify([
-        'uglifyjs dist/%s.js',
+        'uglifyjs dist/%s.min.js',
         '--comments --mangle --compress',
         '-o dist/%s.min.js'
       ]),
