@@ -19,6 +19,7 @@ const FILES = {
     '.editorconfig',
     '.gitignore',
     '.npmignore',
+    '.babelrc',
     'CHANGELOG.md',
     'CONTRIBUTING.md',
     'index.html',
