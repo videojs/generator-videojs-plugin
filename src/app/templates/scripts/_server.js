@@ -34,13 +34,13 @@ const srces = {
 
 const dests = {
 <% if (sass) { -%>
-  css: nameify('dist/%s.css'),
+  css: nameify('dist/browser/%s.css'),
 <% } -%>
-  js: nameify('dist/%s.js'),
+  js: nameify('dist/browser/%s.js'),
 <% if (lang) { -%>
   langs: 'dist/lang',
 <% } -%>
-  tests: 'test/dist/bundle.js'
+  tests: 'dist/test/bundle.js'
 };
 
 const tasks = {
@@ -77,21 +77,11 @@ const tasks = {
     debug: true,
     entries: [srces.js],
     standalone: nameify('%s'),
-    transform: [
-      'babelify',
-      'browserify-shim',
-      'browserify-versionify'
-    ]
   }),
 
   tests: browserify({
     debug: true,
     entries: srces.tests,
-    transform: [
-      'babelify',
-      'browserify-shim',
-      'browserify-versionify'
-    ]
   })
 };
 
@@ -216,7 +206,7 @@ build(['js', 'tests']).then(() => {
       'src/**/*.js',
 <% } -%>
       'test/**/*.js',
-      '!test/dist/**/*.js',
+      '!dist/test/**/*.js',
       'test/index.html'
     ])
     .on('watch', (event, file) => {

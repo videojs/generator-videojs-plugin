@@ -1,3 +1,4 @@
+var pkg = require('../package.json');
 module.exports = function(config) {
   var detectBrowsers = {
     enabled: false,
@@ -21,13 +22,13 @@ module.exports = function(config) {
 
     files: [
 <% if (sass) { -%>
-      'dist/<%= pluginName %>.css',
+      'dist/browser/' + pkg.name + '.css',
 <% } -%>
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/sinon/pkg/sinon-ie.js',
       'node_modules/video.js/dist/video.js',
       'node_modules/video.js/dist/video-js.css',
-      'test/dist/bundle.js'
+      'dist/test/bundle.js'
     ],
 
     detectBrowsers: detectBrowsers,
