@@ -10,9 +10,11 @@ const DEFAULTS = {
   },
   devDependencies: {
 
-    // Sticking with Babel 5 for now. No significantly compelling reason to upgrade.
-    'babel': '^5.8.35',
-    'babelify': '^6.4.0',
+    'babel-cli': '^6.14.0',
+    'babel-plugin-transform-object-assign': '^6.8.0',
+    'babel-preset-es2015': '^6.14.0',
+    'babel-preset-es2015-loose': '^7.0.0',
+    'babelify': '^7.3.0',
     'bannerize': '^1.0.2',
     'bluebird': '^3.2.2',
 

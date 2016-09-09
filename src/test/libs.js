@@ -20,6 +20,7 @@ const FILES = {
     '.gitignore',
     '.npmignore',
     'jsdoc.json',
+    '.babelrc',
     'CHANGELOG.md',
     'CONTRIBUTING.md',
     'index.html',
