@@ -9,13 +9,16 @@ const DEFAULTS = {
   },
   devDependencies: {
 
-    // Sticking with Babel 5 for now. No significantly compelling reason to upgrade.
-    'babel': '^5.8.35',
-    'babelify': '^6.4.0',
+    'babel-cli': '^6.14.0',
+    'babel-plugin-transform-object-assign': '^6.8.0',
+    'babel-preset-es2015': '^6.14.0',
+    'babel-preset-es2015-loose': '^7.0.0',
+    'babelify': '^7.3.0',
     'bannerize': '^1.0.2',
     'bluebird': '^3.2.2',
 
     // browserify-shim wants browserify < 13.
+    'rollupify': '^0.3.4',
     'browserify': '^12.0.2',
     'browserify-shim': '^3.8.12',
     'browserify-versionify': '^1.0.6',
@@ -118,39 +121,45 @@ const packageJSON = (current, context) => {
     'name': context.packageName,
     'version': context.version,
     'description': context.description,
-    'main': 'es5/plugin.js',
+    'main': 'dist/npm/plugin.js',
+    'jsnext:main': 'src/plugin.js',
 
     'scripts': _.assign({}, current.scripts, {
       'prebuild': 'npm run clean',
       'build': 'npm-run-all -p build:*',
 
       'build:js': scriptify([
-        'npm-run-all',
-        'build:js:babel',
-        'build:js:browserify',
-        'build:js:bannerize',
-        'build:js:uglify'
+        'npm-run-all -p',
+        'build:js:npm',
+        'build:js:browser'
       ]),
 
-      'build:js:babel': 'babel src -d es5',
+      'build:js:npm': 'babel src -d dist/npm',
 
-      'build:js:bannerize': scriptify([
-        'bannerize dist/%s.js',
+      'build:js:browser': scriptify([
+        'npm-run-all',
+        'build:js:browser:browserify',
+        'build:js:browser:bannerize',
+        'build:js:browser:uglify'
+      ]),
+
+      'build:js:browser:browserify': scriptify([
+        'browserify src/plugin.js -s %s -o dist/browser/%s.js'
+      ]),
+
+      'build:js:browser:bannerize': scriptify([
+        'bannerize dist/browser/%s.js',
         '--banner=scripts/banner.ejs'
       ]),
 
-      'build:js:browserify': scriptify([
-        'browserify . -s %s -o dist/%s.js'
-      ]),
-
-      'build:js:uglify': scriptify([
-        'uglifyjs dist/%s.js',
-        '--comments --mangle --compress',
+      'build:js:browser:uglify': scriptify([
+        'uglifyjs dist/browser/%s.js',
+        '-c -m --comments',
         '-o dist/%s.min.js'
       ]),
 
       'build:test': 'babel-node scripts/build-test.js',
-      'clean': 'rimraf dist test/dist es5 && mkdirp dist test/dist es5',
+      'clean': 'rimraf dist && mkdirp dist/test dist/npm dist/browser',
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
       'start': 'babel-node scripts/server.js',
@@ -170,6 +179,8 @@ const packageJSON = (current, context) => {
 
     'browserify': {
       transform: [
+        'rollupify',
+        'babelify',
         'browserify-shim',
         'browserify-versionify'
       ]
@@ -182,10 +193,10 @@ const packageJSON = (current, context) => {
     },
 
     // These objects are used as a reference to the browser-global providers.
-    'style': scriptify('dist/%s.css'),
+    'style': scriptify('dist/browser/%s.css'),
     'videojs-plugin': {
-      style: scriptify('dist/%s.css'),
-      script: scriptify('dist/%s.min.js')
+      style: scriptify('dist/browser/%s.css'),
+      script: scriptify('dist/browser/%s.min.js')
     },
 
     'vjsstandard': {
@@ -237,13 +248,13 @@ const packageJSON = (current, context) => {
       'build:css': 'npm-run-all build:css:sass build:css:bannerize',
 
       'build:css:bannerize': scriptify([
-        'bannerize dist/%s.css --banner=scripts/banner.ejs'
+        'bannerize dist/browser/%s.css --banner=scripts/banner.ejs'
       ]),
 
       'build:css:sass': scriptify([
         'node-sass',
         'src/plugin.scss',
-        'dist/%s.css',
+        'dist/browser/%s.css',
         '--output-style=compressed',
         '--linefeed=lf'
       ])

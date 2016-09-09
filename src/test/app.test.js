@@ -45,7 +45,7 @@ describe('videojs-plugin:app', function() {
       assert.strictEqual(this.pkg.name, 'videojs-wat');
       assert.strictEqual(this.pkg.description, 'wat is the plugin');
       assert.strictEqual(this.pkg.version, '0.0.0');
-      assert.strictEqual(this.pkg.main, 'es5/plugin.js');
+      assert.strictEqual(this.pkg.main, 'dist/npm/plugin.js');
       assert.ok(_.isArray(this.pkg.keywords));
       assert.ok(_.isPlainObject(this.pkg['browserify-shim']));
       assert.ok(_.isPlainObject(this.pkg.vjsstandard));

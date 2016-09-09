@@ -23,6 +23,7 @@ To learn more about video.js plugins and this generator's standards and opinions
     - [Install](#install)
     - [Prompt](#prompt)
     - [Hurry](#hurry)
+    - [Limiting Generated Files](#limiting-generated-files)
     - [Brightcove Defaults](#brightcove-defaults)
 - [Updating an Existing Project](#updating-an-existing-project)
   - [Recommendations](#recommendations)

@@ -9,7 +9,6 @@ glob('test/**/*.test.js', (err, files) => {
     throw err;
   }
   browserify(files)
-    .transform('babelify')
     .bundle()
-    .pipe(fs.createWriteStream('test/dist/bundle.js'));
+    .pipe(fs.createWriteStream('dist/test/bundle.js'));
 });
