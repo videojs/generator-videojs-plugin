@@ -4,9 +4,9 @@ import _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
 import {assert, test as helpers} from 'yeoman-generator';
-
 import * as libs from './libs';
 import packageJSON from '../generators/app/package-json';
+import {assert as chaiAssert} from 'chai';
 
 describe('videojs-plugin:app', function() {
   const scripts = [
@@ -190,6 +190,100 @@ describe('videojs-plugin:app', function() {
         author.email,
         'john@doe.com',
         'the author\'s email is correct'
+      );
+    });
+
+  });
+
+  describe('ie8', function() {
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin',
+          ie8: true
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
+
+    it('adds babel plugins to .babelrc and package.json', function() {
+      const babelrc = '.babelrc';
+      const pkg = 'package.json';
+
+      assert.file([babelrc, pkg]);
+
+      const devDependencies = Object.keys(
+        JSON.parse(fs.readFileSync(pkg), 'utf8').devDependencies
+      );
+      const plugins = JSON.parse(fs.readFileSync(babelrc), 'utf8').plugins;
+
+      chaiAssert.notEqual(
+        devDependencies.indexOf('babel-plugin-transform-es3-member-expression-literals'),
+        -1,
+        'package.json has es3 member expressions'
+      );
+      chaiAssert.notEqual(
+        devDependencies.indexOf('babel-plugin-transform-es3-property-literals'),
+        -1,
+        'package.json has transform-es3-properties'
+      );
+      chaiAssert.notEqual(
+        plugins.indexOf('transform-es3-member-expression-literals'),
+        -1,
+        'babel has es3 member expressions'
+      );
+      chaiAssert.notEqual(
+        plugins.indexOf('transform-es3-property-literals'),
+        -1,
+        'babel has transform es3 property literals'
+      );
+    });
+  });
+
+  describe('no ie8', function() {
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin'
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
+
+    it('adds non ie8 babel plugins to .babelrc and package.json', function() {
+      const babelrc = '.babelrc';
+      const pkg = 'package.json';
+
+      assert.file([babelrc, pkg]);
+
+      const devDependencies = Object.keys(
+        JSON.parse(fs.readFileSync(pkg), 'utf8').devDependencies
+      );
+      const plugins = JSON.parse(fs.readFileSync(babelrc), 'utf8').plugins;
+
+      chaiAssert.equal(
+        devDependencies.indexOf('babel-plugin-transform-es3-member-expression-literals'),
+        -1,
+        'package.json does not have es3 member expressions'
+      );
+      chaiAssert.equal(
+        devDependencies.indexOf('babel-plugin-transform-es3-property-literals'),
+        -1,
+        'package.json does not have transform-es3-properties'
+      );
+      chaiAssert.equal(
+        plugins.indexOf('transform-es3-member-expression-literals'),
+        -1,
+        'babel does not have es3 member expressions'
+      );
+      chaiAssert.equal(
+        plugins.indexOf('transform-es3-property-literals'),
+        -1,
+        'babel does not have transform es3 property literals'
       );
     });
   });

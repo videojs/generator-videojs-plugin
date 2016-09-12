@@ -13,7 +13,6 @@ const DEFAULTS = {
     'babel-cli': '^6.14.0',
     'babel-plugin-transform-object-assign': '^6.8.0',
     'babel-preset-es2015': '^6.14.0',
-    'babel-preset-es2015-loose': '^7.0.0',
     'babelify': '^7.3.0',
     'bannerize': '^1.0.2',
     'bluebird': '^3.2.2',
@@ -263,6 +262,13 @@ const packageJSON = (current, context) => {
     });
 
     result.devDependencies['node-sass'] = '^3.4.2';
+  }
+
+  if (context.ie8) {
+    /* eslint-disable max-len */
+    result.devDependencies['babel-plugin-transform-es3-member-expression-literals'] = '^6.8.0';
+    result.devDependencies['babel-plugin-transform-es3-property-literals'] = '^6.8.0';
+    /* eslint-enable max-len */
   }
 
   // Support the documentation tooling option.
