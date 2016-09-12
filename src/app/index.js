@@ -304,8 +304,8 @@ export default yeoman.generators.Base.extend({
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
 
     this._ghooksOptions = {
-      lint: 'Check code quality using videojs-standard',
-      test: 'Run unit tests using Karma',
+      lint: 'Check code quality',
+      test: 'Check code quality and run tests',
       none: 'Nothing'
     };
 
