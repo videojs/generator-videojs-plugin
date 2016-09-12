@@ -132,6 +132,9 @@ const packageJSON = (current, context) => {
         'build:js:uglify'
       ]),
 
+      // Babel is a run in a distinct step (vs. using babelify) because we want
+      // the transpiled code to be what's provided to module consumers using
+      // Node or Browserify.
       'build:js:babel': 'babel src -d es5',
 
       'build:js:bannerize': scriptify([
@@ -139,8 +142,11 @@ const packageJSON = (current, context) => {
         '--banner=scripts/banner.ejs'
       ]),
 
+      // The browserify-shim transform is included ONLY in the build step as
+      // we do not want consuming projects to receive a shimmed module - if we
+      // shim always, we cause obscure errors!
       'build:js:browserify': scriptify([
-        'browserify . -t browserify-shim -t browserify-versionify -s %s -o dist/%s.js'
+        'browserify . -t browserify-shim -s %s -o dist/%s.js'
       ]),
 
       'build:js:uglify': scriptify([
@@ -168,9 +174,20 @@ const packageJSON = (current, context) => {
     'author': context.author,
     'license': context.licenseName,
 
+    'browserify': {
+
+      // Unlike browserify-shim, we want to apply the browserify-versionify
+      // shim ALWAYS because we want the version of this project to always be
+      // available to consumers.
+      transform: ['browserify-versionify']
+    },
+
     'browserify-shim': {
       'qunit': 'global:QUnit',
       'sinon': 'global:sinon',
+
+      // video.js is shimmed for the distributable because we don't want to
+      // build it into every plugin's distributed files.
       'video.js': 'global:videojs'
     },
 
