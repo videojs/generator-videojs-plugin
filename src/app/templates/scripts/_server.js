@@ -54,6 +54,8 @@ const tasks = {
 <% if (sass) { -%>
 
   sass(resolve, reject) {
+    const finish = (err) => err ? reject(err.message) : resolve();
+
     sass.render({
       file: srces.css,
       outputStyle: 'compressed'
@@ -61,13 +63,7 @@ const tasks = {
       if (err) {
         reject(err.message);
       } else {
-        fs.writeFile(dests.css, result.css, (errr) => {
-          if (errr) {
-            reject(errr.message);
-          } else {
-            resolve();
-          }
-        });
+        fs.writeFile(dests.css, result.css, finish);
       }
     });
   },
