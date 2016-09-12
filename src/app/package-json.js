@@ -5,6 +5,7 @@ const KARMA_BROWSERS = ['Chrome', 'Firefox', 'IE', 'Safari'];
 
 const DEFAULTS = {
   dependencies: {
+    'browserify-versionify': '^1.0.6',
     'video.js': '^5.10.1'
   },
   devDependencies: {
@@ -18,7 +19,6 @@ const DEFAULTS = {
     // browserify-shim wants browserify < 13.
     'browserify': '^12.0.2',
     'browserify-shim': '^3.8.12',
-    'browserify-versionify': '^1.0.6',
     'budo': '^8.0.4',
     'glob': '^6.0.3',
     'global': '^4.3.0',
