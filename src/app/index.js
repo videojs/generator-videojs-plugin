@@ -238,7 +238,7 @@ export default yeoman.generators.Base.extend({
     }, {
       type: 'confirm',
       name: 'ie8',
-      message: 'Do you want to support ie8?',
+      message: 'Do you want to support Internet Explorer 8?',
       default: defaults.ie8
     }, {
       type: 'confirm',
