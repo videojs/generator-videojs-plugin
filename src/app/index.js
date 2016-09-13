@@ -11,6 +11,16 @@ import {PREFIX} from './constants';
 import packageJSON from './package-json';
 import * as validators from './validators';
 
+/**
+ * Convert an object into "choices" for a prompt. The object keys are the
+ * values reported by the prompt and the object values are the texts displayed
+ * to the user.
+ *
+ * @param  {Object} o
+ * @return {Array}
+ */
+const objectToChoices = (o) => _.map(o, (v, k) => ({name: v, value: k}));
+
 export default yeoman.generators.Base.extend({
 
   /**
@@ -132,7 +142,7 @@ export default yeoman.generators.Base.extend({
       bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
       changelog: configs.hasOwnProperty('changelog') ? !!configs.changelog : true,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
-      ghooks: true,
+      ghooks: configs.hasOwnProperty('ghooks') ? !!configs.ghooks : 'lint',
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
       sass: configs.hasOwnProperty('sass') ? configs.sass : false
@@ -213,9 +223,7 @@ export default yeoman.generators.Base.extend({
       name: 'license',
       message: 'Choose a license for your project',
       default: defaults.license,
-      choices: _.map(this._licenseNames, (v, k) => {
-        return {name: v, value: k};
-      })
+      choices: objectToChoices(this._licenseNames)
     }, {
       type: 'confirm',
       name: 'changelog',
@@ -245,10 +253,11 @@ export default yeoman.generators.Base.extend({
       message: 'Do you want to support Bower (adds special versioning handling)?',
       default: defaults.bower
     }, {
-      type: 'confirm',
+      type: 'list',
       name: 'ghooks',
-      message: 'Do you want to include ghooks and automatically "npm test" on push?',
-      default: defaults.ghooks
+      message: 'What should be done before you `git push`?',
+      default: defaults.ghooks,
+      choices: objectToChoices(this._ghooksOptions)
     }];
 
     return prompts.filter(p => !_.contains(this._promptsToFilter, p.name));
@@ -293,6 +302,12 @@ export default yeoman.generators.Base.extend({
     });
 
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
+
+    this._ghooksOptions = {
+      lint: 'Check code quality',
+      test: 'Check code quality and run tests',
+      none: 'Nothing'
+    };
 
     this._licenseNames = {
       apache2: 'Apache-2.0',
