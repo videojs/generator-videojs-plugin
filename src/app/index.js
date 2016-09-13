@@ -328,7 +328,8 @@ export default yeoman.generators.Base.extend({
       'scripts/_version.js',
       '_.editorconfig',
       '_.gitignore',
-      '_.npmignore'
+      '_.npmignore',
+      '_jsdoc.json'
     ];
 
     this._templatesToCopy = [
