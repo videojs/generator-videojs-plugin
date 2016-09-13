@@ -145,7 +145,8 @@ export default yeoman.generators.Base.extend({
       ghooks: configs.hasOwnProperty('ghooks') ? !!configs.ghooks : 'lint',
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
-      sass: configs.hasOwnProperty('sass') ? configs.sass : false
+      sass: configs.hasOwnProperty('sass') ? configs.sass : false,
+      ie8: configs.hasOwnProperty('ie8') ? configs.ie8 : false
     };
 
     ['author', 'license', 'name', 'description'].forEach(key => {
@@ -234,6 +235,11 @@ export default yeoman.generators.Base.extend({
       name: 'sass',
       message: 'Do you want to include Sass styling?',
       default: defaults.sass
+    }, {
+      type: 'confirm',
+      name: 'ie8',
+      message: 'Do you want to support Internet Explorer 8?',
+      default: defaults.ie8
     }, {
       type: 'confirm',
       name: 'docs',
@@ -341,7 +347,8 @@ export default yeoman.generators.Base.extend({
       'test/_plugin.test.js',
       '_index.html',
       '_CONTRIBUTING.md',
-      '_README.md'
+      '_README.md',
+      '_.babelrc'
     ];
 
     this._promptsToFilter = [];
@@ -456,7 +463,8 @@ export default yeoman.generators.Base.extend({
       'docs',
       'ghooks',
       'lang',
-      'sass'
+      'sass',
+      'ie8'
     ]), {
       className: `vjs-${configs.name}`,
       functionName: _.camelCase(configs.name),
