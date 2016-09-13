@@ -146,7 +146,7 @@ const packageJSON = (current, context) => {
       // we do not want consuming projects to receive a shimmed module - if we
       // shim always, we cause obscure errors!
       'build:js:browserify': scriptify([
-        'browserify . -t browserify-shim -s %s -o dist/%s.js'
+        'browserify . -g browserify-shim -s %s -o dist/%s.js'
       ]),
 
       'build:js:uglify': scriptify([
