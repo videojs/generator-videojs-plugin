@@ -257,7 +257,7 @@ const packageJSON = (current, context) => {
 
     _.assign(result.scripts, {
       'docs': 'npm-run-all docs:*',
-      'docs:api': 'jsdoc src -r -d docs/api',
+      'docs:api': 'jsdoc src -r -c jsdoc.json -d docs/api',
       'docs:toc': 'doctoc README.md'
     });
 
