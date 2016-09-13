@@ -4,9 +4,9 @@ import _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
 import {assert, test as helpers} from 'yeoman-generator';
+
 import * as libs from './libs';
 import packageJSON from '../generators/app/package-json';
-import {assert as chaiAssert} from 'chai';
 
 describe('videojs-plugin:app', function() {
   const scripts = [
@@ -192,7 +192,6 @@ describe('videojs-plugin:app', function() {
         'the author\'s email is correct'
       );
     });
-
   });
 
   describe('ie8', function() {
@@ -219,22 +218,22 @@ describe('videojs-plugin:app', function() {
       );
       const plugins = JSON.parse(fs.readFileSync(babelrc), 'utf8').plugins;
 
-      chaiAssert.notEqual(
+      assert.notEqual(
         devDependencies.indexOf('babel-plugin-transform-es3-member-expression-literals'),
         -1,
         'package.json has es3 member expressions'
       );
-      chaiAssert.notEqual(
+      assert.notEqual(
         devDependencies.indexOf('babel-plugin-transform-es3-property-literals'),
         -1,
         'package.json has transform-es3-properties'
       );
-      chaiAssert.notEqual(
+      assert.notEqual(
         plugins.indexOf('transform-es3-member-expression-literals'),
         -1,
         'babel has es3 member expressions'
       );
-      chaiAssert.notEqual(
+      assert.notEqual(
         plugins.indexOf('transform-es3-property-literals'),
         -1,
         'babel has transform es3 property literals'
@@ -265,22 +264,22 @@ describe('videojs-plugin:app', function() {
       );
       const plugins = JSON.parse(fs.readFileSync(babelrc), 'utf8').plugins;
 
-      chaiAssert.equal(
+      assert.equal(
         devDependencies.indexOf('babel-plugin-transform-es3-member-expression-literals'),
         -1,
         'package.json does not have es3 member expressions'
       );
-      chaiAssert.equal(
+      assert.equal(
         devDependencies.indexOf('babel-plugin-transform-es3-property-literals'),
         -1,
         'package.json does not have transform-es3-properties'
       );
-      chaiAssert.equal(
+      assert.equal(
         plugins.indexOf('transform-es3-member-expression-literals'),
         -1,
         'babel does not have es3 member expressions'
       );
-      chaiAssert.equal(
+      assert.equal(
         plugins.indexOf('transform-es3-property-literals'),
         -1,
         'babel does not have transform es3 property literals'
