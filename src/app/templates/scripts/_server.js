@@ -79,8 +79,7 @@ const tasks = {
     standalone: nameify('%s'),
     transform: [
       'babelify',
-      'browserify-shim',
-      'browserify-versionify'
+      ['browserify-shim', {global: true}]
     ]
   }),
 
@@ -89,8 +88,7 @@ const tasks = {
     entries: srces.tests,
     transform: [
       'babelify',
-      'browserify-shim',
-      'browserify-versionify'
+      ['browserify-shim', {global: true}]
     ]
   })
 };
