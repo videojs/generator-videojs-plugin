@@ -309,7 +309,10 @@ const packageJSON = (current, context) => {
   // remove it from the package.json entirely.
   if (context.ghooks === 'none') {
     delete result.devDependencies.ghooks;
-    delete result.config.ghooks;
+
+    if (result.config) {
+      delete result.config.ghooks;
+    }
   } else {
     result.devDependencies.ghooks = '^1.3.2';
     result.config = {
