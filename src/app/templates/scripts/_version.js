@@ -1,6 +1,7 @@
 import {exec} from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import semver from 'semver';
 
 /* eslint no-console: 0 */
 
@@ -41,7 +42,7 @@ const hasBower = () => {
 const commands = [];
 
 // If the project has a CHANGELOG, update it for the new release.
-if (hasChangelog()) {
+if (!semver.prerelease(pkg.version) && hasChangelog()) {
   commands.push(`chg release "${pkg.version}"`);
   commands.push('git add CHANGELOG.md');
 }
