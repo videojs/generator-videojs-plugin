@@ -107,7 +107,7 @@ describe('videojs-plugin:app', function() {
           name: 'wat',
           author: 'John Doe',
           description: 'wat is the plugin',
-          sass: true
+          css: true
         })
         .on('end', libs.onEnd.bind(this, done));
     });
@@ -118,7 +118,7 @@ describe('videojs-plugin:app', function() {
       ]));
     });
 
-    it('creates npm-specific and sass-specific files', function() {
+    it('creates npm-specific and css-specific files', function() {
       assert.file(libs.fileList('common', 'oss', 'sass'));
     });
   });

@@ -1,11 +1,10 @@
 import _ from 'lodash';
 import chalk from 'chalk';
-import chg from 'chg';
-import fs from 'fs';
 import path from 'path';
 import tsmlj from 'tsmlj';
 import yeoman from 'yeoman-generator';
 import yosay from 'yosay';
+import shelljs from 'shelljs';
 
 import {PREFIX} from './constants';
 import packageJSON from './package-json';
@@ -140,14 +139,25 @@ export default yeoman.generators.Base.extend({
 
     const defaults = {
       bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
-      changelog: configs.hasOwnProperty('changelog') ? !!configs.changelog : true,
-      docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       ghooks: configs.hasOwnProperty('ghooks') ? !!configs.ghooks : 'lint',
-      lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
-      sass: configs.hasOwnProperty('sass') ? configs.sass : false,
+
+      noShimVideojs: configs.hasOwnProperty('noShimVideojs') ? !!configs.noShimVideojs : false,
+      docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
+      i18n: configs.hasOwnProperty('lang') ? !!configs.lang : false,
+      css: configs.hasOwnProperty('sass') ? configs.sass : false,
       ie8: configs.hasOwnProperty('ie8') ? configs.ie8 : false
     };
+
+    // support new property name old name was lang
+    if (configs.hasOwnProperty('i18n')) {
+      defaults.i18n = configs.i18n;
+    }
+
+    // support new property name old name was sass
+    if (configs.hasOwnProperty('css')) {
+      defaults.css = configs.css;
+    }
 
     ['author', 'license', 'name', 'description'].forEach(key => {
       if (pkg.hasOwnProperty(key)) {
@@ -227,14 +237,14 @@ export default yeoman.generators.Base.extend({
       choices: objectToChoices(this._licenseNames)
     }, {
       type: 'confirm',
-      name: 'changelog',
-      message: 'Do you want to include CHANGELOG tool?',
-      default: defaults.changelog
+      name: 'css',
+      message: 'Do you want to include CSS styling, including sass preprocessing?',
+      default: defaults.css
     }, {
       type: 'confirm',
-      name: 'sass',
-      message: 'Do you want to include Sass styling?',
-      default: defaults.sass
+      name: 'shimVideojs',
+      message: 'Do you want include video.js in your distribution bundles? (NOT RECOMMENDED)',
+      default: defaults.noShimVideojs
     }, {
       type: 'confirm',
       name: 'ie8',
@@ -247,12 +257,12 @@ export default yeoman.generators.Base.extend({
       default: defaults.docs
     }, {
       type: 'confirm',
-      name: 'lang',
+      name: 'i18n',
       message: tsmlj`
         Do you need video.js language file infrastructure for
         internationalized strings?
       `,
-      default: defaults.lang
+      default: defaults.i18n
     }, {
       type: 'confirm',
       name: 'bower',
@@ -329,26 +339,20 @@ export default yeoman.generators.Base.extend({
     this._licenseDefault = 'mit';
 
     this._filesToCopy = [
-      'scripts/_banner.ejs',
-      'scripts/_postversion.js',
-      'scripts/_version.js',
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
-      '_jsdoc.json'
+      '_CHANGELOG.md',
+      '.github/_ISSUE_TEMPLATE.md',
+      '.github/_PULL_REQUEST_TEMPLATE.md'
     ];
 
     this._templatesToCopy = [
-      'scripts/_build-test.js',
-      'scripts/_server.js',
-      'src/_plugin.js',
-      'test/_karma.conf.js',
-      'test/_index.html',
-      'test/_plugin.test.js',
+      'src/js/_index.js',
+      'src/test/_index.test.js',
       '_index.html',
       '_CONTRIBUTING.md',
-      '_README.md',
-      '_.babelrc'
+      '_README.md'
     ];
 
     this._promptsToFilter = [];
@@ -382,15 +386,8 @@ export default yeoman.generators.Base.extend({
         templates: []
       },
       scripts: {
-        files: [
-          'scripts/_banner.ejs',
-          'scripts/_postversion.js',
-          'scripts/_version.js'
-        ],
-        templates: [
-          'scripts/_build-test.js',
-          'scripts/_server.js'
-        ]
+        files: [],
+        templates: []
       }
     };
 
@@ -458,12 +455,12 @@ export default yeoman.generators.Base.extend({
     return _.assign(_.pick(configs, [
       'author',
       'bower',
-      'changelog',
       'description',
       'docs',
       'ghooks',
-      'lang',
-      'sass',
+      'i18n',
+      'css',
+      'shimVideojs',
       'ie8'
     ]), {
       className: `vjs-${configs.name}`,
@@ -492,12 +489,16 @@ export default yeoman.generators.Base.extend({
       this._filesToCopy.push('_.travis.yml');
     }
 
-    if (this.context.lang) {
-      this._filesToCopy.push('lang/_en.json');
+    if (this.context.i18n) {
+      this._filesToCopy.push('src/i18n/_en.json');
     }
 
-    if (this.context.sass) {
-      this._templatesToCopy.push('src/_plugin.scss');
+    if (this.context.docs) {
+      this._filesToCopy.push('src/docs/_index.md');
+    }
+
+    if (this.context.css) {
+      this._templatesToCopy.push('src/css/_index.scss');
     }
 
     if (this.context.bower) {
@@ -520,26 +521,9 @@ export default yeoman.generators.Base.extend({
    */
   writing: {
 
-    /**
-     * Initializes a CHANGELOG.md file if one does not exist.
-     *
-     * @function changelog
-     */
-    changelog() {
-
-      // There is no _limitTo setting that includes CHANGELOG.md, so we only
-      // need to check for it existing to know to skip this.
-      if (!this.context.changelog || this._limitTo.length) {
-        return;
-      }
-
-      try {
-        fs.statSync(this._dest('CHANGELOG.md'));
-      } catch (x) {
-        chg.init(null, this.async());
-      }
+    gitInit() {
+      shelljs.exec('git init');
     },
-
     /**
      * Writes common files.
      *
@@ -618,6 +602,8 @@ export default yeoman.generators.Base.extend({
     if (this.options.hurry) {
       return;
     }
+    shelljs.exec('git add --all');
+    shelljs.exec('git commit -a -m "generator run"');
     this.log(yosay(tsmlj`
       All done; ${chalk.green(this.context.pluginName)} is ready to go!
     `));
