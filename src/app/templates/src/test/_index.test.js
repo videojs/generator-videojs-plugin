@@ -1,10 +1,10 @@
-import document from 'global/document';
+import {document} from 'global';
 
-import QUnit from 'qunit';
+import QUnit from 'qunitjs';
 import sinon from 'sinon';
 import videojs from 'video.js';
 
-import plugin from '../js';
+import plugin from '../js/index';
 
 const Player = videojs.getComponent('Player');
 
