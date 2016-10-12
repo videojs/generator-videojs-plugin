@@ -82,7 +82,6 @@ const packageJSON = (current, context) => {
        version: generatorVersion()
      },
 
-
     'scripts': _.assign({}, current.scripts, {
       clean: 'sb-clean',
       build: 'sb-build',

@@ -5,7 +5,6 @@ import _ from 'lodash';
 import {assert, test as helpers} from 'yeoman-generator';
 
 describe('videojs-plugin:app options', function() {
-
   describe('--bcov', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
@@ -23,7 +22,7 @@ describe('videojs-plugin:app options', function() {
     it('produces expected package properties and file(s)', function() {
       assert.strictEqual(this.pkg.author, 'Brightcove, Inc.');
       assert.strictEqual(this.pkg.license, 'Apache-2.0');
-      assert.file(libs.fileList('oss'));
+      assert.file(libs.fileList('default'));
     });
   });
 
@@ -45,7 +44,9 @@ describe('videojs-plugin:app options', function() {
     it('produces expected package properties and file(s)', function() {
       assert.strictEqual(this.pkg.author, 'Brightcove, Inc.');
       assert.strictEqual(this.pkg.license, 'UNLICENSED');
+
       assert.noFile(libs.fileList('oss'));
+      assert.file(libs.fileList('default'));
     });
   });
 
@@ -65,9 +66,9 @@ describe('videojs-plugin:app options', function() {
     });
 
     it('produces expected files (and not unexpected files)', function() {
-      const expected = libs.fileList('dotfiles', 'dotfiles:oss', 'pkg', 'scripts');
+      const expected = libs.fileList('limit-to-meta');
       const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
+        libs.fileList('default'),
         expected
       );
 
@@ -92,9 +93,9 @@ describe('videojs-plugin:app options', function() {
     });
 
     it('produces expected files (and not unexpected files)', function() {
-      const expected = libs.fileList('dotfiles', 'dotfiles:oss');
+      const expected = libs.fileList('limit-to-dotfiles');
       const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
+        libs.fileList('default'),
         expected
       );
 
@@ -119,9 +120,9 @@ describe('videojs-plugin:app options', function() {
     });
 
     it('produces expected files (and not unexpected files)', function() {
-      const expected = libs.fileList('pkg');
+      const expected = libs.fileList('limit-to-pkg');
       const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
+        libs.fileList('default'),
         expected
       );
 
@@ -130,65 +131,11 @@ describe('videojs-plugin:app options', function() {
     });
   });
 
-  describe('--limit-to=scripts', function() {
+  describe('--limit-to=pkg,dotfiles (with garbage)', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options({
-          limitTo: 'scripts'
-        }))
-        .withPrompts({
-          name: 'options-limit-to=scripts',
-          author: 'ignored',
-          description: 'doesn\'t matter',
-          license: 'mit'
-        })
-        .on('end', libs.onEnd.bind(this, done));
-    });
-
-    it('produces expected files (and not unexpected files)', function() {
-      const expected = libs.fileList('scripts');
-      const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
-        expected
-      );
-
-      assert.file(expected);
-      assert.noFile(unexpected);
-    });
-  });
-
-  describe('--limit-to=dotfiles,scripts', function() {
-    before(function(done) {
-      helpers.run(libs.GENERATOR_PATH)
-        .withOptions(libs.options({
-          limitTo: 'dotfiles,scripts'
-        }))
-        .withPrompts({
-          name: 'options-limit-to=dotfiles,scripts',
-          author: 'ignored',
-          description: 'doesn\'t matter',
-          license: 'mit'
-        })
-        .on('end', libs.onEnd.bind(this, done));
-    });
-
-    it('produces expected files (and not unexpected files)', function() {
-      const expected = libs.fileList('dotfiles', 'dotfiles:oss', 'scripts');
-      const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
-        expected
-      );
-
-      assert.file(expected);
-      assert.noFile(unexpected);
-    });
-  });
-
-  describe('--limit-to=pkg,scripts (with garbage)', function() {
-    before(function(done) {
-      helpers.run(libs.GENERATOR_PATH)
-        .withOptions(libs.options({
-          limitTo: 'pkg,  scripts ,\tfoo\t,   bar '
+          limitTo: 'pkg,  dotfiles  ,\tfoo\t,   bar '
         }))
         .withPrompts({
           name: 'options-limit-to=pkg,scripts (with garbage)',
@@ -200,9 +147,9 @@ describe('videojs-plugin:app options', function() {
     });
 
     it('produces expected files (and not unexpected files)', function() {
-      const expected = libs.fileList('pkg', 'scripts');
+      const expected = libs.fileList('limit-to-dotfiles', 'limit-to-pkg');
       const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
+        libs.fileList('default'),
         expected
       );
 

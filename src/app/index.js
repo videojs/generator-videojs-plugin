@@ -142,21 +142,20 @@ export default yeoman.generators.Base.extend({
       ghooks: configs.hasOwnProperty('ghooks') ? !!configs.ghooks : 'lint',
       license: this._licenseDefault,
 
-      noShimVideojs: configs.hasOwnProperty('noShimVideojs') ? !!configs.noShimVideojs : false,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       i18n: configs.hasOwnProperty('lang') ? !!configs.lang : false,
-      css: configs.hasOwnProperty('sass') ? configs.sass : false,
-      ie8: configs.hasOwnProperty('ie8') ? configs.ie8 : false
+      css: configs.hasOwnProperty('sass') ? !!configs.sass : false,
+      ie8: configs.hasOwnProperty('ie8') ? !!configs.ie8 : false
     };
 
     // support new property name old name was lang
     if (configs.hasOwnProperty('i18n')) {
-      defaults.i18n = configs.i18n;
+      defaults.i18n = !!configs.i18n;
     }
 
     // support new property name old name was sass
     if (configs.hasOwnProperty('css')) {
-      defaults.css = configs.css;
+      defaults.css = !!configs.css;
     }
 
     ['author', 'license', 'name', 'description'].forEach(key => {
@@ -242,11 +241,6 @@ export default yeoman.generators.Base.extend({
       default: defaults.css
     }, {
       type: 'confirm',
-      name: 'shimVideojs',
-      message: 'Do you want include video.js in your distribution bundles? (NOT RECOMMENDED)',
-      default: defaults.noShimVideojs
-    }, {
-      type: 'confirm',
       name: 'ie8',
       message: 'Do you want to support Internet Explorer 8?',
       default: defaults.ie8
@@ -305,14 +299,14 @@ export default yeoman.generators.Base.extend({
     this.option('limit-to', {
       desc: tsmlj`
         Limit files to be updated by passing any comma-separated combination
-        of: dotfiles, pkg, and scripts
+        of: dotfiles and or pkg
       `,
       type: 'string',
       defaults: ''
     });
 
     this.option('limit-to-meta', {
-      desc: 'Only update "meta files" - dotfiles, package.json, and scripts.',
+      desc: 'Only update "meta files" - dotfiles, bower.json, and package.json',
       type: 'boolean',
       defaults: false
     });
@@ -342,9 +336,7 @@ export default yeoman.generators.Base.extend({
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
-      '_CHANGELOG.md',
-      '.github/_ISSUE_TEMPLATE.md',
-      '.github/_PULL_REQUEST_TEMPLATE.md'
+      '_CHANGELOG.md'
     ];
 
     this._templatesToCopy = [
@@ -373,19 +365,17 @@ export default yeoman.generators.Base.extend({
           '_.editorconfig',
           '_.gitignore',
           '_.npmignore',
-          '_.travis.yml'
+          '_.travis.yml',
+          '.github/_ISSUE_TEMPLATE.md',
+          '.github/_PULL_REQUEST_TEMPLATE.md'
         ],
         templates: [
-          'bower.json'
+          '_bower.json'
         ]
       },
 
       // These are empty because package.json has special handling.
       pkg: {
-        files: [],
-        templates: []
-      },
-      scripts: {
         files: [],
         templates: []
       }
@@ -460,7 +450,6 @@ export default yeoman.generators.Base.extend({
       'ghooks',
       'i18n',
       'css',
-      'shimVideojs',
       'ie8'
     ]), {
       className: `vjs-${configs.name}`,
@@ -487,6 +476,8 @@ export default yeoman.generators.Base.extend({
 
     if (!this._isPrivate()) {
       this._filesToCopy.push('_.travis.yml');
+      this._filesToCopy.push('.github/_ISSUE_TEMPLATE.md');
+      this._filesToCopy.push('.github/_PULL_REQUEST_TEMPLATE.md');
     }
 
     if (this.context.i18n) {
@@ -521,8 +512,19 @@ export default yeoman.generators.Base.extend({
    */
   writing: {
 
+    /**
+     * intialize git if there is no _.git directory
+     *
+     * @function gitInit
+     */
     gitInit() {
-      shelljs.exec('git init');
+      const git = this._dest('_.git');
+
+      try {
+        this.fs.statSync(git);
+      } catch (e) {
+        shelljs.exec('git init', {silent: true});
+      }
     },
     /**
      * Writes common files.
@@ -602,8 +604,6 @@ export default yeoman.generators.Base.extend({
     if (this.options.hurry) {
       return;
     }
-    shelljs.exec('git add --all');
-    shelljs.exec('git commit -a -m "generator run"');
     this.log(yosay(tsmlj`
       All done; ${chalk.green(this.context.pluginName)} is ready to go!
     `));

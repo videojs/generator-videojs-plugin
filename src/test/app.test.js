@@ -11,24 +11,17 @@ import generatorVersion from '../generators/app/generator-version';
 
 describe('videojs-plugin:app', function() {
   const scripts = [
-    'build',
-    'build:js',
-    'build:test',
     'clean',
+    'build',
     'lint',
+    'prepublish',
     'start',
+    'watch',
     'test',
-    'test:chrome',
-    'test:firefox',
-    'test:ie',
-    'test:safari',
-    'preversion',
-    'version',
-    'postversion'
+    'version'
   ];
 
   describe('defaults', function() {
-
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
@@ -41,46 +34,39 @@ describe('videojs-plugin:app', function() {
     });
 
     it('sets basic package properties', function() {
-      const p = this.pkg;
-
-      assert.strictEqual(p.author, 'John Doe');
-      assert.strictEqual(p.license, 'MIT');
-      assert.strictEqual(p.name, 'videojs-wat');
-      assert.strictEqual(p.description, 'wat is the plugin');
-      assert.strictEqual(p.version, '0.0.0');
-      assert.strictEqual(p.main, 'es5/plugin.js');
-      assert.ok(_.isArray(p.keywords));
-      assert.ok(_.isPlainObject(p['browserify-shim']));
-      assert.ok(_.isPlainObject(p.vjsstandard));
-      assert.ok(_.isPlainObject(p.devDependencies));
-      assert.strictEqual(p.config.ghooks['pre-push'], 'npm run lint');
-      assert.ok(_.isPlainObject(p['generator-videojs-plugin']));
-      assert.strictEqual(p['generator-videojs-plugin'].version, generatorVersion());
+      assert.strictEqual(this.pkg.author, 'John Doe', 'author exists');
+      assert.strictEqual(this.pkg.license, 'MIT', 'licence exists');
+      assert.strictEqual(this.pkg.name, 'videojs-wat', 'pkg name exists');
+      assert.strictEqual(this.pkg.description, 'wat is the plugin', 'description exists');
+      assert.strictEqual(this.pkg.version, '0.0.0', 'version is set');
+      assert.strictEqual(this.pkg.main, 'dist/es5/index.js', 'main is set');
+      assert.strictEqual(this.pkg['jsnext:main'], 'src/js/index.js', 'jsnext:main is set');
+      assert.ok(_.isArray(this.pkg.keywords), 'keywords exist');
+      assert.ok(_.isArray(this.pkg.files), 'files array exists');
+      assert.ok(_.isPlainObject(this.pkg.devDependencies), 'devDependencies exists');
+      assert.ok(_.isPlainObject(this.pkg.dependencies), 'dependencies exists');
+      assert.ok(_.isPlainObject(this.pkg.spellbook), 'spellbook');
+      assert.equal(typeof this.pkg['browserify-shim'], 'string', 'browserify-shim exists');
+      assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
+      assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
+      assert.equal(this.pkg.spellbook.i18n, false, 'i18n should be disabled');
+      assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
+      assert.ok(_.isPlainObject(this.pkg.vjsstandard));
+      assert.strictEqual(this.pkg.config.ghooks['pre-push'], 'npm run lint');
+      assert.ok(_.isPlainObject(this.pkg['generator-videojs-plugin']));
+      assert.strictEqual(this.pkg['generator-videojs-plugin'].version, generatorVersion());
     });
 
     it('has all scripts, even if they are empty', function() {
       libs.allAreNonEmpty(this.pkg.scripts, scripts);
     });
 
-    it('populates versioning scripts', function() {
-      assert.strictEqual(
-        this.pkg.scripts.version,
-        'babel-node scripts/version.js'
-      );
-
-      assert.strictEqual(
-        this.pkg.scripts.postversion,
-        'babel-node scripts/postversion.js'
-      );
-    });
-
-    it('creates common default set of files', function() {
-      assert.file(libs.fileList('common', 'oss', 'bower'));
+    it('creates all default files', function() {
+      assert.file(libs.fileList('default', 'oss'));
     });
   });
 
   describe('scoped package support', function() {
-
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
@@ -94,12 +80,11 @@ describe('videojs-plugin:app', function() {
     });
 
     it('includes the package name in scope', function() {
-      assert.strictEqual(this.pkg.name, '@herp/videojs-derp');
+      assert.strictEqual(this.pkg.name, '@herp/videojs-derp', 'scope is set on pkg name');
     });
   });
 
-  describe('sass', function() {
-
+  describe('css', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
@@ -112,14 +97,13 @@ describe('videojs-plugin:app', function() {
         .on('end', libs.onEnd.bind(this, done));
     });
 
-    it('populates otherwise empty npm scripts', function() {
-      libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
-        'build:css'
-      ]));
-    });
-
-    it('creates npm-specific and css-specific files', function() {
-      assert.file(libs.fileList('common', 'oss', 'sass'));
+    it('does not disable css in spellbook, creates css files', function() {
+      assert.ok(_.isPlainObject(this.pkg.spellbook));
+      assert.equal(typeof this.pkg.spellbook.css, 'undefined', 'css should not be disabled');
+      assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
+      assert.equal(this.pkg.spellbook.i18n, false, 'i18n should be disabled');
+      assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
+      assert.file(libs.fileList('default', 'oss', 'css'));
     });
   });
 
@@ -137,17 +121,17 @@ describe('videojs-plugin:app', function() {
         .on('end', libs.onEnd.bind(this, done));
     });
 
-    it('populates otherwise empty npm scripts', function() {
-      libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
-        'docs',
-        'docs:api',
-        'docs:toc'
-      ]));
+    it('does not disable docs in spellbook, creates doc files', function() {
+      assert.ok(_.isPlainObject(this.pkg.spellbook));
+      assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
+      assert.equal(typeof this.pkg.spellbook.docs, 'undefined', 'docs should not be disabled');
+      assert.equal(this.pkg.spellbook.i18n, false, 'i18n should be disabled');
+      assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
+      assert.file(libs.fileList('default', 'oss', 'docs'));
     });
   });
 
-  describe('bower turned off', function() {
-
+  describe('i18n', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
@@ -155,48 +139,19 @@ describe('videojs-plugin:app', function() {
           name: 'wat',
           author: 'John Doe',
           description: 'wat is the plugin',
-          bower: false
+          i18n: true
         })
         .on('end', libs.onEnd.bind(this, done));
     });
 
-    it('does not create bower-specific files', function() {
-      assert.noFile(libs.fileList('bower'));
-    });
-  });
+    it('does not disable i18n in spellbook, creates i18n files', function() {
+      assert.ok(_.isPlainObject(this.pkg.spellbook));
+      assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
+      assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
+      assert.equal(typeof this.pkg.spellbook.i18n, 'undefined', 'i18n should not be disabled');
+      assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
 
-  describe('existing package.json with author object', function() {
-
-    before(function(done) {
-      helpers.run(libs.GENERATOR_PATH)
-        .inTmpDir(function(dir) {
-          fs.copySync(path.join(__dirname, '../fixtures/author'), dir);
-        })
-        .withOptions(libs.options({force: true}))
-        .withPrompts({
-          name: 'nomen',
-          author: 'ignore me',
-          description: 'it is a plugin'
-        })
-        .on('end', libs.onEnd.bind(this, done));
-    });
-
-    it('does not change the value of the author field', function() {
-      const author = this.pkg.author;
-
-      assert.ok(_.isPlainObject(author), 'the author is still an object');
-
-      assert.strictEqual(
-        author.name,
-        'John Doe',
-        'the author\'s name is correct'
-      );
-
-      assert.strictEqual(
-        author.email,
-        'john@doe.com',
-        'the author\'s email is correct'
-      );
+      assert.file(libs.fileList('default', 'oss', 'i18n'));
     });
   });
 
@@ -213,82 +168,99 @@ describe('videojs-plugin:app', function() {
         .on('end', libs.onEnd.bind(this, done));
     });
 
-    it('adds babel plugins to .babelrc and package.json', function() {
-      const babelrc = '.babelrc';
-      const pkg = 'package.json';
+    it('does not change the value of the author field', function() {
+      const author = this.pkg.author;
 
-      assert.file([babelrc, pkg]);
+      assert.ok(_.isPlainObject(author), 'the author is still an object');
 
-      const devDependencies = Object.keys(
-        JSON.parse(fs.readFileSync(pkg), 'utf8').devDependencies
+      assert.strictEqual(
+        author.name,
+        'John Doe',
+        'the author\'s name is correct'
       );
-      const plugins = JSON.parse(fs.readFileSync(babelrc), 'utf8').plugins;
+    });
 
-      assert.notEqual(
-        devDependencies.indexOf('babel-plugin-transform-es3-member-expression-literals'),
-        -1,
-        'package.json has es3 member expressions'
-      );
-      assert.notEqual(
-        devDependencies.indexOf('babel-plugin-transform-es3-property-literals'),
-        -1,
-        'package.json has transform-es3-properties'
-      );
-      assert.notEqual(
-        plugins.indexOf('transform-es3-member-expression-literals'),
-        -1,
-        'babel has es3 member expressions'
-      );
-      assert.notEqual(
-        plugins.indexOf('transform-es3-property-literals'),
-        -1,
-        'babel has transform es3 property literals'
-      );
+    it('does not disable ie8 in spellbook', function() {
+      assert.ok(_.isPlainObject(this.pkg.spellbook));
+      assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
+      assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
+      assert.equal(this.pkg.spellbook.i18n, false, 'i18n should be disabled');
+      assert.equal(this.pkg.spellbook.ie8, true, 'ie8 should be supported');
+
+      assert.file(libs.fileList('default', 'oss'));
     });
   });
 
-  describe('no ie8', function() {
+  describe('bower turned off', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
         .withPrompts({
           name: 'wat',
           author: 'John Doe',
-          description: 'wat is the plugin'
+          description: 'wat is the plugin',
+          bower: false
         })
         .on('end', libs.onEnd.bind(this, done));
     });
 
-    it('adds non ie8 babel plugins to .babelrc and package.json', function() {
-      const babelrc = '.babelrc';
-      const pkg = 'package.json';
+    it('does not create bower-specific files, but does create everything else', function() {
+      const files = libs.fileList('default', 'oss');
+      const bowerFiles = libs.fileList('bower');
 
-      assert.file([babelrc, pkg]);
+      bowerFiles.forEach(function(file) {
+        const i = files.indexOf(file);
 
-      const devDependencies = Object.keys(
-        JSON.parse(fs.readFileSync(pkg), 'utf8').devDependencies
-      );
-      const plugins = JSON.parse(fs.readFileSync(babelrc), 'utf8').plugins;
+        if (i !== -1) {
+          files.splice(i, 1);
+        }
+      });
 
-      assert.equal(
-        devDependencies.indexOf('babel-plugin-transform-es3-member-expression-literals'),
-        -1,
-        'package.json does not have es3 member expressions'
+      assert.noFile(bowerFiles);
+      assert.file(files);
+    });
+  });
+
+  describe('existing package.json with author object', function() {
+
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .inTmpDir(function(dir) {
+          fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify({
+            name: 'videojs-author-fixture',
+            description: 'This is a fixture to test the handling of an author object.',
+            author: {
+              name: 'John Doe',
+              email: 'john@doe.com'
+            },
+            license: 'MIT',
+            version: '1.0.0'
+          }));
+        })
+        .withOptions(libs.options({force: true}))
+        .withPrompts({
+          name: 'nomen',
+          author: 'ignore me',
+          description: 'it is a plugin'
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
+
+    it('does not change the value of the author field', function() {
+      let author = this.pkg.author;
+
+      assert.ok(_.isPlainObject(author), 'the author is still an object');
+
+      assert.strictEqual(
+        author.name,
+        'John Doe',
+        'the author\'s name is correct'
       );
-      assert.equal(
-        devDependencies.indexOf('babel-plugin-transform-es3-property-literals'),
-        -1,
-        'package.json does not have transform-es3-properties'
-      );
-      assert.equal(
-        plugins.indexOf('transform-es3-member-expression-literals'),
-        -1,
-        'babel does not have es3 member expressions'
-      );
-      assert.equal(
-        plugins.indexOf('transform-es3-property-literals'),
-        -1,
-        'babel does not have transform es3 property literals'
+
+      assert.strictEqual(
+        author.email,
+        'john@doe.com',
+        'the author\'s email is correct'
       );
     });
   });

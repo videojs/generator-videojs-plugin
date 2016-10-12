@@ -78,13 +78,12 @@ In some cases - especially when updating previously generated projects - you may
 
 - `dotfiles`: Updates _only_ those files starting with a `.` and `bower.json`.
 - `pkg`: Updates _only_ `package.json`.
-- `scripts`: Updates _only_ the `scripts/` directory.
 
 These keys can be combined to create larger sets of files. For example, `--limit-to=dotfiles,pkg` will update the files matched by `dotfiles` and `pkg`.
 
 Finally, the `--limit-to-meta` option is available as a shortcut for using `--limit-to` with _all the available keys._
 
-Update a subset of files with: `yo videojs-plugin --limit-to=pkg,scripts`
+Update a subset of files with: `yo videojs-plugin --limit-to=pkg,dotfiles`
 Update _all_ "meta" files with: `yo videojs-plugin --limit-to-meta`
 
 #### Brightcove Defaults
@@ -98,7 +97,7 @@ Turn on these Brightcove defaults with: `yo videojs-plugin --bcov`
 
 ## Updating an Existing Project
 
-Running a Yeoman generator in an empty directory poses no difficulties; however, running it against an existing project can cause conflicts. Yeoman provides a mechanism, which can be confusing because it's not clearly documented, for resolving these conflicts. It will prompt you to choose one of: 
+Running a Yeoman generator in an empty directory poses no difficulties; however, running it against an existing project can cause conflicts. Yeoman provides a mechanism, which can be confusing because it's not clearly documented, for resolving these conflicts. It will prompt you to choose one of:
 
 - `Y`: yes (default)
 - `n`: no
@@ -112,8 +111,6 @@ Running a Yeoman generator in an empty directory poses no difficulties; however,
 Most of what this generator does is localized to the `package.json` file. Luckily, the generator does a good job of merging your existing contents with the generated contents. In general, it's safe to select `Y` for the `package.json` in your project.
 
 Other files you'll usually want to select `n` on - particularly those files plugin authors will edit the most: anything in `src/` or `test/`.
-
-However, files that are _not_ commonly edited by plugin authors may deserve a diff check (`d`) if you've made changes to these sorts of files. For example, anything in `scripts/`.
 
 ## Extra Tools
 
