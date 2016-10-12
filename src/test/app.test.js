@@ -7,6 +7,7 @@ import {assert, test as helpers} from 'yeoman-generator';
 
 import * as libs from './libs';
 import packageJSON from '../generators/app/package-json';
+import generatorVersion from '../generators/app/generator-version';
 
 describe('videojs-plugin:app', function() {
   const scripts = [
@@ -53,6 +54,8 @@ describe('videojs-plugin:app', function() {
       assert.ok(_.isPlainObject(p.vjsstandard));
       assert.ok(_.isPlainObject(p.devDependencies));
       assert.strictEqual(p.config.ghooks['pre-push'], 'npm run lint');
+      assert.ok(_.isPlainObject(p['generator-videojs-plugin']));
+      assert.strictEqual(p['generator-videojs-plugin'].version, generatorVersion());
     });
 
     it('has all scripts, even if they are empty', function() {
