@@ -32,7 +32,7 @@ const DEFAULTS = {
     'karma-safari-launcher': '^0.1.1',
     'lodash': '^4.11.2',
     'mkdirp': '^0.5.1',
-    'node-semver': '^5.3.0',
+    'semver': '^5.3.0',
     'npm-run-all': '^1.5.1',
     'qunitjs': '^1.21.0',
     'rimraf': '^2.5.1',
