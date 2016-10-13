@@ -40,16 +40,19 @@ describe('videojs-plugin:app', function() {
     });
 
     it('sets basic package properties', function() {
-      assert.strictEqual(this.pkg.author, 'John Doe');
-      assert.strictEqual(this.pkg.license, 'MIT');
-      assert.strictEqual(this.pkg.name, 'videojs-wat');
-      assert.strictEqual(this.pkg.description, 'wat is the plugin');
-      assert.strictEqual(this.pkg.version, '0.0.0');
-      assert.strictEqual(this.pkg.main, 'es5/plugin.js');
-      assert.ok(_.isArray(this.pkg.keywords));
-      assert.ok(_.isPlainObject(this.pkg['browserify-shim']));
-      assert.ok(_.isPlainObject(this.pkg.vjsstandard));
-      assert.ok(_.isPlainObject(this.pkg.devDependencies));
+      const p = this.pkg;
+
+      assert.strictEqual(p.author, 'John Doe');
+      assert.strictEqual(p.license, 'MIT');
+      assert.strictEqual(p.name, 'videojs-wat');
+      assert.strictEqual(p.description, 'wat is the plugin');
+      assert.strictEqual(p.version, '0.0.0');
+      assert.strictEqual(p.main, 'es5/plugin.js');
+      assert.ok(_.isArray(p.keywords));
+      assert.ok(_.isPlainObject(p['browserify-shim']));
+      assert.ok(_.isPlainObject(p.vjsstandard));
+      assert.ok(_.isPlainObject(p.devDependencies));
+      assert.strictEqual(p.config.ghooks['pre-push'], 'npm run lint');
     });
 
     it('has all scripts, even if they are empty', function() {
@@ -287,6 +290,25 @@ describe('videojs-plugin:app', function() {
     });
   });
 
+  describe('ghooks "none"', function() {
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin',
+          ghooks: 'none'
+        })
+        .on('end', libs.onEnd.bind(this, done));
+    });
+
+    it('does not cause a failure', function() {
+      assert.ok(_.isPlainObject(this.pkg));
+      assert.strictEqual(this.pkg.config, undefined);
+    });
+  });
+
   describe('package.json merging', function() {
     let result = packageJSON({
       a: 1,
@@ -335,6 +357,18 @@ describe('videojs-plugin:app', function() {
       assert.strictEqual(result.keywords[1], 'foo');
       assert.strictEqual(result.keywords[2], 'videojs');
       assert.strictEqual(result.keywords[3], 'videojs-plugin');
+    });
+
+    it('handles merging the deep ghooks config object', function() {
+      let pkg = packageJSON({}, {ghooks: 'lint'});
+
+      assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run lint');
+      pkg = packageJSON(pkg, {ghooks: 'none'});
+      assert.strictEqual(pkg.config.ghooks, undefined, '"config.ghooks" is removed when set to none');
+      pkg = packageJSON(pkg, {ghooks: 'test'});
+      assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run test');
+      pkg = packageJSON(pkg, {ghooks: 'lint'});
+      assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run lint');
     });
   });
 });
