@@ -2,10 +2,13 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-* Do not update CHANGELOG for prereleases (#94)
-* Fix a possible delete property error (#92)
+_(none)_
 
 --------------------
+
+## 2.1.1 (2016-10-13)
+* Do not update CHANGELOG for prereleases (#94)
+* Fix a possible delete property error (#92)
 
 ## 2.1.0 (2016-09-13)
 * Added [ghooks](https://www.npmjs.com/package/ghooks) as an optional component of generated projects.
