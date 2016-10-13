@@ -9,7 +9,6 @@ const DEFAULTS = {
     'video.js': '^5.10.1'
   },
   devDependencies: {
-
     'babel-cli': '^6.14.0',
     'babel-plugin-transform-object-assign': '^6.8.0',
     'babel-preset-es2015': '^6.14.0',
@@ -33,6 +32,7 @@ const DEFAULTS = {
     'karma-safari-launcher': '^0.1.1',
     'lodash': '^4.11.2',
     'mkdirp': '^0.5.1',
+    'semver': '^5.3.0',
     'npm-run-all': '^1.5.1',
     'qunitjs': '^1.21.0',
     'rimraf': '^2.5.1',
