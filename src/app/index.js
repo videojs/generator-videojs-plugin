@@ -47,7 +47,7 @@ export default yeoman.generators.Base.extend({
    * @return {String}
    */
   _dest(src) {
-    let basename = path.basename(src);
+    const basename = path.basename(src);
     let destname = src;
 
     if (_.startsWith(basename, '_')) {
@@ -106,7 +106,7 @@ export default yeoman.generators.Base.extend({
       return '';
     }
 
-    let match = name.match(/^@([^/]+)\//);
+    const match = name.match(/^@([^/]+)\//);
 
     return match ? match[1] : '';
   },
@@ -134,11 +134,11 @@ export default yeoman.generators.Base.extend({
    * @return {Object}
    */
   _getPromptDefaults() {
-    let configs = this.config.getAll();
-    let pkg = this._currentPkgJSON || {};
-    let licenseNames = this._licenseNames;
+    const configs = this.config.getAll();
+    const pkg = this._currentPkgJSON || {};
+    const licenseNames = this._licenseNames;
 
-    let defaults = {
+    const defaults = {
       bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
       changelog: configs.hasOwnProperty('changelog') ? !!configs.changelog : true,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
@@ -173,11 +173,11 @@ export default yeoman.generators.Base.extend({
       });
     }
 
-    let name = this.user.git.name();
+    const name = this.user.git.name();
 
     // Build up an author string from git if possible as a last-ditch effort.
     if (!defaults.author && name) {
-      let email = this.user.git.email();
+      const email = this.user.git.email();
 
       defaults.author = name;
 
@@ -197,8 +197,8 @@ export default yeoman.generators.Base.extend({
    * @return {Array}
    */
   _getPrompts() {
-    let defaults = this._getPromptDefaults(defaults);
-    let prompts = [{
+    const defaults = this._getPromptDefaults();
+    const prompts = [{
       name: 'scope',
       message: 'Enter a package scope, if any, for npm (optional):',
       default: defaults.scope,
@@ -438,7 +438,7 @@ export default yeoman.generators.Base.extend({
 
     this.log(yosay(`Welcome to the ${chalk.green(`${PREFIX}plugin`)} generator!`));
 
-    let done = this.async();
+    const done = this.async();
 
     this.prompt(this._getPrompts(), responses => {
       _.assign(this._configsTemp, responses);
@@ -561,7 +561,7 @@ export default yeoman.generators.Base.extend({
      * @function license
      */
     license() {
-      let file = this._licenseFiles[this.config.get('license')];
+      const file = this._licenseFiles[this.config.get('license')];
 
       // There is no _limitTo setting that includes LICENSE, so we only
       // need to check for it existing to know to skip this.
@@ -589,11 +589,11 @@ export default yeoman.generators.Base.extend({
         return;
       }
 
-      let json = packageJSON(this._currentPkgJSON, this.context);
+      const json = packageJSON(this._currentPkgJSON, this.context);
 
       // We want to use normal JSON.stringify here because we want to
       // preserve whatever ordering existed in the _currentPkgJSON object.
-      let contents = JSON.stringify(json, null, 2);
+      const contents = JSON.stringify(json, null, 2);
 
       this.fs.write(this.destinationPath('package.json'), contents);
     }

@@ -67,16 +67,16 @@ const alphabetizeObject = (source) =>
  *         A new ordered object.
  */
 const alphabetizeScripts = (source) => {
-  let keys = Object.keys(source);
-  let prePost = keys.filter(
+  const keys = Object.keys(source);
+  const prePost = keys.filter(
     k => _.startsWith(k, 'pre') || _.startsWith(k, 'post')
   );
-  let order = _.difference(keys, prePost).sort();
+  const order = _.difference(keys, prePost).sort();
 
   // Inject the pre/post scripts into the order where they belong.
   prePost.forEach(pp => {
-    let isPre = _.startsWith(pp, 'pre');
-    let i = order.indexOf(pp.substr(isPre ? 3 : 4));
+    const isPre = _.startsWith(pp, 'pre');
+    const i = order.indexOf(pp.substr(isPre ? 3 : 4));
 
     // Insert pre-scripts in place of their related core script and
     // post-scripts after their related core script.
@@ -111,12 +111,12 @@ const packageJSON = (current, context) => {
    * @param  {String} str
    * @return {String}
    */
-  let scriptify = (str) => {
+  const scriptify = (str) => {
     str = Array.isArray(str) ? str.join(' ') : str;
     return str.replace(/%s/g, context.pluginName);
   };
 
-  let result = _.assign({}, current, {
+  const result = _.assign({}, current, {
     'name': context.packageName,
     'version': context.version,
     'description': context.description,

@@ -20,7 +20,8 @@
       "docs",
       "es5-check",
       "es5-test",
-      "src/app/templates"
+      "src/app/templates",
+      "generators"
     ]
   },
   "scripts": {
@@ -61,6 +62,6 @@
     "babel": "^5.8.34",
     "doctoc": "^0.15.0",
     "mocha": "^2.3.4",
-    "videojs-standard": "^4.0.0"
+    "videojs-standard": "^5.0.0"
   }
 }

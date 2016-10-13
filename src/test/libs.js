@@ -125,7 +125,7 @@ export const onEnd = function(done) {
  */
 export const allAreNonEmpty = function(obj, checks) {
   checks.forEach(key => {
-    let s = obj[key];
+    const s = obj[key];
 
     assert.ok(
       typeof s === 'string' && (/\S/).test(s),
