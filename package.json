@@ -10,8 +10,9 @@
   },
   "repository": "videojs/generator-videojs-plugin",
   "author": {
-    "name": "VideoJS",
-    "url": "https://github.com/videojs"
+    "name": "Pat O'Neill",
+    "email": "pgoneill@gmail.com",
+    "url": "https://github.com/misteroneill"
   },
   "vjsstandard": {
     "ignore": [
@@ -33,7 +34,8 @@
     "lint": "vjsstandard",
     "prepublish": "npm run build",
     "pretest": "npm run lint && npm run build",
-    "test": "mocha es5-test/*.test.js"
+    "test": "mocha es5-test/*.test.js",
+    "version": "chg release -y && git add CHANGELOG.md"
   },
   "keywords": [
     "yeoman-generator",
