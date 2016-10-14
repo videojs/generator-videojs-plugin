@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import tsmlj from 'tsmlj';
+import generatorVersion from './generator-version';
 
 const KARMA_BROWSERS = ['Chrome', 'Firefox', 'IE', 'Safari'];
 
@@ -121,6 +122,10 @@ const packageJSON = (current, context) => {
     'version': context.version,
     'description': context.description,
     'main': 'es5/plugin.js',
+
+    'generator-videojs-plugin': {
+      version: generatorVersion()
+    },
 
     'scripts': _.assign({}, current.scripts, {
       'prebuild': 'npm run clean',
