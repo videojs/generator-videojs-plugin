@@ -38,7 +38,7 @@ const DEFAULTS = {
     'rimraf': '^2.5.1',
     'sinon': '~1.14.0',
     'uglify-js': '^2.6.1',
-    'videojs-standard': '^5.0.0'
+    'videojs-standard': '^4.0.0'
   }
 };
 
