@@ -179,7 +179,7 @@ describe('videojs-plugin:app', function() {
     });
 
     it('does not change the value of the author field', function() {
-      let author = this.pkg.author;
+      const author = this.pkg.author;
 
       assert.ok(_.isPlainObject(author), 'the author is still an object');
 
@@ -310,7 +310,7 @@ describe('videojs-plugin:app', function() {
   });
 
   describe('package.json merging', function() {
-    let result = packageJSON({
+    const result = packageJSON({
       a: 1,
       description: '',
       b: 2,
@@ -327,7 +327,7 @@ describe('videojs-plugin:app', function() {
       isPrivate: false,
       lang: false,
       licenseName: 'MIT',
-      packageName: `videojs-test`,
+      packageName: 'videojs-test',
       pluginName: 'test',
       sass: false,
       version: '1.2.3'
@@ -340,7 +340,7 @@ describe('videojs-plugin:app', function() {
     });
 
     it('retains any pre-existing ordering of keys', function() {
-      let keys = Object.keys(result);
+      const keys = Object.keys(result);
 
       assert.strictEqual(keys[0], 'a');
       assert.strictEqual(keys[1], 'description');
@@ -364,7 +364,11 @@ describe('videojs-plugin:app', function() {
 
       assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run lint');
       pkg = packageJSON(pkg, {ghooks: 'none'});
-      assert.strictEqual(pkg.config.ghooks, undefined, '"config.ghooks" is removed when set to none');
+      assert.strictEqual(
+        pkg.config.ghooks,
+        undefined,
+        '"config.ghooks" is removed when set to none'
+      );
       pkg = packageJSON(pkg, {ghooks: 'test'});
       assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run test');
       pkg = packageJSON(pkg, {ghooks: 'lint'});
