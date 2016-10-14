@@ -2,7 +2,10 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* Add generator-version (#97)
+  * This will store the generator version used for a plugin in its `package.json`.
+* Update vjs-standard to 5.0.0 (#95)
+  * This _does not affect generated projects_, only the generator itself.
 
 --------------------
 
