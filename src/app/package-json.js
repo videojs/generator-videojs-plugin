@@ -4,7 +4,8 @@ import generatorVersion from './generator-version';
 const DEFAULTS = {
   dependencies: {},
   devDependencies: {
-    'videojs-spellbook': '^1.0.7'
+    'videojs-spellbook': '^2.0.0',
+    "ghooks": "^1.3.2",
   }
 };
 
@@ -79,8 +80,8 @@ const packageJSON = (current, context) => {
     'jsnext:main': 'src/js/index.js',
 
     'generator-videojs-plugin': {
-       version: generatorVersion()
-     },
+      version: generatorVersion()
+    },
 
     'scripts': _.assign({}, current.scripts, {
       clean: 'sb-clean',
@@ -137,7 +138,10 @@ const packageJSON = (current, context) => {
   // remove it from the package.json entirely.
   if (context.ghooks === 'none') {
     delete result.devDependencies.ghooks;
-    delete result.config.ghooks;
+
+    if (result.config) {
+      delete result.config.ghooks;
+    }
   } else {
     result.devDependencies.ghooks = '^1.3.2';
     result.config = {

@@ -16,7 +16,7 @@ const FILES = {
     'CHANGELOG.md',
     'CONTRIBUTING.md',
     'src/js/index.js',
-    'src/test/index.test.js',
+    'test/index.test.js',
     'index.html',
     'package.json',
     'bower.json'
@@ -29,7 +29,7 @@ const FILES = {
 
   // only deployed when docs = yes
   docs: [
-    'src/docs/index.md'
+    'docs/index.md'
   ],
 
   // only ommitted when bower = no
@@ -37,9 +37,9 @@ const FILES = {
     'bower.json'
   ],
 
-  // only deployed when i18n = yes
-  i18n: [
-    'src/i18n/en.json'
+  // only deployed when lang = yes
+  lang: [
+    'lang/en.json'
   ],
 
   // files that only get deployed when the licence is not private

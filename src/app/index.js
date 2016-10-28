@@ -143,15 +143,10 @@ export default yeoman.generators.Base.extend({
       license: this._licenseDefault,
 
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
-      i18n: configs.hasOwnProperty('lang') ? !!configs.lang : false,
+      lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       css: configs.hasOwnProperty('sass') ? !!configs.sass : false,
       ie8: configs.hasOwnProperty('ie8') ? !!configs.ie8 : false
     };
-
-    // support new property name old name was lang
-    if (configs.hasOwnProperty('i18n')) {
-      defaults.i18n = !!configs.i18n;
-    }
 
     // support new property name old name was sass
     if (configs.hasOwnProperty('css')) {
@@ -251,12 +246,12 @@ export default yeoman.generators.Base.extend({
       default: defaults.docs
     }, {
       type: 'confirm',
-      name: 'i18n',
+      name: 'lang',
       message: tsmlj`
         Do you need video.js language file infrastructure for
         internationalized strings?
       `,
-      default: defaults.i18n
+      default: defaults.lang
     }, {
       type: 'confirm',
       name: 'bower',
@@ -341,7 +336,7 @@ export default yeoman.generators.Base.extend({
 
     this._templatesToCopy = [
       'src/js/_index.js',
-      'src/test/_index.test.js',
+      'test/_index.test.js',
       '_index.html',
       '_CONTRIBUTING.md',
       '_README.md'
@@ -448,7 +443,7 @@ export default yeoman.generators.Base.extend({
       'description',
       'docs',
       'ghooks',
-      'i18n',
+      'lang',
       'css',
       'ie8'
     ]), {
@@ -480,12 +475,12 @@ export default yeoman.generators.Base.extend({
       this._filesToCopy.push('.github/_PULL_REQUEST_TEMPLATE.md');
     }
 
-    if (this.context.i18n) {
-      this._filesToCopy.push('src/i18n/_en.json');
+    if (this.context.lang) {
+      this._filesToCopy.push('lang/_en.json');
     }
 
     if (this.context.docs) {
-      this._filesToCopy.push('src/docs/_index.md');
+      this._filesToCopy.push('docs/_index.md');
     }
 
     if (this.context.css) {

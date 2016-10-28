@@ -49,9 +49,8 @@ describe('videojs-plugin:app', function() {
       assert.equal(typeof this.pkg['browserify-shim'], 'string', 'browserify-shim exists');
       assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
       assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
-      assert.equal(this.pkg.spellbook.i18n, false, 'i18n should be disabled');
+      assert.equal(this.pkg.spellbook.lang, false, 'lang should be disabled');
       assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
-      assert.ok(_.isPlainObject(this.pkg.vjsstandard));
       assert.strictEqual(this.pkg.config.ghooks['pre-push'], 'npm run lint');
       assert.ok(_.isPlainObject(this.pkg['generator-videojs-plugin']));
       assert.strictEqual(this.pkg['generator-videojs-plugin'].version, generatorVersion());
@@ -101,7 +100,7 @@ describe('videojs-plugin:app', function() {
       assert.ok(_.isPlainObject(this.pkg.spellbook));
       assert.equal(typeof this.pkg.spellbook.css, 'undefined', 'css should not be disabled');
       assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
-      assert.equal(this.pkg.spellbook.i18n, false, 'i18n should be disabled');
+      assert.equal(this.pkg.spellbook.lang, false, 'lang should be disabled');
       assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
       assert.file(libs.fileList('default', 'oss', 'css'));
     });
@@ -125,13 +124,13 @@ describe('videojs-plugin:app', function() {
       assert.ok(_.isPlainObject(this.pkg.spellbook));
       assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
       assert.equal(typeof this.pkg.spellbook.docs, 'undefined', 'docs should not be disabled');
-      assert.equal(this.pkg.spellbook.i18n, false, 'i18n should be disabled');
+      assert.equal(this.pkg.spellbook.lang, false, 'lang should be disabled');
       assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
       assert.file(libs.fileList('default', 'oss', 'docs'));
     });
   });
 
-  describe('i18n', function() {
+  describe('lang', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
@@ -139,19 +138,19 @@ describe('videojs-plugin:app', function() {
           name: 'wat',
           author: 'John Doe',
           description: 'wat is the plugin',
-          i18n: true
+          lang: true
         })
         .on('end', libs.onEnd.bind(this, done));
     });
 
-    it('does not disable i18n in spellbook, creates i18n files', function() {
+    it('does not disable lang in spellbook, creates lang files', function() {
       assert.ok(_.isPlainObject(this.pkg.spellbook));
       assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
       assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
-      assert.equal(typeof this.pkg.spellbook.i18n, 'undefined', 'i18n should not be disabled');
+      assert.equal(typeof this.pkg.spellbook.lang, 'undefined', 'lang should not be disabled');
       assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
 
-      assert.file(libs.fileList('default', 'oss', 'i18n'));
+      assert.file(libs.fileList('default', 'oss', 'lang'));
     });
   });
 
@@ -168,23 +167,11 @@ describe('videojs-plugin:app', function() {
         .on('end', libs.onEnd.bind(this, done));
     });
 
-    it('does not change the value of the author field', function() {
-      const author = this.pkg.author;
-
-      assert.ok(_.isPlainObject(author), 'the author is still an object');
-
-      assert.strictEqual(
-        author.name,
-        'John Doe',
-        'the author\'s name is correct'
-      );
-    });
-
     it('does not disable ie8 in spellbook', function() {
       assert.ok(_.isPlainObject(this.pkg.spellbook));
       assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
       assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
-      assert.equal(this.pkg.spellbook.i18n, false, 'i18n should be disabled');
+      assert.equal(this.pkg.spellbook.lang, false, 'lang should be disabled');
       assert.equal(this.pkg.spellbook.ie8, true, 'ie8 should be supported');
 
       assert.file(libs.fileList('default', 'oss'));
