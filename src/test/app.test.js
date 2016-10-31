@@ -234,7 +234,7 @@ describe('videojs-plugin:app', function() {
     });
 
     it('does not change the value of the author field', function() {
-      let author = this.pkg.author;
+      const author = this.pkg.author;
 
       assert.ok(_.isPlainObject(author), 'the author is still an object');
 
