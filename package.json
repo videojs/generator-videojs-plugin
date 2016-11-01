@@ -16,7 +16,6 @@
   },
   "vjsstandard": {
     "ignore": [
-      "bin",
       "docs",
       "es5-check",
       "es5-test",

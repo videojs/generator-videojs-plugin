@@ -2,6 +2,9 @@
 
 'use strict';
 
+/* eslint-env node */
+/* eslint no-console: "off" */
+
 /**
  * Performs cleanup after updating from one major version of the generator to
  * another.
