@@ -20,24 +20,14 @@
   "vjsstandard": {
     "ignore": [
       "docs",
-      "es5-check",
-      "es5-test",
       "src/app/templates",
       "generators"
     ]
   },
   "scripts": {
-    "prebuild": "node -e \"var s=require('shelljs'),d=['generators','es5-check','es5-test'];s.rm('-rf',d);s.mkdir('-p',d)\"",
-    "build": "npm-run-all -p build:*",
-    "build:check": "babel src/check -d es5-check",
-    "build:docs": "doctoc README.md docs/",
-    "build:generator": "babel --ignore templates/**/* src/app -d generators/app && npm run build:generator:copy",
-    "build:generator:copy": "node -e \"require('shelljs').cp('-r', 'src/app/templates', 'generators/app')\"",
-    "build:test": "babel src/test -d es5-test",
     "lint": "vjsstandard",
-    "prepublish": "npm run build",
-    "pretest": "npm run lint && npm run build",
-    "test": "mocha es5-test/*.test.js",
+    "pretest": "npm run lint",
+    "test": "mocha test/*.test.js",
     "version": "chg release -y && git add CHANGELOG.md"
   },
   "keywords": [
@@ -61,7 +51,6 @@
     "yosay": "^1.0.2"
   },
   "devDependencies": {
-    "babel": "^5.8.34",
     "doctoc": "^0.15.0",
     "mocha": "^2.3.4",
     "videojs-standard": "^5.0.0"

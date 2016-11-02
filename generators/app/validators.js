@@ -1,6 +1,8 @@
-import _ from 'lodash';
-import tsmlj from 'tsmlj';
-import {PREFIX} from './constants';
+'use strict';
+
+const _ = require('lodash');
+const tsmlj = require('tsmlj');
+const PREFIX = require('./constants').PREFIX;
 
 /**
  * Validates that a plugin name does not include invalid characters or start
@@ -50,4 +52,4 @@ const scope = input => {
   return true;
 };
 
-export {name, scope};
+module.exports = {name, scope};

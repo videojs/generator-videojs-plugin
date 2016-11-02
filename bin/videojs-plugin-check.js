@@ -22,7 +22,7 @@ tap
     console.log(chalk[color](prefix + ' ' + assert.name));
   });
 
-glob(path.join(__dirname, '../es5-check/*.test.js'), (err, files) => {
+glob(path.join(__dirname, '../check/*.test.js'), (err, files) => {
   if (err) {
     throw err;
   }

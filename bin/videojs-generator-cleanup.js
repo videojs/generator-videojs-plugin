@@ -19,6 +19,8 @@ const semver = require('semver');
 const sh = require('shelljs');
 const tsmlj = require('tsmlj');
 
+const constants = require('../generators/app/constants');
+
 const configs = {
   v2: {
     removals: [

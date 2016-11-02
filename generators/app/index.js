@@ -1,14 +1,16 @@
-import _ from 'lodash';
-import chalk from 'chalk';
-import path from 'path';
-import tsmlj from 'tsmlj';
-import yeoman from 'yeoman-generator';
-import yosay from 'yosay';
-import shelljs from 'shelljs';
+'use strict';
 
-import {PREFIX} from './constants';
-import packageJSON from './package-json';
-import * as validators from './validators';
+const _ = require('lodash');
+const chalk = require('chalk');
+const path = require('path');
+const tsmlj = require('tsmlj');
+const yeoman = require('yeoman-generator');
+const yosay = require('yosay');
+const shelljs = require('shelljs');
+
+const PREFIX = require('./constants').PREFIX;
+const packageJSON = require('./package-json');
+const validators = require('./validators');
 
 /**
  * Convert an object into "choices" for a prompt. The object keys are the
@@ -20,7 +22,7 @@ import * as validators from './validators';
  */
 const objectToChoices = (o) => _.map(o, (v, k) => ({name: v, value: k}));
 
-export default yeoman.generators.Base.extend({
+module.exports = yeoman.generators.Base.extend({
 
   /**
    * Whether or not this plugin is privately licensed.
@@ -85,10 +87,10 @@ export default yeoman.generators.Base.extend({
    * Gets the full package name, taking scope into account.
    *
    * @param  {String} name
-   * @param  {String} [scope='']
+   * @param  {String} [scope]
    * @return {String}
    */
-  _getPackageName(name, scope = '') {
+  _getPackageName(name, scope) {
     scope = this._getScope(scope);
     name = this._getPluginName(name);
     return scope ? `${scope}/${name}` : name;
@@ -273,7 +275,10 @@ export default yeoman.generators.Base.extend({
    *
    * @method constructor
    */
-  constructor() {
+  // NOTE: because this method is named `constructor`, but is not a true
+  // constructor, it cannot use the object method shorthand in Node 4. An
+  // error will be thrown by Node.
+  constructor: function() {
     yeoman.generators.Base.apply(this, arguments);
 
     this.option('bcov', {
@@ -436,7 +441,9 @@ export default yeoman.generators.Base.extend({
    *
    * @return {Object}
    */
-  _getContext(configs = this.config.getAll()) {
+  _getContext(configs) {
+    configs = configs || this.config.getAll();
+
     return _.assign(_.pick(configs, [
       'author',
       'bower',
@@ -492,8 +499,8 @@ export default yeoman.generators.Base.extend({
     }
 
     if (this._limitTo && this._limitTo.length) {
-      const files = _.union(...this._limitTo.map(k => this._limits[k].files));
-      const templates = _.union(...this._limitTo.map(k => this._limits[k].templates));
+      const files = _.union.apply(_, this._limitTo.map(k => this._limits[k].files));
+      const templates = _.union.apply(_, this._limitTo.map(k => this._limits[k].templates));
 
       this._filesToCopy = _.intersection(this._filesToCopy, files);
       this._templatesToCopy = _.intersection(this._templatesToCopy, templates);

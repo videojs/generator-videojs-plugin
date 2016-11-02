@@ -1,8 +1,11 @@
 /* global before, describe, it */
 
-import * as libs from './libs';
-import _ from 'lodash';
-import {assert, test as helpers} from 'yeoman-generator';
+'use strict';
+
+const libs = require('./libs');
+const _ = require('lodash');
+const assert = require('yeoman-generator').assert;
+const helpers = require('yeoman-generator').test;
 
 describe('videojs-plugin:app options', function() {
   describe('--bcov', function() {
