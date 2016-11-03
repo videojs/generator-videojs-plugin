@@ -92,7 +92,7 @@ const packageJSON = (current, context) => {
       watch: 'sb-watch',
       test: 'sb-test',
       release: 'sb-release',
-      version: 'sb-release'
+      postversion: 'sb-release'
     }),
 
     // Always include the two minimum keywords with whatever exists in the

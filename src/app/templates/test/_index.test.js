@@ -4,7 +4,7 @@ import QUnit from 'qunitjs';
 import sinon from 'sinon';
 import videojs from 'video.js';
 
-import plugin from '../js/index';
+import plugin from '../src/js/index.js';
 
 const Player = videojs.getComponent('Player');
 
