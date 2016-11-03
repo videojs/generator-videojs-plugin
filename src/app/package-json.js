@@ -4,7 +4,7 @@ import generatorVersion from './generator-version';
 const DEFAULTS = {
   dependencies: {},
   devDependencies: {
-    'videojs-spellbook': '^2.0.0',
+    'videojs-spellbook': '^2.0.2',
     'ghooks': '^1.3.2'
   }
 };
