@@ -14,6 +14,9 @@
     "email": "pgoneill@gmail.com",
     "url": "https://github.com/misteroneill"
   },
+  "engines" : {
+    "node" : ">=4"
+  },
   "vjsstandard": {
     "ignore": [
       "bin",
