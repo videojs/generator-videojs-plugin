@@ -78,6 +78,9 @@ const packageJSON = (current, context) => {
     'description': context.description,
     'main': 'dist/es5/index.js',
     'jsnext:main': 'src/js/index.js',
+    'engines': {
+      node: '>=4'
+    },
 
     'generator-videojs-plugin': {
       version: generatorVersion()
