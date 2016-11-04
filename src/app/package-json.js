@@ -108,9 +108,13 @@ const packageJSON = (current, context) => {
       'CONTRIBUTING.md',
       'CHANGELOG.md',
       'README.md',
-      'dist/',
+      'dist/docs',
+      'dist/lang',
+      'dist/es5',
+      'dist/browser',
       'index.html',
-      'src/'
+      'src/',
+      'docs/'
     ],
 
     'dependencies': _.assign({}, current.dependencies, DEFAULTS.dependencies),
