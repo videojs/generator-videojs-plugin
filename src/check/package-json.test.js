@@ -6,13 +6,10 @@ const pkg = require(`${process.cwd()}/package.json`);
 
 const coreScripts = [
   'build',
-  'build:js',
-  'build:test',
   'clean',
   'lint',
   'start',
-  'test',
-  'version'
+  'test'
 ];
 
 tap.ok(_.isPlainObject(pkg), 'package.json exists');
@@ -28,7 +25,7 @@ tap.ok(
   'package.json has "author" property'
 );
 
-tap.equal(pkg.main, 'es5/plugin.js', 'package.json "main" is "es5/plugin.js"');
+tap.equal(pkg.main, 'dist/es5/index.js', 'package.json "main" is "dist/es5/index.js"');
 
 ['videojs', 'videojs-plugin'].forEach(kw => {
   tap.ok(_.includes(pkg.keywords, kw), `package.json has "${kw}" in "keywords"`);
