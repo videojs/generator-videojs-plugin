@@ -3,10 +3,10 @@
   "author": "<%= author %>",
   "license": "<%= licenseName %>",
   "main": [
-<% if (sass) { -%>
-    "dist/<%= pluginName %>.css",
+<% if (css) { -%>
+    "dist/browser/<%= pluginName %>.min.css",
 <% } -%>
-    "dist/<%= pluginName %>.min.js"
+    "dist/browser/<%= pluginName %>.min.js"
   ],
   "keywords": [
     "videojs",

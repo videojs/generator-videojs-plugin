@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <title><%= pluginName %> Demo</title>
-  <link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
-<% if (sass) { -%>
-  <link href="/dist/<%= pluginName %>.css" rel="stylesheet">
+  <link href="/node_modules/videojs-spellbook/node_modules/video.js/dist/video-js.css" rel="stylesheet">
+<% if (css) { -%>
+  <link href="/dist/browser/<%= pluginName %>.css" rel="stylesheet">
 <% } -%>
 </head>
 <body>
@@ -15,13 +15,15 @@
   </video>
   <ul>
     <li><a href="/test/">Run unit tests in browser.</a></li>
-    <% if (docs) { %><li><a href="/docs/api/">Read generated docs.</a></li><% } %>
+    <% if (docs) { %><li><a href="/dist/docs/api/">Read generated api docs.</a></li><% } %>
+    <% if (docs) { %><li><a href="/dist/docs/manual/">Read generated manual docs.</a></li><% } %>
   </ul>
-  <script src="/node_modules/video.js/dist/video.js"></script>
-  <script src="/dist/<%= pluginName %>.js"></script>
+  <script src="/node_modules/videojs-spellbook/node_modules/video.js/dist/video.js"></script>
+  <script src="/dist/browser/<%= pluginName %>.js"></script>
   <script>
     (function(window, videojs) {
       var player = window.player = videojs('<%= pluginName %>-player');
+
       player.<%= functionName %>();
     }(window, window.videojs));
   </script>

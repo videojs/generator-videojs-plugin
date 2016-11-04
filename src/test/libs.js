@@ -6,68 +6,68 @@ import {assert} from 'yeoman-generator';
 // Files that are expected to exist in certain conditions.
 const FILES = {
 
-  'common': [
-    'scripts/banner.ejs',
-    'scripts/build-test.js',
-    'scripts/postversion.js',
-    'scripts/server.js',
-    'scripts/version.js',
-    'test/karma.conf.js',
-    'src/plugin.js',
-    'test/index.html',
-    'test/plugin.test.js',
+  // files that are deployed by default
+  default: [
+    '.git',
     '.editorconfig',
     '.gitignore',
     '.npmignore',
-    'jsdoc.json',
-    '.babelrc',
+    'README.md',
     'CHANGELOG.md',
     'CONTRIBUTING.md',
+    'src/js/index.js',
+    'test/index.test.js',
     'index.html',
     'package.json',
-    'README.md'
+    'bower.json'
   ],
 
-  'oss': [
+  // only deployed when css = yes
+  css: [
+    'src/css/index.scss'
+  ],
+
+  // only deployed when docs = yes
+  docs: [
+    'docs/index.md'
+  ],
+
+  // only ommitted when bower = no
+  bower: [
+    'bower.json'
+  ],
+
+  // only deployed when lang = yes
+  lang: [
+    'lang/en.json'
+  ],
+
+  // files that only get deployed when the licence is not private
+  oss: [
     '.travis.yml',
-    'LICENSE'
-  ],
-
-  'sass': [
-    'src/plugin.scss'
-  ],
-
-  'bower': [
-    'bower.json'
-  ],
-
-  // limit-to options
-  'dotfiles': [
-    '.editorconfig',
-    '.gitignore',
-    '.npmignore'
-  ],
-
-  'dotfiles:bower': [
-    'bower.json'
-  ],
-
-  'dotfiles:oss': [
-    '.travis.yml'
-  ],
-
-  'pkg': [
-    'package.json'
-  ],
-
-  'scripts': [
-    'scripts/banner.ejs',
-    'scripts/build-test.js',
-    'scripts/postversion.js',
-    'scripts/server.js',
-    'scripts/version.js'
+    'LICENSE',
+    '.github/ISSUE_TEMPLATE.md',
+    '.github/PULL_REQUEST_TEMPLATE.md'
   ]
 };
+
+FILES['limit-to-dotfiles'] = ['bower.json'];
+
+// add all files starting with a dot to this list
+FILES.default.forEach(function(file) {
+  if ((/^\./).test(file)) {
+    FILES['limit-to-dotfiles'].push(file);
+  }
+});
+
+FILES['limit-to-pkg'] = [
+  'package.json',
+  '.git'
+];
+
+FILES['limit-to-meta'] = []
+  .concat(FILES['limit-to-pkg'])
+  .concat(FILES['limit-to-dotfiles']);
 
 export const GENERATOR_PATH = path.join(__dirname, '../generators/app');
 

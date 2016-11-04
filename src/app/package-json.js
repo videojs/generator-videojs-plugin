@@ -1,45 +1,11 @@
 import _ from 'lodash';
-import tsmlj from 'tsmlj';
 import generatorVersion from './generator-version';
 
-const KARMA_BROWSERS = ['Chrome', 'Firefox', 'IE', 'Safari'];
-
 const DEFAULTS = {
-  dependencies: {
-    'browserify-versionify': '^1.0.6',
-    'video.js': '^5.10.1'
-  },
+  dependencies: {},
   devDependencies: {
-    'babel-cli': '^6.14.0',
-    'babel-plugin-transform-object-assign': '^6.8.0',
-    'babel-preset-es2015': '^6.14.0',
-    'babelify': '^7.3.0',
-    'bannerize': '^1.0.2',
-    'bluebird': '^3.2.2',
-
-    // browserify-shim wants browserify < 13.
-    'browserify': '^12.0.2',
-    'browserify-shim': '^3.8.12',
-    'bundle-collapser': '^1.2.1',
-    'budo': '^8.0.4',
-    'glob': '^6.0.3',
-    'global': '^4.3.0',
-    'karma': '^0.13.19',
-    'karma-chrome-launcher': '^0.2.2',
-    'karma-detect-browsers': '^2.0.2',
-    'karma-firefox-launcher': '^0.1.7',
-    'karma-ie-launcher': '^0.2.0',
-    'karma-qunit': '^0.1.9',
-    'karma-safari-launcher': '^0.1.1',
-    'lodash': '^4.11.2',
-    'mkdirp': '^0.5.1',
-    'semver': '^5.3.0',
-    'npm-run-all': '^1.5.1',
-    'qunitjs': '^1.21.0',
-    'rimraf': '^2.5.1',
-    'sinon': '~1.14.0',
-    'uglify-js': '^2.6.1',
-    'videojs-standard': '^4.0.0'
+    'videojs-spellbook': '^2.0.2',
+    'ghooks': '^1.3.2'
   }
 };
 
@@ -106,131 +72,45 @@ const alphabetizeScripts = (source) => {
 const packageJSON = (current, context) => {
   current = current || {};
 
-  /**
-   * Replaces all "%s" tokens with the name of the plugin in a given string.
-   *
-   * @param  {String} str
-   * @return {String}
-   */
-  const scriptify = (str) => {
-    str = Array.isArray(str) ? str.join(' ') : str;
-    return str.replace(/%s/g, context.pluginName);
-  };
-
   const result = _.assign({}, current, {
     'name': context.packageName,
     'version': context.version,
     'description': context.description,
-    'main': 'es5/plugin.js',
+    'main': 'dist/es5/index.js',
+    'jsnext:main': 'src/js/index.js',
 
     'generator-videojs-plugin': {
       version: generatorVersion()
     },
 
     'scripts': _.assign({}, current.scripts, {
-      'prebuild': 'npm run clean',
-      'build': 'npm-run-all -p build:*',
-
-      'build:js': scriptify([
-        'npm-run-all',
-        'build:js:babel',
-        'build:js:browserify',
-        'build:js:bannerize',
-        'build:js:collapse',
-        'build:js:uglify'
-      ]),
-
-      // Babel is a run in a distinct step (vs. using babelify) because we want
-      // the transpiled code to be what's provided to module consumers using
-      // Node or Browserify.
-      'build:js:babel': 'babel src -d es5',
-
-      'build:js:bannerize': scriptify([
-        'bannerize dist/%s.js',
-        '--banner=scripts/banner.ejs'
-      ]),
-
-      // The browserify-shim transform is included ONLY in the build step as
-      // we do not want consuming projects to receive a shimmed module - if we
-      // shim always, we cause obscure errors!
-      'build:js:browserify': scriptify([
-        'browserify . -g browserify-shim -s %s -o dist/%s.js'
-      ]),
-
-      'build:js:collapse': scriptify([
-        'bundle-collapser dist/%s.js',
-        '-o dist/%s.min.js'
-      ]),
-
-      'build:js:uglify': scriptify([
-        'uglifyjs dist/%s.min.js',
-        '--comments --mangle --compress',
-        '-o dist/%s.min.js'
-      ]),
-
-      'build:test': 'babel-node scripts/build-test.js',
-      'clean': 'rimraf dist test/dist es5 && mkdirp dist test/dist es5',
-      'lint': 'vjsstandard',
-      'prepublish': 'npm run build',
-      'start': 'babel-node scripts/server.js',
-      'pretest': 'npm-run-all lint build',
-      'test': 'karma start test/karma.conf.js',
-      'preversion': 'npm test',
-      'version': 'babel-node scripts/version.js',
-      'postversion': 'babel-node scripts/postversion.js'
+      clean: 'sb-clean',
+      build: 'sb-build',
+      lint: 'sb-lint',
+      prepublish: 'npm run build',
+      start: 'sb-start',
+      watch: 'sb-watch',
+      test: 'sb-test',
+      release: 'sb-release',
+      postversion: 'sb-release'
     }),
 
     // Always include the two minimum keywords with whatever exists in the
     // current keywords array.
     'keywords': _.union(['videojs', 'videojs-plugin'], current.keywords).sort(),
-
     'author': context.author,
     'license': context.licenseName,
 
-    'browserify': {
-
-      // Unlike browserify-shim, we want to apply the browserify-versionify
-      // shim ALWAYS because we want the version of this project to always be
-      // available to consumers.
-      transform: ['browserify-versionify']
-    },
-
-    'browserify-shim': {
-      'qunit': 'global:QUnit',
-      'sinon': 'global:sinon',
-
-      // video.js is shimmed for the distributable because we don't want to
-      // build it into every plugin's distributed files.
-      'video.js': 'global:videojs'
-    },
-
-    // These objects are used as a reference to the browser-global providers.
-    'style': scriptify('dist/%s.css'),
-    'videojs-plugin': {
-      style: scriptify('dist/%s.css'),
-      script: scriptify('dist/%s.min.js')
-    },
-
-    'vjsstandard': {
-      ignore: [
-        'dist',
-        'docs',
-        'es5',
-        'scripts',
-        'test/dist',
-        'test/karma.conf.js'
-      ]
-    },
+    'browserify-shim': 'node_modules/videojs-spellbook/config/shim.config.js',
+    'spellbook': {},
 
     'files': [
       'CONTRIBUTING.md',
+      'CHANGELOG.md',
+      'README.md',
       'dist/',
-      'docs/',
-      'es5/',
       'index.html',
-      'scripts/',
-      'src/',
-      'test/'
+      'src/'
     ],
 
     'dependencies': _.assign({}, current.dependencies, DEFAULTS.dependencies),
@@ -242,72 +122,16 @@ const packageJSON = (current, context) => {
     )
   });
 
-  // Create scripts for each Karma browser.
-  KARMA_BROWSERS.forEach(browser => {
-    result.scripts[`test:${browser.toLowerCase()}`] = tsmlj`
-      npm run pretest &&
-      karma start test/karma.conf.js --browsers ${browser}
-    `;
+  // spellbook mappings
+  ['js', 'css', 'lang', 'docs'].forEach(function(prop) {
+    if (context[prop] === false) {
+      result.spellbook[prop] = false;
+    }
   });
 
-  if (context.changelog) {
-    result.devDependencies.chg = '^0.3.2';
-    result.scripts.change = 'chg add';
-  }
-
-  // Support the Sass option.
-  if (context.sass) {
-    _.assign(result.scripts, {
-      'build:css': 'npm-run-all build:css:sass build:css:bannerize',
-
-      'build:css:bannerize': scriptify([
-        'bannerize dist/%s.css --banner=scripts/banner.ejs'
-      ]),
-
-      'build:css:sass': scriptify([
-        'node-sass',
-        'src/plugin.scss',
-        'dist/%s.css',
-        '--output-style=compressed',
-        '--linefeed=lf'
-      ])
-    });
-
-    result.devDependencies['node-sass'] = '^3.4.2';
-  }
-
-  if (context.ie8) {
-    /* eslint-disable max-len */
-    result.devDependencies['babel-plugin-transform-es3-member-expression-literals'] = '^6.8.0';
-    result.devDependencies['babel-plugin-transform-es3-property-literals'] = '^6.8.0';
-    /* eslint-enable max-len */
-  }
-
-  // Support the documentation tooling option.
-  if (context.docs) {
-
-    _.assign(result.scripts, {
-      'docs': 'npm-run-all docs:*',
-      'docs:api': 'jsdoc src -r -c jsdoc.json -d docs/api',
-      'docs:toc': 'doctoc README.md'
-    });
-
-    _.assign(result.devDependencies, {
-      doctoc: '^0.15.0',
-      jsdoc: '^3.4.0'
-    });
-  }
-
-  // Include language support. Note that `mkdirs` does not need to change
-  // here because the videojs-languages package will create the destination
-  // directory if needed.
-  if (context.lang) {
-    result.scripts['build:lang'] = 'vjslang --dir dist/lang';
-    result.devDependencies['videojs-languages'] = '^1.0.0';
-  }
-
-  if (context.bower) {
-    result.files.push('bower.json');
+  // support ie8
+  if (context.ie8 === true) {
+    result.spellbook.ie8 = true;
   }
 
   // In case ghooks was previously installed, but is now "none", we can

@@ -1,11 +1,10 @@
 import _ from 'lodash';
 import chalk from 'chalk';
-import chg from 'chg';
-import fs from 'fs';
 import path from 'path';
 import tsmlj from 'tsmlj';
 import yeoman from 'yeoman-generator';
 import yosay from 'yosay';
+import shelljs from 'shelljs';
 
 import {PREFIX} from './constants';
 import packageJSON from './package-json';
@@ -140,14 +139,19 @@ export default yeoman.generators.Base.extend({
 
     const defaults = {
       bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
-      changelog: configs.hasOwnProperty('changelog') ? !!configs.changelog : true,
-      docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       ghooks: configs.hasOwnProperty('ghooks') ? !!configs.ghooks : 'lint',
-      lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       license: this._licenseDefault,
-      sass: configs.hasOwnProperty('sass') ? configs.sass : false,
-      ie8: configs.hasOwnProperty('ie8') ? configs.ie8 : false
+
+      docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
+      lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
+      css: configs.hasOwnProperty('sass') ? !!configs.sass : false,
+      ie8: configs.hasOwnProperty('ie8') ? !!configs.ie8 : false
     };
+
+    // support new property name old name was sass
+    if (configs.hasOwnProperty('css')) {
+      defaults.css = !!configs.css;
+    }
 
     ['author', 'license', 'name', 'description'].forEach(key => {
       if (pkg.hasOwnProperty(key)) {
@@ -227,14 +231,9 @@ export default yeoman.generators.Base.extend({
       choices: objectToChoices(this._licenseNames)
     }, {
       type: 'confirm',
-      name: 'changelog',
-      message: 'Do you want to include CHANGELOG tool?',
-      default: defaults.changelog
-    }, {
-      type: 'confirm',
-      name: 'sass',
-      message: 'Do you want to include Sass styling?',
-      default: defaults.sass
+      name: 'css',
+      message: 'Do you want to include CSS styling, including sass preprocessing?',
+      default: defaults.css
     }, {
       type: 'confirm',
       name: 'ie8',
@@ -295,14 +294,14 @@ export default yeoman.generators.Base.extend({
     this.option('limit-to', {
       desc: tsmlj`
         Limit files to be updated by passing any comma-separated combination
-        of: dotfiles, pkg, and scripts
+        of: dotfiles and or pkg
       `,
       type: 'string',
       defaults: ''
     });
 
     this.option('limit-to-meta', {
-      desc: 'Only update "meta files" - dotfiles, package.json, and scripts.',
+      desc: 'Only update "meta files" - dotfiles, bower.json, and package.json',
       type: 'boolean',
       defaults: false
     });
@@ -329,26 +328,18 @@ export default yeoman.generators.Base.extend({
     this._licenseDefault = 'mit';
 
     this._filesToCopy = [
-      'scripts/_banner.ejs',
-      'scripts/_postversion.js',
-      'scripts/_version.js',
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
-      '_jsdoc.json'
+      '_CHANGELOG.md'
     ];
 
     this._templatesToCopy = [
-      'scripts/_build-test.js',
-      'scripts/_server.js',
-      'src/_plugin.js',
-      'test/_karma.conf.js',
-      'test/_index.html',
-      'test/_plugin.test.js',
+      'src/js/_index.js',
+      'test/_index.test.js',
       '_index.html',
       '_CONTRIBUTING.md',
-      '_README.md',
-      '_.babelrc'
+      '_README.md'
     ];
 
     this._promptsToFilter = [];
@@ -369,10 +360,12 @@ export default yeoman.generators.Base.extend({
           '_.editorconfig',
           '_.gitignore',
           '_.npmignore',
-          '_.travis.yml'
+          '_.travis.yml',
+          '.github/_ISSUE_TEMPLATE.md',
+          '.github/_PULL_REQUEST_TEMPLATE.md'
         ],
         templates: [
-          'bower.json'
+          '_bower.json'
         ]
       },
 
@@ -380,17 +373,6 @@ export default yeoman.generators.Base.extend({
       pkg: {
         files: [],
         templates: []
-      },
-      scripts: {
-        files: [
-          'scripts/_banner.ejs',
-          'scripts/_postversion.js',
-          'scripts/_version.js'
-        ],
-        templates: [
-          'scripts/_build-test.js',
-          'scripts/_server.js'
-        ]
       }
     };
 
@@ -458,12 +440,11 @@ export default yeoman.generators.Base.extend({
     return _.assign(_.pick(configs, [
       'author',
       'bower',
-      'changelog',
       'description',
       'docs',
       'ghooks',
       'lang',
-      'sass',
+      'css',
       'ie8'
     ]), {
       className: `vjs-${configs.name}`,
@@ -490,14 +471,20 @@ export default yeoman.generators.Base.extend({
 
     if (!this._isPrivate()) {
       this._filesToCopy.push('_.travis.yml');
+      this._filesToCopy.push('.github/_ISSUE_TEMPLATE.md');
+      this._filesToCopy.push('.github/_PULL_REQUEST_TEMPLATE.md');
     }
 
     if (this.context.lang) {
       this._filesToCopy.push('lang/_en.json');
     }
 
-    if (this.context.sass) {
-      this._templatesToCopy.push('src/_plugin.scss');
+    if (this.context.docs) {
+      this._filesToCopy.push('docs/_index.md');
+    }
+
+    if (this.context.css) {
+      this._templatesToCopy.push('src/css/_index.scss');
     }
 
     if (this.context.bower) {
@@ -521,25 +508,19 @@ export default yeoman.generators.Base.extend({
   writing: {
 
     /**
-     * Initializes a CHANGELOG.md file if one does not exist.
+     * intialize git if there is no _.git directory
      *
-     * @function changelog
+     * @function gitInit
      */
-    changelog() {
-
-      // There is no _limitTo setting that includes CHANGELOG.md, so we only
-      // need to check for it existing to know to skip this.
-      if (!this.context.changelog || this._limitTo.length) {
-        return;
-      }
+    gitInit() {
+      const git = this._dest('_.git');
 
       try {
-        fs.statSync(this._dest('CHANGELOG.md'));
-      } catch (x) {
-        chg.init(null, this.async());
+        this.fs.statSync(git);
+      } catch (e) {
+        shelljs.exec('git init', {silent: true});
       }
     },
-
     /**
      * Writes common files.
      *
