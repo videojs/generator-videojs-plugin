@@ -68,6 +68,7 @@ const configs = {
       'browserify',
       'dependencies.browserify-versionify',
       'dependencies.video.js',
+      'devDependencies.babel',
       'devDependencies.babel-cli',
       'devDependencies.babel-plugin-transform-es3-member-expression-literals',
       'devDependencies.babel-plugin-transform-es3-property-literals',
@@ -80,6 +81,7 @@ const configs = {
       'devDependencies.browserify-shim',
       'devDependencies.bundle-collapser',
       'devDependencies.budo',
+      'devDependencies.chg',
       'devDependencies.doctoc',
       'devDependencies.glob',
       'devDependencies.global',
@@ -114,6 +116,7 @@ const configs = {
       'scripts.build:js:uglify',
       'scripts.build:lang',
       'scripts.build:test',
+      'scripts.change',
       'scripts.docs',
       'scripts.docs:api',
       'scripts.docs:toc',
@@ -131,9 +134,6 @@ const configs = {
   }
 };
 
-const major = semver.major(require(path.join(__dirname, '..', 'package.json')).version);
-const config = configs[`v${major}`];
-
 const exists = (fname) => {
   try {
     fs.statSync(path.join(process.cwd(), fname));
@@ -143,11 +143,31 @@ const exists = (fname) => {
   }
 };
 
+const version = require(path.join(__dirname, '..', 'package.json')).version;
+let major = semver.major(version);
+let config;
+
+// Walk through the versions in the configs building up a merged config object.
+do {
+  if (!configs[`v${major}`]) {
+    continue;
+  }
+
+  config = config || {};
+
+  _.mergeWith(config, configs[`v${major}`], (dest, src) => {
+    if (Array.isArray(dest)) {
+      return dest.concat(src);
+    }
+  });
+
+  major--;
+
+// Stop when major is 2. There are no cleanups earlier than that.
+} while (major > 1);
+
 if (!config) {
-  console.log(chalk.yellow(tsmlj`
-    There are no updates to be made from
-    v${major ? major - 1 : 0}.x.x to v${major}.x.x
-  `));
+  console.log(chalk.yellow(`There are no updates needed for v${version}`));
   process.exit(0);
 }
 
