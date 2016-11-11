@@ -48,7 +48,7 @@ Then, creating the foundation for your video.js plugin is as simple as:
 $ yo videojs-plugin
 ```
 
-You will be walked through several options and finish with a working, buildable, testable video.js plugin. Of course, this plugin won't do anything out of the box - that part is left to your creativity!
+You will be walked through several options and finish with a working, buildable, testable video.js plugin in the current directory. Of course, this plugin won't do anything out of the box - that part is left to your creativity!
 
 ### Options
 
