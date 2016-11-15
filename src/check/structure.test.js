@@ -17,19 +17,22 @@ tap.ok(isFile('README.md'), 'the "README.md" file exists');
 // Optional files/folders.
 const pkg = require(`${process.cwd()}/package.json`);
 
-if (pkg.spellbook.css) {
-  const cssFiles = ['index.css', 'index.scss', 'index.sass'];
-  const cssFile = cssFiles.find(fname => {
-    return isFile(`src/css/${fname}`);
-  });
+if (pkg.spellbook) {
 
-  tap.ok(cssFile, `one of these files exists: ${cssFiles.join(',')}`);
-}
+  if (pkg.spellbook.css !== false) {
+    const cssFiles = ['index.css', 'index.scss', 'index.sass'];
+    const cssFile = cssFiles.find(fname => {
+      return isFile(`src/css/${fname}`);
+    });
 
-if (pkg.spellbook.docs) {
-  tap.ok(isDir('docs'), 'the "docs" directory exists');
-}
+    tap.ok(cssFile, `one of these files exists: ${cssFiles.join(',')}`);
+  }
 
-if (pkg.spellbook.lang) {
-  tap.ok(isDir('lang'), 'the "lang" directory exists');
+  if (pkg.spellbook.docs !== false) {
+    tap.ok(isDir('docs'), 'the "docs" directory exists');
+  }
+
+  if (pkg.spellbook.lang !== false) {
+    tap.ok(isDir('lang'), 'the "lang" directory exists');
+  }
 }

@@ -52,8 +52,8 @@ tap.ok(
 
 tap.ok(_.isPlainObject(pkg.spellbook), 'package.json has "spellbook" object');
 
-spellbookConfigs.forEach(sbc => {
-  tap.equal(typeof sbc, 'boolean', `package.json "spellbook.${sbc}" is a boolean`);
+Object.keys(pkg.spellbook).forEach(k => {
+  tap.equal(typeof pkg.spellbook[k], 'boolean', `package.json "spellbook.${k}" is a boolean`);
 });
 
 ['videojs', 'videojs-plugin'].forEach(kw => {
@@ -69,4 +69,4 @@ coreScripts.forEach(script => {
   );
 });
 
-tap.strictSame(pkg.files, publishedFiles, 'package.json "files" has expected contents');
+tap.ok(publishedFiles.every(f => pkg.files.indexOf(f) > -1), 'package.json "files" has expected contents');
