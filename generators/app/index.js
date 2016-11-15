@@ -267,7 +267,7 @@ module.exports = yeoman.generators.Base.extend({
       choices: objectToChoices(this._ghooksOptions)
     }];
 
-    return prompts.filter(p => !_.contains(this._promptsToFilter, p.name));
+    return prompts.filter(p => !_.includes(this._promptsToFilter, p.name));
   },
 
   /**
