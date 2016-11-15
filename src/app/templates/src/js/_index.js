@@ -12,7 +12,9 @@ const defaults = {};
  *
  * @function onPlayerReady
  * @param    {Player} player
+ *           A Video.js player.
  * @param    {Object} [options={}]
+ *           An object of options left to the plugin author to define.
  */
 const onPlayerReady = (player, options) => {
   player.addClass('<%= className %>');

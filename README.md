@@ -128,6 +128,8 @@ For example, if `1.x` produced the file `foo/bar.js`, but `2.x` does not, this s
 $ vjsgenclean
 ```
 
+> **Note:** This script _should be run **after** applying_ the latest generator version!
+
 ### Validation with `vjsplugincheck`
 
 This script supports validating a directory as following current [video.js Plugin Standards][standards]. Using it is very simple; run the following command:
