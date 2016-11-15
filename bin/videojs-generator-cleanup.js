@@ -2,7 +2,6 @@
 
 'use strict';
 
-/* eslint-env node */
 /* eslint no-console: "off" */
 
 /**

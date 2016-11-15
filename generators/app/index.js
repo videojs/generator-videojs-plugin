@@ -278,7 +278,7 @@ module.exports = yeoman.generators.Base.extend({
   // NOTE: because this method is named `constructor`, but is not a true
   // constructor, it cannot use the object method shorthand in Node 4. An
   // error will be thrown by Node.
-  constructor: function() {
+  constructor: function() { // eslint-disable-line
     yeoman.generators.Base.apply(this, arguments);
 
     this.option('bcov', {
