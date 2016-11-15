@@ -1,13 +1,16 @@
 /* global before, describe, it */
 
-import _ from 'lodash';
-import fs from 'fs-extra';
-import path from 'path';
-import {assert, test as helpers} from 'yeoman-generator';
+'use strict';
 
-import * as libs from './libs';
-import packageJSON from '../generators/app/package-json';
-import generatorVersion from '../generators/app/generator-version';
+const _ = require('lodash');
+const fs = require('fs-extra');
+const path = require('path');
+const assert = require('yeoman-generator').assert;
+const helpers = require('yeoman-generator').test;
+
+const libs = require('./libs');
+const packageJSON = require('../generators/app/package-json');
+const VERSION = require('../generators/app/constants').VERSION;
 
 describe('videojs-plugin:app', function() {
   const scripts = [
@@ -54,7 +57,7 @@ describe('videojs-plugin:app', function() {
       assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
       assert.strictEqual(this.pkg.config.ghooks['pre-push'], 'npm run lint');
       assert.ok(_.isPlainObject(this.pkg['generator-videojs-plugin']));
-      assert.strictEqual(this.pkg['generator-videojs-plugin'].version, generatorVersion());
+      assert.strictEqual(this.pkg['generator-videojs-plugin'].version, VERSION);
     });
 
     it('has all scripts, even if they are empty', function() {

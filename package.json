@@ -14,28 +14,20 @@
     "email": "pgoneill@gmail.com",
     "url": "https://github.com/misteroneill"
   },
+  "engines": {
+    "node": ">=4.4.0"
+  },
   "vjsstandard": {
     "ignore": [
-      "bin",
       "docs",
-      "es5-check",
-      "es5-test",
-      "src/app/templates",
-      "generators"
+      "generators/app/templates"
     ]
   },
   "scripts": {
-    "prebuild": "node -e \"var s=require('shelljs'),d=['generators','es5-check','es5-test'];s.rm('-rf',d);s.mkdir('-p',d)\"",
-    "build": "npm-run-all -p build:*",
-    "build:check": "babel src/check -d es5-check",
-    "build:docs": "doctoc README.md docs/",
-    "build:generator": "babel --ignore templates/**/* src/app -d generators/app && npm run build:generator:copy",
-    "build:generator:copy": "node -e \"require('shelljs').cp('-r', 'src/app/templates', 'generators/app')\"",
-    "build:test": "babel src/test -d es5-test",
     "lint": "vjsstandard",
-    "prepublish": "npm run build",
-    "pretest": "npm run lint && npm run build",
-    "test": "mocha es5-test/*.test.js",
+    "prepublish": "npm test",
+    "pretest": "npm run lint",
+    "test": "mocha test/*.test.js",
     "version": "chg release -y && git add CHANGELOG.md"
   },
   "keywords": [
@@ -48,7 +40,7 @@
     "chg": "^0.3.2",
     "fs-extra": "^0.26.4",
     "glob": "^6.0.1",
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.1",
     "npm-run-all": "~1.2.0",
     "semver": "^5.1.0",
     "shelljs": "^0.5.3",
@@ -59,9 +51,14 @@
     "yosay": "^1.0.2"
   },
   "devDependencies": {
-    "babel": "^5.8.34",
     "doctoc": "^0.15.0",
+    "ghooks": "^1.3.2",
     "mocha": "^2.3.4",
     "videojs-standard": "^5.0.0"
+  },
+  "config": {
+    "ghooks": {
+      "pre-push": "npm run lint -- --errors"
+    }
   }
 }

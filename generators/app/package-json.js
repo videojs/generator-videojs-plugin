@@ -1,5 +1,7 @@
-import _ from 'lodash';
-import generatorVersion from './generator-version';
+'use strict';
+
+const _ = require('lodash');
+const VERSION = require('./constants').VERSION;
 
 const DEFAULTS = {
   dependencies: {},
@@ -69,7 +71,7 @@ const alphabetizeScripts = (source) => {
  *         Generator rendering context.
  * @return {Object}
  */
-const packageJSON = (current, context) => {
+module.exports = (current, context) => {
   current = current || {};
 
   const result = _.assign({}, current, {
@@ -79,8 +81,12 @@ const packageJSON = (current, context) => {
     'main': 'dist/es5/index.js',
     'jsnext:main': 'src/js/index.js',
 
+    'engines': {
+      node: '>=4.4.0'
+    },
+
     'generator-videojs-plugin': {
-      version: generatorVersion()
+      version: VERSION
     },
 
     'scripts': _.assign({}, current.scripts, {
@@ -162,5 +168,3 @@ const packageJSON = (current, context) => {
 
   return result;
 };
-
-export default packageJSON;

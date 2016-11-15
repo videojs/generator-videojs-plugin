@@ -2,6 +2,8 @@
 
 'use strict';
 
+/* eslint no-console: "off" */
+
 /**
  * Performs cleanup after updating from one major version of the generator to
  * another.
@@ -14,7 +16,7 @@ const _ = require('lodash');
 const path = require('path');
 const semver = require('semver');
 const sh = require('shelljs');
-const tsmlj = require('tsmlj');
+const constants = require('../generators/app/constants');
 
 const configs = {
   v2: {
@@ -57,7 +59,7 @@ const configs = {
       'scripts/server.js',
       'scripts/version.js',
       'test/karma.conf.js',
-      'test/index.html',
+      'test/index.html'
     ],
     renames: {
       'src/plugin.scss': 'src/css/index.scss',
@@ -143,8 +145,7 @@ const exists = (fname) => {
   }
 };
 
-const version = require(path.join(__dirname, '..', 'package.json')).version;
-let major = semver.major(version);
+let major = semver.major(constants.version);
 let config;
 
 // Walk through the versions in the configs building up a merged config object.
@@ -167,7 +168,7 @@ do {
 } while (major > 1);
 
 if (!config) {
-  console.log(chalk.yellow(`There are no updates needed for v${version}`));
+  console.log(chalk.yellow(`There are no updates needed for v${constants.version}`));
   process.exit(0);
 }
 
