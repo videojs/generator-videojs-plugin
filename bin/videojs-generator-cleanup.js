@@ -62,7 +62,7 @@ const configs = {
       'scripts/server.js',
       'scripts/version.js',
       'test/karma.conf.js',
-      'test/index.html',
+      'test/index.html'
     ],
     renames: {
       'src/plugin.scss': 'src/css/index.scss',
