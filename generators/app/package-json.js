@@ -81,6 +81,10 @@ module.exports = (current, context) => {
     'main': 'dist/es5/index.js',
     'jsnext:main': 'src/js/index.js',
 
+    'engines': {
+      node: '>=4.4.0'
+    },
+
     'generator-videojs-plugin': {
       version: VERSION
     },
