@@ -24,6 +24,7 @@
     ]
   },
   "scripts": {
+    "docs": "doctoc README.md",
     "lint": "vjsstandard",
     "prepublish": "npm test",
     "pretest": "npm run lint",
@@ -58,6 +59,7 @@
   },
   "config": {
     "ghooks": {
+      "pre-commit": "npm run docs && git add README.md",
       "pre-push": "npm run lint -- --errors"
     }
   }

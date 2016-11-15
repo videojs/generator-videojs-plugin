@@ -1,8 +1,13 @@
 CHANGELOG
 =========
 
-## HEAD (Unreleased)
-_(none)_
+## HEAD (Unreeased)
+* @misteroneill: Remove dependency on Babel, require Node 4.4+ (#102)
+* @misteroneill: videojs-plugin-check updates for v3 (#101)
+* @misteroneill: videojs-generator-cleanup updates for v3 (#100)
+* @mister-ben: Note that plugin is created in current directory (#103)
+* @BrandonOCasey: Only include useful files on npm (#99)
+* @BrandonOCasey: Integrate with `videojs-spellbook` (#96)
 
 --------------------
 

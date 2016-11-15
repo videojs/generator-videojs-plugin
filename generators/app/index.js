@@ -234,7 +234,7 @@ module.exports = yeoman.generators.Base.extend({
     }, {
       type: 'confirm',
       name: 'css',
-      message: 'Do you want to include CSS styling, including sass preprocessing?',
+      message: 'Do you want to include CSS styling, including Sass preprocessing?',
       default: defaults.css
     }, {
       type: 'confirm',
@@ -244,25 +244,25 @@ module.exports = yeoman.generators.Base.extend({
     }, {
       type: 'confirm',
       name: 'docs',
-      message: 'Do you want to include documentation tooling?',
+      message: 'Do you want to include documentation support?',
       default: defaults.docs
     }, {
       type: 'confirm',
       name: 'lang',
       message: tsmlj`
-        Do you need video.js language file infrastructure for
+        Do you need a Video.js language file setup for
         internationalized strings?
       `,
       default: defaults.lang
     }, {
       type: 'confirm',
       name: 'bower',
-      message: 'Do you want to support Bower (adds special versioning handling)?',
+      message: 'Do you want to support Bower with special versioning handling?',
       default: defaults.bower
     }, {
       type: 'list',
       name: 'ghooks',
-      message: 'What should be done before you `git push`?',
+      message: 'What should be done before you git push?',
       default: defaults.ghooks,
       choices: objectToChoices(this._ghooksOptions)
     }];
