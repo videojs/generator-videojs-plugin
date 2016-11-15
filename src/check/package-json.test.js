@@ -50,8 +50,8 @@ tap.ok(
 
 tap.ok(_.isPlainObject(pkg.spellbook), 'package.json has "spellbook" object');
 
-Object.keys(pkg.spellbook).forEach(k => {
-  tap.equal(typeof pkg.spellbook[k], 'boolean', `package.json "spellbook.${k}" is a boolean`);
+_.forEach(pkg.spellbook, (value) => {
+  tap.ok(_.isBoolean(value) || _.isObject(value), `package.json "spellbook.${k}" is an appropriate type`);
 });
 
 ['videojs', 'videojs-plugin'].forEach(kw => {
