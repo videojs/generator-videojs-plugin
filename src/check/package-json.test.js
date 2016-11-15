@@ -14,8 +14,6 @@ const coreScripts = [
   'watch'
 ];
 
-const spellbookConfigs = ['js', 'css', 'lang', 'docs'];
-
 const publishedFiles = [
   'CONTRIBUTING.md',
   'CHANGELOG.md',
