@@ -25,6 +25,7 @@
   },
   "scripts": {
     "lint": "vjsstandard",
+    "prepublish": "npm test",
     "pretest": "npm run lint",
     "test": "mocha test/*.test.js",
     "version": "chg release -y && git add CHANGELOG.md"
