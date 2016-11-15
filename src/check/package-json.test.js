@@ -6,13 +6,25 @@ const pkg = require(`${process.cwd()}/package.json`);
 
 const coreScripts = [
   'build',
-  'build:js',
-  'build:test',
   'clean',
   'lint',
+  'release',
   'start',
   'test',
-  'version'
+  'watch'
+];
+
+const publishedFiles = [
+  'CONTRIBUTING.md',
+  'CHANGELOG.md',
+  'README.md',
+  'dist/docs',
+  'dist/lang',
+  'dist/es5',
+  'dist/browser',
+  'index.html',
+  'src/',
+  'docs/'
 ];
 
 tap.ok(_.isPlainObject(pkg), 'package.json exists');
@@ -28,7 +40,19 @@ tap.ok(
   'package.json has "author" property'
 );
 
-tap.equal(pkg.main, 'es5/plugin.js', 'package.json "main" is "es5/plugin.js"');
+tap.equal(pkg.main, 'dist/es5/index.js', 'package.json "main" is "dist/es5/index.js"');
+tap.equal(pkg['jsnext:main'], 'src/js/index.js', 'package.json "main" is "src/js/index.js"');
+
+tap.ok(
+  isNonEmptyString(pkg['generator-videojs-plugin'].version),
+  'package.json "generator-videojs-plugin.version" exists'
+);
+
+tap.ok(_.isPlainObject(pkg.spellbook), 'package.json has "spellbook" object');
+
+_.forEach(pkg.spellbook, (value, key) => {
+  tap.ok(_.isBoolean(value) || _.isObject(value), `package.json "spellbook.${key}" is an appropriate type`);
+});
 
 ['videojs', 'videojs-plugin'].forEach(kw => {
   tap.ok(_.includes(pkg.keywords, kw), `package.json has "${kw}" in "keywords"`);
@@ -42,3 +66,5 @@ coreScripts.forEach(script => {
     `package.json "scripts" has "${script}" script`
   );
 });
+
+tap.ok(publishedFiles.every(f => pkg.files.indexOf(f) > -1), 'package.json "files" has expected contents');
