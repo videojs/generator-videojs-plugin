@@ -13,7 +13,6 @@ import tap from 'tap';
 [
   'src/js/index.js',
   'test/index.test.js',
-  '.editorconfig',
   '.gitignore',
   '.npmignore',
   'CHANGELOG.md',

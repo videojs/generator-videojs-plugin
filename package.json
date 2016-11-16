@@ -24,7 +24,7 @@
     ]
   },
   "scripts": {
-    "docs": "doctoc README.md",
+    "docs": "doctoc README.md docs/conventions.md",
     "lint": "vjsstandard",
     "prepublish": "npm test",
     "pretest": "npm run lint",
