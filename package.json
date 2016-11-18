@@ -27,7 +27,7 @@
     "docs": "doctoc README.md docs/conventions.md",
     "lint": "vjsstandard",
     "prepublish": "npm test",
-    "pretest": "npm run lint",
+    "pretest": "npm run lint -- --errors",
     "test": "mocha test/*.test.js",
     "version": "chg release -y && git add CHANGELOG.md"
   },
@@ -55,7 +55,7 @@
     "doctoc": "^1.2.0",
     "ghooks": "^1.3.2",
     "mocha": "^3.1.2",
-    "videojs-standard": "^5.0.0"
+    "videojs-standard": "^6.0.1"
   },
   "config": {
     "ghooks": {

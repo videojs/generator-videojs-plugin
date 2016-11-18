@@ -163,16 +163,33 @@ src/js/bar.js :: test/bar.test.js
 During development, it may be more convenient to run your tests manually in a browser (i.e. through QUnit directly, not Karma). This can be achieved easily by running a development server with `npm start` and navigating to [`http://localhost:9876/`][tests].
 
 ## Release
-
 ### Versioning
 
 __Conventional Video.js plugins may support Bower, but must never check in build artifacts to the history of the main branch (e.g. `master`) in Git.__
 
-TODO
+This convention may be confusing. Thankfully, [videojs-spellbook][spellbook] takes care of things behind the scenes.
+
+When you run `npm version` with the automation provided by the generator and spellbook, the tagged commit created by the `npm version` process will contain the `dist/` directory and all its contents. This allows Bower to "install" tags via Git.
+
+However, because it's undesirable to check in `dist/` everywhere, the `master` branch gets reset and a new version commit (not a tag) is created on `master`'s history.
+
+This process results in a `master` history that looks something like this:
+
+```
+<...> --- C --- V --- C --- C --- V --- C --- C --- <...>
+           \                       \
+            T                       T
+```
+
+`C`: signifies a conventional commit.
+`V`: signifies a version bump commit.
+`T`: tagged commit, with `dist/` included.
 
 ### Publishing
 
-Open-source plugins should use the most basic publishing process available - `npm publish` - which should be run after versioning. Closed-source plugins are left to their respective author(s) or organization.
+Open-source plugins should use the most basic publishing process available - `npm publish` - which should be run _after_ versioning.
+
+Closed-source plugins are left to their author or organization.
 
 
 [bcov]: https://www.brightcove.com

@@ -97,7 +97,6 @@ module.exports = (current, context) => {
       start: 'sb-start',
       watch: 'sb-watch',
       test: 'sb-test',
-      release: 'sb-release',
       postversion: 'sb-release'
     }),
 

@@ -8,7 +8,6 @@ const coreScripts = [
   'build',
   'clean',
   'lint',
-  'release',
   'start',
   'test',
   'watch'

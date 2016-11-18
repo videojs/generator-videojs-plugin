@@ -21,8 +21,7 @@ describe('videojs-plugin:app', function() {
     'start',
     'watch',
     'test',
-    'postversion',
-    'release'
+    'postversion'
   ];
 
   describe('defaults', function() {
