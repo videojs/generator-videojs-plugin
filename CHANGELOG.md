@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-## HEAD (Unreeased)
+## HEAD (Unreleased)
 * @misteroneill: Remove dependency on Babel, require Node 4.4+ (#102)
 * @misteroneill: videojs-plugin-check updates for v3 (#101)
 * @misteroneill: videojs-generator-cleanup updates for v3 (#100)
