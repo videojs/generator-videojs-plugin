@@ -487,7 +487,7 @@ module.exports = yeoman.generators.Base.extend({
     }
 
     if (this.context.docs) {
-      this._filesToCopy.push('docs/_index.md');
+      this._templatesToCopy.push('docs/_index.md');
     }
 
     if (this.context.css) {
