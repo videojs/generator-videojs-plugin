@@ -8,6 +8,8 @@ import plugin from '../src/js/index.js';
 
 const Player = videojs.getComponent('Player');
 
+QUnit.module('sanity tests');
+
 QUnit.test('the environment is sane', function(assert) {
   assert.strictEqual(typeof Array.isArray, 'function', 'es5 exists');
   assert.strictEqual(typeof sinon, 'object', 'sinon exists');
