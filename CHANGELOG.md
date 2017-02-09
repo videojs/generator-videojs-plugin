@@ -2,7 +2,7 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* Video.js 5/6 cross-compatibility (#108)
 
 --------------------
 
