@@ -2,9 +2,12 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-* Video.js 5/6 cross-compatibility (#108)
+_(none)_
 
 --------------------
+
+## 2.3.0 (2017-02-09)
+* Video.js 5/6 cross-compatibility (#108)
 
 ## 2.2.0 (2016-10-14)
 * Add generator-version (#97)
