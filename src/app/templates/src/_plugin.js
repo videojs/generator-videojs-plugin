@@ -3,6 +3,9 @@ import videojs from 'video.js';
 // Default options for the plugin.
 const defaults = {};
 
+// Cross-compatibility for Video.js 5 and 6.
+const registerPlugin = videojs.registerPlugin || videojs.plugin;
+
 /**
  * Function to invoke when the player is ready.
  *
@@ -37,7 +40,7 @@ const <%= functionName %> = function(options) {
 };
 
 // Register the plugin with video.js.
-videojs.plugin('<%= functionName %>', <%= functionName %>);
+registerPlugin('<%= functionName %>', <%= functionName %>);
 
 // Include the version number.
 <%= functionName %>.VERSION = '__VERSION__';
