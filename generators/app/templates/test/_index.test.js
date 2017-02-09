@@ -42,7 +42,8 @@ QUnit.module('<%= pluginName %>', {
 QUnit.test('registers itself with video.js', function(assert) {
   assert.expect(2);
 
-  assert.strictEqual(typeof Player.prototype.<%= functionName %>,
+  assert.strictEqual(
+    typeof Player.prototype.<%= functionName %>,
     'function',
     '<%= pluginName %> plugin was registered'
   );

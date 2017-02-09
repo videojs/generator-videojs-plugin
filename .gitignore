@@ -23,8 +23,3 @@ npm-debug.log*
 
 # Dependency directories
 node_modules/
-
-# Build-related directories
-es5-check/
-es5-test/
-generators/
