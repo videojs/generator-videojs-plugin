@@ -4,7 +4,9 @@ const _ = require('lodash');
 const VERSION = require('./constants').VERSION;
 
 const DEFAULTS = {
-  dependencies: {},
+  dependencies: {
+    'video.js': '^5.16.0'
+  },
   devDependencies: {
     'videojs-spellbook': '^2.0.2',
     'ghooks': '^1.3.2'
