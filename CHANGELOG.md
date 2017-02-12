@@ -2,7 +2,10 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
-_(none)_
+* @misteroneill Video.js 5/6 cross-compatibility updates (#110)
+* @BrandonOCasey Put the sanity test in a module (#111)
+* @misteroneill Fixed an issue where docs/index.md was not rendered as a template (#109)
+* @adamoliver Updated link to conventions in CONTRIBUTING.md template (#107)
 
 --------------------
 
