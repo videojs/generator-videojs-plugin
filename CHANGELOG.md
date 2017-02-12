@@ -14,6 +14,9 @@ _(none)_
 * @BrandonOCasey: Only include useful files on npm (#99)
 * @BrandonOCasey: Integrate with `videojs-spellbook` (#96)
 
+## 2.3.0 (2017-02-09)
+* Video.js 5/6 cross-compatibility (#108)
+
 ## 2.2.0 (2016-10-14)
 * Add generator-version (#97)
   * This will store the generator version used for a plugin in its `package.json`.
