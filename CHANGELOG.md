@@ -2,12 +2,15 @@ CHANGELOG
 =========
 
 ## HEAD (Unreleased)
+_(none)_
+
+--------------------
+
+## 3.1.0 (2017-02-12)
 * @misteroneill Video.js 5/6 cross-compatibility updates (#110)
 * @BrandonOCasey Put the sanity test in a module (#111)
 * @misteroneill Fixed an issue where docs/index.md was not rendered as a template (#109)
 * @adamoliver Updated link to conventions in CONTRIBUTING.md template (#107)
-
---------------------
 
 ## 3.0.0 (2016-11-18)
 * @misteroneill: Remove dependency on Babel, require Node 4.4+ (#102)
