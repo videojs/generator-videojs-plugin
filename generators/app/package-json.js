@@ -162,6 +162,10 @@ module.exports = (current, context) => {
     };
   }
 
+  if (context.type !== 'basic') {
+    result.dependencies['video.js'] = '>=6.0.0-RC.0';
+  }
+
   result.files.sort();
   result.scripts = alphabetizeScripts(result.scripts);
   result.dependencies = alphabetizeObject(result.dependencies);

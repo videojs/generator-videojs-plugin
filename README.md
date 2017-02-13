@@ -22,6 +22,7 @@ To learn more about Video.js plugins and this generator's conventions and opinio
     - [`Enter a description for your plugin`](#enter-a-description-for-your-plugin)
     - [`Enter the author of this plugin`](#enter-the-author-of-this-plugin)
     - [`Choose a license for your project`](#choose-a-license-for-your-project)
+    - [`Choose a plugin type`](#choose-a-plugin-type)
     - [`Do you want to include CSS styling, including Sass preprocessing?`](#do-you-want-to-include-css-styling-including-sass-preprocessing)
     - [`Do you want to support Internet Explorer 8?`](#do-you-want-to-support-internet-explorer-8)
     - [`Do you want to include documentation support?`](#do-you-want-to-include-documentation-support)
@@ -83,6 +84,9 @@ Follow the string formatting convention outlined [for `package.json` people fiel
 
 #### `Choose a license for your project`
 This provides a couple pre-configured, popular options [for the `package.json` license field][npm-license]. If your preferred license isn't found, simply choose "UNLICENSED" and update it manually.
+
+#### `Choose a plugin type`
+This allows you to choose between a basic, function-based plugin or an advanced, class-based plugin (only supported in Video.js 6). This changes the default contents of the `src/js/index.js` file.
 
 #### `Do you want to include CSS styling, including Sass preprocessing?`
 Respond "Y" to set up your project with a base `.scss` file.
