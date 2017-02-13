@@ -172,7 +172,7 @@ module.exports = (current, context) => {
   }
 
   if (context.type !== 'basic') {
-    result.dependencies['video.js'] = '>=6.0.0-RC.0';
+    result.dependencies['video.js'] = '^6.0.1';
   }
 
   result.files.sort();
