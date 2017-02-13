@@ -24,7 +24,7 @@ To learn more about Video.js plugins and this generator's conventions and opinio
     - [`Choose a license for your project`](#choose-a-license-for-your-project)
     - [`Choose a plugin type`](#choose-a-plugin-type)
     - [`Do you want to include CSS styling, including Sass preprocessing?`](#do-you-want-to-include-css-styling-including-sass-preprocessing)
-    - [`Do you want to support Internet Explorer 8?`](#do-you-want-to-support-internet-explorer-8)
+    - [`Do you want to support Internet Explorer 8?` - DEPRECATED](#do-you-want-to-support-internet-explorer-8---deprecated)
     - [`Do you want to include documentation support?`](#do-you-want-to-include-documentation-support)
     - [`Do you need a Video.js language file setup for internationalized strings?`](#do-you-need-a-videojs-language-file-setup-for-internationalized-strings)
     - [`Do you want to support Bower with special versioning handling?`](#do-you-want-to-support-bower-with-special-versioning-handling)
@@ -33,8 +33,8 @@ To learn more about Video.js plugins and this generator's conventions and opinio
     - [Install](#install)
     - [Prompt](#prompt)
     - [Hurry](#hurry)
-    - [Limiting Generated Files](#limiting-generated-files)
-    - [Brightcove Defaults](#brightcove-defaults)
+    - [Limiting Generated Files - DEPRECATED](#limiting-generated-files---deprecated)
+    - [Brightcove Defaults - DEPRECATED](#brightcove-defaults---deprecated)
 - [Updating an Existing Project](#updating-an-existing-project)
   - [Recommendations](#recommendations)
 - [Extra Tools](#extra-tools)
@@ -91,7 +91,10 @@ This allows you to choose between a basic, function-based plugin or an advanced,
 #### `Do you want to include CSS styling, including Sass preprocessing?`
 Respond "Y" to set up your project with a base `.scss` file.
 
-#### `Do you want to support Internet Explorer 8?`
+#### `Do you want to support Internet Explorer 8?` - DEPRECATED
+
+> **Note**: This prompt is deprecated and will be removed from v4.0.0.
+
 Respond "Y" to include some Babel presets to polyfill missing ES5 features for IE8. See [videojs-spellbook][spellbook] for more.
 
 #### `Do you want to include documentation support?`
@@ -126,11 +129,17 @@ Turn prompts off with: `yo videojs-plugin --skip-prompt`
 
 #### Hurry
 
-If you don't want to change configuration, but just want to update an existing plugin and skip all the other stuff (prompts, installation, "yosay"s), you can use this option to do that. _You may need to run the installation manually if dependencies changed!_
+> **Note**: This is a short-hand for: `yo videojs-plugin --skip-install --skip-prompt`
+
+If you don't want to change configuration, but just want to update an existing plugin and skip prompts and installation, you can use this option to do that.
 
 Turn prompts off with: `yo videojs-plugin --hurry`
 
-#### Limiting Generated Files
+_You may need to run the installation manually if dependencies changed!_
+
+#### Limiting Generated Files - DEPRECATED
+
+> **Note**: This option is deprecated and will be removed from v4.0.0.
 
 In some cases - especially when updating previously generated projects - you may want to only update certain "meta" files without needing to deal with prompts for source files and test files you definitely do not want to overwrite. The `--limit-to` and `--limit-to-meta` option helps with this.
 
@@ -146,7 +155,9 @@ Finally, the `--limit-to-meta` option is available as a shortcut for using `--li
 Update a subset of files with: `yo videojs-plugin --limit-to=pkg,dotfiles`
 Update _all_ "meta" files with: `yo videojs-plugin --limit-to-meta`
 
-#### Brightcove Defaults
+#### Brightcove Defaults - DEPRECATED
+
+> **Note**: This option is deprecated and will be removed from v4.0.0.
 
 Set certain values automatically for Brightcove-authored plugins. Has the following effects:
 
