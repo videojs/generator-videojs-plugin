@@ -1,11 +1,3 @@
-CHANGELOG
-=========
-
-## HEAD (Unreleased)
-_(none)_
-
---------------------
-
 ## 3.1.0 (2017-02-12)
 * @misteroneill Video.js 5/6 cross-compatibility updates (#110)
 * @BrandonOCasey Put the sanity test in a module (#111)
