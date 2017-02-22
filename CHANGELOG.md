@@ -1,3 +1,10 @@
+<a name="3.1.1"></a>
+## [3.1.1](https://github.com/videojs/generator-videojs-plugin/compare/v3.1.0...v3.1.1) (2017-02-22)
+
+### Bug Fixes
+
+* Use relative paths and remove nested spellbook paths (#118) ([3d8a648](https://github.com/videojs/generator-videojs-plugin/commit/3d8a648))
+
 ## 3.1.0 (2017-02-12)
 * @misteroneill Video.js 5/6 cross-compatibility updates (#110)
 * @BrandonOCasey Put the sanity test in a module (#111)
