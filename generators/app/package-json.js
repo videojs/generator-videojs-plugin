@@ -8,7 +8,7 @@ const DEFAULTS = {
     'video.js': '^5.16.0'
   },
   devDependencies: {
-    'videojs-spellbook': '^2.0.2',
+    'videojs-spellbook': '^3.0.0',
     'ghooks': '^1.3.2'
   }
 };
