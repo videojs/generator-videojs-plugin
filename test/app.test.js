@@ -54,7 +54,7 @@ describe('videojs-plugin:app', function() {
       assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
       assert.equal(this.pkg.spellbook.lang, false, 'lang should be disabled');
       assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
-      assert.strictEqual(this.pkg.config.ghooks['pre-push'], 'npm run lint');
+      assert.strictEqual(this.pkg.scripts.prepush, 'npm run lint');
       assert.ok(_.isPlainObject(this.pkg['generator-videojs-plugin']));
       assert.strictEqual(this.pkg['generator-videojs-plugin'].version, VERSION);
     });
@@ -271,6 +271,7 @@ describe('videojs-plugin:app', function() {
     it('does not cause a failure', function() {
       assert.ok(_.isPlainObject(this.pkg));
       assert.strictEqual(this.pkg.config, undefined);
+      assert.strictEqual(this.pkg.scripts.prepush, undefined);
     });
   });
 
@@ -327,17 +328,17 @@ describe('videojs-plugin:app', function() {
     it('handles merging the deep ghooks config object', function() {
       let pkg = packageJSON({}, {ghooks: 'lint'});
 
-      assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run lint');
+      assert.strictEqual(pkg.scripts.prepush, 'npm run lint');
       pkg = packageJSON(pkg, {ghooks: 'none'});
       assert.strictEqual(
-        pkg.config.ghooks,
+        pkg.scripts.prepush,
         undefined,
         '"config.ghooks" is removed when set to none'
       );
       pkg = packageJSON(pkg, {ghooks: 'test'});
-      assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run test');
+      assert.strictEqual(pkg.scripts.prepush, 'npm run test');
       pkg = packageJSON(pkg, {ghooks: 'lint'});
-      assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run lint');
+      assert.strictEqual(pkg.scripts.prepush, 'npm run lint');
     });
   });
 });

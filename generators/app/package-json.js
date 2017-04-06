@@ -8,8 +8,7 @@ const DEFAULTS = {
     'video.js': '^5.16.0'
   },
   devDependencies: {
-    'videojs-spellbook': '^3.0.0',
-    'ghooks': '^1.3.2'
+    'videojs-spellbook': '^3.0.0'
   }
 };
 
@@ -148,18 +147,29 @@ module.exports = (current, context) => {
   // In case ghooks was previously installed, but is now "none", we can
   // remove it from the package.json entirely.
   if (context.ghooks === 'none') {
-    delete result.devDependencies.ghooks;
+    delete result.devDependencies.ghoks;
+    delete result.devDependencies.husky;
 
     if (result.config) {
       delete result.config.ghooks;
     }
+
+    if (result.scripts.prepush) {
+      delete result.scripts.prepush;
+    }
   } else {
-    result.devDependencies.ghooks = '^1.3.2';
-    result.config = {
-      ghooks: {
-        'pre-push': `npm run ${context.ghooks}`
+    // delete old config
+    if (result.config) {
+      delete result.config.ghooks;
+      if (Object.keys(result.config).length === 0) {
+        delete result.config;
       }
-    };
+    }
+
+    // delete old ghooks
+    delete result.devDependencies.ghoks;
+    result.devDependencies.husky = '^0.13.1';
+    result.scripts.prepush = `npm run ${context.ghooks}`;
   }
 
   result.files.sort();
