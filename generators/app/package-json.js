@@ -147,7 +147,7 @@ module.exports = (current, context) => {
   // In case ghooks was previously installed, but is now "none", we can
   // remove it from the package.json entirely.
   if (context.ghooks === 'none') {
-    delete result.devDependencies.ghoks;
+    delete result.devDependencies.ghooks;
     delete result.devDependencies.husky;
 
     if (result.config) {
@@ -167,7 +167,7 @@ module.exports = (current, context) => {
     }
 
     // delete old ghooks
-    delete result.devDependencies.ghoks;
+    delete result.devDependencies.ghooks;
     result.devDependencies.husky = '^0.13.1';
     result.scripts.prepush = `npm run ${context.ghooks}`;
   }
