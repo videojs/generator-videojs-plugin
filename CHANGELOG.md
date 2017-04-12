@@ -1,3 +1,18 @@
+<a name="3.2.0"></a>
+# [3.2.0](https://github.com/videojs/generator-videojs-plugin/compare/v3.1.1...v3.2.0) (2017-04-12)
+
+### Features
+
+* use husky instead of ghooks (#121) ([011c28b](https://github.com/videojs/generator-videojs-plugin/commit/011c28b))
+
+### Bug Fixes
+
+* add browerify-versionify to cleanup & remove sinon (#122) ([81e4342](https://github.com/videojs/generator-videojs-plugin/commit/81e4342))
+
+### Chores
+
+* update spellbook version and remove browserify-shim (#123) ([2f3099f](https://github.com/videojs/generator-videojs-plugin/commit/2f3099f))
+
 <a name="3.1.1"></a>
 ## [3.1.1](https://github.com/videojs/generator-videojs-plugin/compare/v3.1.0...v3.1.1) (2017-02-22)
 
