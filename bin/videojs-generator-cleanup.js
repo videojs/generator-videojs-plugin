@@ -67,6 +67,7 @@ const configs = {
       'test/plugin.test.js': 'test/index.test.js'
     },
     pkg: [
+      'browserify-shim',
       'browserify',
       'dependencies.browserify-versionify',
       'dependencies.video.js',

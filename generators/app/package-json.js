@@ -8,7 +8,8 @@ const DEFAULTS = {
     'video.js': '^5.16.0'
   },
   devDependencies: {
-    'videojs-spellbook': '^3.0.0'
+    'videojs-spellbook': '^3.1.3',
+    'ghooks': '^1.3.2'
   }
 };
 
@@ -107,7 +108,6 @@ module.exports = (current, context) => {
     'author': context.author,
     'license': context.licenseName,
 
-    'browserify-shim': 'node_modules/videojs-spellbook/config/shim.config.js',
     'spellbook': {},
 
     'files': [
