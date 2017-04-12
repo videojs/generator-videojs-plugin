@@ -49,7 +49,6 @@ describe('videojs-plugin:app', function() {
       assert.ok(_.isPlainObject(this.pkg.devDependencies), 'devDependencies exists');
       assert.ok(_.isPlainObject(this.pkg.dependencies), 'dependencies exists');
       assert.ok(_.isPlainObject(this.pkg.spellbook), 'spellbook');
-      assert.equal(typeof this.pkg['browserify-shim'], 'string', 'browserify-shim exists');
       assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
       assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
       assert.equal(this.pkg.spellbook.lang, false, 'lang should be disabled');
