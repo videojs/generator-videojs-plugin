@@ -106,6 +106,7 @@ const configs = {
       'devDependencies.uglify-js',
       'devDependencies.videojs-languages',
       'devDependencies.videojs-standard',
+      'devDependencies.ghooks',
       'scripts.prebuild',
       'scripts.build:css',
       'scripts.build:css:bannerize',
@@ -145,7 +146,7 @@ const exists = (fname) => {
   }
 };
 
-let major = semver.major(constants.version);
+let major = semver.major(constants.VERSION);
 let config;
 
 // Walk through the versions in the configs building up a merged config object.
@@ -168,7 +169,7 @@ do {
 } while (major > 1);
 
 if (!config) {
-  console.log(chalk.yellow(`There are no updates needed for v${constants.version}`));
+  console.log(chalk.yellow(`There are no updates needed for v${constants.VERSION}`));
   process.exit(0);
 }
 
