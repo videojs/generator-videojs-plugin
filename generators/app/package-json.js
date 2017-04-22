@@ -171,6 +171,10 @@ module.exports = (current, context) => {
     result.scripts.prepush = `npm run ${context.ghooks}`;
   }
 
+  if (context.pluginType !== 'basic') {
+    result.dependencies['video.js'] = '>=6.0.0-RC.0';
+  }
+
   result.files.sort();
   result.scripts = alphabetizeScripts(result.scripts);
   result.dependencies = alphabetizeObject(result.dependencies);

@@ -143,7 +143,7 @@ module.exports = yeoman.generators.Base.extend({
       bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
       ghooks: configs.hasOwnProperty('ghooks') ? !!configs.ghooks : 'lint',
       license: this._licenseDefault,
-
+      pluginType: configs.pluginType || this._pluginTypeDefault,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       css: configs.hasOwnProperty('sass') ? !!configs.sass : false,
@@ -231,6 +231,12 @@ module.exports = yeoman.generators.Base.extend({
       message: 'Choose a license for your project',
       default: defaults.license,
       choices: objectToChoices(this._licenseNames)
+    }, {
+      type: 'list',
+      name: 'pluginType',
+      message: 'Choose a plugin type',
+      default: defaults.pluginType,
+      choices: objectToChoices(this._pluginTypes)
     }, {
       type: 'confirm',
       name: 'css',
@@ -332,6 +338,13 @@ module.exports = yeoman.generators.Base.extend({
 
     this._licenseDefault = 'mit';
 
+    this._pluginTypes = {
+      basic: 'Basic (function-based)',
+      advanced: 'Advanced (class-based, Video.js 6 only)'
+    };
+
+    this._pluginTypeDefault = 'basic';
+
     this._filesToCopy = [
       '_.editorconfig',
       '_.gitignore',
@@ -340,7 +353,6 @@ module.exports = yeoman.generators.Base.extend({
     ];
 
     this._templatesToCopy = [
-      'src/js/_index.js',
       'test/_index.test.js',
       '_index.html',
       '_CONTRIBUTING.md',
@@ -444,18 +456,12 @@ module.exports = yeoman.generators.Base.extend({
   _getContext(configs) {
     configs = configs || this.config.getAll();
 
-    return _.assign(_.pick(configs, [
-      'author',
-      'bower',
-      'description',
-      'docs',
-      'ghooks',
-      'lang',
-      'css',
-      'ie8'
-    ]), {
+    const camelName = _.camelCase(configs.name);
+
+    return _.assign(configs, {
       className: `vjs-${configs.name}`,
-      functionName: _.camelCase(configs.name),
+      functionName: camelName,
+      constructorName: camelName.charAt(0).toUpperCase() + camelName.substr(1),
       isPrivate: this._isPrivate(),
       licenseName: this._licenseNames[configs.license],
       packageName: this._getPackageName(configs.name, configs.scope),
@@ -560,6 +566,21 @@ module.exports = yeoman.generators.Base.extend({
       this.fs.copyTpl(
         this.templatePath(file),
         this.destinationPath('LICENSE'),
+        this.context
+      );
+    },
+
+    /**
+     * Writes the plugin's index.js file based on the chosen plugin type.
+     */
+    plugin() {
+      if (this._limitTo.length) {
+        return;
+      }
+
+      this.fs.copyTpl(
+        this.templatePath(`src/js/_index-${this.context.pluginType}.js`),
+        this._dest('src/js/index.js'),
         this.context
       );
     },
