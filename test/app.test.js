@@ -42,7 +42,7 @@ describe('videojs-plugin:app', function() {
       assert.strictEqual(this.pkg.name, 'videojs-wat', 'pkg name exists');
       assert.strictEqual(this.pkg.description, 'wat is the plugin', 'description exists');
       assert.strictEqual(this.pkg.version, '0.0.0', 'version is set');
-      assert.strictEqual(this.pkg.main, 'dist/es5/index.js', 'main is set');
+      assert.strictEqual(this.pkg.main, 'build/es5/index.js', 'main is set');
       assert.strictEqual(this.pkg['jsnext:main'], 'src/js/index.js', 'jsnext:main is set');
       assert.ok(_.isArray(this.pkg.keywords), 'keywords exist');
       assert.ok(_.isArray(this.pkg.files), 'files array exists');
