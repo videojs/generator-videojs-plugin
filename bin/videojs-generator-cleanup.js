@@ -137,8 +137,8 @@ const configs = {
     removals: [
       'dist/docs',
       'dist/test',
-      'dist/es5',
-    ],
+      'dist/es5'
+    ]
   }
 };
 
