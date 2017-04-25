@@ -39,7 +39,6 @@ const configs = {
       'scripts.mkdirs',
       'scripts.prestart',
       'scripts.start:serve',
-      'scripts.watch',
       'scripts.watch:css',
       'scripts.watch:js',
       'scripts.watch:test'
