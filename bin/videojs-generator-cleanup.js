@@ -122,7 +122,6 @@ const configs = {
       'scripts.docs',
       'scripts.docs:api',
       'scripts.docs:toc',
-      'scripts.prepublish',
       'scripts.pretest',
       'scripts.test:chrome',
       'scripts.test:firefox',
@@ -133,6 +132,13 @@ const configs = {
       'videojs-plugin',
       'vjsstandard'
     ]
+  },
+  v4: {
+    removals: [
+      'dist/docs',
+      'dist/test',
+      'dist/es5',
+    ],
   }
 };
 
