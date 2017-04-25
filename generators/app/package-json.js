@@ -134,6 +134,8 @@ module.exports = (current, context) => {
   ['js', 'css', 'lang', 'docs', 'test'].forEach(function(prop) {
     if (context[prop] === false) {
       result.spellbook[prop] = false;
+    } else if (current && current.spellbook && current.spellbook[prop]) {
+      result.spellbook[prop] = current.spellbook[prop];
     }
   });
 
