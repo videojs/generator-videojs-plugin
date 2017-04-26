@@ -53,24 +53,6 @@ const FILES = {
   ]
 };
 
-FILES['limit-to-dotfiles'] = ['bower.json'];
-
-// add all files starting with a dot to this list
-FILES.default.forEach(file => {
-  if ((/^\./).test(file)) {
-    FILES['limit-to-dotfiles'].push(file);
-  }
-});
-
-FILES['limit-to-pkg'] = [
-  'package.json',
-  '.git'
-];
-
-FILES['limit-to-meta'] = []
-  .concat(FILES['limit-to-pkg'])
-  .concat(FILES['limit-to-dotfiles']);
-
 const GENERATOR_PATH = path.join(__dirname, '../generators/app');
 
 /**

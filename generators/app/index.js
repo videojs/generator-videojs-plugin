@@ -202,21 +202,6 @@ module.exports = yeoman.generators.Base.extend({
       defaults: false
     });
 
-    this.option('limit-to', {
-      desc: tsmlj`
-        Limit files to be updated by passing any comma-separated combination
-        of: dotfiles and or pkg
-      `,
-      type: 'string',
-      defaults: ''
-    });
-
-    this.option('limit-to-meta', {
-      desc: 'Only update "meta files" - dotfiles, bower.json, and package.json',
-      type: 'boolean',
-      defaults: false
-    });
-
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
 
     this._ghooksOptions = {
@@ -261,57 +246,12 @@ module.exports = yeoman.generators.Base.extend({
 
     this._promptsToFilter = [];
 
-    _.each({
-      limitTo: 'limit-to',
-      limitToMeta: 'limit-to-meta'
-    }, (v, k) => {
-      if (this.options[k]) {
-        this.log(`The --${v} option is deprecated and will be removed in v4.0.0!`);
-      }
-    });
-
     // The "hurry" option skips both prompts and installation.
     if (this.options.hurry) {
       this.options.skipPrompt = this.options.skipInstall = true;
     }
 
     this._configsTemp = {};
-
-    // Defines the files that are allowed for various `--limit-to` options.
-    this._limits = {
-      dotfiles: {
-        files: [
-          '_.editorconfig',
-          '_.gitignore',
-          '_.npmignore',
-          '_.travis.yml',
-          '.github/_ISSUE_TEMPLATE.md',
-          '.github/_PULL_REQUEST_TEMPLATE.md'
-        ],
-        templates: [
-          '_bower.json'
-        ]
-      },
-
-      // These are empty because package.json has special handling.
-      pkg: {
-        files: [],
-        templates: []
-      }
-    };
-
-    // this._limitTo will always be an array of the requested keys that are
-    // valid (i.e. found in the this._limits object).
-    if (this.options.limitToMeta) {
-      this._limitTo = Object.keys(this._limits);
-    } else if (this.options.limitTo) {
-      this._limitTo = _.intersection(
-        this.options.limitTo.split(',').map(s => s.trim()).filter(_.identity),
-        Object.keys(this._limits)
-      );
-    } else {
-      this._limitTo = [];
-    }
 
     // Make sure we filter out the author prompt if there is a current
     // package.json file with an object for the author field.
@@ -397,14 +337,6 @@ module.exports = yeoman.generators.Base.extend({
     if (this.context.bower) {
       this._templatesToCopy.push('_bower.json');
     }
-
-    if (this._limitTo && this._limitTo.length) {
-      const files = _.union.apply(_, this._limitTo.map(k => this._limits[k].files));
-      const templates = _.union.apply(_, this._limitTo.map(k => this._limits[k].templates));
-
-      this._filesToCopy = _.intersection(this._filesToCopy, files);
-      this._templatesToCopy = _.intersection(this._templatesToCopy, templates);
-    }
   },
 
   /**
@@ -452,9 +384,7 @@ module.exports = yeoman.generators.Base.extend({
     license() {
       const file = this._licenseFiles[this.config.get('license')];
 
-      // There is no _limitTo setting that includes LICENSE, so we only
-      // need to check for it existing to know to skip this.
-      if (!file || this._limitTo.length) {
+      if (!file) {
         return;
       }
 
@@ -469,10 +399,6 @@ module.exports = yeoman.generators.Base.extend({
      * Writes the plugin's index.js file based on the chosen plugin type.
      */
     plugin() {
-      if (this._limitTo.length) {
-        return;
-      }
-
       this.fs.copyTpl(
         this.templatePath(`src/js/_index-${this.context.type}.js`),
         this._dest('src/js/index.js'),
@@ -486,13 +412,6 @@ module.exports = yeoman.generators.Base.extend({
      * @function package
      */
     packageJSON() {
-
-      // The only time we don't want to write package.json is when there are
-      // any _limitTo values and "pkg" is not one of them.
-      if (this._limitTo.length && !_.includes(this._limitTo, 'pkg')) {
-        return;
-      }
-
       const json = packageJSON(this._currentPkgJSON, this.context);
 
       // We want to use normal JSON.stringify here because we want to
