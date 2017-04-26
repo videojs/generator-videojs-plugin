@@ -8,7 +8,7 @@ const DEFAULTS = {
     'video.js': '^5.16.0'
   },
   devDependencies: {
-    'videojs-spellbook': '^3.1.3'
+    'videojs-spellbook': '^4.0.0'
   }
 };
 
@@ -79,7 +79,7 @@ module.exports = (current, context) => {
     'name': context.packageName,
     'version': context.version,
     'description': context.description,
-    'main': 'dist/es5/index.js',
+    'main': 'build/es5/index.js',
     'jsnext:main': 'src/js/index.js',
 
     'engines': {
@@ -113,10 +113,9 @@ module.exports = (current, context) => {
       'CONTRIBUTING.md',
       'CHANGELOG.md',
       'README.md',
-      'dist/docs',
-      'dist/lang',
-      'dist/es5',
-      'dist/browser',
+      'build/docs',
+      'dist/',
+      'build/es5',
       'index.html',
       'src/',
       'docs/'
@@ -132,9 +131,11 @@ module.exports = (current, context) => {
   });
 
   // spellbook mappings
-  ['js', 'css', 'lang', 'docs'].forEach(function(prop) {
+  ['js', 'css', 'lang', 'docs', 'test'].forEach(function(prop) {
     if (context[prop] === false) {
       result.spellbook[prop] = false;
+    } else if (current && current.spellbook && current.spellbook[prop]) {
+      result.spellbook[prop] = current.spellbook[prop];
     }
   });
 

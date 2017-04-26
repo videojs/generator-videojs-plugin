@@ -39,7 +39,6 @@ const configs = {
       'scripts.mkdirs',
       'scripts.prestart',
       'scripts.start:serve',
-      'scripts.watch',
       'scripts.watch:css',
       'scripts.watch:js',
       'scripts.watch:test'
@@ -123,7 +122,6 @@ const configs = {
       'scripts.docs',
       'scripts.docs:api',
       'scripts.docs:toc',
-      'scripts.prepublish',
       'scripts.pretest',
       'scripts.test:chrome',
       'scripts.test:firefox',
@@ -133,6 +131,13 @@ const configs = {
       'style',
       'videojs-plugin',
       'vjsstandard'
+    ]
+  },
+  v4: {
+    removals: [
+      'dist/docs',
+      'dist/test',
+      'dist/es5'
     ]
   }
 };
