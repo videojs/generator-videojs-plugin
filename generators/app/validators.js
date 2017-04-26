@@ -5,51 +5,56 @@ const tsmlj = require('tsmlj');
 const PREFIX = require('./constants').PREFIX;
 
 /**
- * Validates that a plugin name does not include invalid characters or start
- * with the "videojs-" prefix.
+ * A collection of functions that validate values and return strings for
+ * error states and `true`
  *
- * @param  {String} input
- * @return {String|Boolean}
+ * @type {Object}
  */
-const name = input => {
+module.exports = {
 
-  if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
-    return tsmlj`
-      Names must start with a lower-case letter and contain
-      only lower-case letters (a-z), digits (0-9), and hyphens (-).
-    `;
+  /**
+   * Validates that a plugin name does not include invalid characters or start
+   * with the "videojs-" prefix.
+   *
+   * @param  {string} input
+   * @return {string|boolean}
+   */
+  name(input) {
+    if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
+      return tsmlj`
+        Names must start with a lower-case letter and contain
+        only lower-case letters (a-z), digits (0-9), and hyphens (-).
+      `;
+    }
+
+    if (_.startsWith(input, PREFIX)) {
+      return tsmlj`
+        Plugins cannot start with "${PREFIX}"; it will automatically
+        be prepended!
+      `;
+    }
+
+    return true;
+  },
+
+  /**
+   * Validates that an npm package scope includes @, but not /.
+   *
+   * @param  {string} input
+   * @return {string|boolean}
+   */
+  scope(input) {
+    if (input && _.startsWith(input, '@')) {
+      return 'Do not begin your scope with "@", it will be automatically added.';
+    }
+
+    if (input && _.endsWith(input, '/')) {
+      return tsmlj`
+        Do not include a trailing "/" in your package scope,
+        it will be automatically added.
+      `;
+    }
+
+    return true;
   }
-
-  if (_.startsWith(input, PREFIX)) {
-    return tsmlj`
-      Plugins cannot start with "${PREFIX}"; it will automatically
-      be prepended!
-    `;
-  }
-
-  return true;
 };
-
-/**
- * Validates that an npm package scope includes @, but not /.
- *
- * @param  {String} input
- * @return {String|Boolean}
- */
-const scope = input => {
-
-  if (input && _.startsWith(input, '@')) {
-    return 'Do not begin your scope with "@", it will be automatically added.';
-  }
-
-  if (input && _.endsWith(input, '/')) {
-    return tsmlj`
-      Do not include a trailing "/" in your package scope,
-      it will be automatically added.
-    `;
-  }
-
-  return true;
-};
-
-module.exports = {name, scope};

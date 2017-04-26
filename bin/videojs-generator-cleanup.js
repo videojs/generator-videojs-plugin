@@ -15,7 +15,6 @@ const fs = require('fs-extra');
 const _ = require('lodash');
 const path = require('path');
 const semver = require('semver');
-const sh = require('shelljs');
 const constants = require('../generators/app/constants');
 
 const configs = {
@@ -176,7 +175,7 @@ if (!config) {
 
 if (config.removals.length) {
   config.removals.filter(exists).forEach(fname => {
-    sh.rm('-rf', fname);
+    fs.removeSync(fname);
     console.log(`Removed "${fname}" from this directory.`);
   });
 }

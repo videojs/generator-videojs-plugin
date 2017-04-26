@@ -1,37 +1,16 @@
 'use strict';
 
 const _ = require('lodash');
-const chalk = require('chalk');
+const execSync = require('child_process').execSync;
 const path = require('path');
 const tsmlj = require('tsmlj');
 const yeoman = require('yeoman-generator');
-const yosay = require('yosay');
-const shelljs = require('shelljs');
-
 const PREFIX = require('./constants').PREFIX;
 const packageJSON = require('./package-json');
+const utils = require('./utils');
 const validators = require('./validators');
 
-/**
- * Convert an object into "choices" for a prompt. The object keys are the
- * values reported by the prompt and the object values are the texts displayed
- * to the user.
- *
- * @param  {Object} o
- * @return {Array}
- */
-const objectToChoices = (o) => _.map(o, (v, k) => ({name: v, value: k}));
-
 module.exports = yeoman.generators.Base.extend({
-
-  /**
-   * Whether or not this plugin is privately licensed.
-   *
-   * @return {Boolean}
-   */
-  _isPrivate() {
-    return this.config.get('license') === 'private';
-  },
 
   /**
    * Removes the leading underscore from a template file name and
@@ -59,74 +38,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   /**
-   * Gets the name of the scope including the "@" symbol. Will not prepend
-   * the "@" if it is already included.
-   *
-   * @param  {String} scope
-   * @return {String}
-   */
-  _getScope(scope) {
-    if (!scope || typeof scope !== 'string') {
-      return '';
-    }
-    return scope.charAt(0) === '@' ? scope : `@${scope}`;
-  },
-
-  /**
-   * Gets the name of the plugin (without scope) including the "videojs-"
-   * prefix.
-   *
-   * @param  {String} name
-   * @return {String}
-   */
-  _getPluginName(name) {
-    return name && typeof name === 'string' ? PREFIX + name : '';
-  },
-
-  /**
-   * Gets the full package name, taking scope into account.
-   *
-   * @param  {String} name
-   * @param  {String} [scope]
-   * @return {String}
-   */
-  _getPackageName(name, scope) {
-    scope = this._getScope(scope);
-    name = this._getPluginName(name);
-    return scope ? `${scope}/${name}` : name;
-  },
-
-  /**
-   * Gets the scope of the plugin (without scope or "videojs-" prefix).
-   *
-   * @param  {String} name
-   * @return {String}
-   */
-  _getScopeFromPackageName(name) {
-    if (!name) {
-      return '';
-    }
-
-    const match = name.match(/^@([^/]+)\//);
-
-    return match ? match[1] : '';
-  },
-
-  /**
-   * Gets the core/default - that is, without scope or "videojs-"
-   * prefix - name of the plugin.
-   *
-   * @param  {String} name
-   * @return {String}
-   */
-  _getDefaultNameFromPackageName(name) {
-    if (!name) {
-      return '';
-    }
-    return name.split('/').reverse()[0].replace(PREFIX, '');
-  },
-
-  /**
    * Attempts to get default values for prompts. Async because it may call
    * out to external processes (e.g. Git) to attempt to gather this info.
    *
@@ -143,7 +54,7 @@ module.exports = yeoman.generators.Base.extend({
       bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
       ghooks: configs.hasOwnProperty('ghooks') ? !!configs.ghooks : 'lint',
       license: this._licenseDefault,
-
+      type: configs.type || this._typeDefault,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
       css: configs.hasOwnProperty('sass') ? !!configs.sass : false,
@@ -165,11 +76,11 @@ module.exports = yeoman.generators.Base.extend({
 
     // At this point, the `defaults.name` may still have the full scope and
     // prefix included; so, we get the scope now.
-    defaults.scope = this._getScopeFromPackageName(defaults.name);
+    defaults.scope = utils.getScopeFromPackageName(defaults.name);
 
     // Strip out the "videojs-" prefix from the name for the purposes of
     // the prompt (otherwise it will be rejected by validation).
-    defaults.name = this._getDefaultNameFromPackageName(defaults.name);
+    defaults.name = utils.getEssentialName(defaults.name);
 
     // The package.json stores a value from `_licenseNames`, so in that
     // case, we need to find the key instead of the value.
@@ -230,7 +141,13 @@ module.exports = yeoman.generators.Base.extend({
       name: 'license',
       message: 'Choose a license for your project',
       default: defaults.license,
-      choices: objectToChoices(this._licenseNames)
+      choices: utils.objectToChoices(this._licenseNames)
+    }, {
+      type: 'list',
+      name: 'type',
+      message: 'Choose a plugin type',
+      default: defaults.type,
+      choices: utils.objectToChoices(this._types)
     }, {
       type: 'confirm',
       name: 'css',
@@ -239,7 +156,7 @@ module.exports = yeoman.generators.Base.extend({
     }, {
       type: 'confirm',
       name: 'ie8',
-      message: 'Do you want to support Internet Explorer 8?',
+      message: 'Do you want to support Internet Explorer 8 (DEPRECATED)?',
       default: defaults.ie8
     }, {
       type: 'confirm',
@@ -264,7 +181,7 @@ module.exports = yeoman.generators.Base.extend({
       name: 'ghooks',
       message: 'What should be done before you git push?',
       default: defaults.ghooks,
-      choices: objectToChoices(this._ghooksOptions)
+      choices: utils.objectToChoices(this._ghooksOptions)
     }];
 
     return prompts.filter(p => !_.includes(this._promptsToFilter, p.name));
@@ -332,6 +249,13 @@ module.exports = yeoman.generators.Base.extend({
 
     this._licenseDefault = 'mit';
 
+    this._types = {
+      basic: 'Basic (function-based)',
+      advanced: 'Advanced (class-based, Video.js 6 only)'
+    };
+
+    this._typeDefault = 'basic';
+
     this._filesToCopy = [
       '_.editorconfig',
       '_.gitignore',
@@ -340,7 +264,6 @@ module.exports = yeoman.generators.Base.extend({
     ];
 
     this._templatesToCopy = [
-      'src/js/_index.js',
       'test/_index.test.js',
       '_index.html',
       '_CONTRIBUTING.md',
@@ -348,6 +271,16 @@ module.exports = yeoman.generators.Base.extend({
     ];
 
     this._promptsToFilter = [];
+
+    _.each({
+      limitTo: 'limit-to',
+      limitToMeta: 'limit-to-meta',
+      bcov: 'bcov'
+    }, (v, k) => {
+      if (this.options[k]) {
+        this.log(`The --${v} option is deprecated and will be removed in v4.0.0!`);
+      }
+    });
 
     // The "hurry" option skips both prompts and installation.
     if (this.options.hurry) {
@@ -423,12 +356,15 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
 
-    this.log(yosay(`Welcome to the ${chalk.green(`${PREFIX}plugin`)} generator!`));
-
     const done = this.async();
 
     this.prompt(this._getPrompts(), responses => {
       _.assign(this._configsTemp, responses);
+
+      if (responses.ie8) {
+        this.log('You have opted for IE8 support. This configuration is deprecated and will be removed from in v4.0.0!');
+      }
+
       done();
     });
   },
@@ -444,22 +380,16 @@ module.exports = yeoman.generators.Base.extend({
   _getContext(configs) {
     configs = configs || this.config.getAll();
 
-    return _.assign(_.pick(configs, [
-      'author',
-      'bower',
-      'description',
-      'docs',
-      'ghooks',
-      'lang',
-      'css',
-      'ie8'
-    ]), {
+    const camelName = _.camelCase(configs.name);
+
+    return _.assign(configs, {
       className: `vjs-${configs.name}`,
-      functionName: _.camelCase(configs.name),
-      isPrivate: this._isPrivate(),
+      functionName: camelName,
+      constructorName: camelName.charAt(0).toUpperCase() + camelName.substr(1),
+      isPrivate: configs.license === 'private',
       licenseName: this._licenseNames[configs.license],
-      packageName: this._getPackageName(configs.name, configs.scope),
-      pluginName: this._getPackageName(configs.name),
+      packageName: utils.getPackageName(configs.name, configs.scope),
+      pluginName: utils.getPackageName(configs.name),
       version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0'
     });
   },
@@ -476,7 +406,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this.context = this._getContext();
 
-    if (!this._isPrivate()) {
+    if (!this.context.isPrivate) {
       this._filesToCopy.push('_.travis.yml');
       this._filesToCopy.push('.github/_ISSUE_TEMPLATE.md');
       this._filesToCopy.push('.github/_PULL_REQUEST_TEMPLATE.md');
@@ -525,9 +455,10 @@ module.exports = yeoman.generators.Base.extend({
       try {
         this.fs.statSync(git);
       } catch (e) {
-        shelljs.exec('git init', {silent: true});
+        execSync('git init');
       }
     },
+
     /**
      * Writes common files.
      *
@@ -565,6 +496,21 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     /**
+     * Writes the plugin's index.js file based on the chosen plugin type.
+     */
+    plugin() {
+      if (this._limitTo.length) {
+        return;
+      }
+
+      this.fs.copyTpl(
+        this.templatePath(`src/js/_index-${this.context.type}.js`),
+        this._dest('src/js/index.js'),
+        this.context
+      );
+    },
+
+    /**
      * Writes/updates the package.json file.
      *
      * @function package
@@ -595,19 +541,5 @@ module.exports = yeoman.generators.Base.extend({
    */
   install() {
     this.npmInstall();
-  },
-
-  /**
-   * Display a final message to the user.
-   *
-   * @method end
-   */
-  end() {
-    if (this.options.hurry) {
-      return;
-    }
-    this.log(yosay(tsmlj`
-      All done; ${chalk.green(this.context.pluginName)} is ready to go!
-    `));
   }
 });
