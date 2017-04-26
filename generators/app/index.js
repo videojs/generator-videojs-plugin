@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const execSync = require('child_process').execSync;
-const path = require('path');
 const tsmlj = require('tsmlj');
 const yeoman = require('yeoman-generator');
 const PREFIX = require('./constants').PREFIX;
@@ -10,32 +9,18 @@ const packageJSON = require('./package-json');
 const utils = require('./utils');
 const validators = require('./validators');
 
+const licenseNames = {
+  apache2: 'Apache-2.0',
+  mit: 'MIT',
+  private: 'UNLICENSED'
+};
+
+const licenseFiles = {
+  apache2: 'licenses/apache2',
+  mit: 'licenses/mit'
+};
+
 module.exports = yeoman.generators.Base.extend({
-
-  /**
-   * Removes the leading underscore from a template file name and
-   * generates the full destination path for it.
-   *
-   * @method _dest
-   * @private
-   * @example
-   *         this._dest('some-dir/__foo') // "/path/to/some-dir/_foo"
-   *         this._dest('_some-file.js')  // "/path/to/some-file.js"
-   *         this._dest('some-file.js')   // "/path/to/some-file.js"
-   *
-   * @param  {String} src
-   * @return {String}
-   */
-  _dest(src) {
-    const basename = path.basename(src);
-    let destname = src;
-
-    if (_.startsWith(basename, '_')) {
-      destname = src.replace(basename, basename.substr(1));
-    }
-
-    return this.destinationPath(destname);
-  },
 
   /**
    * Attempts to get default values for prompts. Async because it may call
@@ -48,26 +33,24 @@ module.exports = yeoman.generators.Base.extend({
   _getPromptDefaults() {
     const configs = this.config.getAll();
     const pkg = this._currentPkgJSON || {};
-    const licenseNames = this._licenseNames;
 
     const defaults = {
-      ghooks: configs.hasOwnProperty('ghooks') ? !!configs.ghooks : 'lint',
-      license: this._licenseDefault,
-      type: configs.type || this._typeDefault,
-      docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
-      lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
-      css: configs.hasOwnProperty('sass') ? !!configs.sass : false
+
+      // ghooks was replaced by husky, so we support both here.
+      husky: _.get(configs, 'husky', _.get(configs, 'ghooks', 'lint')),
+      license: 'mit',
+      type: configs.type || 'basic',
+      docs: _.get(configs, 'docs', false),
+      lang: _.get(configs, 'lang', false),
+
+      // sass was replaced by css, so we support both here.
+      css: _.get(configs, 'css', _.get(configs, 'sass', false))
     };
 
-    // support new property name old name was sass
-    if (configs.hasOwnProperty('css')) {
-      defaults.css = !!configs.css;
-    }
-
     ['author', 'license', 'name', 'description'].forEach(key => {
-      if (pkg.hasOwnProperty(key)) {
+      if (_.has(pkg, key)) {
         defaults[key] = pkg[key];
-      } else if (configs.hasOwnProperty(key)) {
+      } else if (_.has(configs, key)) {
         defaults[key] = configs[key];
       }
     });
@@ -80,10 +63,10 @@ module.exports = yeoman.generators.Base.extend({
     // the prompt (otherwise it will be rejected by validation).
     defaults.name = utils.getEssentialName(defaults.name);
 
-    // The package.json stores a value from `_licenseNames`, so in that
+    // The package.json stores a value from `licenseNames`, so in that
     // case, we need to find the key instead of the value.
     if (pkg && pkg.license && pkg.license === defaults.license) {
-      defaults.license = _.find(Object.keys(licenseNames), k => {
+      defaults.license = _.find(_.keys(licenseNames), k => {
         return licenseNames[k] === pkg.license;
       });
     }
@@ -139,13 +122,16 @@ module.exports = yeoman.generators.Base.extend({
       name: 'license',
       message: 'Choose a license for your project',
       default: defaults.license,
-      choices: utils.objectToChoices(this._licenseNames)
+      choices: utils.objectToChoices(licenseNames)
     }, {
       type: 'list',
       name: 'type',
       message: 'Choose a plugin type',
       default: defaults.type,
-      choices: utils.objectToChoices(this._types)
+      choices: utils.objectToChoices({
+        basic: 'Basic (function-based)',
+        advanced: 'Advanced (class-based, Video.js 6 only)'
+      })
     }, {
       type: 'confirm',
       name: 'css',
@@ -166,13 +152,38 @@ module.exports = yeoman.generators.Base.extend({
       default: defaults.lang
     }, {
       type: 'list',
-      name: 'ghooks',
+      name: 'husky',
       message: 'What should be done before you git push?',
-      default: defaults.ghooks,
-      choices: utils.objectToChoices(this._ghooksOptions)
+      default: defaults.husky,
+      choices: utils.objectToChoices({
+        lint: 'Check code quality',
+        test: 'Check code quality and run tests',
+        none: 'Nothing'
+      })
     }];
 
     return prompts.filter(p => !_.includes(this._promptsToFilter, p.name));
+  },
+
+  /**
+   * Generates a context object used for providing data to EJS file templates.
+   *
+   * @return {Object}
+   */
+  _getContext() {
+    const configs = this.config.getAll();
+    const camelName = _.camelCase(configs.name);
+
+    return _.assign(configs, {
+      className: `vjs-${configs.name}`,
+      functionName: camelName,
+      constructorName: camelName.charAt(0).toUpperCase() + camelName.substr(1),
+      isPrivate: configs.license === 'private',
+      licenseName: licenseNames[configs.license],
+      packageName: utils.getPackageName(configs.name, configs.scope),
+      pluginName: utils.getPackageName(configs.name),
+      version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0'
+    });
   },
 
   /**
@@ -197,47 +208,6 @@ module.exports = yeoman.generators.Base.extend({
     });
 
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
-
-    this._ghooksOptions = {
-      lint: 'Check code quality',
-      test: 'Check code quality and run tests',
-      none: 'Nothing'
-    };
-
-    this._licenseNames = {
-      apache2: 'Apache-2.0',
-      mit: 'MIT',
-      private: 'UNLICENSED'
-    };
-
-    this._licenseFiles = {
-      apache2: 'licenses/_apache2',
-      mit: 'licenses/_mit'
-    };
-
-    this._licenseDefault = 'mit';
-
-    this._types = {
-      basic: 'Basic (function-based)',
-      advanced: 'Advanced (class-based, Video.js 6 only)'
-    };
-
-    this._typeDefault = 'basic';
-
-    this._filesToCopy = [
-      '_.editorconfig',
-      '_.gitignore',
-      '_.npmignore',
-      '_CHANGELOG.md'
-    ];
-
-    this._templatesToCopy = [
-      'test/_index.test.js',
-      '_index.html',
-      '_CONTRIBUTING.md',
-      '_README.md'
-    ];
-
     this._promptsToFilter = [];
 
     // The "hurry" option skips both prompts and installation.
@@ -274,31 +244,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   /**
-   * Generates a context object used for providing data to EJS file templates.
-   *
-   * @param {Object} [configs]
-   *        Optionally provide custom configs.
-   *
-   * @return {Object}
-   */
-  _getContext(configs) {
-    configs = configs || this.config.getAll();
-
-    const camelName = _.camelCase(configs.name);
-
-    return _.assign(configs, {
-      className: `vjs-${configs.name}`,
-      functionName: camelName,
-      constructorName: camelName.charAt(0).toUpperCase() + camelName.substr(1),
-      isPrivate: configs.license === 'private',
-      licenseName: this._licenseNames[configs.license],
-      packageName: utils.getPackageName(configs.name, configs.scope),
-      pluginName: utils.getPackageName(configs.name),
-      version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0'
-    });
-  },
-
-  /**
    * Store configs, generate template rendering context, alter the setup for
    * file structure.
    *
@@ -307,109 +252,80 @@ module.exports = yeoman.generators.Base.extend({
   configuring() {
     this.config.set(this._configsTemp);
     delete this._configsTemp;
-
     this.context = this._getContext();
-
-    if (!this.context.isPrivate) {
-      this._filesToCopy.push('_.travis.yml');
-      this._filesToCopy.push('.github/_ISSUE_TEMPLATE.md');
-      this._filesToCopy.push('.github/_PULL_REQUEST_TEMPLATE.md');
-    }
-
-    if (this.context.lang) {
-      this._filesToCopy.push('lang/_en.json');
-    }
-
-    if (this.context.docs) {
-      this._templatesToCopy.push('docs/_index.md');
-    }
-
-    if (this.context.css) {
-      this._templatesToCopy.push('src/css/_index.scss');
-    }
   },
 
   /**
    * Perform various writing tasks.
    *
-   * @property {Object} writing
+   * @method writing
    */
-  writing: {
+  writing() {
+    const git = this.destinationPath('.git');
 
-    /**
-     * intialize git if there is no _.git directory
-     *
-     * @function gitInit
-     */
-    gitInit() {
-      const git = this._dest('_.git');
+    // Initialize a Git repository if none exists.
+    try {
+      this.fs.statSync(git);
+    } catch (e) {
+      execSync('git init');
+    }
 
-      try {
-        this.fs.statSync(git);
-      } catch (e) {
-        execSync('git init');
-      }
-    },
+    // Render template files.
+    [
+      'test/index.test.js',
+      'index.html',
+      'CONTRIBUTING.md',
+      'README.md'
+    ]
+      .concat(this.context.css && 'src/css/index.scss')
+      .filter(Boolean)
+      .forEach(src => this.fs.copyTpl(this.templatePath(src), this.destinationPath(src), this.context));
 
-    /**
-     * Writes common files.
-     *
-     * @function common
-     */
-    common() {
-      this._templatesToCopy.forEach(src => {
-        this.fs.copyTpl(this.templatePath(src), this._dest(src), this.context);
-      });
+    // Special license template handling.
+    const license = licenseFiles[this.context.license];
 
-      this._filesToCopy.forEach(src => {
-        this.fs.copy(this.templatePath(src), this._dest(src));
-      });
-    },
-
-    /**
-     * Writes the LICENSE file based on the chosen license.
-     *
-     * @function license
-     */
-    license() {
-      const file = this._licenseFiles[this.config.get('license')];
-
-      if (!file) {
-        return;
-      }
-
+    if (license) {
       this.fs.copyTpl(
-        this.templatePath(file),
+        this.templatePath(license),
         this.destinationPath('LICENSE'),
         this.context
       );
-    },
-
-    /**
-     * Writes the plugin's index.js file based on the chosen plugin type.
-     */
-    plugin() {
-      this.fs.copyTpl(
-        this.templatePath(`src/js/_index-${this.context.type}.js`),
-        this._dest('src/js/index.js'),
-        this.context
-      );
-    },
-
-    /**
-     * Writes/updates the package.json file.
-     *
-     * @function package
-     */
-    packageJSON() {
-      const json = packageJSON(this._currentPkgJSON, this.context);
-
-      // We want to use normal JSON.stringify here because we want to
-      // preserve whatever ordering existed in the _currentPkgJSON object.
-      const contents = JSON.stringify(json, null, 2);
-
-      this.fs.write(this.destinationPath('package.json'), contents);
     }
+
+    // Special index template handling.
+    this.fs.copyTpl(
+      this.templatePath(`src/js/index-${this.context.type}.js`),
+      this.destinationPath('src/js/index.js'),
+      this.context
+    );
+
+    // Copy non-template files.
+    [
+      '.editorconfig',
+      '.gitignore',
+      '.npmignore',
+      'CHANGELOG.md'
+    ]
+      .concat(
+        !this.context.isPrivate && [
+          '.travis.yml',
+          '.github/ISSUE_TEMPLATE.md',
+          '.github/PULL_REQUEST_TEMPLATE.md'
+        ],
+        this.context.lang && 'lang/en.json',
+        this.context.docs && 'docs/index.md'
+      )
+      .filter(Boolean)
+      .forEach(src => this.fs.copy(this.templatePath(src), this.destinationPath(src)));
+
+    // Write out the new package.json
+    const json = packageJSON(this._currentPkgJSON, this.context);
+
+    // We want to use normal JSON.stringify here because we want to
+    // preserve whatever ordering existed in the _currentPkgJSON object.
+    const contents = JSON.stringify(json, null, 2);
+
+    this.fs.write(this.destinationPath('package.json'), contents);
   },
 
   /**

@@ -139,32 +139,23 @@ module.exports = (current, context) => {
     }
   });
 
-  // In case ghooks was previously installed, but is now "none", we can
+  // In case husky was previously installed, but is now "none", we can
   // remove it from the package.json entirely.
-  if (context.ghooks === 'none') {
-    delete result.devDependencies.ghooks;
+  if (context.husky === 'none') {
     delete result.devDependencies.husky;
-
-    if (result.config) {
-      delete result.config.ghooks;
-    }
-
-    if (result.scripts.prepush) {
-      delete result.scripts.prepush;
-    }
+    delete result.scripts.prepush;
   } else {
-    // delete old config
-    if (result.config) {
-      delete result.config.ghooks;
-      if (Object.keys(result.config).length === 0) {
-        delete result.config;
-      }
-    }
-
-    // delete old ghooks
-    delete result.devDependencies.ghooks;
     result.devDependencies.husky = '^0.13.1';
-    result.scripts.prepush = `npm run ${context.ghooks}`;
+    result.scripts.prepush = `npm run ${context.husky}`;
+  }
+
+  // Delete old config that was used for ghooks.
+  delete result.devDependencies.ghooks;
+  if (result.config) {
+    delete result.config.ghooks;
+    if (Object.keys(result.config).length === 0) {
+      delete result.config;
+    }
   }
 
   if (context.type !== 'basic') {

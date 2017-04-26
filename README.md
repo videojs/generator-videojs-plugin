@@ -93,7 +93,7 @@ Respond "Y" to include base files for documentation as well as configuration for
 Respond "Y" to include base files for translation and inclusion with your packaged plugin.
 
 #### `What should be done before you git push?`
-This prompt presents several options for automation via [ghooks][ghooks] before pushing to any Git remote.
+This prompt presents several options for automation via [husky][husky] before pushing to any Git remote.
 
 - `Check code quality`: The default. Code must pass [videojs-standard][standard] before anything can be pushed.
 - `Check code quality and run tests`: Code must pass [videojs-standard][standard] _and unit tests must pass_ before anything can be pushed.
@@ -165,7 +165,7 @@ $ vjsgenclean
 [bcov]: https://www.brightcove.com/
 [conventions]: docs/conventions.md
 [getting-started]: http://yeoman.io/learning/index.html
-[ghooks]: https://www.npmjs.com/package/ghooks
+[husky]: https://www.npmjs.com/package/husky
 [misteroneill]: https://github.com/misteroneill
 [npm-desc]: https://docs.npmjs.com/files/package.json#description-1
 [npm-license]: https://docs.npmjs.com/files/package.json#license
