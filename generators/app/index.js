@@ -192,11 +192,6 @@ module.exports = yeoman.generators.Base.extend({
   constructor: function() { // eslint-disable-line
     yeoman.generators.Base.apply(this, arguments);
 
-    this.option('bcov', {
-      type: 'boolean',
-      defaults: false
-    });
-
     this.option('skip-prompt', {
       type: 'boolean',
       defaults: false
@@ -268,8 +263,7 @@ module.exports = yeoman.generators.Base.extend({
 
     _.each({
       limitTo: 'limit-to',
-      limitToMeta: 'limit-to-meta',
-      bcov: 'bcov'
+      limitToMeta: 'limit-to-meta'
     }, (v, k) => {
       if (this.options[k]) {
         this.log(`The --${v} option is deprecated and will be removed in v4.0.0!`);
@@ -281,9 +275,7 @@ module.exports = yeoman.generators.Base.extend({
       this.options.skipPrompt = this.options.skipInstall = true;
     }
 
-    this._configsTemp = {
-      bcov: this.options.bcov || !!this.config.get('bcov')
-    };
+    this._configsTemp = {};
 
     // Defines the files that are allowed for various `--limit-to` options.
     this._limits = {
@@ -321,20 +313,9 @@ module.exports = yeoman.generators.Base.extend({
       this._limitTo = [];
     }
 
-    // Handle the Brightcove option/config.
-    if (this._configsTemp.bcov) {
-
-      // All Brightcove plugins use the same author string.
-      this._promptsToFilter.push('author');
-      this._configsTemp.author = 'Brightcove, Inc.';
-
-      // Brightcove plugins are either Apache-2.0 or private/closed-source.
-      this._licenseNames = _.pick(this._licenseNames, 'apache2', 'private');
-      this._licenseDefault = 'apache2';
-
     // Make sure we filter out the author prompt if there is a current
     // package.json file with an object for the author field.
-    } else if (this._currentPkgJSON && _.isPlainObject(this._currentPkgJSON.author)) {
+    if (this._currentPkgJSON && _.isPlainObject(this._currentPkgJSON.author)) {
       this._promptsToFilter.push('author');
       this._configsTemp.author = this._currentPkgJSON.author;
     }

@@ -33,7 +33,6 @@ To learn more about Video.js plugins and this generator's conventions and opinio
     - [Prompt](#prompt)
     - [Hurry](#hurry)
     - [Limiting Generated Files - DEPRECATED](#limiting-generated-files---deprecated)
-    - [Brightcove Defaults - DEPRECATED](#brightcove-defaults---deprecated)
 - [Updating an Existing Project](#updating-an-existing-project)
   - [Recommendations](#recommendations)
 - [Extra Tools](#extra-tools)
@@ -147,17 +146,6 @@ Finally, the `--limit-to-meta` option is available as a shortcut for using `--li
 
 Update a subset of files with: `yo videojs-plugin --limit-to=pkg,dotfiles`
 Update _all_ "meta" files with: `yo videojs-plugin --limit-to-meta`
-
-#### Brightcove Defaults - DEPRECATED
-
-> **Note**: This option is deprecated and will be removed from v4.0.0.
-
-Set certain values automatically for Brightcove-authored plugins. Has the following effects:
-
-- Sets the author to `"Brightcove, Inc."`
-- Limits open-source license options to `Apache-2.0` only.
-
-Turn on these Brightcove defaults with: `yo videojs-plugin --bcov`
 
 ## Updating an Existing Project
 
