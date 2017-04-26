@@ -1,12 +1,12 @@
 {
-  "name": "<%= pluginName %>",
-  "author": "<%= author %>",
-  "license": "<%= licenseName %>",
+  "name": "<%- pluginName %>",
+  "author": "<%- author %>",
+  "license": "<%- licenseName %>",
   "main": [
 <% if (css) { -%>
-    "dist/browser/<%= pluginName %>.min.css",
+    "dist/browser/<%- pluginName %>.min.css",
 <% } -%>
-    "dist/browser/<%= pluginName %>.min.js"
+    "dist/browser/<%- pluginName %>.min.js"
   ],
   "keywords": [
     "videojs",

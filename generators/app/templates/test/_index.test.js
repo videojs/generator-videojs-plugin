@@ -17,7 +17,7 @@ QUnit.test('the environment is sane', function(assert) {
   assert.strictEqual(typeof plugin, 'function', 'plugin is a function');
 });
 
-QUnit.module('<%= pluginName %>', {
+QUnit.module('<%- pluginName %>', {
 
   beforeEach() {
 
@@ -43,18 +43,18 @@ QUnit.test('registers itself with video.js', function(assert) {
   assert.expect(2);
 
   assert.strictEqual(
-    typeof Player.prototype.<%= functionName %>,
+    typeof Player.prototype.<%- functionName %>,
     'function',
-    '<%= pluginName %> plugin was registered'
+    '<%- pluginName %> plugin was registered'
   );
 
-  this.player.<%= functionName %>();
+  this.player.<%- functionName %>();
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
 
   assert.ok(
-    this.player.hasClass('<%= className %>'),
+    this.player.hasClass('<%- className %>'),
     'the plugin adds a class to the player'
   );
 });

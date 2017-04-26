@@ -1,1 +1,1 @@
-# Documentation for <%= pluginName %>
+# Documentation for <%- pluginName %>

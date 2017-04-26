@@ -21,7 +21,7 @@ const registerPlugin = videojs.registerPlugin || videojs.plugin;
  *           An object of options left to the plugin author to define.
  */
 const onPlayerReady = (player, options) => {
-  player.addClass('<%= className %>');
+  player.addClass('<%- className %>');
 };
 
 /**
@@ -32,20 +32,20 @@ const onPlayerReady = (player, options) => {
  * depending on how the plugin is invoked. This may or may not be important
  * to you; if not, remove the wait for "ready"!
  *
- * @function <%= functionName %>
+ * @function <%- functionName %>
  * @param    {Object} [options={}]
  *           An object of options left to the plugin author to define.
  */
-const <%= functionName %> = function(options) {
+const <%- functionName %> = function(options) {
   this.ready(() => {
     onPlayerReady(this, videojs.mergeOptions(defaults, options));
   });
 };
 
 // Register the plugin with video.js.
-registerPlugin('<%= functionName %>', <%= functionName %>);
+registerPlugin('<%- functionName %>', <%- functionName %>);
 
 // Include the version number.
-<%= functionName %>.VERSION = '__VERSION__';
+<%- functionName %>.VERSION = '__VERSION__';
 
-export default <%= functionName %>;
+export default <%- functionName %>;
