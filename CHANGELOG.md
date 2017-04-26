@@ -1,3 +1,10 @@
+<a name="3.3.1"></a>
+## [3.3.1](https://github.com/videojs/generator-videojs-plugin/compare/v3.3.0...v3.3.1) (2017-04-26)
+
+### Bug Fixes
+
+* Remove double prompt. (#126) ([95727f8](https://github.com/videojs/generator-videojs-plugin/commit/95727f8))
+
 <a name="3.3.0"></a>
 # [3.3.0](https://github.com/videojs/generator-videojs-plugin/compare/v3.2.0...v3.3.0) (2017-04-26)
 
