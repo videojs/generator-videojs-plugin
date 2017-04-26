@@ -1,3 +1,29 @@
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v3.3.1...v4.0.0) (2017-04-26)
+
+### Features
+
+* Remove Bower support option. ([804f835](https://github.com/videojs/generator-videojs-plugin/commit/804f835))
+* Remove Brightcove Defaults ([d9565c8](https://github.com/videojs/generator-videojs-plugin/commit/d9565c8))
+* Remove deprecated IE8 support option. ([ab2a7bc](https://github.com/videojs/generator-videojs-plugin/commit/ab2a7bc))
+* Remove limit-to options. ([925bcdc](https://github.com/videojs/generator-videojs-plugin/commit/925bcdc))
+* Remove vjsplugincheck script. ([e85e37f](https://github.com/videojs/generator-videojs-plugin/commit/e85e37f))
+* Update videojs-spellbook to 4.0.0 (#124) ([dc43489](https://github.com/videojs/generator-videojs-plugin/commit/dc43489))
+
+### Code Refactoring
+
+* Refactor a bunch of application code for simplicity. ([fbc0e44](https://github.com/videojs/generator-videojs-plugin/commit/fbc0e44))
+
+
+### BREAKING CHANGES
+
+* This removes the option for generated projects to support Bower with special versioning.
+* This removes the vjsplugincheck script.
+* This removes the option to limit the output to certain files.
+* This removes the option to use Brightcove default values for some fields.
+* This removes the option to support IE8.
+* This brings generated projects back to the 2.x-style output. This means, going from 3.0.0 to 4.0.0, files in `dist/browser` will once again be found in `dist` directly.
+
 <a name="3.3.1"></a>
 ## [3.3.1](https://github.com/videojs/generator-videojs-plugin/compare/v3.3.0...v3.3.1) (2017-04-26)
 
