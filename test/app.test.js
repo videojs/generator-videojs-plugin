@@ -52,7 +52,6 @@ describe('videojs-plugin:app', function() {
       assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
       assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
       assert.equal(this.pkg.spellbook.lang, false, 'lang should be disabled');
-      assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
       assert.strictEqual(this.pkg.scripts.prepush, 'npm run lint');
       assert.ok(_.isPlainObject(this.pkg['generator-videojs-plugin']));
       assert.strictEqual(this.pkg['generator-videojs-plugin'].version, VERSION);
@@ -103,7 +102,6 @@ describe('videojs-plugin:app', function() {
       assert.equal(typeof this.pkg.spellbook.css, 'undefined', 'css should not be disabled');
       assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
       assert.equal(this.pkg.spellbook.lang, false, 'lang should be disabled');
-      assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
       assert.file(libs.fileList('default', 'oss', 'css'));
     });
   });
@@ -127,7 +125,6 @@ describe('videojs-plugin:app', function() {
       assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
       assert.equal(typeof this.pkg.spellbook.docs, 'undefined', 'docs should not be disabled');
       assert.equal(this.pkg.spellbook.lang, false, 'lang should be disabled');
-      assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
       assert.file(libs.fileList('default', 'oss', 'docs'));
     });
   });
@@ -150,33 +147,8 @@ describe('videojs-plugin:app', function() {
       assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
       assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
       assert.equal(typeof this.pkg.spellbook.lang, 'undefined', 'lang should not be disabled');
-      assert.equal(typeof this.pkg.spellbook.ie8, 'undefined', 'ie8 should not be supported');
 
       assert.file(libs.fileList('default', 'oss', 'lang'));
-    });
-  });
-
-  describe('ie8', function() {
-    before(function(done) {
-      helpers.run(libs.GENERATOR_PATH)
-        .withOptions(libs.options())
-        .withPrompts({
-          name: 'wat',
-          author: 'John Doe',
-          description: 'wat is the plugin',
-          ie8: true
-        })
-        .on('end', libs.onEnd.bind(this, done));
-    });
-
-    it('does not disable ie8 in spellbook', function() {
-      assert.ok(_.isPlainObject(this.pkg.spellbook));
-      assert.equal(this.pkg.spellbook.css, false, 'css should be disabled');
-      assert.equal(this.pkg.spellbook.docs, false, 'docs should be disabled');
-      assert.equal(this.pkg.spellbook.lang, false, 'lang should be disabled');
-      assert.equal(this.pkg.spellbook.ie8, true, 'ie8 should be supported');
-
-      assert.file(libs.fileList('default', 'oss'));
     });
   });
 

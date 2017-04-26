@@ -24,7 +24,6 @@ To learn more about Video.js plugins and this generator's conventions and opinio
     - [`Choose a license for your project`](#choose-a-license-for-your-project)
     - [`Choose a plugin type`](#choose-a-plugin-type)
     - [`Do you want to include CSS styling, including Sass preprocessing?`](#do-you-want-to-include-css-styling-including-sass-preprocessing)
-    - [`Do you want to support Internet Explorer 8?` - DEPRECATED](#do-you-want-to-support-internet-explorer-8---deprecated)
     - [`Do you want to include documentation support?`](#do-you-want-to-include-documentation-support)
     - [`Do you need a Video.js language file setup for internationalized strings?`](#do-you-need-a-videojs-language-file-setup-for-internationalized-strings)
     - [`Do you want to support Bower with special versioning handling?`](#do-you-want-to-support-bower-with-special-versioning-handling)
@@ -90,12 +89,6 @@ This allows you to choose between a basic, function-based plugin or an advanced,
 
 #### `Do you want to include CSS styling, including Sass preprocessing?`
 Respond "Y" to set up your project with a base `.scss` file.
-
-#### `Do you want to support Internet Explorer 8?` - DEPRECATED
-
-> **Note**: This prompt is deprecated and will be removed from v4.0.0.
-
-Respond "Y" to include some Babel presets to polyfill missing ES5 features for IE8. See [videojs-spellbook][spellbook] for more.
 
 #### `Do you want to include documentation support?`
 Respond "Y" to include base files for documentation as well as configuration for generating API documentation. This will also include a placeholder in the `README.md` for generating a table of contents.

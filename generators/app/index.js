@@ -57,8 +57,7 @@ module.exports = yeoman.generators.Base.extend({
       type: configs.type || this._typeDefault,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
-      css: configs.hasOwnProperty('sass') ? !!configs.sass : false,
-      ie8: configs.hasOwnProperty('ie8') ? !!configs.ie8 : false
+      css: configs.hasOwnProperty('sass') ? !!configs.sass : false
     };
 
     // support new property name old name was sass
@@ -153,11 +152,6 @@ module.exports = yeoman.generators.Base.extend({
       name: 'css',
       message: 'Do you want to include CSS styling, including Sass preprocessing?',
       default: defaults.css
-    }, {
-      type: 'confirm',
-      name: 'ie8',
-      message: 'Do you want to support Internet Explorer 8 (DEPRECATED)?',
-      default: defaults.ie8
     }, {
       type: 'confirm',
       name: 'docs',
@@ -360,11 +354,6 @@ module.exports = yeoman.generators.Base.extend({
 
     this.prompt(this._getPrompts(), responses => {
       _.assign(this._configsTemp, responses);
-
-      if (responses.ie8) {
-        this.log('You have opted for IE8 support. This configuration is deprecated and will be removed from in v4.0.0!');
-      }
-
       done();
     });
   },

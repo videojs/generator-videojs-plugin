@@ -139,11 +139,6 @@ module.exports = (current, context) => {
     }
   });
 
-  // support ie8
-  if (context.ie8 === true) {
-    result.spellbook.ie8 = true;
-  }
-
   // In case ghooks was previously installed, but is now "none", we can
   // remove it from the package.json entirely.
   if (context.ghooks === 'none') {
