@@ -5,6 +5,7 @@ const VERSION = require('./constants').VERSION;
 
 const DEFAULTS = {
   dependencies: {
+    'global': '^4.3.2',
     'video.js': '^5.16.0'
   },
   devDependencies: {

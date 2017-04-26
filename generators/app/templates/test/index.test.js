@@ -1,5 +1,4 @@
-import {document} from 'global';
-
+import document from 'global/document';
 import QUnit from 'qunitjs';
 import sinon from 'sinon';
 import videojs from 'video.js';
