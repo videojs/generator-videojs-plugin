@@ -149,12 +149,6 @@ module.exports = yeoman.generators.Base.extend({
       default: defaults.type,
       choices: utils.objectToChoices(this._types)
     }, {
-      type: 'list',
-      name: 'type',
-      message: 'Choose a plugin type',
-      default: defaults.type,
-      choices: utils.objectToChoices(this._types)
-    }, {
       type: 'confirm',
       name: 'css',
       message: 'Do you want to include CSS styling, including Sass preprocessing?',
