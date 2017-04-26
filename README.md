@@ -16,21 +16,21 @@ To learn more about Video.js plugins and this generator's conventions and opinio
 
 
 - [Getting Started](#getting-started)
-  - [Prompts](#prompts)
-    - [`Enter a package scope, if any, for npm`](#enter-a-package-scope-if-any-for-npm)
-    - [`Enter the name of this plugin`](#enter-the-name-of-this-plugin)
-    - [`Enter a description for your plugin`](#enter-a-description-for-your-plugin)
-    - [`Enter the author of this plugin`](#enter-the-author-of-this-plugin)
-    - [`Choose a license for your project`](#choose-a-license-for-your-project)
-    - [`Choose a plugin type`](#choose-a-plugin-type)
-    - [`Do you want to include CSS styling, including Sass preprocessing?`](#do-you-want-to-include-css-styling-including-sass-preprocessing)
-    - [`Do you want to include documentation support?`](#do-you-want-to-include-documentation-support)
-    - [`Do you need a Video.js language file setup for internationalized strings?`](#do-you-need-a-videojs-language-file-setup-for-internationalized-strings)
-    - [`What should be done before you git push?`](#what-should-be-done-before-you-git-push)
-  - [Options](#options)
-    - [Install](#install)
-    - [Prompt](#prompt)
-    - [Hurry](#hurry)
+- [Prompts](#prompts)
+  - [`Enter a package scope, if any, for npm`](#enter-a-package-scope-if-any-for-npm)
+  - [`Enter the name of this plugin`](#enter-the-name-of-this-plugin)
+  - [`Enter a description for your plugin`](#enter-a-description-for-your-plugin)
+  - [`Enter the author of this plugin`](#enter-the-author-of-this-plugin)
+  - [`Choose a license for your project`](#choose-a-license-for-your-project)
+  - [`Choose a plugin type`](#choose-a-plugin-type)
+  - [`Do you want to include CSS styling, including Sass preprocessing?`](#do-you-want-to-include-css-styling-including-sass-preprocessing)
+  - [`Do you want to include documentation support?`](#do-you-want-to-include-documentation-support)
+  - [`Do you need a Video.js language file setup for internationalized strings?`](#do-you-need-a-videojs-language-file-setup-for-internationalized-strings)
+  - [`What should be done before you git push?`](#what-should-be-done-before-you-git-push)
+- [Options](#options)
+  - [Install](#install)
+  - [Prompt](#prompt)
+  - [Hurry](#hurry)
 - [Updating an Existing Project](#updating-an-existing-project)
   - [Recommendations](#recommendations)
 - [Extra Tools](#extra-tools)
@@ -58,62 +58,62 @@ $ yo videojs-plugin
 
 You will be walked through several prompts and finish with a working, buildable, testable Video.js plugin in the current directory. Of course, this plugin won't do much out of the box - that part is left to your creativity!
 
-### Prompts
-#### `Enter a package scope, if any, for npm`
+## Prompts
+### `Enter a package scope, if any, for npm`
 _Optional!_ This is useful for [scoped npm packages][npm-scope]. You don't need to include the `@` or `/` characters - only the actual scope name.
 
-#### `Enter the name of this plugin`
+### `Enter the name of this plugin`
 Only lower-case characters, numbers, and hyphens are allowed in plugin names.
 
 By convention, Video.js plugin names are prefixed with `videojs-`. The generator will add this prefix automatically; so, don't include it here. So, providing a plugin name of `world` will produce a plugin named `videojs-world`.
 
 If a scope of `hello` is given above, the plugin name will be prefixed with that as well (and formatted according to npm's conventions), yielding a name of `@hello/videojs-world`. Again, the scope is _optional_.
 
-#### `Enter a description for your plugin`
+### `Enter a description for your plugin`
 Populates the [`package.json` description field][npm-desc].
 
-#### `Enter the author of this plugin`
+### `Enter the author of this plugin`
 When starting a new project with the generator, it will attempt to retrieve this information from your Git installation.
 
 Follow the string formatting convention outlined [for `package.json` people fields][npm-ppl].
 
-#### `Choose a license for your project`
+### `Choose a license for your project`
 This provides a couple pre-configured, popular options [for the `package.json` license field][npm-license]. If your preferred license isn't found, simply choose "UNLICENSED" and update it manually.
 
-#### `Choose a plugin type`
+### `Choose a plugin type`
 This allows you to choose between a basic, function-based plugin or an advanced, class-based plugin (only supported in Video.js 6). This changes the default contents of the `src/js/index.js` file.
 
-#### `Do you want to include CSS styling, including Sass preprocessing?`
+### `Do you want to include CSS styling, including Sass preprocessing?`
 Respond "Y" to set up your project with a base `.scss` file.
 
-#### `Do you want to include documentation support?`
+### `Do you want to include documentation support?`
 Respond "Y" to include base files for documentation as well as configuration for generating API documentation. This will also include a placeholder in the `README.md` for generating a table of contents.
 
-#### `Do you need a Video.js language file setup for internationalized strings?`
+### `Do you need a Video.js language file setup for internationalized strings?`
 Respond "Y" to include base files for translation and inclusion with your packaged plugin.
 
-#### `What should be done before you git push?`
+### `What should be done before you git push?`
 This prompt presents several options for automation via [husky][husky] before pushing to any Git remote.
 
 - `Check code quality`: The default. Code must pass [videojs-standard][standard] before anything can be pushed.
 - `Check code quality and run tests`: Code must pass [videojs-standard][standard] _and unit tests must pass_ before anything can be pushed.
 - `Nothing`: Does nothing. There are no `pre-push` hooks configured.
 
-### Options
+## Options
 
-#### Install
+### Install
 
 By default, the generator will run `npm install` after it is finished. This can be a slow process and you may not always need it; so, it can be disabled (this option is provided by Yeoman itself, but it's useful and worth documenting here).
 
 Turn installation off with: `yo videojs-plugin --skip-install`
 
-#### Prompt
+### Prompt
 
 By default, the generator will present the user with a series of prompts to choose various settings. This can be disabled if you've previously selected values and don't want to change them.
 
 Turn prompts off with: `yo videojs-plugin --skip-prompt`
 
-#### Hurry
+### Hurry
 
 > **Note**: This is a short-hand for: `yo videojs-plugin --skip-install --skip-prompt`
 
