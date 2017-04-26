@@ -36,7 +36,6 @@ To learn more about Video.js plugins and this generator's conventions and opinio
   - [Recommendations](#recommendations)
 - [Extra Tools](#extra-tools)
   - [Cleanup with `vjsgenclean`](#cleanup-with-vjsgenclean)
-  - [Validation with `vjsplugincheck`](#validation-with-vjsplugincheck)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -162,14 +161,6 @@ $ vjsgenclean
 ```
 
 > **Note:** This script _should be run **after** applying_ the latest generator version!
-
-### Validation with `vjsplugincheck`
-
-This script supports validating a directory as following current [Video.js Plugin Conventions][conventions]. Using it is simple; run the following command:
-
-```sh
-$ vjsplugincheck
-```
 
 ## License
 
