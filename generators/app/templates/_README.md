@@ -1,6 +1,6 @@
-# <%= pluginName %>
+# <%- pluginName %>
 
-<%= description %>
+<%- description %>
 
 <% if (docs) { -%>
 ## Table of Contents
@@ -11,20 +11,20 @@
 ## Installation
 
 ```sh
-npm install --save <%= pluginName %>
+npm install --save <%- pluginName %>
 ```
 <% if (bower) { -%>
 
 The npm installation is preferred, but Bower works, too.
 
 ```sh
-bower install  --save <%= pluginName %>
+bower install  --save <%- pluginName %>
 ```
 <% } -%>
 
 ## Usage
 
-To include <%= pluginName %> on your website or web application, use any of the following methods.
+To include <%- pluginName %> on your website or web application, use any of the following methods.
 
 ### `<script>` Tag
 
@@ -32,17 +32,17 @@ This is the simplest case. Get the script in whatever way you prefer and include
 
 ```html
 <script src="//path/to/video.min.js"></script>
-<script src="//path/to/<%= pluginName %>.min.js"></script>
+<script src="//path/to/<%- pluginName %>.min.js"></script>
 <script>
   var player = videojs('my-video');
 
-  player.<%= functionName %>();
+  player.<%- functionName %>();
 </script>
 ```
 
 ### Browserify
 
-When using with Browserify, install <%= pluginName %> via npm and `require` the plugin as you would any other module.
+When using with Browserify, install <%- pluginName %> via npm and `require` the plugin as you would any other module.
 
 ```js
 var videojs = require('video.js');
@@ -50,11 +50,11 @@ var videojs = require('video.js');
 // The actual plugin function is exported by this module, but it is also
 // attached to the `Player.prototype`; so, there is no need to assign it
 // to a variable.
-require('<%= pluginName %>');
+require('<%- pluginName %>');
 
 var player = videojs('my-video');
 
-player.<%= functionName %>();
+player.<%- functionName %>();
 ```
 
 ### RequireJS/AMD
@@ -62,16 +62,16 @@ player.<%= functionName %>();
 When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
 
 ```js
-require(['video.js', '<%= pluginName %>'], function(videojs) {
+require(['video.js', '<%- pluginName %>'], function(videojs) {
   var player = videojs('my-video');
 
-  player.<%= functionName %>();
+  player.<%- functionName %>();
 });
 ```
 
 ## License
 
-<%= licenseName %>. Copyright (c) <%= author %>
+<%- licenseName %>. Copyright (c) <%- author %>
 
 
 [videojs]: http://videojs.com/

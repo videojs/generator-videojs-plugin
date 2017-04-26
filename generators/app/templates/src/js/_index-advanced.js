@@ -8,10 +8,10 @@ const defaults = {};
 /**
  * A plugin class.
  */
-class <%= constructorName %> extends Plugin {
+class <%- constructorName %> extends Plugin {
 
   /**
-   * Create an instance of the <%= constructorName %> plugin class.
+   * Create an instance of the <%- constructorName %> plugin class.
    *
    * @param  {Player} player
    *         An instance of a Video.js player.
@@ -24,7 +24,7 @@ class <%= constructorName %> extends Plugin {
     this.options = videojs.mergeOptions(defaults, options);
 
     this.player.ready(() => {
-      this.player.addClass('<%= className %>');
+      this.player.addClass('<%- className %>');
     });
   }
 
@@ -42,12 +42,12 @@ class <%= constructorName %> extends Plugin {
 }
 
 // Define default values for the plugin's `state`.
-<%= constructorName %>.defaultState = {};
+<%- constructorName %>.defaultState = {};
 
 // Register the plugin with video.js.
-videojs.registerPlugin('<%= functionName %>', <%= constructorName %>);
+videojs.registerPlugin('<%- functionName %>', <%- constructorName %>);
 
 // Include the version number.
-<%= constructorName %>.VERSION = '__VERSION__';
+<%- constructorName %>.VERSION = '__VERSION__';
 
-export default <%= constructorName %>;
+export default <%- constructorName %>;
