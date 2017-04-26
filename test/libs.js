@@ -20,8 +20,7 @@ const FILES = {
     'src/js/index.js',
     'test/index.test.js',
     'index.html',
-    'package.json',
-    'bower.json'
+    'package.json'
   ],
 
   // only deployed when css = yes
@@ -32,11 +31,6 @@ const FILES = {
   // only deployed when docs = yes
   docs: [
     'docs/index.md'
-  ],
-
-  // only ommitted when bower = no
-  bower: [
-    'bower.json'
   ],
 
   // only deployed when lang = yes

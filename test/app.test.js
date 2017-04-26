@@ -152,36 +152,6 @@ describe('videojs-plugin:app', function() {
     });
   });
 
-  describe('bower turned off', function() {
-    before(function(done) {
-      helpers.run(libs.GENERATOR_PATH)
-        .withOptions(libs.options())
-        .withPrompts({
-          name: 'wat',
-          author: 'John Doe',
-          description: 'wat is the plugin',
-          bower: false
-        })
-        .on('end', libs.onEnd.bind(this, done));
-    });
-
-    it('does not create bower-specific files, but does create everything else', function() {
-      const files = libs.fileList('default', 'oss');
-      const bowerFiles = libs.fileList('bower');
-
-      bowerFiles.forEach(function(file) {
-        const i = files.indexOf(file);
-
-        if (i !== -1) {
-          files.splice(i, 1);
-        }
-      });
-
-      assert.noFile(bowerFiles);
-      assert.file(files);
-    });
-  });
-
   describe('existing package.json with author object', function() {
 
     before(function(done) {
@@ -256,7 +226,6 @@ describe('videojs-plugin:app', function() {
       keywords: ['foo', 'bar']
     }, {
       author: 'Jane Doe',
-      bower: false,
       className: 'vjs-test',
       description: 'This is the description',
       docs: false,

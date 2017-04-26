@@ -51,7 +51,6 @@ module.exports = yeoman.generators.Base.extend({
     const licenseNames = this._licenseNames;
 
     const defaults = {
-      bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
       ghooks: configs.hasOwnProperty('ghooks') ? !!configs.ghooks : 'lint',
       license: this._licenseDefault,
       type: configs.type || this._typeDefault,
@@ -165,11 +164,6 @@ module.exports = yeoman.generators.Base.extend({
         internationalized strings?
       `,
       default: defaults.lang
-    }, {
-      type: 'confirm',
-      name: 'bower',
-      message: 'Do you want to support Bower with special versioning handling?',
-      default: defaults.bower
     }, {
       type: 'list',
       name: 'ghooks',
@@ -332,10 +326,6 @@ module.exports = yeoman.generators.Base.extend({
 
     if (this.context.css) {
       this._templatesToCopy.push('src/css/_index.scss');
-    }
-
-    if (this.context.bower) {
-      this._templatesToCopy.push('_bower.json');
     }
   },
 

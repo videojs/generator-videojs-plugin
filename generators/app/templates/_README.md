@@ -13,14 +13,6 @@
 ```sh
 npm install --save <%- pluginName %>
 ```
-<% if (bower) { -%>
-
-The npm installation is preferred, but Bower works, too.
-
-```sh
-bower install  --save <%- pluginName %>
-```
-<% } -%>
 
 ## Usage
 

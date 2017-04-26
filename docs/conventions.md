@@ -50,11 +50,10 @@ Plugins should be as self-contained as possible, so the only dependency (`"depen
 
 Folder/Filename            | Optional? | Generated? | Description
 -------------------------- | --------- | ---------- | -----------
-`dist/`                    |           |            | Created during builds, ignored by Git.
-`dist/browser/`            |           |            | Packaged assets for use in a browser/`<script>` tag.
-`dist/docs/`               | ✓         |            | Packaged documentation.
-`dist/es5/`                |           |            | Transpiled assets for ES5 consumers (e.g. Node, Browserify).
-`dist/lang/`               | ✓         |            | Compiled language assets.
+`build/docs/`              | ✓         |            | Packaged documentation.
+`build/es5/`               |           |            | Transpiled assets for ES5 consumers (e.g. Node, Browserify).
+`build/lang/`              | ✓         |            | Compiled language assets.
+`dist/`                    |           |            | Created during builds, ignored by Git. Packaged assets for use in a browser/`<script>` tag.
 `docs/`                    | ✓         | ?          | Any documentation beyond `README.md`.
 `docs/index.md`            | ✓         | ?          | An index for additional documentation.
 `lang/`                    | ✓         | ?          | Any JSON language files for the plugin.
@@ -68,7 +67,6 @@ Folder/Filename            | Optional? | Generated? | Description
 `.editorconfig`            | ✓         | ✓          |
 `.gitignore`               |           | ✓          |
 `.npmignore`               |           | ✓          |
-`bower.json`               | ✓         | ?          |
 `CHANGELOG.md`             |           | ✓          |
 `CONTRIBUTING.md`          | ✓         | ✓          | Documents how developers can work on the plugin.
 `index.html`               |           | ✓          | An example of usage of the plugin. This can be used with GitHub pages as well.
@@ -165,25 +163,9 @@ During development, it may be more convenient to run your tests manually in a br
 ## Release
 ### Versioning
 
-__Conventional Video.js plugins may support Bower, but must never check in build artifacts to the history of the main branch (e.g. `master`) in Git.__
+__Conventional Video.js plugins must never check in build artifacts to the history of the main branch (e.g. `master`).__
 
-This convention may be confusing. Thankfully, [videojs-spellbook][spellbook] takes care of things behind the scenes.
-
-When you run `npm version` with the automation provided by the generator and spellbook, the tagged commit created by the `npm version` process will contain the `dist/` directory and all its contents. This allows Bower to "install" tags via Git.
-
-However, because it's undesirable to check in `dist/` everywhere, the `master` branch gets reset and a new version commit (not a tag) is created on `master`'s history.
-
-This process results in a `master` history that looks something like this:
-
-```
-<...> --- C --- V --- C --- C --- V --- C --- C --- <...>
-           \                       \
-            T                       T
-```
-
-`C`: signifies a conventional commit.
-`V`: signifies a version bump commit.
-`T`: tagged commit, with `dist/` included.
+This convention still exists, but it was originally geared toward supporting Bower by way of a commit off of the `master` branch that contained the `dist` contents. Because 4.0.0 and onward do not support Bower, this section really only exists for historical purposes and to reiterate that checking in build artifacts is a bad practice.
 
 ### Publishing
 

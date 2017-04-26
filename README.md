@@ -26,7 +26,6 @@ To learn more about Video.js plugins and this generator's conventions and opinio
     - [`Do you want to include CSS styling, including Sass preprocessing?`](#do-you-want-to-include-css-styling-including-sass-preprocessing)
     - [`Do you want to include documentation support?`](#do-you-want-to-include-documentation-support)
     - [`Do you need a Video.js language file setup for internationalized strings?`](#do-you-need-a-videojs-language-file-setup-for-internationalized-strings)
-    - [`Do you want to support Bower with special versioning handling?`](#do-you-want-to-support-bower-with-special-versioning-handling)
     - [`What should be done before you git push?`](#what-should-be-done-before-you-git-push)
   - [Options](#options)
     - [Install](#install)
@@ -92,9 +91,6 @@ Respond "Y" to include base files for documentation as well as configuration for
 
 #### `Do you need a Video.js language file setup for internationalized strings?`
 Respond "Y" to include base files for translation and inclusion with your packaged plugin.
-
-#### `Do you want to support Bower with special versioning handling?`
-Respond "Y" to set up your project with a `bower.json` file and, more importantly, will adjust the release process to create tags which include your `dist/` directory.
 
 #### `What should be done before you git push?`
 This prompt presents several options for automation via [ghooks][ghooks] before pushing to any Git remote.
