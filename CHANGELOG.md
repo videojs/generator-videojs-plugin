@@ -1,3 +1,15 @@
+<a name="3.3.0"></a>
+# [3.3.0](https://github.com/videojs/generator-videojs-plugin/compare/v3.2.0...v3.3.0) (2017-04-26)
+
+### Features
+
+* Deprecate limit-to and bcov options and IE8 support prompt. (#114) ([5a0f465](https://github.com/videojs/generator-videojs-plugin/commit/5a0f465))
+* Support output of an advanced plugin (#113) ([19b6898](https://github.com/videojs/generator-videojs-plugin/commit/19b6898))
+
+### Bug Fixes
+
+* Fixes #116, remove HTML escaping for non-HTML files. (#125) ([3302379](https://github.com/videojs/generator-videojs-plugin/commit/3302379)), closes [#116](https://github.com/videojs/generator-videojs-plugin/issues/116) [#125](https://github.com/videojs/generator-videojs-plugin/issues/125)
+
 <a name="3.2.0"></a>
 # [3.2.0](https://github.com/videojs/generator-videojs-plugin/compare/v3.1.1...v3.2.0) (2017-04-12)
 
