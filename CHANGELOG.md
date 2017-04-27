@@ -1,3 +1,10 @@
+<a name="4.0.1"></a>
+## [4.0.1](https://github.com/videojs/generator-videojs-plugin/compare/v4.0.0...v4.0.1) (2017-04-27)
+
+### Bug Fixes
+
+* Replace bad URIs in generated index.html ([0dffb79](https://github.com/videojs/generator-videojs-plugin/commit/0dffb79))
+
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v3.3.1...v4.0.0) (2017-04-26)
 
