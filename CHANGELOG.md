@@ -1,3 +1,10 @@
+<a name="4.0.2"></a>
+## [4.0.2](https://github.com/videojs/generator-videojs-plugin/compare/v4.0.1...v4.0.2) (2017-04-27)
+
+### Bug Fixes
+
+* Ensure that dotfiles are always included in the package as expected. ([157222a](https://github.com/videojs/generator-videojs-plugin/commit/157222a))
+
 <a name="4.0.1"></a>
 ## [4.0.1](https://github.com/videojs/generator-videojs-plugin/compare/v4.0.0...v4.0.1) (2017-04-27)
 
