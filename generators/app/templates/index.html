@@ -5,7 +5,7 @@
   <title><%= pluginName %> Demo</title>
   <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
 <% if (css) { -%>
-  <link href="dist/browser/<%= pluginName %>.css" rel="stylesheet">
+  <link href="dist/<%= pluginName %>.css" rel="stylesheet">
 <% } -%>
 </head>
 <body>
@@ -19,7 +19,7 @@
     <% if (docs) { %><li><a href="dist/docs/manual/">Read generated manual docs.</a></li><% } %>
   </ul>
   <script src="node_modules/video.js/dist/video.js"></script>
-  <script src="dist/browser/<%= pluginName %>.js"></script>
+  <script src="dist/<%= pluginName %>.js"></script>
   <script>
     (function(window, videojs) {
       var player = window.player = videojs('<%= pluginName %>-player');
