@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const execSync = require('child_process').execSync;
+const path = require('path');
 const tsmlj = require('tsmlj');
 const yeoman = require('yeoman-generator');
 const PREFIX = require('./constants').PREFIX;
@@ -187,6 +188,37 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   /**
+   * Same as the inherited method, but replaces path elements with leading
+   * underscores with dots. This way, dotfiles/dirs are never ignored.
+   *
+   * @method _normalizedDestinationPath
+   * @private
+   * @example
+   *         this.destinationPath('_some-file.js')  // "/path/to/.some-file.js"
+   *         this.destinationPath('dir/_dir/some-file.js')  // "/path/to/dir/.dir/some-file.js"
+   *         this.destinationPath('some-file.js')   // "/path/to/some-file.js"
+   *         this.destinationPath('some_file.js')   // "/path/to/some_file.js"
+   *
+   * @param  {String} src
+   * @return {String}
+   */
+  _normalizedDestinationPath(src) {
+
+    // Paths coming into this function are formatted in Unix style as strings;
+    // so, we don't need to vary support for Windows-style paths.
+    const sep = '/';
+    const parsed = path.parse(src);
+    const parts = parsed.dir ? parsed.dir.split(sep).filter(Boolean) : [];
+
+    const dest = parts
+      .concat(parsed.base)
+      .map(s => (s.charAt(0) === '_') ? '.' + s.substr(1) : s)
+      .join(sep);
+
+    return this.destinationPath(dest);
+  },
+
+  /**
    * Sets up the generator.
    *
    * @method constructor
@@ -279,7 +311,7 @@ module.exports = yeoman.generators.Base.extend({
     ]
       .concat(this.context.css && 'src/css/index.scss')
       .filter(Boolean)
-      .forEach(src => this.fs.copyTpl(this.templatePath(src), this.destinationPath(src), this.context));
+      .forEach(src => this.fs.copyTpl(this.templatePath(src), this._normalizedDestinationPath(src), this.context));
 
     // Special license template handling.
     const license = licenseFiles[this.context.license];
@@ -287,7 +319,7 @@ module.exports = yeoman.generators.Base.extend({
     if (license) {
       this.fs.copyTpl(
         this.templatePath(license),
-        this.destinationPath('LICENSE'),
+        this._normalizedDestinationPath('LICENSE'),
         this.context
       );
     }
@@ -295,28 +327,28 @@ module.exports = yeoman.generators.Base.extend({
     // Special index template handling.
     this.fs.copyTpl(
       this.templatePath(`src/js/index-${this.context.type}.js`),
-      this.destinationPath('src/js/index.js'),
+      this._normalizedDestinationPath('src/js/index.js'),
       this.context
     );
 
     // Copy non-template files.
     [
-      '.editorconfig',
-      '.gitignore',
-      '.npmignore',
+      '_editorconfig',
+      '_gitignore',
+      '_npmignore',
       'CHANGELOG.md'
     ]
       .concat(
         !this.context.isPrivate && [
-          '.travis.yml',
-          '.github/ISSUE_TEMPLATE.md',
-          '.github/PULL_REQUEST_TEMPLATE.md'
+          '_travis.yml',
+          '_github/ISSUE_TEMPLATE.md',
+          '_github/PULL_REQUEST_TEMPLATE.md'
         ],
         this.context.lang && 'lang/en.json',
         this.context.docs && 'docs/index.md'
       )
       .filter(Boolean)
-      .forEach(src => this.fs.copy(this.templatePath(src), this.destinationPath(src)));
+      .forEach(src => this.fs.copy(this.templatePath(src), this._normalizedDestinationPath(src)));
 
     // Write out the new package.json
     const json = packageJSON(this._currentPkgJSON, this.context);
@@ -325,7 +357,7 @@ module.exports = yeoman.generators.Base.extend({
     // preserve whatever ordering existed in the _currentPkgJSON object.
     const contents = JSON.stringify(json, null, 2);
 
-    this.fs.write(this.destinationPath('package.json'), contents);
+    this.fs.write(this._normalizedDestinationPath('package.json'), contents);
   },
 
   /**
