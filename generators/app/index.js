@@ -21,6 +21,25 @@ const validators = require('./validators');
  */
 const objectToChoices = (o) => _.map(o, (v, k) => ({name: v, value: k}));
 
+const huskyChoices = objectToChoices({
+  lint: 'Check code quality',
+  test: 'Check code quality and run tests',
+  none: 'Nothing'
+});
+
+const licenseNames = {
+  apache2: 'Apache-2.0',
+  mit: 'MIT',
+  private: 'UNLICENSED'
+};
+
+const licenseFiles = {
+  apache2: 'licenses/_apache2',
+  mit: 'licenses/_mit'
+};
+
+const licenseDefault = 'mit';
+
 module.exports = yeoman.generators.Base.extend({
 
   /**
@@ -136,15 +155,13 @@ module.exports = yeoman.generators.Base.extend({
   _getPromptDefaults() {
     const configs = this.config.getAll();
     const pkg = this._currentPkgJSON || {};
-    const licenseNames = this._licenseNames;
 
     const defaults = {
-      bower: configs.hasOwnProperty('bower') ? !!configs.bower : true,
       changelog: configs.hasOwnProperty('changelog') ? !!configs.changelog : true,
       docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
-      ghooks: configs.hasOwnProperty('ghooks') ? !!configs.ghooks : 'lint',
+      husky: configs.hasOwnProperty('husky') ? !!configs.husky : 'lint',
       lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
-      license: this._licenseDefault,
+      license: licenseDefault,
       sass: configs.hasOwnProperty('sass') ? configs.sass : false,
       ie8: configs.hasOwnProperty('ie8') ? configs.ie8 : false
     };
@@ -224,7 +241,7 @@ module.exports = yeoman.generators.Base.extend({
       name: 'license',
       message: 'Choose a license for your project',
       default: defaults.license,
-      choices: objectToChoices(this._licenseNames)
+      choices: objectToChoices(licenseNames)
     }, {
       type: 'confirm',
       name: 'changelog',
@@ -254,16 +271,11 @@ module.exports = yeoman.generators.Base.extend({
       `,
       default: defaults.lang
     }, {
-      type: 'confirm',
-      name: 'bower',
-      message: 'Do you want to support Bower (adds special versioning handling)?',
-      default: defaults.bower
-    }, {
       type: 'list',
-      name: 'ghooks',
+      name: 'husky',
       message: 'What should be done before you `git push`?',
-      default: defaults.ghooks,
-      choices: objectToChoices(this._ghooksOptions)
+      default: defaults.husky,
+      choices: huskyChoices
     }];
 
     return prompts.filter(p => !_.contains(this._promptsToFilter, p.name));
@@ -304,29 +316,8 @@ module.exports = yeoman.generators.Base.extend({
 
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
 
-    this._ghooksOptions = {
-      lint: 'Check code quality',
-      test: 'Check code quality and run tests',
-      none: 'Nothing'
-    };
-
-    this._licenseNames = {
-      apache2: 'Apache-2.0',
-      mit: 'MIT',
-      private: 'UNLICENSED'
-    };
-
-    this._licenseFiles = {
-      apache2: 'licenses/_apache2',
-      mit: 'licenses/_mit'
-    };
-
-    this._licenseDefault = 'mit';
-
     this._filesToCopy = [
       'scripts/_banner.ejs',
-      'scripts/_postversion.js',
-      'scripts/_version.js',
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
@@ -364,9 +355,7 @@ module.exports = yeoman.generators.Base.extend({
           '_.npmignore',
           '_.travis.yml'
         ],
-        templates: [
-          'bower.json'
-        ]
+        templates: []
       },
 
       // These are empty because package.json has special handling.
@@ -376,9 +365,7 @@ module.exports = yeoman.generators.Base.extend({
       },
       scripts: {
         files: [
-          'scripts/_banner.ejs',
-          'scripts/_postversion.js',
-          'scripts/_version.js'
+          'scripts/_banner.ejs'
         ],
         templates: [
           'scripts/_build-test.js',
@@ -441,11 +428,10 @@ module.exports = yeoman.generators.Base.extend({
 
     return _.assign(_.pick(configs, [
       'author',
-      'bower',
       'changelog',
       'description',
       'docs',
-      'ghooks',
+      'husky',
       'lang',
       'sass',
       'ie8'
@@ -453,7 +439,7 @@ module.exports = yeoman.generators.Base.extend({
       className: `vjs-${configs.name}`,
       functionName: _.camelCase(configs.name),
       isPrivate: this._isPrivate(),
-      licenseName: this._licenseNames[configs.license],
+      licenseName: licenseNames[configs.license],
       packageName: this._getPackageName(configs.name, configs.scope),
       pluginName: this._getPackageName(configs.name),
       version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0'
@@ -482,10 +468,6 @@ module.exports = yeoman.generators.Base.extend({
 
     if (this.context.sass) {
       this._templatesToCopy.push('src/_plugin.scss');
-    }
-
-    if (this.context.bower) {
-      this._templatesToCopy.push('_bower.json');
     }
 
     if (this._limitTo && this._limitTo.length) {
@@ -545,7 +527,7 @@ module.exports = yeoman.generators.Base.extend({
      * @function license
      */
     license() {
-      const file = this._licenseFiles[this.config.get('license')];
+      const file = licenseFiles[this.config.get('license')];
 
       // There is no _limitTo setting that includes LICENSE, so we only
       // need to check for it existing to know to skip this.

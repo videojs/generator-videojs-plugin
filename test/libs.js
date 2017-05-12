@@ -11,9 +11,7 @@ const FILES = {
   'common': [
     'scripts/banner.ejs',
     'scripts/build-test.js',
-    'scripts/postversion.js',
     'scripts/server.js',
-    'scripts/version.js',
     'test/karma.conf.js',
     'src/plugin.js',
     'test/index.html',
@@ -39,19 +37,11 @@ const FILES = {
     'src/plugin.scss'
   ],
 
-  'bower': [
-    'bower.json'
-  ],
-
   // limit-to options
   'dotfiles': [
     '.editorconfig',
     '.gitignore',
     '.npmignore'
-  ],
-
-  'dotfiles:bower': [
-    'bower.json'
   ],
 
   'dotfiles:oss': [
@@ -65,9 +55,7 @@ const FILES = {
   'scripts': [
     'scripts/banner.ejs',
     'scripts/build-test.js',
-    'scripts/postversion.js',
-    'scripts/server.js',
-    'scripts/version.js'
+    'scripts/server.js'
   ]
 };
 

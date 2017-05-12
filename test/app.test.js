@@ -19,9 +19,7 @@ describe('videojs-plugin:app', function() {
     'lint',
     'start',
     'test',
-    'preversion',
-    'version',
-    'postversion'
+    'preversion'
   ];
 
   describe('defaults', function() {
@@ -50,7 +48,7 @@ describe('videojs-plugin:app', function() {
       assert.ok(_.isPlainObject(p['browserify-shim']));
       assert.ok(_.isPlainObject(p.vjsstandard));
       assert.ok(_.isPlainObject(p.devDependencies));
-      assert.strictEqual(p.config.ghooks['pre-push'], 'npm run lint');
+      assert.strictEqual(p.scripts.prepush, 'npm run lint');
       assert.ok(_.isPlainObject(p['generator-videojs-plugin']));
       assert.strictEqual(p['generator-videojs-plugin'].version, generatorVersion());
     });
@@ -59,20 +57,8 @@ describe('videojs-plugin:app', function() {
       libs.allAreNonEmpty(this.pkg.scripts, scripts);
     });
 
-    it('populates versioning scripts', function() {
-      assert.strictEqual(
-        this.pkg.scripts.version,
-        'babel-node scripts/version.js'
-      );
-
-      assert.strictEqual(
-        this.pkg.scripts.postversion,
-        'babel-node scripts/postversion.js'
-      );
-    });
-
     it('creates common default set of files', function() {
-      libs.fileList('common', 'oss', 'bower').forEach(f => assert.file(f));
+      libs.fileList('common', 'oss').forEach(f => assert.file(f));
     });
   });
 
@@ -140,25 +126,6 @@ describe('videojs-plugin:app', function() {
         'docs:api',
         'docs:toc'
       ]));
-    });
-  });
-
-  describe('bower turned off', function() {
-
-    before(function(done) {
-      helpers.run(libs.GENERATOR_PATH)
-        .withOptions(libs.options())
-        .withPrompts({
-          name: 'wat',
-          author: 'John Doe',
-          description: 'wat is the plugin',
-          bower: false
-        })
-        .on('end', libs.onEnd.bind(this, done));
-    });
-
-    it('does not create bower-specific files', function() {
-      libs.fileList('bower').forEach(f => assert.noFile(f));
     });
   });
 
@@ -290,7 +257,7 @@ describe('videojs-plugin:app', function() {
     });
   });
 
-  describe('ghooks "none"', function() {
+  describe('husky "none"', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
@@ -298,14 +265,14 @@ describe('videojs-plugin:app', function() {
           name: 'wat',
           author: 'John Doe',
           description: 'wat is the plugin',
-          ghooks: 'none'
+          husky: 'none'
         })
         .on('end', libs.onEnd.bind(this, done));
     });
 
     it('does not cause a failure', function() {
       assert.ok(_.isPlainObject(this.pkg));
-      assert.strictEqual(this.pkg.config, undefined);
+      assert.strictEqual(this.pkg.scripts.prepush, undefined);
     });
   });
 
@@ -319,7 +286,6 @@ describe('videojs-plugin:app', function() {
       keywords: ['foo', 'bar']
     }, {
       author: 'Jane Doe',
-      bower: false,
       className: 'vjs-test',
       description: 'This is the description',
       docs: false,
@@ -357,22 +323,6 @@ describe('videojs-plugin:app', function() {
       assert.strictEqual(result.keywords[1], 'foo');
       assert.strictEqual(result.keywords[2], 'videojs');
       assert.strictEqual(result.keywords[3], 'videojs-plugin');
-    });
-
-    it('handles merging the deep ghooks config object', function() {
-      let pkg = packageJSON({}, {ghooks: 'lint'});
-
-      assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run lint');
-      pkg = packageJSON(pkg, {ghooks: 'none'});
-      assert.strictEqual(
-        pkg.config.ghooks,
-        undefined,
-        '"config.ghooks" is removed when set to none'
-      );
-      pkg = packageJSON(pkg, {ghooks: 'test'});
-      assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run test');
-      pkg = packageJSON(pkg, {ghooks: 'lint'});
-      assert.strictEqual(pkg.config.ghooks['pre-push'], 'npm run lint');
     });
   });
 });

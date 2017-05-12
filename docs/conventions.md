@@ -26,8 +26,6 @@ This document and [the Yeoman generator](https://github.com/videojs/generator-vi
   - [Testing in a Browser](#testing-in-a-browser)
 - [Release](#release)
   - [Versioning](#versioning)
-    - [CHANGELOG](#changelog)
-    - [Bower](#bower)
   - [Publishing](#publishing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -72,7 +70,6 @@ Folder/Filename            | Optional? | Generated? | Description
 `.editorconfig`            |           | ✓          |
 `.gitignore`               |           | ✓          |
 `.npmignore`               |           | ✓          |
-`bower.json`               | ✓         | ?          |
 `CHANGELOG.md`             | ✓         | ?          |
 `CONTRIBUTING.md`          | ✓         | ✓          | Documents how developers can work on the plugin.
 `index.html`               | ✓         | ✓          | An example of usage of the plugin. This can be used with GitHub pages as well.
@@ -128,8 +125,6 @@ npm Script    | Optional | Description
 `lint`        |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
 `start`       |          | Starts a development server at port `9999` (or closest open port) with live reload and automatic background builds.
 `test`        |          | Runs `lint`, builds tests, and runs tests in available browsers.
-`version`     |          | [see below](#versioning)
-`postversion` |          | [see below](#versioning)
 
 ## Coding Style
 
@@ -177,50 +172,9 @@ During development, it may be more convenient to run your tests manually in a br
 
 ### Versioning
 
-__Convention video.js plugins may support Bower, but must never check in build artifacts to the main branch history in source control.__
+__Conventional video.js plugins must never check in build artifacts to the main branch (i.e. `master`) history in source control.__
 
-Regardless of Bower support (detailed below), the `"preversion"` script will run `npm test` to enforce code quality and unit test passage before allowing the version to be bumped.
-
-The `"version"` script runs `scripts/version.js`, which handles two special situations/configurations: the presence of CHANGELOG tooling and support for Bower.
-
-The `"postversion"` script runs `scripts/postversion.js`, which completes the Bower support tasks.
-
-#### CHANGELOG
-
-The `"version"` script will determine whether or not a project has CHANGELOG tooling by the presence of a `CHANGELOG.md` file, the `chg` project dependency, and the presence of the `"change"` script.
-
-If all conditions are met, the process will create a new "release" entry in the `CHANGELOG.md`, promoting anything under "HEAD" to a new heading matching the new project version.
-
-#### Bower
-
-The `"version"` script determines Bower support by the presence of a `bower.json` file.
-
-It is generally considered a best practice to not check build artifacts (`dist/`, `es5/`, etc.) into source control. However, because Bower only clones repositories and offers no mechanism for scripting, we must define a workflow for bumping versions without checking `dist/` into the repository's `master` history!
-
-Assuming a project is on the `master` branch (though this is not required), the process looks like:
-
-1. `"preversion"` script is run as outlined above.
-1. _npm automatically bumps the `package.json` version._
-1. The npm `"version"` script will run:
-  1. CHANGELOG handling is performed as outlined previously.
-  1. `package.json` is staged and committed. The effect of this is that the `package.json` change exists in the history of `master`.
-  1. `npm run build` so the new version number gets picked up in build artifacts.
-  1. The `dist/` directory will be _force-added_. Normally, it is ignored, but it needs to exist in the tag for Bower to install things properly.
-1. _npm automatically commits and tags._ This commit's changeset will contain only the `dist/` dir (the `package.json` bump is the parent commit).
-1. The npm `"postversion"` script will run:
-  1. `master` is reset backward by one commit. This avoids `dist/` being added to `master`'s history. Tagged commits will be children of commits on `master`.
-
-This process results in a `master` history that looks something like this:
-
-```
-<...> C --- V --- C --- C <...> C --- C --- V --- C --- C <...>
-             \                               \
-              T                               T
-```
-
-`C`: signifies a conventional commit.
-`V`: signifies a version bump commit.
-`T`: tagged commit, with `dist/` included.
+The `"preversion"` script will run `npm test` to enforce code quality and unit test passage before allowing the version to be bumped.
 
 ### Publishing
 

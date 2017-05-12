@@ -1,10 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const tsmlj = require('tsmlj');
 const generatorVersion = require('./generator-version');
-
-const KARMA_BROWSERS = ['Chrome', 'Firefox', 'IE', 'Safari'];
 
 const DEFAULTS = {
   dependencies: {
@@ -177,9 +174,7 @@ const packageJSON = (current, context) => {
       'start': 'babel-node scripts/server.js',
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
-      'preversion': 'npm test',
-      'version': 'babel-node scripts/version.js',
-      'postversion': 'babel-node scripts/postversion.js'
+      'preversion': 'npm test'
     }),
 
     // Always include the two minimum keywords with whatever exists in the
@@ -244,17 +239,19 @@ const packageJSON = (current, context) => {
     )
   });
 
-  // Create scripts for each Karma browser.
-  KARMA_BROWSERS.forEach(browser => {
-    result.scripts[`test:${browser.toLowerCase()}`] = tsmlj`
-      npm run pretest &&
-      karma start test/karma.conf.js --browsers ${browser}
-    `;
-  });
-
   if (context.changelog) {
     result.devDependencies.chg = '^0.3.2';
     result.scripts.change = 'chg add';
+  }
+
+  // In case husky was previously installed, but is now "none", we can
+  // remove it from the package.json entirely.
+  if (context.husky === 'none') {
+    delete result.devDependencies.husky;
+    delete result.scripts.prepush;
+  } else {
+    result.devDependencies.husky = '^0.13.3';
+    result.scripts.prepush = `npm run ${context.husky}`;
   }
 
   // Support the Sass option.
@@ -294,6 +291,10 @@ const packageJSON = (current, context) => {
       'docs:toc': 'doctoc README.md'
     });
 
+    if (context.husky !== 'none') {
+      result.scripts.precommit = 'npm run docs && git add docs/api/ README.md';
+    }
+
     _.assign(result.devDependencies, {
       doctoc: '^0.15.0',
       jsdoc: '^3.4.0'
@@ -306,27 +307,6 @@ const packageJSON = (current, context) => {
   if (context.lang) {
     result.scripts['build:lang'] = 'vjslang --dir dist/lang';
     result.devDependencies['videojs-languages'] = '^1.0.0';
-  }
-
-  if (context.bower) {
-    result.files.push('bower.json');
-  }
-
-  // In case ghooks was previously installed, but is now "none", we can
-  // remove it from the package.json entirely.
-  if (context.ghooks === 'none') {
-    delete result.devDependencies.ghooks;
-
-    if (result.config) {
-      delete result.config.ghooks;
-    }
-  } else {
-    result.devDependencies.ghooks = '^1.3.2';
-    result.config = {
-      ghooks: {
-        'pre-push': `npm run ${context.ghooks}`
-      }
-    };
   }
 
   result.files.sort();

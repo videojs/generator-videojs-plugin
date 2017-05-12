@@ -27,7 +27,7 @@ describe('videojs-plugin:app options', function() {
     it('produces expected files (and not unexpected files)', function() {
       const expected = libs.fileList('dotfiles', 'dotfiles:oss', 'pkg', 'scripts');
       const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
+        libs.fileList('common', 'oss', 'sass'),
         expected
       );
 
@@ -54,7 +54,7 @@ describe('videojs-plugin:app options', function() {
     it('produces expected files (and not unexpected files)', function() {
       const expected = libs.fileList('dotfiles', 'dotfiles:oss');
       const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
+        libs.fileList('common', 'oss', 'sass'),
         expected
       );
 
@@ -81,7 +81,7 @@ describe('videojs-plugin:app options', function() {
     it('produces expected files (and not unexpected files)', function() {
       const expected = libs.fileList('pkg');
       const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
+        libs.fileList('common', 'oss', 'sass'),
         expected
       );
 
@@ -108,7 +108,7 @@ describe('videojs-plugin:app options', function() {
     it('produces expected files (and not unexpected files)', function() {
       const expected = libs.fileList('scripts');
       const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
+        libs.fileList('common', 'oss', 'sass'),
         expected
       );
 
@@ -135,7 +135,7 @@ describe('videojs-plugin:app options', function() {
     it('produces expected files (and not unexpected files)', function() {
       const expected = libs.fileList('dotfiles', 'dotfiles:oss', 'scripts');
       const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
+        libs.fileList('common', 'oss', 'sass'),
         expected
       );
 
@@ -162,7 +162,7 @@ describe('videojs-plugin:app options', function() {
     it('produces expected files (and not unexpected files)', function() {
       const expected = libs.fileList('pkg', 'scripts');
       const unexpected = _.difference(
-        libs.fileList('bower', 'common', 'oss', 'sass'),
+        libs.fileList('common', 'oss', 'sass'),
         expected
       );
 

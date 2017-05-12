@@ -78,7 +78,7 @@ In some cases - especially when updating previously generated projects - you may
 
 `--limit-to` accepts keys which will limit the generated files to only those specified. The possible keys are:
 
-- `dotfiles`: Updates _only_ those files starting with a `.` and `bower.json`.
+- `dotfiles`: Updates _only_ those files starting with a `.`.
 - `pkg`: Updates _only_ `package.json`.
 - `scripts`: Updates _only_ the `scripts/` directory.
 

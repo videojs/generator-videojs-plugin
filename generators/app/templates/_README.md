@@ -13,14 +13,6 @@
 ```sh
 npm install --save <%= pluginName %>
 ```
-<% if (bower) { -%>
-
-The npm installation is preferred, but Bower works, too.
-
-```sh
-bower install  --save <%= pluginName %>
-```
-<% } -%>
 
 ## Usage
 
@@ -40,7 +32,7 @@ This is the simplest case. Get the script in whatever way you prefer and include
 </script>
 ```
 
-### Browserify
+### Browserify/CommonJS
 
 When using with Browserify, install <%= pluginName %> via npm and `require` the plugin as you would any other module.
 
