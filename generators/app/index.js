@@ -1,15 +1,15 @@
-import _ from 'lodash';
-import chalk from 'chalk';
-import chg from 'chg';
-import fs from 'fs';
-import path from 'path';
-import tsmlj from 'tsmlj';
-import yeoman from 'yeoman-generator';
-import yosay from 'yosay';
+'use strict';
 
-import {PREFIX} from './constants';
-import packageJSON from './package-json';
-import * as validators from './validators';
+const _ = require('lodash');
+const chalk = require('chalk');
+const fs = require('fs');
+const path = require('path');
+const tsmlj = require('tsmlj');
+const yeoman = require('yeoman-generator');
+const yosay = require('yosay');
+const PREFIX = require('./constants').PREFIX;
+const packageJSON = require('./package-json');
+const validators = require('./validators');
 
 /**
  * Convert an object into "choices" for a prompt. The object keys are the
@@ -21,7 +21,7 @@ import * as validators from './validators';
  */
 const objectToChoices = (o) => _.map(o, (v, k) => ({name: v, value: k}));
 
-export default yeoman.generators.Base.extend({
+module.exports = yeoman.generators.Base.extend({
 
   /**
    * Whether or not this plugin is privately licensed.
@@ -89,8 +89,8 @@ export default yeoman.generators.Base.extend({
    * @param  {String} [scope='']
    * @return {String}
    */
-  _getPackageName(name, scope = '') {
-    scope = this._getScope(scope);
+  _getPackageName(name, scope) {
+    scope = scope ? this._getScope(scope) : '';
     name = this._getPluginName(name);
     return scope ? `${scope}/${name}` : name;
   },
@@ -274,13 +274,8 @@ export default yeoman.generators.Base.extend({
    *
    * @method constructor
    */
-  constructor() {
+  constructor: function() { // eslint-disable-line
     yeoman.generators.Base.apply(this, arguments);
-
-    this.option('bcov', {
-      type: 'boolean',
-      defaults: false
-    });
 
     this.option('skip-prompt', {
       type: 'boolean',
@@ -358,9 +353,7 @@ export default yeoman.generators.Base.extend({
       this.options.skipPrompt = this.options.skipInstall = true;
     }
 
-    this._configsTemp = {
-      bcov: this.options.bcov || !!this.config.get('bcov')
-    };
+    this._configsTemp = {};
 
     // Defines the files that are allowed for various `--limit-to` options.
     this._limits = {
@@ -407,20 +400,9 @@ export default yeoman.generators.Base.extend({
       this._limitTo = [];
     }
 
-    // Handle the Brightcove option/config.
-    if (this._configsTemp.bcov) {
-
-      // All Brightcove plugins use the same author string.
-      this._promptsToFilter.push('author');
-      this._configsTemp.author = 'Brightcove, Inc.';
-
-      // Brightcove plugins are either Apache-2.0 or private/closed-source.
-      this._licenseNames = _.pick(this._licenseNames, 'apache2', 'private');
-      this._licenseDefault = 'apache2';
-
     // Make sure we filter out the author prompt if there is a current
     // package.json file with an object for the author field.
-    } else if (this._currentPkgJSON && _.isPlainObject(this._currentPkgJSON.author)) {
+    if (this._currentPkgJSON && _.isPlainObject(this._currentPkgJSON.author)) {
       this._promptsToFilter.push('author');
       this._configsTemp.author = this._currentPkgJSON.author;
     }
@@ -454,7 +436,9 @@ export default yeoman.generators.Base.extend({
    *
    * @return {Object}
    */
-  _getContext(configs = this.config.getAll()) {
+  _getContext(configs) {
+    configs = configs || this.config.getAll();
+
     return _.assign(_.pick(configs, [
       'author',
       'bower',
@@ -505,8 +489,8 @@ export default yeoman.generators.Base.extend({
     }
 
     if (this._limitTo && this._limitTo.length) {
-      const files = _.union(...this._limitTo.map(k => this._limits[k].files));
-      const templates = _.union(...this._limitTo.map(k => this._limits[k].templates));
+      const files = _.union.apply(null, this._limitTo.map(k => this._limits[k].files));
+      const templates = _.union.apply(null, this._limitTo.map(k => this._limits[k].templates));
 
       this._filesToCopy = _.intersection(this._filesToCopy, files);
       this._templatesToCopy = _.intersection(this._templatesToCopy, templates);
@@ -536,7 +520,7 @@ export default yeoman.generators.Base.extend({
       try {
         fs.statSync(this._dest('CHANGELOG.md'));
       } catch (x) {
-        chg.init(null, this.async());
+        this.fs.copy(this.templatePath('_CHANGELOG.md'), this._dest('CHANGELOG.md'));
       }
     },
 

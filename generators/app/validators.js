@@ -1,6 +1,8 @@
-import _ from 'lodash';
-import tsmlj from 'tsmlj';
-import {PREFIX} from './constants';
+'use strict';
+
+const _ = require('lodash');
+const tsmlj = require('tsmlj');
+const PREFIX = require('./constants');
 
 /**
  * Validates that a plugin name does not include invalid characters or start
@@ -9,7 +11,7 @@ import {PREFIX} from './constants';
  * @param  {String} input
  * @return {String|Boolean}
  */
-const name = input => {
+const name = (input) => {
 
   if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
     return tsmlj`
@@ -34,7 +36,7 @@ const name = input => {
  * @param  {String} input
  * @return {String|Boolean}
  */
-const scope = input => {
+const scope = (input) => {
 
   if (input && _.startsWith(input, '@')) {
     return 'Do not begin your scope with "@", it will be automatically added.';
@@ -50,4 +52,4 @@ const scope = input => {
   return true;
 };
 
-export {name, scope};
+module.exports = {name, scope};

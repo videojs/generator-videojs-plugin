@@ -1,7 +1,9 @@
-import fs from 'fs';
-import _ from 'lodash';
-import path from 'path';
-import {assert} from 'yeoman-generator';
+'use strict';
+
+const fs = require('fs');
+const _ = require('lodash');
+const path = require('path');
+const assert = require('yeoman-generator').assert;
 
 // Files that are expected to exist in certain conditions.
 const FILES = {
@@ -69,7 +71,7 @@ const FILES = {
   ]
 };
 
-export const GENERATOR_PATH = path.join(__dirname, '../generators/app');
+const GENERATOR_PATH = path.join(__dirname, '../generators/app');
 
 /**
  * Gets a joined array of filenames from the FILES object.
@@ -78,8 +80,8 @@ export const GENERATOR_PATH = path.join(__dirname, '../generators/app');
  * @param  {...String} Keys from FILES
  * @return {Array}
  */
-export const fileList = function(...list) {
-  return _.union(...list.map(str => FILES[str]));
+const fileList = function() {
+  return _.union.apply(_, _.toArray(arguments).map(str => FILES[str]));
 };
 
 /**
@@ -89,8 +91,8 @@ export const fileList = function(...list) {
  * @param  {...Object} Same as Object.assign
  * @return {Object}
  */
-export const options = function(...args) {
-  return _.assign(...[{skipInstall: true}].concat(args));
+const options = function() {
+  return _.assign.apply(_, [{skipInstall: true}].concat(_.toArray(arguments)));
 };
 
 /**
@@ -101,7 +103,7 @@ export const options = function(...args) {
  * @function onEnd
  * @param    {Function} [done]
  */
-export const onEnd = function(done) {
+const onEnd = function(done) {
 
   // There are cases where a package.json will not be created.
   try {
@@ -123,7 +125,7 @@ export const onEnd = function(done) {
  * @param  {Array}  checks
  * @return {Boolean}
  */
-export const allAreNonEmpty = function(obj, checks) {
+const allAreNonEmpty = function(obj, checks) {
   checks.forEach(key => {
     const s = obj[key];
 
@@ -132,4 +134,12 @@ export const allAreNonEmpty = function(obj, checks) {
       `"${key}" was a non-empty string`
     );
   });
+};
+
+module.exports = {
+  GENERATOR_PATH,
+  fileList,
+  options,
+  onEnd,
+  allAreNonEmpty
 };

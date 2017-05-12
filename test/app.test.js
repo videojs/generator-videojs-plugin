@@ -1,27 +1,24 @@
+'use strict';
+
 /* global before, describe, it */
 
-import _ from 'lodash';
-import fs from 'fs-extra';
-import path from 'path';
-import {assert, test as helpers} from 'yeoman-generator';
+const _ = require('lodash');
+const fs = require('fs-extra');
+const path = require('path');
+const assert = require('yeoman-generator').assert;
+const helpers = require('yeoman-generator').test;
 
-import * as libs from './libs';
-import packageJSON from '../generators/app/package-json';
-import generatorVersion from '../generators/app/generator-version';
+const libs = require('./libs');
+const packageJSON = require('../generators/app/package-json');
+const generatorVersion = require('../generators/app/generator-version');
 
 describe('videojs-plugin:app', function() {
   const scripts = [
     'build',
-    'build:js',
-    'build:test',
     'clean',
     'lint',
     'start',
     'test',
-    'test:chrome',
-    'test:firefox',
-    'test:ie',
-    'test:safari',
     'preversion',
     'version',
     'postversion'
@@ -75,7 +72,7 @@ describe('videojs-plugin:app', function() {
     });
 
     it('creates common default set of files', function() {
-      assert.file(libs.fileList('common', 'oss', 'bower'));
+      libs.fileList('common', 'oss', 'bower').forEach(f => assert.file(f));
     });
   });
 
@@ -119,7 +116,7 @@ describe('videojs-plugin:app', function() {
     });
 
     it('creates npm-specific and sass-specific files', function() {
-      assert.file(libs.fileList('common', 'oss', 'sass'));
+      libs.fileList('common', 'oss', 'sass').forEach(f => assert.file(f));
     });
   });
 
@@ -161,7 +158,7 @@ describe('videojs-plugin:app', function() {
     });
 
     it('does not create bower-specific files', function() {
-      assert.noFile(libs.fileList('bower'));
+      libs.fileList('bower').forEach(f => assert.noFile(f));
     });
   });
 

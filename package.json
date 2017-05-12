@@ -4,8 +4,10 @@
   "description": "A Yeoman generator for VideoJS plugins",
   "license": "Apache-2.0",
   "main": "generators/app/index.js",
+  "engine": {
+    "node": ">=4.4.0"
+  },
   "bin": {
-    "vjsplugincheck": "bin/videojs-plugin-check.js",
     "vjsgenclean": "bin/videojs-generator-cleanup.js"
   },
   "repository": "videojs/generator-videojs-plugin",
@@ -16,27 +18,18 @@
   },
   "vjsstandard": {
     "ignore": [
-      "bin",
       "docs",
-      "es5-check",
-      "es5-test",
-      "src/app/templates",
-      "generators"
+      "generators/app/templates"
     ]
   },
   "scripts": {
-    "prebuild": "node -e \"var s=require('shelljs'),d=['generators','es5-check','es5-test'];s.rm('-rf',d);s.mkdir('-p',d)\"",
-    "build": "npm-run-all -p build:*",
-    "build:check": "babel src/check -d es5-check",
-    "build:docs": "doctoc README.md docs/",
-    "build:generator": "babel --ignore templates/**/* src/app -d generators/app && npm run build:generator:copy",
-    "build:generator:copy": "node -e \"require('shelljs').cp('-r', 'src/app/templates', 'generators/app')\"",
-    "build:test": "babel src/test -d es5-test",
+    "docs": "doctoc README.md docs/conventions.md",
     "lint": "vjsstandard",
-    "prepublish": "npm run build",
-    "pretest": "npm run lint && npm run build",
-    "test": "mocha es5-test/*.test.js",
-    "version": "chg release -y && git add CHANGELOG.md"
+    "precommit": "npm run docs && git add README.md docs/conventions.md",
+    "prepush": "npm run lint -- --errors",
+    "pretest": "npm run lint",
+    "test": "mocha test/*.test.js",
+    "version": "conventional-changelog -p videojs -i CHANGELOG.md -s && git add CHANGELOG.md"
   },
   "keywords": [
     "yeoman-generator",
@@ -45,23 +38,20 @@
   ],
   "dependencies": {
     "chalk": "^1.0.0",
-    "chg": "^0.3.2",
     "fs-extra": "^0.26.4",
-    "glob": "^6.0.1",
     "lodash": "^3.10.1",
-    "npm-run-all": "~1.2.0",
+    "rimraf": "^2.6.1",
     "semver": "^5.1.0",
-    "shelljs": "^0.5.3",
-    "tap": "^2.3.1",
-    "tap-parser": "^1.2.2",
     "tsmlj": "^1.0.0",
     "yeoman-generator": "^0.20.0",
     "yosay": "^1.0.2"
   },
   "devDependencies": {
-    "babel": "^5.8.34",
+    "conventional-changelog-cli": "^1.3.1",
+    "conventional-changelog-videojs": "^3.0.0",
     "doctoc": "^0.15.0",
+    "husky": "^0.13.3",
     "mocha": "^2.3.4",
-    "videojs-standard": "^5.0.0"
+    "videojs-standard": "^6.0.0"
   }
 }

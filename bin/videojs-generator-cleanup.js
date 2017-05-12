@@ -1,20 +1,24 @@
 #!/usr/bin/env node
 
-var chalk = require('chalk');
-var fs = require('fs-extra');
-var _ = require('lodash');
-var path = require('path');
-var semver = require('semver');
-var sh = require('shelljs');
+'use strict';
 
-var configs = {
+/* eslint no-console: "off" */
+
+const chalk = require('chalk');
+const fs = require('fs-extra');
+const _ = require('lodash');
+const path = require('path');
+const semver = require('semver');
+const rimraf = require('rimraf');
+
+const configs = {
   v2: {
     files: [
       'dist-test',
       'test/karma',
       'scripts/npm-postversion-for-bower.sh',
       'scripts/npm-preversion-for-bower.sh',
-      'scripts/npm-version-for-bower.sh',
+      'scripts/npm-version-for-bower.sh'
     ],
     pkg: [
       'devDependencies.connect',
@@ -37,9 +41,8 @@ var configs = {
   }
 };
 
-var major = semver.major(require('../package.json').version);
-var config = configs['v' + major];
-var files, filename, pkg;
+const major = semver.major(require('../package.json').version);
+const config = configs['v' + major];
 
 if (!config) {
   console.log(
@@ -51,7 +54,7 @@ if (!config) {
 }
 
 if (Array.isArray(config.files) && config.files.length) {
-  files = config.files.filter(function(f) {
+  const files = config.files.filter(function(f) {
     try {
       fs.statSync(path.join(process.cwd(), f));
       return true;
@@ -60,7 +63,7 @@ if (Array.isArray(config.files) && config.files.length) {
     }
   });
 
-  sh.rm('-rf', files);
+  rimraf(files);
 
   files.forEach(function(f) {
     console.log('Removed "' + f + '" from this directory');
@@ -68,8 +71,8 @@ if (Array.isArray(config.files) && config.files.length) {
 }
 
 if (Array.isArray(config.pkg) && config.pkg.length) {
-  filename = path.join(process.cwd(), 'package.json');
-  pkg = require(filename);
+  const filename = path.join(process.cwd(), 'package.json');
+  const pkg = require(filename);
 
   config.pkg.forEach(function(p) {
     if (_.get(pkg, p)) {

@@ -1,3 +1,4 @@
+'use strict';
 
 /**
  * Gets the version of the generator.
@@ -6,4 +7,4 @@
  */
 const generatorVersion = () => require('../../package.json').version;
 
-export default generatorVersion;
+module.exports = generatorVersion;

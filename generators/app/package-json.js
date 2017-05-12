@@ -1,6 +1,8 @@
-import _ from 'lodash';
-import tsmlj from 'tsmlj';
-import generatorVersion from './generator-version';
+'use strict';
+
+const _ = require('lodash');
+const tsmlj = require('tsmlj');
+const generatorVersion = require('./generator-version');
 
 const KARMA_BROWSERS = ['Chrome', 'Firefox', 'IE', 'Safari'];
 
@@ -335,4 +337,4 @@ const packageJSON = (current, context) => {
   return result;
 };
 
-export default packageJSON;
+module.exports = packageJSON;
