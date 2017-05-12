@@ -8,6 +8,7 @@ const tsmlj = require('tsmlj');
 const yeoman = require('yeoman-generator');
 const yosay = require('yosay');
 const PREFIX = require('./constants').PREFIX;
+const naming = require('./naming');
 const packageJSON = require('./package-json');
 const validators = require('./validators');
 
@@ -32,6 +33,8 @@ const licenseNames = {
   mit: 'MIT',
   private: 'UNLICENSED'
 };
+
+const licenseChoices = objectToChoices(licenseNames);
 
 const licenseFiles = {
   apache2: 'licenses/_apache2',
@@ -77,74 +80,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   /**
-   * Gets the name of the scope including the "@" symbol. Will not prepend
-   * the "@" if it is already included.
-   *
-   * @param  {String} scope
-   * @return {String}
-   */
-  _getScope(scope) {
-    if (!scope || typeof scope !== 'string') {
-      return '';
-    }
-    return scope.charAt(0) === '@' ? scope : `@${scope}`;
-  },
-
-  /**
-   * Gets the name of the plugin (without scope) including the "videojs-"
-   * prefix.
-   *
-   * @param  {String} name
-   * @return {String}
-   */
-  _getPluginName(name) {
-    return name && typeof name === 'string' ? PREFIX + name : '';
-  },
-
-  /**
-   * Gets the full package name, taking scope into account.
-   *
-   * @param  {String} name
-   * @param  {String} [scope='']
-   * @return {String}
-   */
-  _getPackageName(name, scope) {
-    scope = scope ? this._getScope(scope) : '';
-    name = this._getPluginName(name);
-    return scope ? `${scope}/${name}` : name;
-  },
-
-  /**
-   * Gets the scope of the plugin (without scope or "videojs-" prefix).
-   *
-   * @param  {String} name
-   * @return {String}
-   */
-  _getScopeFromPackageName(name) {
-    if (!name) {
-      return '';
-    }
-
-    const match = name.match(/^@([^/]+)\//);
-
-    return match ? match[1] : '';
-  },
-
-  /**
-   * Gets the core/default - that is, without scope or "videojs-"
-   * prefix - name of the plugin.
-   *
-   * @param  {String} name
-   * @return {String}
-   */
-  _getDefaultNameFromPackageName(name) {
-    if (!name) {
-      return '';
-    }
-    return name.split('/').reverse()[0].replace(PREFIX, '');
-  },
-
-  /**
    * Attempts to get default values for prompts. Async because it may call
    * out to external processes (e.g. Git) to attempt to gather this info.
    *
@@ -157,35 +92,35 @@ module.exports = yeoman.generators.Base.extend({
     const pkg = this._currentPkgJSON || {};
 
     const defaults = {
-      changelog: configs.hasOwnProperty('changelog') ? !!configs.changelog : true,
-      docs: configs.hasOwnProperty('docs') ? !!configs.docs : false,
-      husky: configs.hasOwnProperty('husky') ? !!configs.husky : 'lint',
-      lang: configs.hasOwnProperty('lang') ? !!configs.lang : false,
+      changelog: _.has(configs, 'changelog') ? !!configs.changelog : true,
+      docs: _.has(configs, 'docs') ? !!configs.docs : false,
+      husky: _.has(configs, 'husky') ? !!configs.husky : 'lint',
+      lang: _.has(configs, 'lang') ? !!configs.lang : false,
       license: licenseDefault,
-      sass: configs.hasOwnProperty('sass') ? configs.sass : false,
-      ie8: configs.hasOwnProperty('ie8') ? configs.ie8 : false
+      sass: _.has(configs, 'sass') ? configs.sass : false,
+      ie8: _.has(configs, 'ie8') ? configs.ie8 : false
     };
 
     ['author', 'license', 'name', 'description'].forEach(key => {
-      if (pkg.hasOwnProperty(key)) {
+      if (_.has(pkg, key)) {
         defaults[key] = pkg[key];
-      } else if (configs.hasOwnProperty(key)) {
+      } else if (_.has(configs, key)) {
         defaults[key] = configs[key];
       }
     });
 
     // At this point, the `defaults.name` may still have the full scope and
     // prefix included; so, we get the scope now.
-    defaults.scope = this._getScopeFromPackageName(defaults.name);
+    defaults.scope = naming.getScopeFromPackageName(defaults.name);
 
     // Strip out the "videojs-" prefix from the name for the purposes of
     // the prompt (otherwise it will be rejected by validation).
-    defaults.name = this._getDefaultNameFromPackageName(defaults.name);
+    defaults.name = naming.getDefaultNameFromPackageName(defaults.name);
 
     // The package.json stores a value from `_licenseNames`, so in that
     // case, we need to find the key instead of the value.
     if (pkg && pkg.license && pkg.license === defaults.license) {
-      defaults.license = _.find(Object.keys(licenseNames), k => {
+      defaults.license = _.find(licenseNames, (v, k) => {
         return licenseNames[k] === pkg.license;
       });
     }
@@ -241,7 +176,7 @@ module.exports = yeoman.generators.Base.extend({
       name: 'license',
       message: 'Choose a license for your project',
       default: defaults.license,
-      choices: objectToChoices(licenseNames)
+      choices: licenseChoices
     }, {
       type: 'confirm',
       name: 'changelog',
@@ -440,8 +375,8 @@ module.exports = yeoman.generators.Base.extend({
       functionName: _.camelCase(configs.name),
       isPrivate: this._isPrivate(),
       licenseName: licenseNames[configs.license],
-      packageName: this._getPackageName(configs.name, configs.scope),
-      pluginName: this._getPackageName(configs.name),
+      packageName: naming.getPackageName(configs.name, configs.scope),
+      pluginName: naming.getPackageName(configs.name),
       version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0'
     });
   },
