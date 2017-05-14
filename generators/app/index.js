@@ -7,41 +7,10 @@ const path = require('path');
 const tsmlj = require('tsmlj');
 const yeoman = require('yeoman-generator');
 const yosay = require('yosay');
-const PREFIX = require('./constants').PREFIX;
+const constants = require('./constants');
 const naming = require('./naming');
 const packageJSON = require('./package-json');
 const validators = require('./validators');
-
-/**
- * Convert an object into "choices" for a prompt. The object keys are the
- * values reported by the prompt and the object values are the texts displayed
- * to the user.
- *
- * @param  {Object} o
- * @return {Array}
- */
-const objectToChoices = (o) => _.map(o, (v, k) => ({name: v, value: k}));
-
-const huskyChoices = objectToChoices({
-  lint: 'Check code quality',
-  test: 'Check code quality and run tests',
-  none: 'Nothing'
-});
-
-const licenseNames = {
-  apache2: 'Apache-2.0',
-  mit: 'MIT',
-  private: 'UNLICENSED'
-};
-
-const licenseChoices = objectToChoices(licenseNames);
-
-const licenseFiles = {
-  apache2: 'licenses/_apache2',
-  mit: 'licenses/_mit'
-};
-
-const licenseDefault = 'mit';
 
 module.exports = yeoman.generators.Base.extend({
 
@@ -91,37 +60,26 @@ module.exports = yeoman.generators.Base.extend({
     const configs = this.config.getAll();
     const pkg = this._currentPkgJSON || {};
 
-    const defaults = {
-      changelog: _.has(configs, 'changelog') ? !!configs.changelog : true,
-      docs: _.has(configs, 'docs') ? !!configs.docs : false,
-      husky: _.has(configs, 'husky') ? !!configs.husky : 'lint',
-      lang: _.has(configs, 'lang') ? !!configs.lang : false,
-      license: licenseDefault,
-      sass: _.has(configs, 'sass') ? configs.sass : false,
-      ie8: _.has(configs, 'ie8') ? configs.ie8 : false
-    };
-
-    ['author', 'license', 'name', 'description'].forEach(key => {
-      if (_.has(pkg, key)) {
-        defaults[key] = pkg[key];
-      } else if (_.has(configs, key)) {
-        defaults[key] = configs[key];
-      }
-    });
+    const defaults = _.assign(
+      {},
+      constants.PROMPT_DEFAULTS,
+      configs,
+      _.pick(pkg, ['author', 'license', 'name', 'description'])
+    );
 
     // At this point, the `defaults.name` may still have the full scope and
-    // prefix included; so, we get the scope now.
+    // constants.PREFIX included; so, we get the scope now.
     defaults.scope = naming.getScopeFromPackageName(defaults.name);
 
-    // Strip out the "videojs-" prefix from the name for the purposes of
+    // Strip out the "videojs-" constants.PREFIX from the name for the purposes of
     // the prompt (otherwise it will be rejected by validation).
     defaults.name = naming.getDefaultNameFromPackageName(defaults.name);
 
-    // The package.json stores a value from `_licenseNames`, so in that
+    // The package.json stores a value from `LICENSE_NAMES`, so in that
     // case, we need to find the key instead of the value.
     if (pkg && pkg.license && pkg.license === defaults.license) {
-      defaults.license = _.find(licenseNames, (v, k) => {
-        return licenseNames[k] === pkg.license;
+      defaults.license = _.find(constants.LICENSE_NAMES, (v, k) => {
+        return constants.LICENSE_NAMES[k] === pkg.license;
       });
     }
 
@@ -159,7 +117,7 @@ module.exports = yeoman.generators.Base.extend({
       name: 'name',
       message: tsmlj`
         Enter the name of this plugin (a-z/0-9/- only; will be
-        prefixed with "${PREFIX}"):
+        prefixed with "${constants.PREFIX}"):
       `,
       default: defaults.name,
       validate: validators.name
@@ -176,7 +134,7 @@ module.exports = yeoman.generators.Base.extend({
       name: 'license',
       message: 'Choose a license for your project',
       default: defaults.license,
-      choices: licenseChoices
+      choices: constants.LICENSE_CHOICES
     }, {
       type: 'confirm',
       name: 'changelog',
@@ -210,7 +168,7 @@ module.exports = yeoman.generators.Base.extend({
       name: 'husky',
       message: 'What should be done before you `git push`?',
       default: defaults.husky,
-      choices: huskyChoices
+      choices: constants.HUSKY_CHOICES
     }];
 
     return prompts.filter(p => !_.contains(this._promptsToFilter, p.name));
@@ -340,7 +298,7 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
 
-    this.log(yosay(`Welcome to the ${chalk.green(`${PREFIX}plugin`)} generator!`));
+    this.log(yosay(`Welcome to the ${chalk.green(`${constants.PREFIX}plugin`)} generator!`));
 
     const done = this.async();
 
@@ -374,7 +332,7 @@ module.exports = yeoman.generators.Base.extend({
       className: `vjs-${configs.name}`,
       functionName: _.camelCase(configs.name),
       isPrivate: this._isPrivate(),
-      licenseName: licenseNames[configs.license],
+      licenseName: constants.LICENSE_NAMES[configs.license],
       packageName: naming.getPackageName(configs.name, configs.scope),
       pluginName: naming.getPackageName(configs.name),
       version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0'
@@ -462,7 +420,7 @@ module.exports = yeoman.generators.Base.extend({
      * @function license
      */
     license() {
-      const file = licenseFiles[this.config.get('license')];
+      const file = constants.LICENSE_FILES[this.config.get('license')];
 
       // There is no _limitTo setting that includes LICENSE, so we only
       // need to check for it existing to know to skip this.
