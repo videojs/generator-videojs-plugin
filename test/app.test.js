@@ -32,7 +32,7 @@ describe('videojs-plugin:app', function() {
           author: 'John Doe',
           description: 'wat is the plugin'
         })
-        .on('end', libs.onEnd.bind(this, done));
+        .on('end', () => libs.onEnd(this, done));
     });
 
     it('sets basic package properties', function() {
@@ -73,7 +73,7 @@ describe('videojs-plugin:app', function() {
           author: 'John Doe',
           description: 'it herps and derps'
         })
-        .on('end', libs.onEnd.bind(this, done));
+        .on('end', () => libs.onEnd(this, done));
     });
 
     it('includes the package name in scope', function() {
@@ -92,7 +92,7 @@ describe('videojs-plugin:app', function() {
           description: 'wat is the plugin',
           sass: true
         })
-        .on('end', libs.onEnd.bind(this, done));
+        .on('end', () => libs.onEnd(this, done));
     });
 
     it('populates otherwise empty npm scripts', function() {
@@ -117,7 +117,7 @@ describe('videojs-plugin:app', function() {
           description: 'wat is the plugin',
           docs: true
         })
-        .on('end', libs.onEnd.bind(this, done));
+        .on('end', () => libs.onEnd(this, done));
     });
 
     it('populates otherwise empty npm scripts', function() {
@@ -142,7 +142,7 @@ describe('videojs-plugin:app', function() {
           author: 'ignore me',
           description: 'it is a plugin'
         })
-        .on('end', libs.onEnd.bind(this, done));
+        .on('end', () => libs.onEnd(this, done));
     });
 
     it('does not change the value of the author field', function() {
@@ -174,18 +174,30 @@ describe('videojs-plugin:app', function() {
           description: 'wat is the plugin',
           ie8: true
         })
-        .on('end', libs.onEnd.bind(this, done));
+        .on('end', () => libs.onEnd(this, done));
     });
 
     it('adds special dependencies for IE8', function() {
       assert.file(['.babelrc', 'package.json']);
 
-      const devDependencies = JSON.parse(fs.readFileSync('package.json'), 'utf8').devDependencies;
-      const presets = JSON.parse(fs.readFileSync('.babelrc'), 'utf8').presets;
+      const pkg = JSON.parse(fs.readFileSync('package.json'), 'utf8');
+      const babelrc = JSON.parse(fs.readFileSync('.babelrc'), 'utf8');
 
-      assert.ok(devDependencies.hasOwnProperty('babel-preset-es3'), 'loads es3 preset');
-      assert.ok(devDependencies.hasOwnProperty('es5-shim'), 'loads es5-shim preset');
-      assert.notStrictEqual(presets.indexOf('es3'), -1, 'adds es3 preset to .babelrc');
+      assert.ok(
+        pkg.devDependencies.hasOwnProperty('babel-preset-es3'),
+        'loads es3 preset'
+      );
+
+      assert.ok(
+        pkg.devDependencies.hasOwnProperty('es5-shim'),
+        'loads es5-shim preset'
+      );
+
+      assert.notStrictEqual(
+        babelrc.presets.indexOf('es3'),
+        -1,
+        'adds es3 preset to .babelrc'
+      );
     });
   });
 
@@ -198,18 +210,28 @@ describe('videojs-plugin:app', function() {
           author: 'John Doe',
           description: 'wat is the plugin'
         })
-        .on('end', libs.onEnd.bind(this, done));
+        .on('end', () => libs.onEnd(this, done));
     });
 
     it('does not add special dependencies for IE8', function() {
       assert.file(['.babelrc', 'package.json']);
 
-      const devDependencies = JSON.parse(fs.readFileSync('package.json'), 'utf8').devDependencies;
-      const presets = JSON.parse(fs.readFileSync('.babelrc'), 'utf8').presets;
+      const pkg = JSON.parse(fs.readFileSync('package.json'), 'utf8');
+      const babelrc = JSON.parse(fs.readFileSync('.babelrc'), 'utf8');
 
-      assert.ok(!devDependencies.hasOwnProperty('babel-preset-es3'), 'does not load es3 preset');
-      assert.ok(!devDependencies.hasOwnProperty('es5-shim'), 'does not load es5-shim preset');
-      assert.strictEqual(presets.indexOf('es3'), -1, 'does not add es3 preset to .babelrc');
+      assert.ok(
+        !pkg.devDependencies.hasOwnProperty('babel-preset-es3'),
+        'does not load es3 preset'
+      );
+      assert.ok(
+        !pkg.devDependencies.hasOwnProperty('es5-shim'),
+        'does not load es5-shim preset'
+      );
+      assert.strictEqual(
+        babelrc.presets.indexOf('es3'),
+        -1,
+        'does not add es3 preset to .babelrc'
+      );
     });
   });
 
@@ -223,7 +245,7 @@ describe('videojs-plugin:app', function() {
           description: 'wat is the plugin',
           husky: 'none'
         })
-        .on('end', libs.onEnd.bind(this, done));
+        .on('end', () => libs.onEnd(this, done));
     });
 
     it('does not cause a failure', function() {

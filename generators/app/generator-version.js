@@ -3,7 +3,8 @@
 /**
  * Gets the version of the generator.
  *
- * @return {String}
+ * @return {string}
+ *         The version of the generator.
  */
 const generatorVersion = () => require('../../package.json').version;
 

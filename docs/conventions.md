@@ -45,28 +45,28 @@ All conventional video.js plugins _must_:
 
 __All conventional video.js plugins must be npm packages.__
 
-Plugins should be as self-contained as possible, so the only dependency (`"dependencies"` in `package.json`) by default is video.js, which is shimmed using `browserify-shim`.
+Plugins should be as self-contained as possible, so the only dependency by default is video.js and `global`, providing access to global variables.
 
-Development dependencies (`"devDependencies"` in `package.json`) will include many packages related to developing, building, and testing a conventional video.js plugin.
+Development dependencies will include many packages related to developing, building, and testing a conventional video.js plugin.
 
 ### Structure
 
 Folder/Filename            | Optional? | Generated? | Description
 -------------------------- | --------- | ---------- | -----------
-`dist/`                    |           |            | Created during builds, ignored by Git.
+`dist/`                    |           |            | Build output for browser/script tag usage, ignored by Git.
 `docs/`                    | ✓         |            | Any documentation beyond `README.md`.
-`es5/`                     |           |            | Babel-compiled `src/` scripts.
+`es5/`                     |           |            | Babel-compiled `src/` scripts for consumption by CommonJS systems, ignored by Git.
 `lang/`                    | ✓         | ?          | Any JSON language files for the plugin.
-`scripts/`                 |           | ✓          | Scripts used by npm; _not part of the source code!_
+`scripts/`                 |           | ✓          | Scripts used by tooling; _not part of the source code!_
 `src/`                     |           | ✓          | All source code.
-`src/scss/`                | ✓         |            | Sass source code/partials.
 `src/js/`                  | ✓         |            | JavaScript source code.
-`src/plugin.scss`          | ✓         | ?          | Sass _entry point_.
-`src/plugin.js`            |           | ✓          | Browserify _entry point_.
+`src/plugin.scss`          | ✓         | ?          | Sass entry point.
+`src/plugin.js`            |           | ✓          | Plugin entry point.
 `test/`                    |           | ✓          | Unit tests.
 `test/dist/`               |           |            | Created during test builds, ignored by Git.
 `test/karma.conf.js`       |           | ✓          | Karma configuration file.
-`test/plugin.test.js`      |           | ✓          | Browserify _entry point_.
+`test/plugin.test.js`      |           | ✓          | Default plugin test module.
+`.babelrc`                 |           | ✓          | Configuration for Babel.
 `.editorconfig`            |           | ✓          |
 `.gitignore`               |           | ✓          |
 `.npmignore`               |           | ✓          |
@@ -120,10 +120,10 @@ All names are lower-case and use colons (`:`) as sub-task separators (multiple c
 npm Script    | Optional | Description
 ------------- | -------- | -----------
 `build`       |          | Runs all build sub-tasks.
-`clean`       |          | Cleans up _all_ build artifacts.
+`clean`       |          | Cleans up all build artifacts.
 `docs`        | ✓        | Performs documentation tasks.
 `lint`        |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
-`start`       |          | Starts a development server at port `9999` (or closest open port) with and automatic background builds.
+`start`       |          | Starts a development server at port `9999` with automatic background builds (see `watch`).
 `test`        |          | Runs `lint`, builds tests, and runs tests in available browsers.
 `watch`       |          | Watches `.js` and (optional) `.scss` sources and rebuilds on demand.
 
@@ -163,7 +163,7 @@ When the `build:test` script is executed, all `*.test.js` files within `test` an
 
 ### Testing with Karma
 
-All the test automation uses single-run Karma sessions. `npm test` will launch all the matching browsers which Karma supports and run tests in them. `npm run test:*` will test in a given browser (e.g. `chrome` or `firefox`).
+All the test automation uses single-run Karma sessions. `npm test` will launch all the matching browsers which Karma supports and run tests in them.
 
 ### Testing in a Browser
 

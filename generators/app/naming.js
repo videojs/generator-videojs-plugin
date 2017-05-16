@@ -60,7 +60,7 @@ module.exports = {
   /**
    * Gets the scope from a package name.
    *
-   * @param  {string} packageName
+   * @param  {string} name
    *         A full package name, including scope (e.g. "@scope/videojs-foo-bar").
    *
    * @return {string}
@@ -99,10 +99,12 @@ module.exports = {
    * either a basic name (e.g. "foo-bar") or a prefixed
    *
    * @param  {string} name
-   *         A plugin name.
+   *         A plugin name (e.g. "videojs-foo-bar").
+   *
    * @return {string}
+   *         A function name equivalent (e.g. "videojsFooBar").
    */
   getFunctionName(name) {
-    return _.camelCase(this.getBasicName(name));
+    return _.camelCase(this._getPrefixedName(name));
   }
 };

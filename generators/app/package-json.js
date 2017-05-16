@@ -54,6 +54,8 @@ const IE8_DEFAULTS = {
  * assignment order - to "sort" an object in alphabetic order.
  *
  * @param  {Object} source
+ *         A plain object to be sorted.
+ *
  * @return {Object}
  *         A new ordered object.
  */
@@ -70,6 +72,8 @@ const alphabetizeObject = (source) =>
  *    "postversion": "..."
  *
  * @param  {Object} source
+ *         A plain object to be sorted.
+ *
  * @return {Object}
  *         A new ordered object.
  */
@@ -105,19 +109,17 @@ const alphabetizeScripts = (source) => {
  *
  * @param  {Object} current
  *         Representation of current package.json.
+ *
  * @param  {Object} context
  *         Generator rendering context.
+ *
  * @return {Object}
+ *         A new representation package.json.
  */
 const packageJSON = (current, context) => {
   current = current || {};
 
-  /**
-   * Replaces all "%s" tokens with the name of the plugin in a given string.
-   *
-   * @param  {String} str
-   * @return {String}
-   */
+  // Replaces all "%s" tokens with the name of the plugin in a given string.
   const scriptify = (str) => {
     str = Array.isArray(str) ? str.join(' ') : str;
     return str.replace(/%s/g, context.pluginName);

@@ -8,8 +8,11 @@ const PREFIX = require('./constants');
  * Validates that a plugin name does not include invalid characters or start
  * with the "videojs-" prefix.
  *
- * @param  {String} input
- * @return {String|Boolean}
+ * @param  {string} input
+ *         A value to test.
+ *
+ * @return {string|boolean}
+ *         A string if erroneous and `true` if not.
  */
 const name = (input) => {
 
@@ -33,8 +36,11 @@ const name = (input) => {
 /**
  * Validates that an npm package scope includes @, but not /.
  *
- * @param  {String} input
- * @return {String|Boolean}
+ * @param  {string} input
+ *         A value to test.
+ *
+ * @return {string|boolean}
+ *         A string if erroneous and `true` if not.
  */
 const scope = (input) => {
 

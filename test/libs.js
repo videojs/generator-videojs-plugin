@@ -43,20 +43,23 @@ const GENERATOR_PATH = path.join(__dirname, '../generators/app');
 /**
  * Gets a joined array of filenames from the FILES object.
  *
- * @function fileList
- * @param  {...String} Keys from FILES
- * @return {Array}
+ * @param    {...string}
+ *           Keys from FILES
+ *
+ * @return   {Array}
+ *           An array of filenames.
  */
-const fileList = function() {
-  return _.union.apply(_, _.toArray(arguments).map(str => FILES[str]));
-};
+const fileList = () =>
+  _.union.apply(_, _.toArray(arguments).map(str => FILES[str]));
 
 /**
  * Set up options to always skip installation.
  *
- * @function options
- * @param  {...Object} Same as Object.assign
+ * @param  {...Object}
+ *         Same as Object.assign.
+ *
  * @return {Object}
+ *         A final, merged object.
  */
 const options = function() {
   return _.assign.apply(_, [{skipInstall: true}].concat(_.toArray(arguments)));
@@ -67,16 +70,18 @@ const options = function() {
  *
  * This function expects to be bound to a RunContext: `onEnd.bind(this)`;
  *
- * @function onEnd
- * @param    {Function} [done]
+ * @param {Object} context
+ *        A test context - `this` in a Mocha hook.
+ * @param {Function} [done]
+ *        A callback to call when finished.
  */
-const onEnd = function(done) {
+const onEnd = (context, done) => {
 
   // There are cases where a package.json will not be created.
   try {
-    this.pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+    context.pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
   } catch (x) {
-    this.pkg = null;
+    context.pkg = null;
   }
 
   if (typeof done === 'function') {
@@ -85,12 +90,13 @@ const onEnd = function(done) {
 };
 
 /**
- * Assert that all keys listed in an array match non-empty values
- * in an object.
+ * Assert that all keys listed in an array match non-empty strings in an object.
  *
  * @param  {Object} obj
+ *         An object to test.
+ *
  * @param  {Array}  checks
- * @return {Boolean}
+ *         An array of keys to verify as non-empty strings.
  */
 const allAreNonEmpty = function(obj, checks) {
   checks.forEach(key => {

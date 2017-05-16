@@ -17,7 +17,8 @@ module.exports = yeoman.generators.Base.extend({
   /**
    * Whether or not this plugin is privately licensed.
    *
-   * @return {Boolean}
+   * @return {boolean}
+   *         True if the plugin is privately licensed.
    */
   _isPrivate() {
     return this.config.get('license') === 'private';
@@ -27,15 +28,17 @@ module.exports = yeoman.generators.Base.extend({
    * Removes the leading underscore from a template file name and
    * generates the full destination path for it.
    *
-   * @method _dest
    * @private
    * @example
    *         this._dest('some-dir/__foo') // "/path/to/some-dir/_foo"
    *         this._dest('_some-file.js')  // "/path/to/some-file.js"
    *         this._dest('some-file.js')   // "/path/to/some-file.js"
    *
-   * @param  {String} src
-   * @return {String}
+   * @param  {string} src
+   *         A template file path.
+   *
+   * @return {string}
+   *         A destination file path.
    */
   _dest(src) {
     const basename = path.basename(src);
@@ -52,9 +55,9 @@ module.exports = yeoman.generators.Base.extend({
    * Attempts to get default values for prompts. Async because it may call
    * out to external processes (e.g. Git) to attempt to gather this info.
    *
-   * @method _getPromptDefaults
    * @private
    * @return {Object}
+   *         An object containing default prompt values.
    */
   _getPromptDefaults() {
     const configs = this.config.getAll();
@@ -78,7 +81,7 @@ module.exports = yeoman.generators.Base.extend({
     // The package.json stores a value from `LICENSE_NAMES`, so in that
     // case, we need to find the key instead of the value.
     if (pkg && pkg.license && pkg.license === defaults.license) {
-      defaults.license = _.find(constants.LICENSE_NAMES, (v, k) => {
+      defaults.license = _.find(_.keys(constants.LICENSE_NAMES), (k) => {
         return constants.LICENSE_NAMES[k] === pkg.license;
       });
     }
@@ -102,9 +105,9 @@ module.exports = yeoman.generators.Base.extend({
   /**
    * Gets prompts for the user.
    *
-   * @method _createPrompts
    * @private
    * @return {Array}
+   *         An array of prompt definition objects.
    */
   _getPrompts() {
     const defaults = this._getPromptDefaults();
@@ -177,10 +180,11 @@ module.exports = yeoman.generators.Base.extend({
   /**
    * Generates a context object used for providing data to EJS file templates.
    *
-   * @param {Object} [configs]
-   *        Optionally provide custom configs.
+   * @param  {Object} [configs]
+   *         Optionally provide custom configs.
    *
    * @return {Object}
+   *         An object to be used in EJS file templates.
    */
   _getContext(configs) {
     configs = configs || this.config.getAll();
@@ -196,11 +200,6 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
-  /**
-   * Sets up the generator.
-   *
-   * @method constructor
-   */
   constructor: function() { // eslint-disable-line
     yeoman.generators.Base.apply(this, arguments);
 
@@ -256,15 +255,13 @@ module.exports = yeoman.generators.Base.extend({
 
   /**
    * Display prompts to the user.
-   *
-   * @method prompting
    */
   prompting() {
     if (this.options.skipPrompt) {
       return;
     }
 
-    this.log(yosay(`Welcome to the ${chalk.green(`${constants.PREFIX}plugin`)} generator!`));
+    this.log(yosay(`Welcome to the ${chalk.green('Video.js')} plugin generator!`));
 
     const done = this.async();
 
@@ -277,8 +274,6 @@ module.exports = yeoman.generators.Base.extend({
   /**
    * Store configs, generate template rendering context, alter the setup for
    * file structure.
-   *
-   * @method configuring
    */
   configuring() {
     this.config.set(this._preconfigs);
@@ -376,8 +371,6 @@ module.exports = yeoman.generators.Base.extend({
   /**
    * Install npm dependencies; we don't have any Bower dependencies; so,
    * we don't want to run that (or depend on it in any way).
-   *
-   * @method install
    */
   install() {
     this.npmInstall();
@@ -385,8 +378,6 @@ module.exports = yeoman.generators.Base.extend({
 
   /**
    * Display a final message to the user.
-   *
-   * @method end
    */
   end() {
     if (this.options.hurry) {
