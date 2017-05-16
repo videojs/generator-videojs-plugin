@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const PREFIX = require('./constants').PREFIX;
 
 module.exports = {
@@ -6,10 +7,14 @@ module.exports = {
    * Gets the name of the scope including the "@" symbol. Will not prepend
    * the "@" if it is already included.
    *
-   * @param  {String} scope
-   * @return {String}
+   * @private
+   * @param  {string} scope
+   *         An initial scope to normalize (e.g. "scope").
+   *
+   * @return {string}
+   *         A normalized scope (e.g. "@scope") or an empty string.
    */
-  getScope(scope) {
+  _getScope(scope) {
     if (!scope || typeof scope !== 'string') {
       return '';
     }
@@ -19,34 +24,49 @@ module.exports = {
   /**
    * Gets the name of the plugin (without scope) including the "videojs-"
    * prefix.
+   *@private
+   * @param  {string} name
+   *         A plugin name without scope or "videojs-" prefix (e.g. "foo-bar").
    *
-   * @param  {String} name
-   * @return {String}
+   * @return {string}
+   *         A plugin name without scope and including the "videojs-" prefix.
    */
-  getPluginName(name) {
-    return name && typeof name === 'string' ? PREFIX + name : '';
+  _getPrefixedName(name) {
+    if (!name || typeof name !== 'string') {
+      return '';
+    }
+    name = this.getBasicName(name);
+    return name.substr(0, PREFIX.length) === PREFIX ? name : PREFIX + name;
   },
 
   /**
    * Gets the full package name, taking scope into account.
    *
-   * @param  {String} name
-   * @param  {String} [scope='']
-   * @return {String}
+   * @param  {string} name
+   *         A plugin name without scope or "videojs-" prefix (e.g. "foo-bar").
+   *
+   * @param  {string} [scope='']
+   *         An optional package scope with or without "@" (e.g. "scope").
+   *
+   * @return {string}
+   *         A full package name (e.g. "@scope/videojs-foo-bar")
    */
   getPackageName(name, scope) {
-    scope = scope ? this.getScope(scope) : '';
-    name = this.getPluginName(name);
+    scope = this._getScope(scope);
+    name = this._getPrefixedName(name);
     return scope ? `${scope}/${name}` : name;
   },
 
   /**
-   * Gets the scope of the plugin (without scope or "videojs-" prefix).
+   * Gets the scope from a package name.
    *
-   * @param  {String} name
-   * @return {String}
+   * @param  {string} packageName
+   *         A full package name, including scope (e.g. "@scope/videojs-foo-bar").
+   *
+   * @return {string}
+   *         The scope only (e.g. "scope") or an empty string.
    */
-  getScopeFromPackageName(name) {
+  getScope(name) {
     if (!name) {
       return '';
     }
@@ -57,16 +77,32 @@ module.exports = {
   },
 
   /**
-   * Gets the core/default - that is, without scope or "videojs-"
-   * prefix - name of the plugin.
+   * Gets the basic - that is, without scope or "videojs-" prefix - name of
+   * a plugin from a package name, prefixed name, or basic name.
    *
-   * @param  {String} name
-   * @return {String}
+   * @param  {string} name
+   *         A plugin name, possibly with scope and "videojs-" prefix (e.g.
+   *         "@scope/videojs-foo-bar").
+   *
+   * @return {string}
+   *         A basic plugin name (e.g. "foo-bar").
    */
-  getDefaultNameFromPackageName(name) {
+  getBasicName(name) {
     if (!name) {
       return '';
     }
     return name.split('/').reverse()[0].replace(PREFIX, '');
+  },
+
+  /**
+   * Gets a function-friendly name for the plugin (e.g. "videojsFooBar") from
+   * either a basic name (e.g. "foo-bar") or a prefixed
+   *
+   * @param  {string} name
+   *         A plugin name.
+   * @return {string}
+   */
+  getFunctionName(name) {
+    return _.camelCase(this.getBasicName(name));
   }
 };

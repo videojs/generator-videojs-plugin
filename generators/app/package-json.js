@@ -5,40 +5,45 @@ const generatorVersion = require('./generator-version');
 
 const DEFAULTS = {
   dependencies: {
-    'browserify-versionify': '^1.0.6',
-    'video.js': '^5.10.1'
+    'global': '^4.3.2',
+    'video.js': '^5.19.2'
   },
   devDependencies: {
-    'babel-cli': '^6.14.0',
+    'babel-cli': '^6.24.1',
+    'babel-plugin-external-helpers': '^6.22.0',
     'babel-plugin-transform-object-assign': '^6.8.0',
     'babel-preset-es2015': '^6.14.0',
-    'babelify': '^7.3.0',
     'bannerize': '^1.0.2',
-    'bluebird': '^3.2.2',
-
-    // browserify-shim wants browserify < 13.
-    'browserify': '^12.0.2',
-    'browserify-shim': '^3.8.12',
-    'bundle-collapser': '^1.2.1',
-    'budo': '^8.0.4',
-    'glob': '^6.0.3',
-    'global': '^4.3.0',
-    'karma': '^0.13.19',
-    'karma-chrome-launcher': '^0.2.2',
-    'karma-detect-browsers': '^2.0.2',
-    'karma-firefox-launcher': '^0.1.7',
-    'karma-ie-launcher': '^0.2.0',
-    'karma-qunit': '^0.1.9',
-    'karma-safari-launcher': '^0.1.1',
-    'lodash': '^4.11.2',
+    'karma': '^1.7.0',
+    'karma-chrome-launcher': '^2.1.1',
+    'karma-detect-browsers': '^2.2.5',
+    'karma-firefox-launcher': '^1.0.1',
+    'karma-ie-launcher': '^1.0.0',
+    'karma-qunit': '^1.2.1',
+    'karma-safari-launcher': '^1.0.0',
     'mkdirp': '^0.5.1',
-    'semver': '^5.3.0',
-    'npm-run-all': '^1.5.1',
+    'npm-run-all': '^4.0.2',
+    'qunitjs': '^2.3.2',
+    'rimraf': '^2.6.1',
+    'rollup': '^0.41.6',
+    'rollup-plugin-babel': '^2.7.1',
+    'rollup-plugin-commonjs': '^8.0.2',
+    'rollup-plugin-multi-entry': '^2.0.1',
+    'rollup-plugin-node-resolve': '^3.0.0',
+    'rollup-plugin-replace': '^1.1.1',
+    'sinon': '^2.2.0',
+    'uglify-js': '^3.0.7',
+    'videojs-standard': '^6.0.0'
+  }
+};
+
+const IE8_DEFAULTS = {
+  devDependencies: {
+    'babel-preset-es3': '^1.0.1',
+    'es5-shim': '^4.5.9',
+    'karma': '~1.3.0',
     'qunitjs': '^1.21.0',
-    'rimraf': '^2.5.1',
-    'sinon': '~1.14.0',
-    'uglify-js': '^2.6.1',
-    'videojs-standard': '^4.0.0'
+    'sinon': '^1.17.7'
   }
 };
 
@@ -121,6 +126,7 @@ const packageJSON = (current, context) => {
     'version': context.version,
     'description': context.description,
     'main': 'es5/plugin.js',
+    'module': 'src/plugin.js',
 
     'generator-videojs-plugin': {
       version: generatorVersion()
@@ -133,45 +139,36 @@ const packageJSON = (current, context) => {
       'build:js': scriptify([
         'npm-run-all',
         'build:js:babel',
-        'build:js:browserify',
+        'build:js:rollup',
         'build:js:bannerize',
-        'build:js:collapse',
         'build:js:uglify'
       ]),
 
-      // Babel is a run in a distinct step (vs. using babelify) because we want
-      // the transpiled code to be what's provided to module consumers using
-      // Node or Browserify.
+      // Babel is a run in a distinct step because we want the transpiled code
+      // to be what's provided to module consumers using CommonJS modules.
       'build:js:babel': 'babel src -d es5',
+      'build:js:rollup': 'rollup -c scripts/build.rollup.config.js',
 
+      // This could easily be part of the rollup config, but because we need it
+      // for the CSS, we might as well keep things consistent.
       'build:js:bannerize': scriptify([
         'bannerize dist/%s.js',
         '--banner=scripts/banner.ejs'
       ]),
 
-      // The browserify-shim transform is included ONLY in the build step as
-      // we do not want consuming projects to receive a shimmed module - if we
-      // shim always, we cause obscure errors!
-      'build:js:browserify': scriptify([
-        'browserify . -g browserify-shim -s %s -o dist/%s.js'
-      ]),
-
-      'build:js:collapse': scriptify([
-        'bundle-collapser dist/%s.js',
-        '-o dist/%s.min.js'
-      ]),
-
       'build:js:uglify': scriptify([
-        'uglifyjs dist/%s.min.js',
+        'uglifyjs dist/%s.js',
         '--comments --mangle --compress',
+        context.ie8 ? '--ie8' : '',
         '-o dist/%s.min.js'
       ]),
 
-      'build:test': 'babel-node scripts/build-test.js',
-      'clean': 'rimraf dist test/dist es5 && mkdirp dist test/dist es5',
+      'build:test': 'rollup -c scripts/test.rollup.config.js',
+      'clean': 'rimraf dist test/dist es5',
+      'postclean': 'mkdirp dist test/dist es5',
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
-      'start': 'babel-node scripts/server.js',
+      'start': 'exit 0',
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
       'preversion': 'npm test'
@@ -183,30 +180,6 @@ const packageJSON = (current, context) => {
 
     'author': context.author,
     'license': context.licenseName,
-
-    'browserify': {
-
-      // Unlike browserify-shim, we want to apply the browserify-versionify
-      // shim ALWAYS because we want the version of this project to always be
-      // available to consumers.
-      transform: ['browserify-versionify']
-    },
-
-    'browserify-shim': {
-      'qunit': 'global:QUnit',
-      'sinon': 'global:sinon',
-
-      // video.js is shimmed for the distributable because we don't want to
-      // build it into every plugin's distributed files.
-      'video.js': 'global:videojs'
-    },
-
-    // These objects are used as a reference to the browser-global providers.
-    'style': scriptify('dist/%s.css'),
-    'videojs-plugin': {
-      style: scriptify('dist/%s.css'),
-      script: scriptify('dist/%s.min.js')
-    },
 
     'vjsstandard': {
       ignore: [
@@ -235,14 +208,10 @@ const packageJSON = (current, context) => {
     'devDependencies': _.assign(
       {},
       current.devDependencies,
-      DEFAULTS.devDependencies
+      DEFAULTS.devDependencies,
+      context.ie8 ? IE8_DEFAULTS.devDependencies : {}
     )
   });
-
-  if (context.changelog) {
-    result.devDependencies.chg = '^0.3.2';
-    result.scripts.change = 'chg add';
-  }
 
   // In case husky was previously installed, but is now "none", we can
   // remove it from the package.json entirely.
@@ -259,27 +228,20 @@ const packageJSON = (current, context) => {
     _.assign(result.scripts, {
       'build:css': 'npm-run-all build:css:sass build:css:bannerize',
 
-      'build:css:bannerize': scriptify([
-        'bannerize dist/%s.css --banner=scripts/banner.ejs'
-      ]),
-
       'build:css:sass': scriptify([
         'node-sass',
         'src/plugin.scss',
         'dist/%s.css',
         '--output-style=compressed',
         '--linefeed=lf'
+      ]),
+
+      'build:css:bannerize': scriptify([
+        'bannerize dist/%s.css --banner=scripts/banner.ejs'
       ])
     });
 
-    result.devDependencies['node-sass'] = '^3.4.2';
-  }
-
-  if (context.ie8) {
-    /* eslint-disable max-len */
-    result.devDependencies['babel-plugin-transform-es3-member-expression-literals'] = '^6.8.0';
-    result.devDependencies['babel-plugin-transform-es3-property-literals'] = '^6.8.0';
-    /* eslint-enable max-len */
+    result.devDependencies['node-sass'] = '^4.5.3';
   }
 
   // Support the documentation tooling option.
@@ -296,8 +258,8 @@ const packageJSON = (current, context) => {
     }
 
     _.assign(result.devDependencies, {
-      doctoc: '^0.15.0',
-      jsdoc: '^3.4.0'
+      doctoc: '^1.3.0',
+      jsdoc: '^3.4.3'
     });
   }
 

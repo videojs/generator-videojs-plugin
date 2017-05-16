@@ -44,8 +44,8 @@ describe('videojs-plugin:app', function() {
       assert.strictEqual(p.description, 'wat is the plugin');
       assert.strictEqual(p.version, '0.0.0');
       assert.strictEqual(p.main, 'es5/plugin.js');
+      assert.strictEqual(p.module, 'src/plugin.js');
       assert.ok(_.isArray(p.keywords));
-      assert.ok(_.isPlainObject(p['browserify-shim']));
       assert.ok(_.isPlainObject(p.vjsstandard));
       assert.ok(_.isPlainObject(p.devDependencies));
       assert.strictEqual(p.scripts.prepush, 'npm run lint');
@@ -177,37 +177,15 @@ describe('videojs-plugin:app', function() {
         .on('end', libs.onEnd.bind(this, done));
     });
 
-    it('adds babel plugins to .babelrc and package.json', function() {
-      const babelrc = '.babelrc';
-      const pkg = 'package.json';
+    it('adds special dependencies for IE8', function() {
+      assert.file(['.babelrc', 'package.json']);
 
-      assert.file([babelrc, pkg]);
+      const devDependencies = JSON.parse(fs.readFileSync('package.json'), 'utf8').devDependencies;
+      const presets = JSON.parse(fs.readFileSync('.babelrc'), 'utf8').presets;
 
-      const devDependencies = Object.keys(
-        JSON.parse(fs.readFileSync(pkg), 'utf8').devDependencies
-      );
-      const plugins = JSON.parse(fs.readFileSync(babelrc), 'utf8').plugins;
-
-      assert.notEqual(
-        devDependencies.indexOf('babel-plugin-transform-es3-member-expression-literals'),
-        -1,
-        'package.json has es3 member expressions'
-      );
-      assert.notEqual(
-        devDependencies.indexOf('babel-plugin-transform-es3-property-literals'),
-        -1,
-        'package.json has transform-es3-properties'
-      );
-      assert.notEqual(
-        plugins.indexOf('transform-es3-member-expression-literals'),
-        -1,
-        'babel has es3 member expressions'
-      );
-      assert.notEqual(
-        plugins.indexOf('transform-es3-property-literals'),
-        -1,
-        'babel has transform es3 property literals'
-      );
+      assert.ok(devDependencies.hasOwnProperty('babel-preset-es3'), 'loads es3 preset');
+      assert.ok(devDependencies.hasOwnProperty('es5-shim'), 'loads es5-shim preset');
+      assert.notStrictEqual(presets.indexOf('es3'), -1, 'adds es3 preset to .babelrc');
     });
   });
 
@@ -223,37 +201,15 @@ describe('videojs-plugin:app', function() {
         .on('end', libs.onEnd.bind(this, done));
     });
 
-    it('adds non ie8 babel plugins to .babelrc and package.json', function() {
-      const babelrc = '.babelrc';
-      const pkg = 'package.json';
+    it('does not add special dependencies for IE8', function() {
+      assert.file(['.babelrc', 'package.json']);
 
-      assert.file([babelrc, pkg]);
+      const devDependencies = JSON.parse(fs.readFileSync('package.json'), 'utf8').devDependencies;
+      const presets = JSON.parse(fs.readFileSync('.babelrc'), 'utf8').presets;
 
-      const devDependencies = Object.keys(
-        JSON.parse(fs.readFileSync(pkg), 'utf8').devDependencies
-      );
-      const plugins = JSON.parse(fs.readFileSync(babelrc), 'utf8').plugins;
-
-      assert.equal(
-        devDependencies.indexOf('babel-plugin-transform-es3-member-expression-literals'),
-        -1,
-        'package.json does not have es3 member expressions'
-      );
-      assert.equal(
-        devDependencies.indexOf('babel-plugin-transform-es3-property-literals'),
-        -1,
-        'package.json does not have transform-es3-properties'
-      );
-      assert.equal(
-        plugins.indexOf('transform-es3-member-expression-literals'),
-        -1,
-        'babel does not have es3 member expressions'
-      );
-      assert.equal(
-        plugins.indexOf('transform-es3-property-literals'),
-        -1,
-        'babel does not have transform es3 property literals'
-      );
+      assert.ok(!devDependencies.hasOwnProperty('babel-preset-es3'), 'does not load es3 preset');
+      assert.ok(!devDependencies.hasOwnProperty('es5-shim'), 'does not load es5-shim preset');
+      assert.strictEqual(presets.indexOf('es3'), -1, 'does not add es3 preset to .babelrc');
     });
   });
 

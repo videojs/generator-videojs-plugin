@@ -69,11 +69,11 @@ module.exports = yeoman.generators.Base.extend({
 
     // At this point, the `defaults.name` may still have the full scope and
     // constants.PREFIX included; so, we get the scope now.
-    defaults.scope = naming.getScopeFromPackageName(defaults.name);
+    defaults.scope = naming.getScope(defaults.name);
 
-    // Strip out the "videojs-" constants.PREFIX from the name for the purposes of
-    // the prompt (otherwise it will be rejected by validation).
-    defaults.name = naming.getDefaultNameFromPackageName(defaults.name);
+    // Strip out the "videojs-" constants.PREFIX from the name for the
+    // purposes of the prompt (otherwise it will be rejected by validation).
+    defaults.name = naming.getBasicName(defaults.name);
 
     // The package.json stores a value from `LICENSE_NAMES`, so in that
     // case, we need to find the key instead of the value.
@@ -175,6 +175,28 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   /**
+   * Generates a context object used for providing data to EJS file templates.
+   *
+   * @param {Object} [configs]
+   *        Optionally provide custom configs.
+   *
+   * @return {Object}
+   */
+  _getContext(configs) {
+    configs = configs || this.config.getAll();
+
+    return _.assign(configs, {
+      className: `vjs-${configs.name}`,
+      functionName: naming.getFunctionName(configs.name),
+      isPrivate: this._isPrivate(),
+      licenseName: constants.LICENSE_NAMES[configs.license],
+      packageName: naming.getPackageName(configs.name, configs.scope),
+      pluginName: naming.getPackageName(configs.name),
+      version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0'
+    });
+  },
+
+  /**
    * Sets up the generator.
    *
    * @method constructor
@@ -192,42 +214,27 @@ module.exports = yeoman.generators.Base.extend({
       defaults: false
     });
 
-    this.option('limit-to', {
-      desc: tsmlj`
-        Limit files to be updated by passing any comma-separated combination
-        of: dotfiles, pkg, and scripts
-      `,
-      type: 'string',
-      defaults: ''
-    });
-
-    this.option('limit-to-meta', {
-      desc: 'Only update "meta files" - dotfiles, package.json, and scripts.',
-      type: 'boolean',
-      defaults: false
-    });
-
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
 
     this._filesToCopy = [
-      'scripts/_banner.ejs',
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
-      '_jsdoc.json'
+      '_jsdoc.json',
+      'scripts/_banner.ejs'
     ];
 
     this._templatesToCopy = [
-      'scripts/_build-test.js',
-      'scripts/_server.js',
+      'scripts/_build.rollup.config.js',
+      'scripts/_test.rollup.config.js',
       'src/_plugin.js',
-      'test/_karma.conf.js',
       'test/_index.html',
+      'test/_karma.conf.js',
       'test/_plugin.test.js',
+      '_.babelrc',
       '_index.html',
       '_CONTRIBUTING.md',
-      '_README.md',
-      '_.babelrc'
+      '_README.md'
     ];
 
     this._promptsToFilter = [];
@@ -237,54 +244,13 @@ module.exports = yeoman.generators.Base.extend({
       this.options.skipPrompt = this.options.skipInstall = true;
     }
 
-    this._configsTemp = {};
-
-    // Defines the files that are allowed for various `--limit-to` options.
-    this._limits = {
-      dotfiles: {
-        files: [
-          '_.editorconfig',
-          '_.gitignore',
-          '_.npmignore',
-          '_.travis.yml'
-        ],
-        templates: []
-      },
-
-      // These are empty because package.json has special handling.
-      pkg: {
-        files: [],
-        templates: []
-      },
-      scripts: {
-        files: [
-          'scripts/_banner.ejs'
-        ],
-        templates: [
-          'scripts/_build-test.js',
-          'scripts/_server.js'
-        ]
-      }
-    };
-
-    // this._limitTo will always be an array of the requested keys that are
-    // valid (i.e. found in the this._limits object).
-    if (this.options.limitToMeta) {
-      this._limitTo = Object.keys(this._limits);
-    } else if (this.options.limitTo) {
-      this._limitTo = _.intersection(
-        this.options.limitTo.split(',').map(s => s.trim()).filter(_.identity),
-        Object.keys(this._limits)
-      );
-    } else {
-      this._limitTo = [];
-    }
+    this._preconfigs = {};
 
     // Make sure we filter out the author prompt if there is a current
     // package.json file with an object for the author field.
     if (this._currentPkgJSON && _.isPlainObject(this._currentPkgJSON.author)) {
       this._promptsToFilter.push('author');
-      this._configsTemp.author = this._currentPkgJSON.author;
+      this._preconfigs.author = this._currentPkgJSON.author;
     }
   },
 
@@ -302,40 +268,9 @@ module.exports = yeoman.generators.Base.extend({
 
     const done = this.async();
 
-    this.prompt(this._getPrompts(), responses => {
-      _.assign(this._configsTemp, responses);
+    this.prompt(this._getPrompts(), (responses) => {
+      _.assign(this._preconfigs, responses);
       done();
-    });
-  },
-
-  /**
-   * Generates a context object used for providing data to EJS file templates.
-   *
-   * @param {Object} [configs]
-   *        Optionally provide custom configs.
-   *
-   * @return {Object}
-   */
-  _getContext(configs) {
-    configs = configs || this.config.getAll();
-
-    return _.assign(_.pick(configs, [
-      'author',
-      'changelog',
-      'description',
-      'docs',
-      'husky',
-      'lang',
-      'sass',
-      'ie8'
-    ]), {
-      className: `vjs-${configs.name}`,
-      functionName: _.camelCase(configs.name),
-      isPrivate: this._isPrivate(),
-      licenseName: constants.LICENSE_NAMES[configs.license],
-      packageName: naming.getPackageName(configs.name, configs.scope),
-      pluginName: naming.getPackageName(configs.name),
-      version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0'
     });
   },
 
@@ -346,8 +281,8 @@ module.exports = yeoman.generators.Base.extend({
    * @method configuring
    */
   configuring() {
-    this.config.set(this._configsTemp);
-    delete this._configsTemp;
+    this.config.set(this._preconfigs);
+    delete this._preconfigs;
 
     this.context = this._getContext();
 
@@ -361,14 +296,6 @@ module.exports = yeoman.generators.Base.extend({
 
     if (this.context.sass) {
       this._templatesToCopy.push('src/_plugin.scss');
-    }
-
-    if (this._limitTo && this._limitTo.length) {
-      const files = _.union.apply(null, this._limitTo.map(k => this._limits[k].files));
-      const templates = _.union.apply(null, this._limitTo.map(k => this._limits[k].templates));
-
-      this._filesToCopy = _.intersection(this._filesToCopy, files);
-      this._templatesToCopy = _.intersection(this._templatesToCopy, templates);
     }
   },
 
@@ -385,10 +312,7 @@ module.exports = yeoman.generators.Base.extend({
      * @function changelog
      */
     changelog() {
-
-      // There is no _limitTo setting that includes CHANGELOG.md, so we only
-      // need to check for it existing to know to skip this.
-      if (!this.context.changelog || this._limitTo.length) {
+      if (!this.context.changelog) {
         return;
       }
 
@@ -422,9 +346,7 @@ module.exports = yeoman.generators.Base.extend({
     license() {
       const file = constants.LICENSE_FILES[this.config.get('license')];
 
-      // There is no _limitTo setting that includes LICENSE, so we only
-      // need to check for it existing to know to skip this.
-      if (!file || this._limitTo.length) {
+      if (!file) {
         return;
       }
 
@@ -441,13 +363,6 @@ module.exports = yeoman.generators.Base.extend({
      * @function package
      */
     packageJSON() {
-
-      // The only time we don't want to write package.json is when there are
-      // any _limitTo values and "pkg" is not one of them.
-      if (this._limitTo.length && !_.includes(this._limitTo, 'pkg')) {
-        return;
-      }
-
       const json = packageJSON(this._currentPkgJSON, this.context);
 
       // We want to use normal JSON.stringify here because we want to

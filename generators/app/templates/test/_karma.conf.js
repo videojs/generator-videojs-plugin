@@ -19,11 +19,8 @@ module.exports = function(config) {
     basePath: '..',
     frameworks: ['qunit', 'detectBrowsers'],
     files: [
-<% if (sass) { -%>
-      'dist/<%= pluginName %>.css',
-<% } -%>
+      <% if (sass) { %>'dist/<%= pluginName %>.css',<% } %>
       'node_modules/sinon/pkg/sinon.js',
-      'node_modules/sinon/pkg/sinon-ie.js',
       'node_modules/video.js/dist/video.js',
       'node_modules/video.js/dist/video-js.css',
       'test/dist/bundle.js'

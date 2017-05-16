@@ -3,10 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title><%= pluginName %> Demo</title>
-  <link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
-<% if (sass) { -%>
-  <link href="/dist/<%= pluginName %>.css" rel="stylesheet">
-<% } -%>
+  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+  <% if (sass) { %><link href="dist/<%= pluginName %>.css" rel="stylesheet"><% } %>
 </head>
 <body>
   <video id="<%= pluginName %>-player" class="video-js vjs-default-skin" controls>
@@ -14,11 +12,12 @@
     <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
   </video>
   <ul>
-    <li><a href="/test/">Run unit tests in browser.</a></li>
-    <% if (docs) { %><li><a href="/docs/api/">Read generated docs.</a></li><% } %>
+    <li><a href="test/">Run unit tests in browser.</a></li>
+    <% if (docs) { %><li><a href="docs/api/">Read generated docs.</a></li><% } %>
   </ul>
-  <script src="/node_modules/video.js/dist/video.js"></script>
-  <script src="/dist/<%= pluginName %>.js"></script>
+  <% if (ie8) { %><script src="node_modules/es5-shim/es5-shim.js"></script><% } %>
+  <script src="node_modules/video.js/dist/video.js"></script>
+  <script src="dist/<%= pluginName %>.js"></script>
   <script>
     (function(window, videojs) {
       var player = window.player = videojs('<%= pluginName %>-player');

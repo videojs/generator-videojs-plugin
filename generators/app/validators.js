@@ -13,7 +13,7 @@ const PREFIX = require('./constants');
  */
 const name = (input) => {
 
-  if (!(/^[a-z][a-z0-9-]+$/).test(input)) {
+  if (!(/^[a-z][a-z0-9-]*$/).test(input)) {
     return tsmlj`
       Names must start with a lower-case letter and contain
       only lower-case letters (a-z), digits (0-9), and hyphens (-).

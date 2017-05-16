@@ -8,19 +8,19 @@ const assert = require('yeoman-generator').assert;
 // Files that are expected to exist in certain conditions.
 const FILES = {
 
-  'common': [
+  common: [
     'scripts/banner.ejs',
-    'scripts/build-test.js',
-    'scripts/server.js',
-    'test/karma.conf.js',
+    'scripts/build.rollup.config.js',
+    'scripts/test.rollup.config.js',
     'src/plugin.js',
     'test/index.html',
+    'test/karma.conf.js',
     'test/plugin.test.js',
+    '.babelrc',
     '.editorconfig',
     '.gitignore',
     '.npmignore',
     'jsdoc.json',
-    '.babelrc',
     'CHANGELOG.md',
     'CONTRIBUTING.md',
     'index.html',
@@ -28,34 +28,13 @@ const FILES = {
     'README.md'
   ],
 
-  'oss': [
+  oss: [
     '.travis.yml',
     'LICENSE'
   ],
 
-  'sass': [
+  sass: [
     'src/plugin.scss'
-  ],
-
-  // limit-to options
-  'dotfiles': [
-    '.editorconfig',
-    '.gitignore',
-    '.npmignore'
-  ],
-
-  'dotfiles:oss': [
-    '.travis.yml'
-  ],
-
-  'pkg': [
-    'package.json'
-  ],
-
-  'scripts': [
-    'scripts/banner.ejs',
-    'scripts/build-test.js',
-    'scripts/server.js'
   ]
 };
 
