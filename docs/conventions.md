@@ -70,7 +70,7 @@ Folder/Filename            | Optional? | Generated? | Description
 `.editorconfig`            |           | ✓          |
 `.gitignore`               |           | ✓          |
 `.npmignore`               |           | ✓          |
-`CHANGELOG.md`             | ✓         | ?          |
+`CHANGELOG.md`             | ✓         | ✓          |
 `CONTRIBUTING.md`          | ✓         | ✓          | Documents how developers can work on the plugin.
 `index.html`               | ✓         | ✓          | An example of usage of the plugin. This can be used with GitHub pages as well.
 `LICENSE`                  | ✓         | ?          | Defaults to `MIT`.

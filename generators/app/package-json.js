@@ -14,6 +14,8 @@ const DEFAULTS = {
     'babel-plugin-transform-object-assign': '^6.8.0',
     'babel-preset-es2015': '^6.14.0',
     'bannerize': '^1.0.2',
+    'conventional-changelog-cli': '^1.3.1',
+    'conventional-changelog-videojs': '^3.0.0',
     'karma': '^1.7.0',
     'karma-chrome-launcher': '^2.1.1',
     'karma-detect-browsers': '^2.2.5',
@@ -33,6 +35,7 @@ const DEFAULTS = {
     'rollup-plugin-node-resolve': '^3.0.0',
     'rollup-plugin-replace': '^1.1.1',
     'rollup-watch': '^3.2.2',
+    'semver': '^5.3.0',
     'sinon': '^2.2.0',
     'uglify-js': '^3.0.7',
     'videojs-standard': '^6.0.0'
@@ -177,6 +180,7 @@ const packageJSON = (current, context) => {
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
       'preversion': 'npm test',
+      'version': 'node scripts/version.js',
       'watch': 'npm-run-all -p watch:*',
       'watch:js': 'rollup -c scripts/build.rollup.config.js -w',
       'watch:test': 'rollup -c scripts/test.rollup.config.js -w'

@@ -1,11 +1,11 @@
 {
   "name": "generator-videojs-plugin",
   "version": "2.3.0",
-  "description": "A Yeoman generator for VideoJS plugins",
+  "description": "A Yeoman generator for Video.js plugins",
   "license": "Apache-2.0",
   "main": "generators/app/index.js",
   "engine": {
-    "node": ">=4.4.0"
+    "node": ">=4.8.0"
   },
   "bin": {
     "vjsgenclean": "bin/videojs-generator-cleanup.js"
@@ -29,7 +29,7 @@
     "prepush": "npm run lint -- --errors",
     "pretest": "npm run lint",
     "test": "mocha test/*.test.js",
-    "version": "conventional-changelog -p videojs -i CHANGELOG.md -s && git add CHANGELOG.md"
+    "version": "node scripts/version.js"
   },
   "keywords": [
     "yeoman-generator",

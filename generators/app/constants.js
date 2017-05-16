@@ -44,7 +44,6 @@ module.exports = {
   LICENSE_DEFAULT,
 
   PROMPT_DEFAULTS: {
-    changelog: true,
     docs: false,
     husky: 'lint',
     lang: false,

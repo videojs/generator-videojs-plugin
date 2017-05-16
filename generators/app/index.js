@@ -140,11 +140,6 @@ module.exports = yeoman.generators.Base.extend({
       choices: constants.LICENSE_CHOICES
     }, {
       type: 'confirm',
-      name: 'changelog',
-      message: 'Do you want to include CHANGELOG tool?',
-      default: defaults.changelog
-    }, {
-      type: 'confirm',
       name: 'sass',
       message: 'Do you want to include Sass styling?',
       default: defaults.sass
@@ -307,10 +302,6 @@ module.exports = yeoman.generators.Base.extend({
      * @function changelog
      */
     changelog() {
-      if (!this.context.changelog) {
-        return;
-      }
-
       try {
         fs.statSync(this._dest('CHANGELOG.md'));
       } catch (x) {

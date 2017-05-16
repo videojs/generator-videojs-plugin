@@ -19,7 +19,9 @@ describe('videojs-plugin:app', function() {
     'lint',
     'start',
     'test',
-    'preversion'
+    'preversion',
+    'version',
+    'watch'
   ];
 
   describe('defaults', function() {
