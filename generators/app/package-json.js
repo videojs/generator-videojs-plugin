@@ -22,6 +22,7 @@ const DEFAULTS = {
     'karma-qunit': '^1.2.1',
     'karma-safari-launcher': '^1.0.0',
     'mkdirp': '^0.5.1',
+    'node-static': '^0.7.9',
     'npm-run-all': '^4.0.2',
     'qunitjs': '^2.3.2',
     'rimraf': '^2.6.1',
@@ -31,6 +32,7 @@ const DEFAULTS = {
     'rollup-plugin-multi-entry': '^2.0.1',
     'rollup-plugin-node-resolve': '^3.0.0',
     'rollup-plugin-replace': '^1.1.1',
+    'rollup-watch': '^3.2.2',
     'sinon': '^2.2.0',
     'uglify-js': '^3.0.7',
     'videojs-standard': '^6.0.0'
@@ -168,10 +170,14 @@ const packageJSON = (current, context) => {
       'postclean': 'mkdirp dist test/dist es5',
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
-      'start': 'exit 0',
+      'start': 'npm-run-all -p start:server watch',
+      'start:server': 'static -a 0.0.0.0 -p 9999 .',
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
-      'preversion': 'npm test'
+      'preversion': 'npm test',
+      'watch': 'npm-run-all -p watch:*',
+      'watch:js': 'rollup -c scripts/build.rollup.config.js -w',
+      'watch:test': 'rollup -c scripts/test.rollup.config.js -w'
     }),
 
     // Always include the two minimum keywords with whatever exists in the
@@ -238,6 +244,15 @@ const packageJSON = (current, context) => {
 
       'build:css:bannerize': scriptify([
         'bannerize dist/%s.css --banner=scripts/banner.ejs'
+      ]),
+
+      'watch:css': scriptify([
+        'node-sass',
+        'src/plugin.scss',
+        'dist/%s.css',
+        '--output-style=compressed',
+        '--linefeed=lf',
+        '--watch src/**/*.scss'
       ])
     });
 

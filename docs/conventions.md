@@ -123,8 +123,9 @@ npm Script    | Optional | Description
 `clean`       |          | Cleans up _all_ build artifacts.
 `docs`        | ✓        | Performs documentation tasks.
 `lint`        |          | Lints all `.js` ES6 source file(s) using `videojs-standard`.
-`start`       |          | Starts a development server at port `9999` (or closest open port) with live reload and automatic background builds.
+`start`       |          | Starts a development server at port `9999` (or closest open port) with and automatic background builds.
 `test`        |          | Runs `lint`, builds tests, and runs tests in available browsers.
+`watch`       |          | Watches `.js` and (optional) `.scss` sources and rebuilds on demand.
 
 ## Coding Style
 
