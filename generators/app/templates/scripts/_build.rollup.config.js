@@ -7,7 +7,7 @@ import path from 'path';
 const pkg = require(path.resolve(__dirname, '../package.json'));
 
 export default {
-  moduleName: '<%= functionName %>',
+  moduleName: '<%= moduleName %>',
   entry: 'src/plugin.js',
   dest: 'dist/<%= pluginName %>.js',
   format: 'umd',

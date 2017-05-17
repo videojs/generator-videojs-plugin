@@ -7,7 +7,7 @@ import path from 'path';
 const pkg = require(path.resolve(__dirname, '../package.json'));
 
 export default {
-  moduleName: '<%= functionName %>Tests',
+  moduleName: '<%= moduleName %>Tests',
   entry: 'test/**/*.test.js',
   dest: 'test/dist/bundle.js',
   format: 'iife',

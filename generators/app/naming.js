@@ -95,8 +95,22 @@ module.exports = {
   },
 
   /**
-   * Gets a function-friendly name for the plugin (e.g. "videojsFooBar") from
-   * either a basic name (e.g. "foo-bar") or a prefixed
+   * Gets a plugin function-friendly name for the plugin (e.g. "fooBar") from
+   * either a basic name (e.g. "foo-bar") or a prefixed name.
+   *
+   * @param  {string} name
+   *         A plugin name (e.g. "videojs-foo-bar").
+   *
+   * @return {string}
+   *         A function name equivalent (e.g. "fooBar").
+   */
+  getFunctionName(name) {
+    return _.camelCase(this.getBasicName(name));
+  },
+
+  /**
+   * Gets a module-friendly name for the plugin (e.g. "videojsFooBar") from
+   * either a basic name (e.g. "foo-bar") or a prefixed name.
    *
    * @param  {string} name
    *         A plugin name (e.g. "videojs-foo-bar").
@@ -104,7 +118,7 @@ module.exports = {
    * @return {string}
    *         A function name equivalent (e.g. "videojsFooBar").
    */
-  getFunctionName(name) {
+  getModuleName(name) {
     return _.camelCase(this._getPrefixedName(name));
   }
 };

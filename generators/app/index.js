@@ -187,6 +187,7 @@ module.exports = yeoman.generators.Base.extend({
     return _.assign(configs, {
       className: `vjs-${configs.name}`,
       functionName: naming.getFunctionName(configs.name),
+      moduleName: naming.getModuleName(configs.name),
       isPrivate: this._isPrivate(),
       licenseName: constants.LICENSE_NAMES[configs.license],
       packageName: naming.getPackageName(configs.name, configs.scope),
@@ -214,7 +215,6 @@ module.exports = yeoman.generators.Base.extend({
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
-      '_jsdoc.json',
       'scripts/_banner.ejs'
     ];
 
@@ -278,6 +278,10 @@ module.exports = yeoman.generators.Base.extend({
 
     if (!this._isPrivate()) {
       this._filesToCopy.push('_.travis.yml');
+    }
+
+    if (this.context.docs) {
+      this._filesToCopy.push('_jsdoc.json');
     }
 
     if (this.context.lang) {

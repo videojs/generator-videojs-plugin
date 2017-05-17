@@ -33,6 +33,10 @@ const FILES = {
     'LICENSE'
   ],
 
+  docs: [
+    'jsdoc.json'
+  ],
+
   sass: [
     'src/plugin.scss'
   ]
