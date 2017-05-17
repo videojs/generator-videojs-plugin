@@ -23,7 +23,7 @@
     "docs": "doctoc README.md docs/conventions.md",
     "lint": "vjsstandard",
     "precommit": "npm run docs && git add README.md docs/conventions.md",
-    "prepush": "npm run lint -- --errors",
+    "prepush": "npm run lint",
     "pretest": "npm run lint",
     "test": "mocha test/*.test.js",
     "version": "node scripts/version.js"
