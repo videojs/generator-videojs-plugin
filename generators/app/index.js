@@ -6,7 +6,6 @@ const fs = require('fs');
 const path = require('path');
 const tsmlj = require('tsmlj');
 const yeoman = require('yeoman-generator');
-const yosay = require('yosay');
 const constants = require('./constants');
 const naming = require('./naming');
 const packageJSON = require('./package-json');
@@ -257,7 +256,7 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
 
-    this.log(yosay(`Welcome to the ${chalk.green('Video.js')} plugin generator!`));
+    this.log(`Welcome to the ${chalk.green('Video.js')} plugin generator!`);
 
     const done = this.async();
 
@@ -379,8 +378,7 @@ module.exports = yeoman.generators.Base.extend({
     if (this.options.hurry) {
       return;
     }
-    this.log(yosay(tsmlj`
-      All done; ${chalk.green(this.context.pluginName)} is ready to go!
-    `));
+
+    this.log(`All done; ${chalk.green(this.context.pluginName)} is ready to go!`);
   }
 });

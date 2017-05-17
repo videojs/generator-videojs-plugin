@@ -176,7 +176,11 @@ const packageJSON = (current, context) => {
       'prepublish': 'npm run build',
       'prestart': 'npm run build',
       'start': 'npm-run-all -p start:server watch',
-      'start:server': 'static -a 0.0.0.0 -p 9999 -H \'{"Cache-Control": "no-cache, must-revalidate"}\' .',
+      'start:server': scriptify([
+        'static -a 0.0.0.0 -p 9999',
+        '-H \'{"Cache-Control": "no-cache, must-revalidate"}\'',
+        '.'
+      ]),
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
       'preversion': 'npm test',

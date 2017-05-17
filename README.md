@@ -66,7 +66,7 @@ yo videojs-plugin --skip-prompt
 
 #### Hurry
 
-If you don't want to change configuration, but just want to update an existing plugin and skip all the other stuff (prompts, installation, "yosay"s), you can use this option to do that. _You may need to run the installation manually if dependencies changed!_
+If you don't want to change configuration, but just want to update an existing plugin and skip all the other stuff (e.g., prompts, installation), you can use this option to do that. _You may need to run the installation manually if dependencies changed!_
 
 ```sh
 yo videojs-plugin --hurry
