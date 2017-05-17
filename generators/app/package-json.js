@@ -47,8 +47,7 @@ const IE8_DEFAULTS = {
     'babel-preset-es3': '^1.0.1',
     'es5-shim': '^4.5.9',
     'karma': '~1.3.0',
-    'qunitjs': '^1.21.0',
-    'sinon': '^1.17.7'
+    'qunitjs': '^1.21.0'
   }
 };
 
@@ -276,7 +275,7 @@ const packageJSON = (current, context) => {
     });
 
     if (context.husky !== 'none') {
-      result.scripts.precommit = 'npm run docs && git add docs/api/ README.md';
+      result.scripts.precommit = 'npm run docs && git add README.md';
     }
 
     _.assign(result.devDependencies, {

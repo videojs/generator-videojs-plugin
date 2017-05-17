@@ -12,6 +12,7 @@ const FILES = {
     'scripts/banner.ejs',
     'scripts/build.rollup.config.js',
     'scripts/test.rollup.config.js',
+    'scripts/version.js',
     'src/plugin.js',
     'test/index.html',
     'test/karma.conf.js',
