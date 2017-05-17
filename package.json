@@ -7,9 +7,6 @@
   "engine": {
     "node": ">=4.8.0"
   },
-  "bin": {
-    "vjsgenclean": "bin/videojs-generator-cleanup.js"
-  },
   "repository": "videojs/generator-videojs-plugin",
   "author": {
     "name": "Pat O'Neill",

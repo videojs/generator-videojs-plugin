@@ -25,7 +25,6 @@ To learn more about Video.js plugins and this generator's conventions and opinio
     - [Limiting Generated Files](#limiting-generated-files)
 - [Updating an Existing Project](#updating-an-existing-project)
   - [Recommendations](#recommendations)
-- [Cleanup with `vjsgenclean`](#cleanup-with-vjsgenclean)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -116,16 +115,6 @@ Most of what this generator does is localized to the `package.json` file. Luckil
 Other files you'll usually want to select `n` on - particularly those files plugin authors will edit the most: anything in `src/` or `test/`.
 
 However, files that are _not_ commonly edited by plugin authors may deserve a diff check (`d`) if you've made changes to these sorts of files. For example, anything in `scripts/`.
-
-## Cleanup with `vjsgenclean`
-
-The generator is non-destructive: it will only add to or update your project. The `vjsgenclean` script will _remove_ files and `package.json` fields that were removed since the previous major version of the generator.
-
-For example, if `1.x` produced the file `foo/bar.js`, but `2.x` does not, this script will delete it.
-
-```sh
-$ vjsgenclean
-```
 
 ## License
 
