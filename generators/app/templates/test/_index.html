@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   <title><%= pluginName %> Unit Tests</title>
-  <link rel="stylesheet" href="/node_modules/qunitjs/qunit/qunit.css">
-  <link rel="stylesheet" href="/node_modules/video.js/dist/video-js.css">
+  <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+  <link rel="stylesheet" href="../node_modules/video.js/dist/video-js.css">
 <% if (sass) { -%>
-  <link href="/dist/<%= pluginName %>.css" rel="stylesheet">
+  <link href="../dist/<%= pluginName %>.css" rel="stylesheet">
 <% } -%>
 </head>
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
-  <% if (ie8) { %><script src="/node_modules/es5-shim/es5-shim.js"></script><% } %>
-  <script src="/node_modules/sinon/pkg/sinon.js"></script>
-  <script src="/node_modules/qunitjs/qunit/qunit.js"></script>
-  <script src="/node_modules/video.js/dist/video.js"></script>
-  <script src="/test/dist/bundle.js"></script>
+  <% if (ie8) { %><script src="../node_modules/es5-shim/es5-shim.js"></script><% } %>
+  <script src="../node_modules/sinon/pkg/sinon.js"></script>
+  <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+  <script src="../node_modules/video.js/dist/video.js"></script>
+  <script src="../test/dist/bundle.js"></script>
 </body>
 </html>
