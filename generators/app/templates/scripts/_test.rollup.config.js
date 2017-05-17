@@ -46,7 +46,10 @@ export default {
           modules: false
         }]
       ],
-      plugins: ['external-helpers']
+      plugins: [
+        'external-helpers',
+        'transform-object-assign'
+      ]
     })
   ]
 };
