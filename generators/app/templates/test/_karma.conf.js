@@ -19,10 +19,12 @@ module.exports = function(config) {
     basePath: '..',
     frameworks: ['qunit', 'detectBrowsers'],
     files: [
-      <% if (sass) { %>'dist/<%= pluginName %>.css',<% } %>
-      'node_modules/sinon/pkg/sinon.js',
-      'node_modules/video.js/dist/video.js',
       'node_modules/video.js/dist/video-js.css',
+      <% if (sass) { %>'dist/<%= pluginName %>.css',<% } %>
+      <% if (ie8) { %>'node_modules/es5-shim/es5-shim.js',<% } %>
+      'node_modules/sinon/pkg/sinon.js',
+      <% if (ie8) { %>'node_modules/sinon/pkg/sinon-ie.js',<% } %>
+      'node_modules/video.js/dist/video.js',
       'test/dist/bundle.js'
     ],
     customLaunchers: {
