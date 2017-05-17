@@ -45,8 +45,8 @@ describe('videojs-plugin:app', function() {
       assert.strictEqual(p.name, 'videojs-wat');
       assert.strictEqual(p.description, 'wat is the plugin');
       assert.strictEqual(p.version, '0.0.0');
-      assert.strictEqual(p.main, 'es5/plugin.js');
-      assert.strictEqual(p.module, 'src/plugin.js');
+      assert.strictEqual(p.main, 'dist/videojs-wat.cjs.js');
+      assert.strictEqual(p.module, 'dist/videojs-wat.es.js');
       assert.ok(_.isArray(p.keywords));
       assert.ok(_.isPlainObject(p.vjsstandard));
       assert.ok(_.isPlainObject(p.devDependencies));

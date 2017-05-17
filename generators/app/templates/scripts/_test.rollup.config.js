@@ -38,6 +38,7 @@ export default {
     }),
     babel({
       babelrc: false,
+      exclude: 'node_modules/**',
       presets: [
         <% if (ie8) { %>'es3',<% } %>
         ['es2015', {

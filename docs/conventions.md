@@ -55,7 +55,6 @@ Folder/Filename            | Optional? | Generated? | Description
 -------------------------- | --------- | ---------- | -----------
 `dist/`                    |           |            | Build output for browser/script tag usage, ignored by Git.
 `docs/`                    | ✓         |            | Any documentation beyond `README.md`.
-`es5/`                     |           |            | Babel-compiled `src/` scripts for consumption by CommonJS systems, ignored by Git.
 `lang/`                    | ✓         | ?          | Any JSON language files for the plugin.
 `scripts/`                 |           | ✓          | Scripts used by tooling; _not part of the source code!_
 `src/`                     |           | ✓          | All source code.

@@ -9,7 +9,6 @@ const DEFAULTS = {
     'video.js': '^5.19.2'
   },
   devDependencies: {
-    'babel-cli': '^6.24.1',
     'babel-plugin-external-helpers': '^6.22.0',
     'babel-plugin-transform-object-assign': '^6.8.0',
     'babel-preset-es2015': '^6.14.0',
@@ -131,8 +130,8 @@ const packageJSON = (current, context) => {
     'name': context.packageName,
     'version': context.version,
     'description': context.description,
-    'main': 'es5/plugin.js',
-    'module': 'src/plugin.js',
+    'main': scriptify('dist/%s.cjs.js'),
+    'module': scriptify('dist/%s.es.js'),
 
     'generator-videojs-plugin': {
       version: generatorVersion()
@@ -144,15 +143,11 @@ const packageJSON = (current, context) => {
 
       'build:js': scriptify([
         'npm-run-all',
-        'build:js:babel',
         'build:js:rollup',
         'build:js:bannerize',
         'build:js:uglify'
       ]),
 
-      // Babel is a run in a distinct step because we want the transpiled code
-      // to be what's provided to module consumers using CommonJS modules.
-      'build:js:babel': 'babel src -d es5',
       'build:js:rollup': 'rollup -c scripts/build.rollup.config.js',
 
       // This could easily be part of the rollup config, but because we need it
@@ -170,8 +165,8 @@ const packageJSON = (current, context) => {
       ]),
 
       'build:test': 'rollup -c scripts/test.rollup.config.js',
-      'clean': 'rimraf dist test/dist es5',
-      'postclean': 'mkdirp dist test/dist es5',
+      'clean': 'rimraf dist test/dist',
+      'postclean': 'mkdirp dist test/dist',
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
       'prestart': 'npm run build',
@@ -201,7 +196,6 @@ const packageJSON = (current, context) => {
       ignore: [
         'dist',
         'docs',
-        'es5',
         'scripts',
         'test/dist',
         'test/karma.conf.js'
@@ -212,7 +206,6 @@ const packageJSON = (current, context) => {
       'CONTRIBUTING.md',
       'dist/',
       'docs/',
-      'es5/',
       'index.html',
       'scripts/',
       'src/',
