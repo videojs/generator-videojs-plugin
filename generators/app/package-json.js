@@ -183,7 +183,8 @@ const packageJSON = (current, context) => {
       'preversion': 'npm test',
       'version': 'node scripts/version.js',
       'watch': 'npm-run-all -p watch:*',
-      'watch:js': 'rollup -c scripts/build.rollup.config.js -w',
+      'watch:js-modules': 'rollup -c scripts/modules.rollup.config.js -w',
+      'watch:js-umd': 'rollup -c scripts/umd.rollup.config.js -w',
       'watch:test': 'rollup -c scripts/test.rollup.config.js -w'
     }),
 

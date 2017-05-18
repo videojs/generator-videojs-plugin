@@ -10,8 +10,9 @@ const FILES = {
 
   common: [
     'scripts/banner.ejs',
-    'scripts/build.rollup.config.js',
+    'scripts/modules.rollup.config.js',
     'scripts/test.rollup.config.js',
+    'scripts/umd.rollup.config.js',
     'scripts/version.js',
     'src/plugin.js',
     'test/index.html',
