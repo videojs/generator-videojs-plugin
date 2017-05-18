@@ -1,4 +1,5 @@
 import videojs from 'video.js';
+import {version as VERSION} from '../package.json';
 
 // Default options for the plugin.
 const defaults = {};
@@ -44,6 +45,6 @@ const <%= functionName %> = function(options) {
 registerPlugin('<%= functionName %>', <%= functionName %>);
 
 // Include the version number.
-<%= functionName %>.VERSION = '__VERSION__';
+<%= functionName %>.VERSION = VERSION;
 
 export default <%= functionName %>;
