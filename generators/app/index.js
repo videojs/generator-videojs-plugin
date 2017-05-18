@@ -219,8 +219,9 @@ module.exports = yeoman.generators.Base.extend({
     ];
 
     this._templatesToCopy = [
-      'scripts/_build.rollup.config.js',
+      'scripts/_modules.rollup.config.js',
       'scripts/_test.rollup.config.js',
+      'scripts/_umd.rollup.config.js',
       'src/_plugin.js',
       'test/_index.html',
       'test/_karma.conf.js',

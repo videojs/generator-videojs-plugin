@@ -143,12 +143,14 @@ const packageJSON = (current, context) => {
 
       'build:js': scriptify([
         'npm-run-all',
-        'build:js:rollup',
+        'build:js:rollup-modules',
+        'build:js:rollup-umd',
         'build:js:bannerize',
         'build:js:uglify'
       ]),
 
-      'build:js:rollup': 'rollup -c scripts/build.rollup.config.js',
+      'build:js:rollup-modules': 'rollup -c scripts/modules.rollup.config.js',
+      'build:js:rollup-umd': 'rollup -c scripts/umd.rollup.config.js',
 
       // This could easily be part of the rollup config, but because we need it
       // for the CSS, we might as well keep things consistent.

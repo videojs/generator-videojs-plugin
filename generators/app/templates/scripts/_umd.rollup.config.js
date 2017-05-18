@@ -1,12 +1,19 @@
+/**
+ * Rollup configuration for packaging the plugin in a module that is consumable
+ * as the `src` of a `script` tag or via AMD or similar client-side loading.
+ *
+ * This module DOES include its dependencies.
+ */
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import json from 'rollup-plugin-json';
 import resolve from 'rollup-plugin-node-resolve';
-import path from 'path';
 
 export default {
   moduleName: '<%= moduleName %>',
   entry: 'src/plugin.js',
+  dest: 'dist/<%= pluginName %>.js',
+  format: 'umd',
   external: ['video.js'],
   globals: {
     'video.js': 'videojs'
@@ -37,10 +44,5 @@ export default {
         'transform-object-assign'
       ]
     })
-  ],
-  targets: [
-    {dest: 'dist/<%= pluginName %>.js', format: 'umd'},
-    {dest: 'dist/<%= pluginName %>.cjs.js', format: 'cjs'},
-    {dest: 'dist/<%= pluginName %>.es.js', format: 'es'}
   ]
 };
