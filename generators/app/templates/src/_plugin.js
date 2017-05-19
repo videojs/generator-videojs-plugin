@@ -17,7 +17,10 @@ const registerPlugin = videojs.registerPlugin || videojs.plugin;
  *
  * @function onPlayerReady
  * @param    {Player} player
+ *           A Video.js player object.
+ *
  * @param    {Object} [options={}]
+ *           A plain object containing options for the plugin.
  */
 const onPlayerReady = (player, options) => {
   player.addClass('<%= className %>');

@@ -36,6 +36,7 @@ export default {
       main: true,
       jsnext: true
     }),
+    json(),
     commonjs({
       sourceMap: false
     }),
@@ -43,7 +44,9 @@ export default {
       babelrc: false,
       exclude: 'node_modules/**',
       presets: [
-        <% if (ie8) { %>'es3',<% } %>
+<% if (ie8) { -%>
+        'es3',
+<% } -%>
         ['es2015', {
           loose: true,
           modules: false

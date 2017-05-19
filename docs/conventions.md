@@ -65,7 +65,6 @@ Folder/Filename            | Optional? | Generated? | Description
 `test/dist/`               |           |            | Created during test builds, ignored by Git.
 `test/karma.conf.js`       |           | ✓          | Karma configuration file.
 `test/plugin.test.js`      |           | ✓          | Default plugin test module.
-`.babelrc`                 |           | ✓          | Configuration for Babel.
 `.editorconfig`            |           | ✓          |
 `.gitignore`               |           | ✓          |
 `.npmignore`               |           | ✓          |

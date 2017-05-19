@@ -18,7 +18,6 @@ const FILES = {
     'test/index.html',
     'test/karma.conf.js',
     'test/plugin.test.js',
-    '.babelrc',
     '.editorconfig',
     '.gitignore',
     '.npmignore',

@@ -180,10 +180,9 @@ describe('videojs-plugin:app', function() {
     });
 
     it('adds special dependencies for IE8', function() {
-      assert.file(['.babelrc', 'package.json']);
+      assert.file(['package.json']);
 
       const pkg = JSON.parse(fs.readFileSync('package.json'), 'utf8');
-      const babelrc = JSON.parse(fs.readFileSync('.babelrc'), 'utf8');
 
       assert.ok(
         pkg.devDependencies.hasOwnProperty('babel-preset-es3'),
@@ -193,12 +192,6 @@ describe('videojs-plugin:app', function() {
       assert.ok(
         pkg.devDependencies.hasOwnProperty('es5-shim'),
         'loads es5-shim preset'
-      );
-
-      assert.notStrictEqual(
-        babelrc.presets.indexOf('es3'),
-        -1,
-        'adds es3 preset to .babelrc'
       );
     });
   });
@@ -216,23 +209,18 @@ describe('videojs-plugin:app', function() {
     });
 
     it('does not add special dependencies for IE8', function() {
-      assert.file(['.babelrc', 'package.json']);
+      assert.file(['package.json']);
 
       const pkg = JSON.parse(fs.readFileSync('package.json'), 'utf8');
-      const babelrc = JSON.parse(fs.readFileSync('.babelrc'), 'utf8');
 
       assert.ok(
         !pkg.devDependencies.hasOwnProperty('babel-preset-es3'),
         'does not load es3 preset'
       );
+
       assert.ok(
         !pkg.devDependencies.hasOwnProperty('es5-shim'),
         'does not load es5-shim preset'
-      );
-      assert.strictEqual(
-        babelrc.presets.indexOf('es3'),
-        -1,
-        'does not add es3 preset to .babelrc'
       );
     });
   });

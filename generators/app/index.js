@@ -226,7 +226,6 @@ module.exports = yeoman.generators.Base.extend({
       'test/_index.html',
       'test/_karma.conf.js',
       'test/_plugin.test.js',
-      '_.babelrc',
       '_index.html',
       '_CONTRIBUTING.md',
       '_README.md'

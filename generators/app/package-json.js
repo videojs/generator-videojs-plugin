@@ -199,7 +199,6 @@ const packageJSON = (current, context) => {
       ignore: [
         'dist',
         'docs',
-        'scripts',
         'test/dist',
         'test/karma.conf.js'
       ]
