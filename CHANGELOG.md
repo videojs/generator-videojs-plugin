@@ -1,3 +1,29 @@
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v2.3.0...v5.0.0) (2017-05-19)
+
+### Features
+
+* Add CHANGELOG handling by default via conventional-changelog ([c53b6cb](https://github.com/videojs/generator-videojs-plugin/commit/c53b6cb))
+* Add watch scripts and simple static server ([56d71d8](https://github.com/videojs/generator-videojs-plugin/commit/56d71d8))
+* Remove Bower support option. ([b2ef091](https://github.com/videojs/generator-videojs-plugin/commit/b2ef091))
+
+### Bug Fixes
+
+* Ensure we include old IE dependencies in tests. ([a506d12](https://github.com/videojs/generator-videojs-plugin/commit/a506d12))
+
+### Code Refactoring
+
+* Move naming methods into a module. ([8297d51](https://github.com/videojs/generator-videojs-plugin/commit/8297d51))
+* Move several settings to the constants module. ([1dd813b](https://github.com/videojs/generator-videojs-plugin/commit/1dd813b))
+* Remove Babel processing and vjsplugincheck script. ([cef03e9](https://github.com/videojs/generator-videojs-plugin/commit/cef03e9))
+* Remove Browserify entirely in favor of Rollup. ([3132eae](https://github.com/videojs/generator-videojs-plugin/commit/3132eae))
+
+
+### BREAKING CHANGES
+
+* This removes the option for generated projects to support Bower with special versioning.
+* Removed the vjsplugincheck script and the --bcov command line option.
+
 ## 2.3.0 (2017-02-09)
 * Video.js 5/6 cross-compatibility (#108)
 
