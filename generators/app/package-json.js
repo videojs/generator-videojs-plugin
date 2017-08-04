@@ -171,7 +171,6 @@ const packageJSON = (current, context) => {
       'postclean': 'mkdirp dist test/dist',
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
-      'prestart': 'npm run build',
       'start': 'npm-run-all -p start:server watch',
       'start:server': scriptify([
         'static -a 0.0.0.0 -p 9999',
