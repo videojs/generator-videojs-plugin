@@ -252,6 +252,11 @@ const packageJSON = (current, context) => {
       ]),
 
       'watch:css': scriptify([
+        'npm-run-all',
+        'build:css:sass',
+        'watch:css:sass'
+      ]),
+      'watch:css:sass': scriptify([
         'node-sass',
         'src/plugin.scss',
         'dist/%s.css',
