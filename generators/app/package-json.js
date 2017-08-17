@@ -278,7 +278,7 @@ const packageJSON = (current, context) => {
     });
 
     if (context.husky !== 'none') {
-      result.scripts.precommit = 'npm run docs && git add README.md';
+      result.scripts.precommit = 'npm run docs:toc && git add README.md';
     }
 
     _.assign(result.devDependencies, {
