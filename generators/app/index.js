@@ -215,7 +215,8 @@ module.exports = yeoman.generators.Base.extend({
       '_.gitignore',
       '_.npmignore',
       'scripts/_banner.ejs',
-      'scripts/_version.js'
+      'scripts/_version.js',
+      'scripts/_browser-sync.config.js'
     ];
 
     this._templatesToCopy = [

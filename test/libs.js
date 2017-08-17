@@ -14,6 +14,7 @@ const FILES = {
     'scripts/test.rollup.config.js',
     'scripts/umd.rollup.config.js',
     'scripts/version.js',
+    'scripts/browser-sync.config.js',
     'src/plugin.js',
     'test/index.html',
     'test/karma.conf.js',
