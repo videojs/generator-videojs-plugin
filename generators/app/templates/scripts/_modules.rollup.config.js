@@ -11,7 +11,7 @@ import json from 'rollup-plugin-json';
 export default {
   moduleName: '<%= moduleName %>',
   entry: 'src/plugin.js',
-  external: ['video.js'],
+  external: ['video.js', 'global'],
   globals: {
     'video.js': 'videojs'
   },
