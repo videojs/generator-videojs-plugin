@@ -12,6 +12,7 @@ const DEFAULTS = {
     'babel-plugin-external-helpers': '^6.22.0',
     'babel-plugin-transform-object-assign': '^6.8.0',
     'babel-preset-es2015': '^6.14.0',
+    'browser-sync': '^2.18.13',
     'bannerize': '^1.0.2',
     'conventional-changelog-cli': '^1.3.1',
     'conventional-changelog-videojs': '^3.0.0',
@@ -23,7 +24,6 @@ const DEFAULTS = {
     'karma-qunit': '^1.2.1',
     'karma-safari-launcher': '^1.0.0',
     'mkdirp': '^0.5.1',
-    'node-static': '^0.7.9',
     'npm-run-all': '^4.0.2',
     'qunitjs': '^2.3.2',
     'rimraf': '^2.6.1',
@@ -172,10 +172,17 @@ const packageJSON = (current, context) => {
       'lint': 'vjsstandard',
       'prepublish': 'npm run build',
       'start': 'npm-run-all -p start:server watch',
+      'start-tunnel': 'npm-run-all -p start:tunnel-server watch',
       'start:server': scriptify([
-        'static -a 0.0.0.0 -p 9999',
-        '-H \'{"Cache-Control": "no-cache, must-revalidate"}\'',
-        '.'
+        'browser-sync',
+        'start',
+        '--config', 'scripts/browser-sync.config.js'
+      ]),
+      'start:tunnel-server': scriptify([
+        'browser-sync',
+        'start',
+        '--config', 'scripts/browser-sync.config.js',
+        '--tunnel'
       ]),
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
