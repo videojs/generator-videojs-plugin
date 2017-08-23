@@ -1,3 +1,10 @@
+<a name="5.0.2"></a>
+## [5.0.2](https://github.com/videojs/generator-videojs-plugin/compare/v5.0.1...v5.0.2) (2017-08-23)
+
+### Bug Fixes
+
+* Explicitly set global/document and global/window as external for module builds to avoid warnings. ([7601d77](https://github.com/videojs/generator-videojs-plugin/commit/7601d77))
+
 <a name="5.0.1"></a>
 ## [5.0.1](https://github.com/videojs/generator-videojs-plugin/compare/v5.0.0...v5.0.1) (2017-08-23)
 
