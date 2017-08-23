@@ -1,3 +1,14 @@
+<a name="5.0.1"></a>
+## [5.0.1](https://github.com/videojs/generator-videojs-plugin/compare/v5.0.0...v5.0.1) (2017-08-23)
+
+### Bug Fixes
+
+* bring doc precommit from 5s to 1s (#132) ([e9f2cb3](https://github.com/videojs/generator-videojs-plugin/commit/e9f2cb3))
+* build sass before watching, as watch wont build until a change (#130) ([e7b0791](https://github.com/videojs/generator-videojs-plugin/commit/e7b0791))
+* Set global as external to prevent a warning (#134) ([9a11d12](https://github.com/videojs/generator-videojs-plugin/commit/9a11d12))
+* start should not build before starting, as watch will do that (#131) ([df4bac6](https://github.com/videojs/generator-videojs-plugin/commit/df4bac6))
+* Use external-helpers in UMD builds (#129) ([4912227](https://github.com/videojs/generator-videojs-plugin/commit/4912227))
+
 <a name="5.0.0"></a>
 # [5.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v2.3.0...v5.0.0) (2017-05-19)
 
