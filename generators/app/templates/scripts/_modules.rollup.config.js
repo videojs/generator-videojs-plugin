@@ -9,8 +9,15 @@ import babel from 'rollup-plugin-babel';
 import json from 'rollup-plugin-json';
 
 export default {
-  moduleName: '<%= moduleName %>',
-  entry: 'src/plugin.js',
+  name: '<%= moduleName %>',
+  input: 'src/plugin.js',
+  output: [{
+    file: 'dist/<%= pluginName %>.cjs.js',
+    format: 'cjs'
+  }, {
+    file: 'dist/<%= pluginName %>.es.js',
+    format: 'es'
+  }],
   external: [
     'global',
     'global/document',
@@ -20,7 +27,9 @@ export default {
   globals: {
     'video.js': 'videojs'
   },
+<% if (ie8) { -%>
   legacy: true,
+<% } -%>
   plugins: [
     json(),
     babel({
@@ -40,9 +49,5 @@ export default {
         'transform-object-assign'
       ]
     })
-  ],
-  targets: [
-    {dest: 'dist/<%= pluginName %>.cjs.js', format: 'cjs'},
-    {dest: 'dist/<%= pluginName %>.es.js', format: 'es'}
   ]
 };

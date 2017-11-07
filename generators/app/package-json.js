@@ -27,7 +27,7 @@ const DEFAULTS = {
     'npm-run-all': '^4.0.2',
     'qunitjs': '^2.3.2',
     'rimraf': '^2.6.1',
-    'rollup': '^0.41.6',
+    'rollup': '^0.50.0',
     'rollup-plugin-babel': '^2.7.1',
     'rollup-plugin-commonjs': '^8.0.2',
     'rollup-plugin-json': '^2.1.1',
