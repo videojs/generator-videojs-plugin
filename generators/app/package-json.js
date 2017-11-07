@@ -265,7 +265,7 @@ const packageJSON = (current, context) => {
       ])
     });
 
-    result.devDependencies['node-sass'] = '^4.5.3';
+    result.devDependencies['node-sass'] = '4.5.3';
   }
 
   // Support the documentation tooling option.
