@@ -1,3 +1,15 @@
+<a name="5.0.3"></a>
+## [5.0.3](https://github.com/videojs/generator-videojs-plugin/compare/v5.0.2...v5.0.3) (2017-11-07)
+
+### Bug Fixes
+
+* Fix broken watch as of Sass 4.6.0 (#138) ([9d24d0d](https://github.com/videojs/generator-videojs-plugin/commit/9d24d0d)), closes [#138](https://github.com/videojs/generator-videojs-plugin/issues/138)
+* Tick 2ms in tests for player ready, see https://github.com/videojs/video.js/pull/4665 (#136) ([87f0d08](https://github.com/videojs/generator-videojs-plugin/commit/87f0d08))
+
+### Chores
+
+* Update to Rollup 0.50 to fix issue with test builds. (#137) ([b8e359b](https://github.com/videojs/generator-videojs-plugin/commit/b8e359b)), closes [#137](https://github.com/videojs/generator-videojs-plugin/issues/137)
+
 <a name="5.0.2"></a>
 ## [5.0.2](https://github.com/videojs/generator-videojs-plugin/compare/v5.0.1...v5.0.2) (2017-08-23)
 
