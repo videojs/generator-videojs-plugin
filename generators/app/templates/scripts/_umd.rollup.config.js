@@ -10,15 +10,21 @@ import json from 'rollup-plugin-json';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-  moduleName: '<%= moduleName %>',
-  entry: 'src/plugin.js',
-  dest: 'dist/<%= pluginName %>.js',
-  format: 'umd',
-  external: ['video.js'],
+  name: '<%= moduleName %>',
+  input: 'src/plugin.js',
+  output: {
+    file: 'dist/<%= pluginName %>.js',
+    format: 'umd'
+  },
+  external: [
+    'video.js'
+  ],
   globals: {
     'video.js': 'videojs'
   },
+<% if (ie8) { -%>
   legacy: true,
+<% } -%>
   plugins: [
     resolve({
       browser: true,

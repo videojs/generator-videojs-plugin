@@ -11,7 +11,7 @@
 ## Installation
 
 ```sh
-npm install --save <%= pluginName %>
+npm install --save <%= packageName %>
 ```
 
 ## Usage
@@ -42,7 +42,7 @@ var videojs = require('video.js');
 // The actual plugin function is exported by this module, but it is also
 // attached to the `Player.prototype`; so, there is no need to assign it
 // to a variable.
-require('<%= pluginName %>');
+require('<%= packageName %>');
 
 var player = videojs('my-video');
 
@@ -54,7 +54,7 @@ player.<%= functionName %>();
 When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
 
 ```js
-require(['video.js', '<%= pluginName %>'], function(videojs) {
+require(['video.js', '<%= packageName %>'], function(videojs) {
   var player = videojs('my-video');
 
   player.<%= functionName %>();

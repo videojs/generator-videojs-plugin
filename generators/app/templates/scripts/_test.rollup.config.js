@@ -10,10 +10,12 @@ import multiEntry from 'rollup-plugin-multi-entry';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-  moduleName: '<%= moduleName %>Tests',
-  entry: 'test/**/*.test.js',
-  dest: 'test/dist/bundle.js',
-  format: 'iife',
+  name: '<%= moduleName %>Tests',
+  input: 'test/**/*.test.js',
+  output: {
+    file: 'test/dist/bundle.js',
+    format: 'iife'
+  },
   external: [
     'qunit',
     'qunitjs',
@@ -26,7 +28,9 @@ export default {
     'sinon': 'sinon',
     'video.js': 'videojs'
   },
+<% if (ie8) { -%>
   legacy: true,
+<% } -%>
   plugins: [
     multiEntry({
       exports: false
