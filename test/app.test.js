@@ -166,65 +166,6 @@ describe('videojs-plugin:app', function() {
     });
   });
 
-  describe('ie8', function() {
-    before(function(done) {
-      helpers.run(libs.GENERATOR_PATH)
-        .withOptions(libs.options())
-        .withPrompts({
-          name: 'wat',
-          author: 'John Doe',
-          description: 'wat is the plugin',
-          ie8: true
-        })
-        .on('end', () => libs.onEnd(this, done));
-    });
-
-    it('adds special dependencies for IE8', function() {
-      assert.file(['package.json']);
-
-      const pkg = JSON.parse(fs.readFileSync('package.json'), 'utf8');
-
-      assert.ok(
-        pkg.devDependencies.hasOwnProperty('babel-preset-es3'),
-        'loads es3 preset'
-      );
-
-      assert.ok(
-        pkg.devDependencies.hasOwnProperty('es5-shim'),
-        'loads es5-shim preset'
-      );
-    });
-  });
-
-  describe('no ie8', function() {
-    before(function(done) {
-      helpers.run(libs.GENERATOR_PATH)
-        .withOptions(libs.options())
-        .withPrompts({
-          name: 'wat',
-          author: 'John Doe',
-          description: 'wat is the plugin'
-        })
-        .on('end', () => libs.onEnd(this, done));
-    });
-
-    it('does not add special dependencies for IE8', function() {
-      assert.file(['package.json']);
-
-      const pkg = JSON.parse(fs.readFileSync('package.json'), 'utf8');
-
-      assert.ok(
-        !pkg.devDependencies.hasOwnProperty('babel-preset-es3'),
-        'does not load es3 preset'
-      );
-
-      assert.ok(
-        !pkg.devDependencies.hasOwnProperty('es5-shim'),
-        'does not load es5-shim preset'
-      );
-    });
-  });
-
   describe('husky "none"', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)

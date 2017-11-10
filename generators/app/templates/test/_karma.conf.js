@@ -21,7 +21,6 @@ module.exports = function(config) {
     files: [
       'node_modules/video.js/dist/video-js.css',
       <% if (sass) { %>'dist/<%= pluginName %>.css',<% } %>
-      <% if (ie8) { %>'node_modules/es5-shim/es5-shim.js',<% } %>
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/video.js/dist/video.js',
       'test/dist/bundle.js'

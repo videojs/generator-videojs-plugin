@@ -28,9 +28,6 @@ export default {
     'sinon': 'sinon',
     'video.js': 'videojs'
   },
-<% if (ie8) { -%>
-  legacy: true,
-<% } -%>
   plugins: [
     multiEntry({
       exports: false
@@ -48,9 +45,6 @@ export default {
       babelrc: false,
       exclude: 'node_modules/**',
       presets: [
-<% if (ie8) { -%>
-        'es3',
-<% } -%>
         ['es2015', {
           loose: true,
           modules: false

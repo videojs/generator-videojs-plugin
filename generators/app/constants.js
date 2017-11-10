@@ -48,7 +48,6 @@ module.exports = {
     husky: 'lint',
     lang: false,
     license: LICENSE_DEFAULT,
-    sass: false,
-    ie8: false
+    sass: false
   }
 };

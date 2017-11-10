@@ -144,11 +144,6 @@ module.exports = yeoman.generators.Base.extend({
       default: defaults.sass
     }, {
       type: 'confirm',
-      name: 'ie8',
-      message: 'Do you want to support Internet Explorer 8?',
-      default: defaults.ie8
-    }, {
-      type: 'confirm',
       name: 'docs',
       message: 'Do you want to include documentation tooling?',
       default: defaults.docs
