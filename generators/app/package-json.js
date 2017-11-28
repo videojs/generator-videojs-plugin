@@ -15,6 +15,7 @@ const DEFAULTS = {
     'bannerize': '^1.0.2',
     'conventional-changelog-cli': '^1.3.1',
     'conventional-changelog-videojs': '^3.0.0',
+    'in-publish': '^2.0.0',
     'karma': '^1.7.0',
     'karma-chrome-launcher': '^2.1.1',
     'karma-detect-browsers': '^2.2.5',
@@ -170,7 +171,7 @@ const packageJSON = (current, context) => {
       'clean': 'rimraf dist test/dist',
       'postclean': 'mkdirp dist test/dist',
       'lint': 'vjsstandard',
-      'prepublish': 'npm run build',
+      'prepublish': 'not-in-install && npm run build',
       'start': 'npm-run-all -p start:server watch',
       'start:server': scriptify([
         'static -a 0.0.0.0 -p 9999',
