@@ -171,7 +171,7 @@ const packageJSON = (current, context) => {
       'clean': 'rimraf dist test/dist',
       'postclean': 'mkdirp dist test/dist',
       'lint': 'vjsstandard',
-      'prepublish': 'not-in-install && npm run build',
+      'prepublish': 'not-in-install && npm run build || in-install',
       'start': 'npm-run-all -p start:server watch',
       'start:server': scriptify([
         'static -a 0.0.0.0 -p 9999',
