@@ -22,7 +22,6 @@ To learn more about Video.js plugins and this generator's conventions and opinio
     - [Install](#install)
     - [Prompt](#prompt)
     - [Hurry](#hurry)
-    - [Limiting Generated Files](#limiting-generated-files)
 - [Updating an Existing Project](#updating-an-existing-project)
   - [Recommendations](#recommendations)
 - [License](#license)
@@ -69,32 +68,6 @@ If you don't want to change configuration, but just want to update an existing p
 
 ```sh
 yo videojs-plugin --hurry
-```
-
-#### Limiting Generated Files
-
-In some cases - especially when updating previously generated projects - you may want to only update certain "meta" files without needing to deal with prompts for source files and test files you definitely do not want to overwrite. The `--limit-to` and `--limit-to-meta` option helps with this.
-
-`--limit-to` accepts keys which will limit the generated files to only those specified. The possible keys are:
-
-- `dotfiles`: Updates _only_ those files starting with a `.`.
-- `pkg`: Updates _only_ `package.json`.
-- `scripts`: Updates _only_ the `scripts/` directory.
-
-These keys can be combined to create larger sets of files. For example, `--limit-to=dotfiles,pkg` will update the files matched by `dotfiles` and `pkg`.
-
-Finally, the `--limit-to-meta` option is available as a shortcut for using `--limit-to` with _all the available keys._
-
-Update a subset of files with: 
-
-```sh
-yo videojs-plugin --limit-to=pkg,scripts
-```
-
-Update _all_ "meta" files with: 
-
-```sh
-yo videojs-plugin --limit-to-meta
 ```
 
 ## Updating an Existing Project
