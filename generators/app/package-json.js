@@ -26,6 +26,7 @@ const DEFAULTS = {
     'mkdirp': '^0.5.1',
     'node-static': '^0.7.9',
     'npm-run-all': '^4.0.2',
+    'portscanner': '^2.1.1',
     'qunitjs': '^2.3.2',
     'rimraf': '^2.6.1',
     'rollup': '^0.50.0',
@@ -173,11 +174,7 @@ const packageJSON = (current, context) => {
       'lint': 'vjsstandard',
       'prepublish': 'not-in-install && npm run build || in-install',
       'start': 'npm-run-all -p start:server watch',
-      'start:server': scriptify([
-        'static -a 0.0.0.0 -p 9999',
-        '-H \'{"Cache-Control": "no-cache, must-revalidate"}\'',
-        '.'
-      ]),
+      'start:server': 'node scripts/server.js',
       'pretest': 'npm-run-all lint build',
       'test': 'karma start test/karma.conf.js',
       'preversion': 'npm test',
