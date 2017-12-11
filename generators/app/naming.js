@@ -24,7 +24,8 @@ module.exports = {
   /**
    * Gets the name of the plugin (without scope) including the "videojs-"
    * prefix.
-   *@private
+   *
+   * @private
    * @param  {string} name
    *         A plugin name without scope or "videojs-" prefix (e.g. "foo-bar").
    *
