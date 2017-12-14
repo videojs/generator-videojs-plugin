@@ -1,3 +1,19 @@
+<a name="5.1.0"></a>
+# [5.1.0](https://github.com/videojs/generator-videojs-plugin/compare/v5.0.4...v5.1.0) (2017-12-14)
+
+### Features
+
+* Add support for port scanning in the development server to use the first available port from 9999 to 10999. (#145) ([7de482d](https://github.com/videojs/generator-videojs-plugin/commit/7de482d))
+* Don't build on install (#142) ([117cdfb](https://github.com/videojs/generator-videojs-plugin/commit/117cdfb))
+
+### Bug Fixes
+
+* Prepublish install failure (#143) ([40735aa](https://github.com/videojs/generator-videojs-plugin/commit/40735aa))
+
+### Code Refactoring
+
+* Make sure Node versions are consistent. (#144) ([338779f](https://github.com/videojs/generator-videojs-plugin/commit/338779f))
+
 <a name="5.0.4"></a>
 ## [5.0.4](https://github.com/videojs/generator-videojs-plugin/compare/v5.0.3...v5.0.4) (2017-11-27)
 
