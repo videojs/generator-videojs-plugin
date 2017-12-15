@@ -1,3 +1,10 @@
+<a name="5.1.1"></a>
+## [5.1.1](https://github.com/videojs/generator-videojs-plugin/compare/v5.1.0...v5.1.1) (2017-12-15)
+
+### Bug Fixes
+
+* Fix linter errors on generated server.js file. ([9a4aa46](https://github.com/videojs/generator-videojs-plugin/commit/9a4aa46))
+
 <a name="5.1.0"></a>
 # [5.1.0](https://github.com/videojs/generator-videojs-plugin/compare/v5.0.4...v5.1.0) (2017-12-14)
 
