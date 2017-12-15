@@ -1,8 +1,10 @@
+/* eslint no-console: "off" */
+
 const http = require('http');
 const portscanner = require('portscanner');
-const static = require('node-static');
+const nodeStatic = require('node-static');
 
-const files = new static.Server(process.cwd(), {cache: false});
+const files = new nodeStatic.Server(process.cwd(), {cache: false});
 
 const server = http.createServer((request, response) => {
   response.setHeader('Cache-Control', 'no-cache,must-revalidate');
