@@ -21,6 +21,7 @@ const FILES = {
     '.editorconfig',
     '.gitignore',
     '.npmignore',
+    '.nvmrc',
     'jsdoc.json',
     'CHANGELOG.md',
     'CONTRIBUTING.md',

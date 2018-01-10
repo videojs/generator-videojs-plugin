@@ -6,49 +6,49 @@ const generatorVersion = require('./generator-version');
 const DEFAULTS = {
   dependencies: {
     'global': '^4.3.2',
-    'video.js': '^5.19.2'
+    'video.js': '^5.19.2 || ^6.6.0'
   },
   devDependencies: {
     'babel-plugin-external-helpers': '^6.22.0',
-    'babel-plugin-transform-object-assign': '^6.8.0',
-    'babel-preset-es2015': '^6.14.0',
-    'bannerize': '^1.0.2',
-    'conventional-changelog-cli': '^1.3.1',
+    'babel-plugin-transform-object-assign': '^6.22.0',
+    'babel-preset-es2015': '^6.24.1',
+    'bannerize': '^1.1.3',
+    'conventional-changelog-cli': '^1.3.5',
     'conventional-changelog-videojs': '^3.0.0',
     'in-publish': '^2.0.0',
-    'karma': '^1.7.0',
-    'karma-chrome-launcher': '^2.1.1',
-    'karma-detect-browsers': '^2.2.5',
-    'karma-firefox-launcher': '^1.0.1',
+    'karma': '^1.7.1',
+    'karma-chrome-launcher': '^2.2.0',
+    'karma-detect-browsers': '^2.2.6',
+    'karma-firefox-launcher': '^1.1.0',
     'karma-ie-launcher': '^1.0.0',
     'karma-qunit': '^1.2.1',
     'karma-safari-launcher': '^1.0.0',
     'mkdirp': '^0.5.1',
-    'node-static': '^0.7.9',
-    'npm-run-all': '^4.0.2',
+    'node-static': '^0.7.10',
+    'npm-run-all': '^4.1.2',
     'portscanner': '^2.1.1',
-    'qunitjs': '^2.3.2',
-    'rimraf': '^2.6.1',
-    'rollup': '^0.50.0',
+    'qunitjs': '^2.4.1',
+    'rimraf': '^2.6.2',
+    'rollup': '^0.53.4',
     'rollup-plugin-babel': '^2.7.1',
-    'rollup-plugin-commonjs': '^8.0.2',
-    'rollup-plugin-json': '^2.1.1',
-    'rollup-plugin-multi-entry': '^2.0.1',
+    'rollup-plugin-commonjs': '^8.2.6',
+    'rollup-plugin-json': '^2.3.0',
+    'rollup-plugin-multi-entry': '^2.0.2',
     'rollup-plugin-node-resolve': '^3.0.0',
     'rollup-watch': '^3.2.2',
-    'semver': '^5.3.0',
-    'sinon': '^2.2.0',
-    'uglify-js': '^3.0.7',
-    'videojs-standard': '^6.0.0'
+    'semver': '^5.4.1',
+    'sinon': '^2.4.1',
+    'uglify-js': '^3.3.5',
+    'videojs-standard': '^6.0.1'
   }
 };
 
 const IE8_DEFAULTS = {
   devDependencies: {
     'babel-preset-es3': '^1.0.1',
-    'es5-shim': '^4.5.9',
+    'es5-shim': '^4.5.10',
     'karma': '~1.3.0',
-    'qunitjs': '^1.21.0'
+    'qunitjs': '^1.23.1'
   }
 };
 
@@ -227,7 +227,7 @@ const packageJSON = (current, context) => {
     delete result.devDependencies.husky;
     delete result.scripts.prepush;
   } else {
-    result.devDependencies.husky = '^0.13.3';
+    result.devDependencies.husky = '^0.13.4';
     result.scripts.prepush = `npm run ${context.husky}`;
   }
 
