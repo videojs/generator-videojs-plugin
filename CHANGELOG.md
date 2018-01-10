@@ -1,3 +1,10 @@
+<a name="5.2.0"></a>
+# [5.2.0](https://github.com/videojs/generator-videojs-plugin/compare/v5.1.1...v5.2.0) (2018-01-10)
+
+### Features
+
+* Add .nvmrc and update various minimum dependency versions. (#148) ([5b7ba9b](https://github.com/videojs/generator-videojs-plugin/commit/5b7ba9b))
+
 <a name="5.1.1"></a>
 ## [5.1.1](https://github.com/videojs/generator-videojs-plugin/compare/v5.1.0...v5.1.1) (2017-12-15)
 
