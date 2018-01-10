@@ -214,6 +214,7 @@ module.exports = yeoman.generators.Base.extend({
       '_.editorconfig',
       '_.gitignore',
       '_.npmignore',
+      '_.nvmrc',
       'scripts/_banner.ejs',
       'scripts/_server.js',
       'scripts/_version.js'
