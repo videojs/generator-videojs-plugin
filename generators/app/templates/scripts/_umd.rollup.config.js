@@ -17,10 +17,16 @@ export default {
     format: 'umd'
   },
   external: [
+    'global',
+    'global/window',
+    'global/document',
     'video.js'
   ],
   globals: {
-    'video.js': 'videojs'
+    'video.js': 'videojs',
+    'global': 'window',
+    'global/window': 'window',
+    'global/document': 'document'
   },
 <% if (ie8) { -%>
   legacy: true,
