@@ -1,3 +1,14 @@
+<a name="5.2.1"></a>
+## [5.2.1](https://github.com/videojs/generator-videojs-plugin/compare/v5.2.0...v5.2.1) (2018-02-03)
+
+### Bug Fixes
+
+* Do not add .yo-rc.json to .gitignore (#150) ([af317b9](https://github.com/videojs/generator-videojs-plugin/commit/af317b9))
+
+### Code Refactoring
+
+* Save bytes in the UMD module by using Rollup globals rather than bundling the global module. ([dc05ad0](https://github.com/videojs/generator-videojs-plugin/commit/dc05ad0))
+
 <a name="5.2.0"></a>
 # [5.2.0](https://github.com/videojs/generator-videojs-plugin/compare/v5.1.1...v5.2.0) (2018-01-10)
 
