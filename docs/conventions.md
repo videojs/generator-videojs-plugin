@@ -59,7 +59,6 @@ Folder/Filename            | Optional? | Generated? | Description
 `scripts/`                 |           | ✓          | Scripts used by tooling; _not part of the source code!_
 `src/`                     |           | ✓          | All source code.
 `src/js/`                  | ✓         |            | JavaScript source code.
-`src/plugin.scss`          | ✓         | ?          | Sass entry point.
 `src/plugin.js`            |           | ✓          | Plugin entry point.
 `test/`                    |           | ✓          | Unit tests.
 `test/dist/`               |           |            | Created during test builds, ignored by Git.
