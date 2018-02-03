@@ -43,15 +43,6 @@ const DEFAULTS = {
   }
 };
 
-const IE8_DEFAULTS = {
-  devDependencies: {
-    'babel-preset-es3': '^1.0.1',
-    'es5-shim': '^4.5.10',
-    'karma': '~1.3.0',
-    'qunitjs': '^1.23.1'
-  }
-};
-
 /**
  * Takes advantage of the way V8 orders object properties - by their
  * assignment order - to "sort" an object in alphabetic order.
@@ -164,7 +155,6 @@ const packageJSON = (current, context) => {
       'build:js:uglify': scriptify([
         'uglifyjs dist/%s.js',
         '--comments --mangle --compress',
-        context.ie8 ? '--ie8' : '',
         '-o dist/%s.min.js'
       ]),
 
@@ -216,8 +206,7 @@ const packageJSON = (current, context) => {
     'devDependencies': _.assign(
       {},
       current.devDependencies,
-      DEFAULTS.devDependencies,
-      context.ie8 ? IE8_DEFAULTS.devDependencies : {}
+      DEFAULTS.devDependencies
     )
   });
 
