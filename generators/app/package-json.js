@@ -24,7 +24,8 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 }, {});
 
 const DEFAULTS = {
-  dependencies: getGeneratorVersions(['global', 'video.js']),
+  dependencies: getGeneratorVersions(['global']),
+  peerDependencies: getGeneratorVersions(['video.js']),
   devDependencies: getGeneratorVersions([
     'babel-core',
     'babel-plugin-external-helpers',

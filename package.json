@@ -87,7 +87,7 @@
     "semver": "^5.4.1",
     "sinon": "^5.1.0",
     "uglify-es": "^3.3.9",
-    "video.js": "^5.19.2 || ^6.6.0 || ^7.0.3",
+    "video.js": "^7.0.3",
     "videojs-languages": "^1.0.0"
   }
 }
