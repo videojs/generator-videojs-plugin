@@ -28,7 +28,7 @@ This is the simplest case. Get the script in whatever way you prefer and include
 <script>
   var player = videojs('my-video');
 
-  player.<%= functionName %>();
+  player.<%= pluginFunctionName %>();
 </script>
 ```
 
@@ -46,7 +46,7 @@ require('<%= packageName %>');
 
 var player = videojs('my-video');
 
-player.<%= functionName %>();
+player.<%= pluginFunctionName %>();
 ```
 
 ### RequireJS/AMD
@@ -57,7 +57,7 @@ When using with RequireJS (or another AMD library), get the script in whatever w
 require(['video.js', '<%= packageName %>'], function(videojs) {
   var player = videojs('my-video');
 
-  player.<%= functionName %>();
+  player.<%= pluginFunctionName %>();
 });
 ```
 
