@@ -145,14 +145,12 @@ const packageJSON = (current, context) => {
 
       'build:js': scriptify([
         'npm-run-all',
-        'build:js:rollup-modules',
-        'build:js:rollup-umd',
+        'build:js:rollup',
         'build:js:bannerize',
         'build:js:uglify'
       ]),
 
-      'build:js:rollup-modules': 'rollup -c scripts/modules.rollup.config.js',
-      'build:js:rollup-umd': 'rollup -c scripts/umd.rollup.config.js',
+      'build:js:rollup': 'rollup -c scripts/rollup.config.js',
 
       // This could easily be part of the rollup config, but because we need it
       // for the CSS, we might as well keep things consistent.
@@ -168,7 +166,6 @@ const packageJSON = (current, context) => {
         '-o dist/%s.min.js'
       ]),
 
-      'build:test': 'rollup -c scripts/test.rollup.config.js',
       'clean': 'rimraf dist test/dist',
       'postclean': 'mkdirp dist test/dist',
       'lint': 'vjsstandard',
@@ -180,9 +177,7 @@ const packageJSON = (current, context) => {
       'preversion': 'npm test',
       'version': 'node scripts/version.js',
       'watch': 'npm-run-all -p watch:*',
-      'watch:js-modules': 'rollup -c scripts/modules.rollup.config.js -w',
-      'watch:js-umd': 'rollup -c scripts/umd.rollup.config.js -w',
-      'watch:test': 'rollup -c scripts/test.rollup.config.js -w'
+      'watch:js': 'rollup -c scripts/rollup.config.js -w'
     }),
 
     // Always include the two minimum keywords with whatever exists in the
