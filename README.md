@@ -1,5 +1,7 @@
 # generator-videojs-plugin
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/videojs/generator-videojs-plugin.svg)](https://greenkeeper.io/)
+
 This is an opinionated [Yeoman][yo] generator for [Video.js][vjs] plugins. It is based on the recommendations of the Video.js core team as well as tools and conventions for developing plugins at [Brightcove][bcov].
 
 Lead Maintainer: Pat O'Neill [@misteroneill](https://github.com/misteroneill)
