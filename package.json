@@ -34,7 +34,7 @@
     "videojs-plugin"
   ],
   "dependencies": {
-    "chalk": "^1.0.0",
+    "chalk": "^2.3.2",
     "fs-extra": "^0.26.4",
     "lodash": "^3.10.1",
     "rimraf": "^2.6.1",
