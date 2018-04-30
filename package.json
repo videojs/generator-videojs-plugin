@@ -47,7 +47,7 @@
     "conventional-changelog-videojs": "^3.0.0",
     "doctoc": "^0.15.0",
     "husky": "^0.13.3",
-    "mocha": "^2.3.4",
+    "mocha": "^5.0.2",
     "videojs-standard": "^6.0.0"
   }
 }
