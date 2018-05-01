@@ -35,7 +35,7 @@
   ],
   "dependencies": {
     "chalk": "^1.0.0",
-    "fs-extra": "^0.26.4",
+    "fs-extra": "^6.0.0",
     "lodash": "^3.10.1",
     "rimraf": "^2.6.1",
     "semver": "^5.1.0",
