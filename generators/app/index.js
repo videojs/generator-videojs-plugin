@@ -215,16 +215,16 @@ module.exports = yeoman.generators.Base.extend({
       '_.gitignore',
       '_.npmignore',
       '_.nvmrc',
-      'scripts/_banner.ejs',
+      'scripts/_banner.js',
       'scripts/_server.js',
-      'scripts/_version.js'
+      'scripts/_version.js',
+      'scripts/_primed-rollup-plugins.js'
     ];
 
     this._templatesToCopy = [
       'scripts/_rollup.config.js',
       'src/_plugin.js',
-      'test/_index.html',
-      'test/_karma.conf.js',
+      'scripts/_karma.conf.js',
       'test/_plugin.test.js',
       '_index.html',
       '_CONTRIBUTING.md',

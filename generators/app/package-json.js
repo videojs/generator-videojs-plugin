@@ -23,6 +23,7 @@ const DEFAULTS = {
     'karma-ie-launcher': '^1.0.0',
     'karma-qunit': '^1.2.1',
     'karma-safari-launcher': '^1.0.0',
+    'karma-rollup-preprocessor': '^6.0.0',
     'mkdirp': '^0.5.1',
     'node-static': '^0.7.10',
     'npm-run-all': '^4.1.2',
@@ -35,10 +36,11 @@ const DEFAULTS = {
     'rollup-plugin-json': '^2.3.0',
     'rollup-plugin-multi-entry': '^2.0.2',
     'rollup-plugin-node-resolve': '^3.0.0',
+    'rollup-plugin-uglify': '^4.0.0',
     'rollup-watch': '^3.2.2',
     'semver': '^5.4.1',
     'sinon': '^2.4.1',
-    'uglify-js': '^3.3.5',
+    'uglify-es': '^3.3.9',
     'videojs-standard': '^6.0.1'
   }
 };
@@ -143,37 +145,17 @@ const packageJSON = (current, context) => {
       'prebuild': 'npm run clean',
       'build': 'npm-run-all -p build:*',
 
-      'build:js': scriptify([
-        'npm-run-all',
-        'build:js:rollup',
-        'build:js:bannerize',
-        'build:js:uglify'
-      ]),
-
-      'build:js:rollup': 'rollup -c scripts/rollup.config.js',
-
-      // This could easily be part of the rollup config, but because we need it
-      // for the CSS, we might as well keep things consistent.
-      'build:js:bannerize': scriptify([
-        'bannerize dist/%s.js',
-        '--banner=scripts/banner.ejs'
-      ]),
-
-      'build:js:uglify': scriptify([
-        'uglifyjs dist/%s.js',
-        '--comments --mangle --compress',
-        context.ie8 ? '--ie8' : '',
-        '-o dist/%s.min.js'
-      ]),
+      'build:js': 'rollup -c scripts/rollup.config.js',
 
       'clean': 'rimraf dist test/dist',
       'postclean': 'mkdirp dist test/dist',
       'lint': 'vjsstandard',
       'prepublish': 'not-in-install && npm run build || in-install',
-      'start': 'npm-run-all -p start:server watch',
+      'start': 'npm-run-all -p start:server test:server watch',
       'start:server': 'node scripts/server.js',
-      'pretest': 'npm-run-all lint build',
-      'test': 'karma start test/karma.conf.js',
+      'pretest': 'npm run all lint',
+      'test': 'karma start scripts/karma.conf.js',
+      'test:server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch --no-browsers',
       'preversion': 'npm test',
       'version': 'node scripts/version.js',
       'watch': 'npm-run-all -p watch:*',
@@ -190,9 +172,7 @@ const packageJSON = (current, context) => {
     'vjsstandard': {
       ignore: [
         'dist',
-        'docs',
-        'test/dist',
-        'test/karma.conf.js'
+        'docs'
       ]
     },
 
