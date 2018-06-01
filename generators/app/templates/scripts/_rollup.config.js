@@ -1,96 +1,53 @@
 /**
  * Rollup configuration for packaging the plugin in various formats.
  */
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
-import json from 'rollup-plugin-json';
-import multiEntry from 'rollup-plugin-multi-entry';
-import resolve from 'rollup-plugin-node-resolve';
+const plugins = require('./primed-rollup-plugins.js');
+const banner = require('./banner.js');
 
-const primedBabel = babel({
-  babelrc: false,
-  exclude: 'node_modules/**',
-  presets: [
-    ['es2015', {
-      loose: true,
-      modules: false
-    }]
-  ],
-  plugins: [
-    'external-helpers',
-    'transform-object-assign'
-  ]
-});
+// to prevent a screen during rollup watch
+process.stderr.isTTY = false;
 
-const primedCommonJS = commonjs({sourceMap: false});
-const primedJson = json();
-const primedMultiEntry = multiEntry({exports: false});
-
-const primedResolve = resolve({
-  browser: true,
-  main: true,
-  jsnext: true
-});
-
-const distExternal = [
-  'global',
-  'global/window',
-  'global/document',
-  'video.js'
-];
-
-const distGlobals = {
+const umdGlobals = {
   'video.js': 'videojs',
   'global': 'window',
   'global/window': 'window',
   'global/document': 'document'
 };
-
-const testExternal = [
-  'qunit',
-  'qunitjs',
-  'sinon',
-  'video.js'
-];
-
-const testGlobals = {
-  'qunit': 'QUnit',
-  'qunitjs': 'QUnit',
-  'sinon': 'sinon',
+const moduleGlobals = {
   'video.js': 'videojs'
 };
 
 export default [{
+  // umd
   input: 'src/plugin.js',
   output: {
     name: '<%= moduleName %>',
     file: 'dist/<%= pluginName %>.js',
     format: 'umd',
-    globals: distGlobals
+    globals: umdGlobals,
+    banner
   },
-  external: distExternal,
-  plugins: [primedResolve, primedJson, primedCommonJS, primedBabel]
+  external: Object.keys(umdGlobals),
+  plugins: [plugins.resolve, plugins.json, plugins.commonjs, plugins.babel]
 }, {
+  // minified umd
   input: 'src/plugin.js',
-  output: [{
-    file: 'dist/<%= pluginName %>.cjs.js',
-    format: 'cjs',
-    globals: distGlobals
-  }, {
-    file: 'dist/<%= pluginName %>.es.js',
-    format: 'es',
-    globals: distGlobals
-  }],
-  external: distExternal,
-  plugins: [primedJson, primedBabel]
-}, {
-  input: 'test/**/*.test.js',
   output: {
-    name: '<%= moduleName %>Tests',
-    file: 'test/dist/bundle.js',
-    format: 'iife',
-    globals: testGlobals
+    name: '<%= moduleName %>',
+    file: 'dist/<%= pluginName %>.min.js',
+    format: 'umd',
+    globals: umdGlobals,
+    banner
   },
-  external: testExternal,
-  plugins: [primedMultiEntry, primedResolve, primedJson, primedCommonJS, primedBabel]
+  external: Object.keys(umdGlobals),
+  plugins: [plugins.resolve, plugins.json, plugins.commonjs, plugins.uglify, plugins.babel]
+}, {
+  // cjs and es
+  input: 'src/plugin.js',
+  output: [
+    {file: 'dist/<%= pluginName %>.cjs.js', format: 'cjs', globals: moduleGlobals, banner},
+    {file: 'dist/<%= pluginName %>.es.js', format: 'es', globals: moduleGlobals, banner}
+  ],
+  external: Object.keys(moduleGlobals).concat(['global', 'global/window', 'global/document']),
+  plugins: [plugins.json, plugins.babel]
 }];
