@@ -2,45 +2,62 @@
 
 const _ = require('lodash');
 const generatorVersion = require('./generator-version');
+const pkg = require('../../package.json');
+
+pkg.optionalDependencies = pkg.optionalDependencies || {};
+pkg.devDependencies = pkg.devDependencies || {};
+
+const getGeneratorVersion = (pkgName) =>
+  pkg.optionalDependencies[pkgName] || pkg.devDependencies[pkgName];
+
+const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
+  const version = getGeneratorVersion(pkgName);
+
+  if (!version) {
+    throw new Error(
+      `Error ${pkgName} is not in optional/devdependencies for generator-videojs-plugin`
+    );
+  }
+
+  acc[pkgName] = version;
+  return acc;
+}, {});
 
 const DEFAULTS = {
-  dependencies: {
-    'global': '^4.3.2',
-    'video.js': '^5.19.2 || ^6.6.0'
-  },
-  devDependencies: {
-    'babel-plugin-external-helpers': '^6.22.0',
-    'babel-plugin-transform-object-assign': '^6.22.0',
-    'babel-preset-es2015': '^6.24.1',
-    'bannerize': '^1.1.3',
-    'conventional-changelog-cli': '^1.3.5',
-    'conventional-changelog-videojs': '^3.0.0',
-    'in-publish': '^2.0.0',
-    'karma': '^1.7.1',
-    'karma-chrome-launcher': '^2.2.0',
-    'karma-detect-browsers': '^2.2.6',
-    'karma-firefox-launcher': '^1.1.0',
-    'karma-ie-launcher': '^1.0.0',
-    'karma-qunit': '^2.0.0',
-    'karma-safari-launcher': '^1.0.0',
-    'mkdirp': '^0.5.1',
-    'node-static': '^0.7.10',
-    'npm-run-all': '^4.1.2',
-    'portscanner': '^2.1.1',
-    'qunit': '^2.5.1',
-    'rimraf': '^2.6.2',
-    'rollup': '^0.53.4',
-    'rollup-plugin-babel': '^2.7.1',
-    'rollup-plugin-commonjs': '^8.2.6',
-    'rollup-plugin-json': '^2.3.0',
-    'rollup-plugin-multi-entry': '^2.0.2',
-    'rollup-plugin-node-resolve': '^3.0.0',
-    'rollup-watch': '^3.2.2',
-    'semver': '^5.4.1',
-    'sinon': '^2.4.1',
-    'uglify-js': '^3.3.5',
-    'videojs-standard': '^6.0.1'
-  }
+  dependencies: getGeneratorVersions(['global', 'video.js']),
+  devDependencies: getGeneratorVersions([
+    'babel-plugin-external-helpers',
+    'babel-plugin-transform-object-assign',
+    'babel-preset-es2015',
+    'bannerize',
+    'conventional-changelog-cli',
+    'conventional-changelog-videojs',
+    'in-publish',
+    'karma',
+    'karma-chrome-launcher',
+    'karma-detect-browsers',
+    'karma-firefox-launcher',
+    'karma-ie-launcher',
+    'karma-qunit',
+    'karma-safari-launcher',
+    'mkdirp',
+    'node-static',
+    'npm-run-all',
+    'portscanner',
+    'qunit',
+    'rimraf',
+    'rollup',
+    'rollup-plugin-babel',
+    'rollup-plugin-commonjs',
+    'rollup-plugin-json',
+    'rollup-plugin-multi-entry',
+    'rollup-plugin-node-resolve',
+    'rollup-watch',
+    'semver',
+    'sinon',
+    'uglify-js',
+    'videojs-standard'
+  ])
 };
 
 /**
@@ -216,7 +233,7 @@ const packageJSON = (current, context) => {
     delete result.devDependencies.husky;
     delete result.scripts.prepush;
   } else {
-    result.devDependencies.husky = '^0.13.4';
+    _.assign(result.devDependencies, getGeneratorVersions(['husky']));
     result.scripts.prepush = `npm run ${context.husky}`;
   }
 
@@ -233,10 +250,7 @@ const packageJSON = (current, context) => {
       result.scripts.precommit = 'npm run docs:toc && git add README.md';
     }
 
-    _.assign(result.devDependencies, {
-      doctoc: '^1.3.0',
-      jsdoc: '^3.4.3'
-    });
+    _.assign(result.devDependencies, getGeneratorVersions(['doctoc', 'jsdoc']));
   }
 
   // Include language support. Note that `mkdirs` does not need to change
