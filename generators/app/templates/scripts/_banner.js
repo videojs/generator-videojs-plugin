@@ -5,4 +5,3 @@ module.exports = {
   string: bannerString,
   comment: `/*! ${bannerString} */`
 };
-

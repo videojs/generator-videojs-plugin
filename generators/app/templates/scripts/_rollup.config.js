@@ -40,7 +40,13 @@ export default [{
     banner
   },
   external: Object.keys(umdGlobals),
-  plugins: [plugins.resolve, plugins.json, plugins.commonjs, plugins.uglify, plugins.babel]
+  plugins: [
+    plugins.resolve,
+    plugins.json,
+    plugins.commonjs,
+    plugins.uglify,
+    plugins.babel
+  ]
 }, {
   // cjs and es
   input: 'src/plugin.js',
@@ -48,6 +54,7 @@ export default [{
     {file: 'dist/<%= pluginName %>.cjs.js', format: 'cjs', globals: moduleGlobals, banner},
     {file: 'dist/<%= pluginName %>.es.js', format: 'es', globals: moduleGlobals, banner}
   ],
-  external: Object.keys(moduleGlobals).concat(['global', 'global/window', 'global/document']),
+  external: Object.keys(moduleGlobals)
+    .concat(['global', 'global/window', 'global/document']),
   plugins: [plugins.json, plugins.babel]
 }];
