@@ -253,6 +253,29 @@ const packageJSON = (current, context) => {
     _.assign(result.devDependencies, getGeneratorVersions(['doctoc', 'jsdoc']));
   }
 
+  if (context.css) {
+
+    _.assign(result.scripts, {
+      'build:css': 'npm-run-all build:css:postcss build:css:minify',
+      'build:css:postcss': 'postcss --config scripts/postcss.config.js',
+      'build:css:minify': 'postcss --config scripts/postcss.min.config.js',
+      'watch:css': 'npm run build:css:postcss -- -w'
+    });
+
+    if (context.husky !== 'none') {
+      result.scripts.precommit = 'npm run docs:toc && git add README.md';
+    }
+
+    _.assign(result.devDependencies, getGeneratorVersions([
+      'postcss-cli',
+      'postcss-banner',
+      'postcss-import',
+      'autoprefixer',
+      'cssnano'
+    ]));
+
+  }
+
   // Include language support. Note that `mkdirs` does not need to change
   // here because the videojs-languages package will create the destination
   // directory if needed.

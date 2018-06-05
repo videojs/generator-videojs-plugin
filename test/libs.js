@@ -37,6 +37,12 @@ const FILES = {
 
   docs: [
     'jsdoc.json'
+  ],
+
+  css: [
+    'src/plugin.css',
+    'scripts/postcss.config.js',
+    'scripts/postcss.min.config.js'
   ]
 };
 
