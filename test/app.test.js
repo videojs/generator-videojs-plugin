@@ -83,31 +83,6 @@ describe('videojs-plugin:app', function() {
     });
   });
 
-  describe('sass', function() {
-
-    before(function(done) {
-      helpers.run(libs.GENERATOR_PATH)
-        .withOptions(libs.options())
-        .withPrompts({
-          name: 'wat',
-          author: 'John Doe',
-          description: 'wat is the plugin',
-          sass: true
-        })
-        .on('end', () => libs.onEnd(this, done));
-    });
-
-    it('populates otherwise empty npm scripts', function() {
-      libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
-        'build:css'
-      ]));
-    });
-
-    it('creates npm-specific and sass-specific files', function() {
-      libs.fileList('common', 'oss', 'sass').forEach(f => assert.file(f));
-    });
-  });
-
   describe('docs', function() {
 
     before(function(done) {
@@ -204,7 +179,6 @@ describe('videojs-plugin:app', function() {
       licenseName: 'MIT',
       packageName: 'videojs-test',
       pluginName: 'test',
-      sass: false,
       version: '1.2.3'
     });
 

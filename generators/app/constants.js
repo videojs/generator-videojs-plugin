@@ -47,7 +47,6 @@ module.exports = {
     docs: false,
     husky: 'lint',
     lang: false,
-    license: LICENSE_DEFAULT,
-    sass: false
+    license: LICENSE_DEFAULT
   }
 };

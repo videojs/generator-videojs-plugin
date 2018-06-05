@@ -139,11 +139,6 @@ module.exports = yeoman.generators.Base.extend({
       choices: constants.LICENSE_CHOICES
     }, {
       type: 'confirm',
-      name: 'sass',
-      message: 'Do you want to include Sass styling?',
-      default: defaults.sass
-    }, {
-      type: 'confirm',
       name: 'docs',
       message: 'Do you want to include documentation tooling?',
       default: defaults.docs
@@ -283,10 +278,6 @@ module.exports = yeoman.generators.Base.extend({
 
     if (this.context.lang) {
       this._filesToCopy.push('lang/_en.json');
-    }
-
-    if (this.context.sass) {
-      this._templatesToCopy.push('src/_plugin.scss');
     }
   },
 

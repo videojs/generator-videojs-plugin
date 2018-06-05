@@ -37,10 +37,6 @@ const FILES = {
 
   docs: [
     'jsdoc.json'
-  ],
-
-  sass: [
-    'src/plugin.scss'
   ]
 };
 

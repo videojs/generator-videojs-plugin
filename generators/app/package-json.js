@@ -220,41 +220,6 @@ const packageJSON = (current, context) => {
     result.scripts.prepush = `npm run ${context.husky}`;
   }
 
-  // Support the Sass option.
-  if (context.sass) {
-    _.assign(result.scripts, {
-      'build:css': 'npm-run-all build:css:sass build:css:bannerize',
-
-      'build:css:sass': scriptify([
-        'node-sass',
-        'src/plugin.scss',
-        'dist/%s.css',
-        '--output-style=compressed',
-        '--linefeed=lf'
-      ]),
-
-      'build:css:bannerize': scriptify([
-        'bannerize dist/%s.css --banner=scripts/banner.ejs'
-      ]),
-
-      'watch:css': scriptify([
-        'npm-run-all',
-        'build:css:sass',
-        'watch:css:sass'
-      ]),
-      'watch:css:sass': scriptify([
-        'node-sass',
-        'src/plugin.scss',
-        'dist/%s.css',
-        '--output-style=compressed',
-        '--linefeed=lf',
-        '--watch src/**/*.scss'
-      ])
-    });
-
-    result.devDependencies['node-sass'] = '4.5.3';
-  }
-
   // Support the documentation tooling option.
   if (context.docs) {
 
