@@ -258,7 +258,7 @@ const packageJSON = (current, context) => {
   // directory if needed.
   if (context.lang) {
     result.scripts['build:lang'] = 'vjslang --dir dist/lang';
-    result.devDependencies['videojs-languages'] = '^1.0.0';
+    _.assign(result.devDependencies, getGeneratorVersions(['videojs-languages']));
   }
 
   result.files.sort();

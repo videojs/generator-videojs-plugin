@@ -11,6 +11,7 @@ const helpers = require('yeoman-generator').test;
 const libs = require('./libs');
 const packageJSON = require('../generators/app/package-json');
 const generatorVersion = require('../generators/app/generator-version');
+const generatorPkg = require('../package.json');
 
 describe('videojs-plugin:app', function() {
   const scripts = [
@@ -103,6 +104,55 @@ describe('videojs-plugin:app', function() {
         'docs:api',
         'docs:toc'
       ]));
+    });
+  });
+
+  describe('all options', function() {
+
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin',
+          docs: true,
+          lang: true,
+          husky: 'test'
+        })
+        .on('end', () => libs.onEnd(this, done));
+    });
+
+    it('populates otherwise empty npm scripts', function() {
+      libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
+        'docs',
+        'docs:api',
+        'docs:toc',
+        'prepush',
+        'build:lang'
+      ]));
+    });
+
+    it('does not have empty versions', function() {
+      libs.allAreNonEmpty(this.pkg.dependencies, Object.keys(this.pkg.dependencies));
+      libs.allAreNonEmpty(this.pkg.devDependencies, Object.keys(this.pkg.devDependencies));
+    });
+
+    it('(generator) has no extra optional deps', function() {
+      const optionalPackages = Object.keys(generatorPkg.optionalDependencies);
+      const packages = Object.keys(this.pkg.dependencies)
+        .concat(Object.keys(this.pkg.devDependencies));
+      let i = optionalPackages.length;
+
+      while (i--) {
+        const pkg = optionalPackages[i];
+
+        if (packages.indexOf(pkg) !== -1) {
+          optionalPackages.splice(i, 1);
+        }
+      }
+
+      assert.deepEqual(optionalPackages, [], 'there are no extra packages in optional dependencies');
     });
   });
 
