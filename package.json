@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "main": "generators/app/index.js",
   "engine": {
-    "node": ">=4.8.0"
+    "node": ">=8"
   },
   "repository": "videojs/generator-videojs-plugin",
   "author": {
