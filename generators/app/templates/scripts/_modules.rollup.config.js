@@ -27,18 +27,12 @@ export default {
   globals: {
     'video.js': 'videojs'
   },
-<% if (ie8) { -%>
-  legacy: true,
-<% } -%>
   plugins: [
     json(),
     babel({
       babelrc: false,
       exclude: 'node_modules/**',
       presets: [
-<% if (ie8) { -%>
-        'es3',
-<% } -%>
         ['es2015', {
           loose: true,
           modules: false

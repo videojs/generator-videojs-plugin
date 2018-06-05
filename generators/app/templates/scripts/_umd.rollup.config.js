@@ -28,9 +28,6 @@ export default {
     'global/window': 'window',
     'global/document': 'document'
   },
-<% if (ie8) { -%>
-  legacy: true,
-<% } -%>
   plugins: [
     resolve({
       browser: true,
@@ -45,9 +42,6 @@ export default {
       babelrc: false,
       exclude: 'node_modules/**',
       presets: [
-<% if (ie8) { -%>
-        'es3',
-<% } -%>
         ['es2015', {
           loose: true,
           modules: false
