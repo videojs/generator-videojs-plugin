@@ -12,6 +12,7 @@ const FILES = {
     'scripts/banner.js',
     'scripts/rollup.config.js',
     'scripts/version.js',
+    'scripts/primed-rollup-plugins.js',
     'src/plugin.js',
     'test/index.html',
     'test/karma.conf.js',
