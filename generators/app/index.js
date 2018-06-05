@@ -224,7 +224,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this._templatesToCopy = [
       'scripts/_rollup.config.js',
-      'test/_karma.conf.js',
+      'scripts/_karma.conf.js',
       'test/_plugin.test.js',
       '_index.html',
       '_CONTRIBUTING.md',
@@ -281,7 +281,7 @@ module.exports = yeoman.generators.Base.extend({
     }
 
     if (this.context.docs) {
-      this._filesToCopy.push('_jsdoc.json');
+      this._filesToCopy.push('scripts/_jsdoc.json');
     }
 
     if (this.context.lang) {

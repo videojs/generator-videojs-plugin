@@ -15,13 +15,13 @@ const FILES = {
     'scripts/primed-rollup-plugins.js',
     'src/plugin.js',
     'test/index.html',
-    'test/karma.conf.js',
+    'scripts/karma.conf.js',
     'test/plugin.test.js',
     '.editorconfig',
     '.gitignore',
     '.npmignore',
     '.nvmrc',
-    'jsdoc.json',
+    'scripts/jsdoc.json',
     'CHANGELOG.md',
     'CONTRIBUTING.md',
     'index.html',
@@ -35,7 +35,7 @@ const FILES = {
   ],
 
   docs: [
-    'jsdoc.json'
+    'scripts/jsdoc.json'
   ],
 
   css: [

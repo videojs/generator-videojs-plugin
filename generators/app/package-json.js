@@ -157,9 +157,9 @@ const packageJSON = (current, context) => {
       'lint': 'vjsstandard',
       'prepublish': 'not-in-install && npm run build || in-install',
       'start': 'npm-run-all -p server watch',
-      'server': 'karma start test/karma.conf.js --singleRun=false --auto-watch --no-browsers',
+      'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch --no-browsers',
       'pretest': 'npm run all lint',
-      'test': 'karma start test/karma.conf.js',
+      'test': 'karma start scripts/karma.conf.js',
       'preversion': 'npm test',
       'version': 'node scripts/version.js',
       'watch': 'npm-run-all -p watch:*',
@@ -214,7 +214,7 @@ const packageJSON = (current, context) => {
 
     _.assign(result.scripts, {
       'docs': 'npm-run-all docs:*',
-      'docs:api': 'jsdoc src -r -c jsdoc.json -d docs/api',
+      'docs:api': 'jsdoc src -r -c scripts/jsdoc.json -d docs/api',
       'docs:toc': 'doctoc README.md'
     });
 
