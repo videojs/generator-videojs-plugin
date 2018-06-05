@@ -218,7 +218,6 @@ module.exports = yeoman.generators.Base.extend({
       '_.npmignore',
       '_.nvmrc',
       'scripts/_banner.js',
-      'scripts/_server.js',
       'scripts/_version.js',
       'scripts/_primed-rollup-plugins.js'
     ];
