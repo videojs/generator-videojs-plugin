@@ -64,11 +64,12 @@ describe('videojs-plugin:app', function() {
     });
 
     it('creates the expected plugin.js contents', function() {
-      assert.fileContent('src/plugin.js', /const wat = function/);
+      assert.fileContent('src/plugin.js', /class Wat extends Plugin/);
     });
+
   });
 
-  describe('advanced', function() {
+  describe('basic', function() {
 
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
@@ -77,7 +78,7 @@ describe('videojs-plugin:app', function() {
           name: 'wat',
           author: 'John Doe',
           description: 'wat is the plugin',
-          pluginType: 'advanced'
+          pluginType: 'basic'
         })
         .on('end', () => libs.onEnd(this, done));
     });
@@ -109,7 +110,7 @@ describe('videojs-plugin:app', function() {
     });
 
     it('creates the expected plugin.js contents', function() {
-      assert.fileContent('src/plugin.js', /class Wat extends Plugin/);
+      assert.fileContent('src/plugin.js', /const wat = function/);
     });
   });
 

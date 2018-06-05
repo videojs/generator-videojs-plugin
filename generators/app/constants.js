@@ -27,8 +27,8 @@ module.exports = {
   PREFIX: 'videojs-',
 
   PLUGIN_TYPE_CHOICES: objectToChoices({
-    basic: 'Basic plugin (function-based)',
-    advanced: 'Advanced plugin (class-based)'
+    advanced: 'Advanced plugin (class-based)',
+    basic: 'Basic plugin (function-based)'
   }),
 
   HUSKY_CHOICES: objectToChoices({
@@ -53,6 +53,6 @@ module.exports = {
     husky: 'lint',
     lang: false,
     license: LICENSE_DEFAULT,
-    pluginType: 'basic'
+    pluginType: 'advanced'
   }
 };

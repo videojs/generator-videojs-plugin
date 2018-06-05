@@ -7,7 +7,9 @@ const Plugin = videojs.getPlugin('plugin');
 const defaults = {};
 
 /**
- * An advanced Video.js plugin.
+ * An advanced Video.js plugin. For more information on the API
+ *
+ * See: https://blog.videojs.com/feature-spotlight-advanced-plugins/
  */
 class <%= pluginClassName %> extends Plugin {
 
@@ -25,12 +27,13 @@ class <%= pluginClassName %> extends Plugin {
    *         from your plugin's caller.
    */
   constructor(player, options) {
+    // the parent class will add player under this.player
     super(player);
 
     this.options = videojs.mergeOptions(defaults, options);
 
-    player.ready(() => {
-      player.addClass('<%= className %>');
+    this.player.ready(() => {
+      this.player.addClass('<%= className %>');
     });
   }
 }
