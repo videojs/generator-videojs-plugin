@@ -145,6 +145,11 @@ module.exports = yeoman.generators.Base.extend({
       choices: constants.PLUGIN_TYPE_CHOICES
     }, {
       type: 'confirm',
+      name: 'css',
+      message: 'Do you want to use css tooling?',
+      default: defaults.css
+    }, {
+      type: 'confirm',
       name: 'docs',
       message: 'Do you want to include documentation tooling?',
       default: defaults.docs
@@ -212,7 +217,7 @@ module.exports = yeoman.generators.Base.extend({
       '_.gitignore',
       '_.npmignore',
       '_.nvmrc',
-      'scripts/_banner.ejs',
+      'scripts/_banner.js',
       'scripts/_server.js',
       'scripts/_version.js'
     ];
@@ -284,6 +289,11 @@ module.exports = yeoman.generators.Base.extend({
 
     if (this.context.lang) {
       this._filesToCopy.push('lang/_en.json');
+    }
+
+    if (this.context.css) {
+      this._templatesToCopy.push('src/_plugin.css');
+      this._templatesToCopy.push('scripts/_postcss.config.js');
     }
   },
 

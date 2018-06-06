@@ -9,7 +9,7 @@ const assert = require('yeoman-generator').assert;
 const FILES = {
 
   common: [
-    'scripts/banner.ejs',
+    'scripts/banner.js',
     'scripts/modules.rollup.config.js',
     'scripts/test.rollup.config.js',
     'scripts/umd.rollup.config.js',
@@ -37,6 +37,11 @@ const FILES = {
 
   docs: [
     'jsdoc.json'
+  ],
+
+  css: [
+    'src/plugin.css',
+    'scripts/postcss.config.js'
   ]
 };
 

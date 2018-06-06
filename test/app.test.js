@@ -168,6 +168,7 @@ describe('videojs-plugin:app', function() {
           description: 'wat is the plugin',
           docs: true,
           lang: true,
+          css: true,
           husky: 'test'
         })
         .on('end', () => libs.onEnd(this, done));
@@ -203,6 +204,31 @@ describe('videojs-plugin:app', function() {
       }
 
       assert.deepEqual(optionalPackages, [], 'there are no extra packages in optional dependencies');
+    });
+  });
+
+  describe('css', function() {
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin',
+          css: true
+        })
+        .on('end', () => libs.onEnd(this, done));
+    });
+
+    it('populates otherwise empty npm scripts', function() {
+      libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
+        'build:css',
+        'watch:css'
+      ]));
+    });
+
+    it('creates css specific files default set of files', function() {
+      libs.fileList('common', 'oss', 'css').forEach(f => assert.file(f));
     });
   });
 

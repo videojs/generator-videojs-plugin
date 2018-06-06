@@ -50,6 +50,7 @@ module.exports = {
 
   PROMPT_DEFAULTS: {
     docs: false,
+    css: false,
     husky: 'lint',
     lang: false,
     license: LICENSE_DEFAULT,
