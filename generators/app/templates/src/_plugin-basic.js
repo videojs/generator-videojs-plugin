@@ -34,20 +34,20 @@ const onPlayerReady = (player, options) => {
  * depending on how the plugin is invoked. This may or may not be important
  * to you; if not, remove the wait for "ready"!
  *
- * @function <%= functionName %>
+ * @function <%= pluginFunctionName %>
  * @param    {Object} [options={}]
  *           An object of options left to the plugin author to define.
  */
-const <%= functionName %> = function(options) {
+const <%= pluginFunctionName %> = function(options) {
   this.ready(() => {
     onPlayerReady(this, videojs.mergeOptions(defaults, options));
   });
 };
 
 // Register the plugin with video.js.
-registerPlugin('<%= functionName %>', <%= functionName %>);
+registerPlugin('<%= pluginFunctionName %>', <%= pluginFunctionName %>);
 
 // Include the version number.
-<%= functionName %>.VERSION = VERSION;
+<%= pluginFunctionName %>.VERSION = VERSION;
 
-export default <%= functionName %>;
+export default <%= pluginFunctionName %>;

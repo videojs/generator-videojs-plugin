@@ -134,9 +134,15 @@ module.exports = yeoman.generators.Base.extend({
     }, {
       type: 'list',
       name: 'license',
-      message: 'Choose a license for your project',
+      message: 'Choose a license for your plugin',
       default: defaults.license,
       choices: constants.LICENSE_CHOICES
+    }, {
+      type: 'list',
+      name: 'pluginType',
+      message: 'Choose a type for your plugin',
+      default: defaults.pluginType,
+      choices: constants.PLUGIN_TYPE_CHOICES
     }, {
       type: 'confirm',
       name: 'docs',
@@ -175,7 +181,8 @@ module.exports = yeoman.generators.Base.extend({
 
     return _.assign(configs, {
       className: `vjs-${configs.name}`,
-      functionName: naming.getFunctionName(configs.name),
+      pluginFunctionName: naming.getPluginFunctionName(configs.name),
+      pluginClassName: naming.getPluginClassName(configs.name),
       moduleName: naming.getModuleName(configs.name),
       isPrivate: this._isPrivate(),
       licenseName: constants.LICENSE_NAMES[configs.license],
@@ -214,7 +221,6 @@ module.exports = yeoman.generators.Base.extend({
       'scripts/_modules.rollup.config.js',
       'scripts/_test.rollup.config.js',
       'scripts/_umd.rollup.config.js',
-      'src/_plugin.js',
       'test/_index.html',
       'test/_karma.conf.js',
       'test/_plugin.test.js',
@@ -307,6 +313,12 @@ module.exports = yeoman.generators.Base.extend({
      * @function common
      */
     common() {
+      this.fs.copyTpl(
+        this.templatePath(`src/_plugin-${this.context.pluginType}.js`),
+        this._dest('src/_plugin.js'),
+        this.context
+      );
+
       this._templatesToCopy.forEach(src => {
         this.fs.copyTpl(this.templatePath(src), this._dest(src), this.context);
       });
