@@ -79,7 +79,7 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^3.2.2",
     "semver": "^5.4.1",
-    "sinon": "^2.4.1",
+    "sinon": "^5.1.0",
     "uglify-js": "^3.3.5",
     "jsdoc": "^3.4.3"
   }
