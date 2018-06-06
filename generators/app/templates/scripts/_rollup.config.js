@@ -2,7 +2,9 @@
  * Rollup configuration for packaging the plugin in various formats.
  */
 const plugins = require('./primed-rollup-plugins.js');
-const banner = require('./banner.js');
+const banner = require('./banner.js').comment;
+
+
 
 // to prevent a screen during rollup watch
 process.stderr.isTTY = false;
