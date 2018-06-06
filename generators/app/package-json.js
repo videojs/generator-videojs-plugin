@@ -256,10 +256,8 @@ const packageJSON = (current, context) => {
   if (context.css) {
 
     _.assign(result.scripts, {
-      'build:css': 'npm-run-all build:css:postcss build:css:minify',
-      'build:css:postcss': 'postcss --config scripts/postcss.config.js',
-      'build:css:minify': 'postcss --config scripts/postcss.min.config.js',
-      'watch:css': 'npm run build:css:postcss -- -w'
+      'build:css': 'postcss -o dist/videojs-test.css --config scripts/postcss.config.js src/plugin.css',
+      'watch:css': 'npm run build:css -- -w'
     });
 
     if (context.husky !== 'none') {

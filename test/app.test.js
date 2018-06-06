@@ -11,6 +11,7 @@ const helpers = require('yeoman-generator').test;
 const libs = require('./libs');
 const packageJSON = require('../generators/app/package-json');
 const generatorVersion = require('../generators/app/generator-version');
+const generatorPkg = require('../package.json');
 
 describe('videojs-plugin:app', function() {
   const scripts = [
@@ -61,6 +62,56 @@ describe('videojs-plugin:app', function() {
 
     it('creates common default set of files', function() {
       libs.fileList('common', 'oss').forEach(f => assert.file(f));
+    });
+
+    it('creates the expected plugin.js contents', function() {
+      assert.fileContent('src/plugin.js', /class Wat extends Plugin/);
+    });
+
+  });
+
+  describe('basic', function() {
+
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin',
+          pluginType: 'basic'
+        })
+        .on('end', () => libs.onEnd(this, done));
+    });
+
+    it('sets basic package properties', function() {
+      const p = this.pkg;
+
+      assert.strictEqual(p.author, 'John Doe');
+      assert.strictEqual(p.license, 'MIT');
+      assert.strictEqual(p.name, 'videojs-wat');
+      assert.strictEqual(p.description, 'wat is the plugin');
+      assert.strictEqual(p.version, '0.0.0');
+      assert.strictEqual(p.main, 'dist/videojs-wat.cjs.js');
+      assert.strictEqual(p.module, 'dist/videojs-wat.es.js');
+      assert.ok(_.isArray(p.keywords));
+      assert.ok(_.isPlainObject(p.vjsstandard));
+      assert.ok(_.isPlainObject(p.devDependencies));
+      assert.strictEqual(p.scripts.prepush, 'npm run lint');
+      assert.ok(_.isPlainObject(p['generator-videojs-plugin']));
+      assert.strictEqual(p['generator-videojs-plugin'].version, generatorVersion());
+    });
+
+    it('has all scripts, even if they are empty', function() {
+      libs.allAreNonEmpty(this.pkg.scripts, scripts);
+    });
+
+    it('creates common default set of files', function() {
+      libs.fileList('common', 'oss').forEach(f => assert.file(f));
+    });
+
+    it('creates the expected plugin.js contents', function() {
+      assert.fileContent('src/plugin.js', /const wat = function/);
     });
   });
 
@@ -117,6 +168,7 @@ describe('videojs-plugin:app', function() {
           description: 'wat is the plugin',
           docs: true,
           lang: true,
+          css: true,
           husky: 'test'
         })
         .on('end', () => libs.onEnd(this, done));
@@ -171,8 +223,6 @@ describe('videojs-plugin:app', function() {
     it('populates otherwise empty npm scripts', function() {
       libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
         'build:css',
-        'build:css:postcss',
-        'build:css:minify',
         'watch:css'
       ]));
     });
@@ -249,7 +299,8 @@ describe('videojs-plugin:app', function() {
       className: 'vjs-test',
       description: 'This is the description',
       docs: false,
-      functionName: 'test',
+      pluginFunctionName: 'test',
+      pluginClassName: 'Test',
       isPrivate: false,
       lang: false,
       licenseName: 'MIT',

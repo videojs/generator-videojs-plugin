@@ -217,7 +217,7 @@ module.exports = yeoman.generators.Base.extend({
       '_.gitignore',
       '_.npmignore',
       '_.nvmrc',
-      'scripts/_banner.ejs',
+      'scripts/_banner.js',
       'scripts/_server.js',
       'scripts/_version.js'
     ];
@@ -294,7 +294,6 @@ module.exports = yeoman.generators.Base.extend({
     if (this.context.css) {
       this._templatesToCopy.push('src/_plugin.css');
       this._templatesToCopy.push('scripts/_postcss.config.js');
-      this._templatesToCopy.push('scripts/_postcss.min.config.js');
     }
   },
 
