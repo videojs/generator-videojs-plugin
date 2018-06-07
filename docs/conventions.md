@@ -61,8 +61,7 @@ Folder/Filename            | Optional? | Generated? | Description
 `src/js/`                  | ✓         |            | JavaScript source code.
 `src/plugin.js`            |           | ✓          | Plugin entry point.
 `test/`                    |           | ✓          | Unit tests.
-`test/dist/`               |           |            | Created during test builds, ignored by Git.
-`test/karma.conf.js`       |           | ✓          | Karma configuration file.
+`scripts/karma.conf.js`    |           | ✓          | Karma configuration file.
 `test/plugin.test.js`      |           | ✓          | Default plugin test module.
 `.editorconfig`            |           | ✓          |
 `.gitignore`               |           | ✓          |
