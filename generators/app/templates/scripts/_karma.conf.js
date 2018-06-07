@@ -52,7 +52,7 @@ module.exports = function(config) {
     frameworks: ['qunit', 'detectBrowsers'],
     files: [
       'node_modules/video.js/dist/video-js.css',
-      <% if (css) { %><link href="dist/<%= pluginName %>.css" rel="stylesheet"><% } %>
+      <% if (css) { %>'dist/<%= pluginName %>.css',<% } %>
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/video.js/dist/video.js',
       {included: false, pattern: 'src/**/*.js', watched: true},
