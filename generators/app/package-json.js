@@ -26,10 +26,10 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 const DEFAULTS = {
   dependencies: getGeneratorVersions(['global', 'video.js']),
   devDependencies: getGeneratorVersions([
+    'babel-core',
     'babel-plugin-external-helpers',
     'babel-plugin-transform-object-assign',
     'babel-preset-es2015',
-    'bannerize',
     'conventional-changelog-cli',
     'conventional-changelog-videojs',
     'in-publish',
@@ -53,7 +53,6 @@ const DEFAULTS = {
     'rollup-plugin-multi-entry',
     'rollup-plugin-node-resolve',
     'rollup-plugin-uglify',
-    'rollup-watch',
     'semver',
     'sinon',
     'uglify-es',
