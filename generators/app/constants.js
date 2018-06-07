@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const path = require('path');
 
 /**
  * Convert an object into "choices" for a prompt.
@@ -54,6 +55,7 @@ module.exports = {
     husky: 'lint',
     lang: false,
     license: LICENSE_DEFAULT,
-    pluginType: 'advanced'
+    pluginType: 'advanced',
+    name: path.basename(process.cwd()).replace(/^videojs-/, '')
   }
 };
