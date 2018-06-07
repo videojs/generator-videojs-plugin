@@ -1,5 +1,13 @@
+const rollupPlugins = require('./primed-rollup-plugins');
+const testGlobals = {
+  'qunit': 'QUnit',
+  'qunitjs': 'QUnit',
+  'sinon': 'sinon',
+  'video.js': 'videojs'
+};
+
 module.exports = function(config) {
-  var detectBrowsers = {
+  const detectBrowsers = {
     enabled: false,
     usePhantomJS: false
   };
@@ -11,7 +19,7 @@ module.exports = function(config) {
 
   // If no browsers are specified, we enable `karma-detect-browsers`
   // this will detect all browsers that are available for testing
-  if (!config.browsers.length) {
+  if (config.browsers !== false && !config.browsers.length) {
     detectBrowsers.enabled = true;
   }
 
@@ -23,7 +31,10 @@ module.exports = function(config) {
       <% if (css) { %><link href="dist/<%= pluginName %>.css" rel="stylesheet"><% } %>
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/video.js/dist/video.js',
-      'test/dist/bundle.js'
+      {included: false, pattern: 'src/**/*.js', watched: true},
+      // Make sure to disable Karma’s file watcher
+      // because the preprocessor will use its own.
+      {pattern: 'test/**/*.test.js', watched: false}
     ],
     customLaunchers: {
       travisChrome: {
@@ -31,12 +42,37 @@ module.exports = function(config) {
         flags: ['--no-sandbox']
       }
     },
-    detectBrowsers: detectBrowsers,
+    client: {
+      clearContext: false,
+      qunit: {
+        showUI: true,
+        testTimeout: 5000
+      }
+    },
+    detectBrowsers,
     reporters: ['dots'],
     port: 9876,
     colors: true,
     autoWatch: false,
     singleRun: true,
-    concurrency: Infinity
+    concurrency: Infinity,
+    preprocessors: {
+      'test/**/*.test.js': ['rollup']
+    },
+    rollupPreprocessor: {
+      output: {
+        format: 'iife',
+        name: '<%= moduleName %>Test',
+        globals: testGlobals
+      },
+      external: testGlobals,
+      plugins: [
+        rollupPlugins.multiEntry,
+        rollupPlugins.resolve,
+        rollupPlugins.json,
+        rollupPlugins.commonjs,
+        rollupPlugins.babel
+      ]
+    }
   });
 };

@@ -10,10 +10,9 @@ const FILES = {
 
   common: [
     'scripts/banner.js',
-    'scripts/modules.rollup.config.js',
-    'scripts/test.rollup.config.js',
-    'scripts/umd.rollup.config.js',
+    'scripts/rollup.config.js',
     'scripts/version.js',
+    'scripts/primed-rollup-plugins.js',
     'src/plugin.js',
     'test/index.html',
     'test/karma.conf.js',

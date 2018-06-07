@@ -3,11 +3,19 @@
 const http = require('http');
 const portscanner = require('portscanner');
 const nodeStatic = require('node-static');
+const url = require('url');
 
 const files = new nodeStatic.Server(process.cwd(), {cache: false});
 
 const server = http.createServer((request, response) => {
   response.setHeader('Cache-Control', 'no-cache,must-revalidate');
+  const requestUrl = url.parse('http://' + request.headers.host + request.url);
+
+  if ((/^\/test.*/).test(requestUrl.path)) {
+    response.writeHead(302, {Location: `http://${requestUrl.hostname}:9876/debug.html`});
+    response.end();
+    return;
+  }
 
   request.addListener('end', () => {
     files.serve(request, response, (err) => {

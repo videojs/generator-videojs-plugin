@@ -66,6 +66,7 @@
     "karma-firefox-launcher": "^1.1.0",
     "karma-ie-launcher": "^1.0.0",
     "karma-qunit": "^2.0.0",
+    "karma-rollup-preprocessor": "^6.0.0",
     "karma-safari-launcher": "^1.0.0",
     "mkdirp": "^0.5.1",
     "node-static": "^0.7.10",
@@ -82,10 +83,11 @@
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-multi-entry": "^2.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^4.0.0",
     "rollup-watch": "^3.2.2",
     "semver": "^5.4.1",
     "sinon": "^2.4.1",
-    "uglify-js": "^3.3.5",
+    "uglify-es": "^3.3.9",
     "video.js": "^5.19.2 || ^6.6.0",
     "videojs-languages": "^1.0.0"
   }
