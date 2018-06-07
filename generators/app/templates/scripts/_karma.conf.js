@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const rollupPlugins = require('./primed-rollup-plugins');
 const nodeStatic = require('node-static');
 const path = require('path');
@@ -10,7 +11,7 @@ const testGlobals = {
 };
 
 const StaticMiddlewareFactory = function(config) {
-  console.log(`> Dev server started at http://${config.listenAddress}:${config.port}/`);
+  console.log(`**** Dev server started at http://${config.listenAddress}:${config.port}/ *****`);
   return function(req, res, next) {
     res.setHeader('Cache-Control', 'no-cache,must-revalidate');
 
@@ -22,8 +23,8 @@ const StaticMiddlewareFactory = function(config) {
 
         console.log([
           (new Date()).toISOString(),
-          `[${response.statusCode}]`,
-          request.url
+          `[${res.statusCode}]`,
+          req.url
         ].join(' '));
       });
     }).resume();
@@ -95,7 +96,7 @@ module.exports = function(config) {
         name: '<%= moduleName %>Test',
         globals: testGlobals
       },
-      external: testGlobals,
+      external: Object.keys(testGlobals),
       plugins: [
         rollupPlugins.multiEntry,
         rollupPlugins.resolve,
