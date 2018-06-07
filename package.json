@@ -71,7 +71,6 @@
     "mkdirp": "^0.5.1",
     "node-static": "^0.7.10",
     "npm-run-all": "^4.1.2",
-    "portscanner": "^2.1.1",
     "postcss-banner": "^3.0.0",
     "postcss-cli": "^5.0.0",
     "postcss-import": "^11.1.0",

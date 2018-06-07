@@ -1,9 +1,33 @@
 const rollupPlugins = require('./primed-rollup-plugins');
+const nodeStatic = require('node-static');
+const path = require('path');
+const files = new nodeStatic.Server(path.join(__dirname, '..'), {cache: false});
 const testGlobals = {
   'qunit': 'QUnit',
   'qunitjs': 'QUnit',
   'sinon': 'sinon',
   'video.js': 'videojs'
+};
+
+const StaticMiddlewareFactory = function(config) {
+  console.log(`> Dev server started at http://${config.listenAddress}:${config.port}/`);
+  return function(req, res, next) {
+    res.setHeader('Cache-Control', 'no-cache,must-revalidate');
+
+    req.addListener('end', () => {
+      files.serve(req, res, (err) => {
+        if (err) {
+          next();
+        }
+
+        console.log([
+          (new Date()).toISOString(),
+          `[${response.statusCode}]`,
+          request.url
+        ].join(' '));
+      });
+    }).resume();
+  };
 };
 
 module.exports = function(config) {
@@ -51,7 +75,13 @@ module.exports = function(config) {
     },
     detectBrowsers,
     reporters: ['dots'],
-    port: 9876,
+    port: 9999,
+    urlRoot: '/test/',
+    plugins: [
+      {'middleware:static': ['factory', StaticMiddlewareFactory]},
+      'karma-*'
+    ],
+    middleware: ['static'],
     colors: true,
     autoWatch: false,
     singleRun: true,
