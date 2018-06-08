@@ -239,6 +239,7 @@ const packageJSON = (current, context) => {
       'postcss-cli',
       'postcss-banner',
       'postcss-import',
+      'postcss-preset-env',
       'autoprefixer',
       'cssnano'
     ]));

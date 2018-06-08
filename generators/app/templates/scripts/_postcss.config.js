@@ -58,16 +58,33 @@ const printOutput = postcss.plugin('postcss-print-output', function(opts) {
 module.exports = function(context) {
   return {
     plugins: [
-      require('postcss-banner')({important: true, inline: true, banner}),
+      // inlines local file imports
       require('postcss-import')(),
+
+      // allows you to use newer css features, by converting
+      // them into something browsers can support now.
+      // see https://preset-env.cssdb.org/features
+      // by default we use stage 2+
+      require('postcss-preset-env')({browsers: browserList}),
+
+      // adds a banner to the top of the file
+      require('postcss-banner')({important: true, inline: true, banner}),
+
+      // add/remove vendor prefixes based on browser list
       require('autoprefixer')(browserList),
+
+      // print and save the unminified output
       unminifiedOutput(),
+
+      // minify
       require('cssnano')({
         safe: true,
         preset: ['default', {
           autoprefixer: browserList
         }]
       }),
+
+      // print the minified output
       printOutput()
     ]
   };

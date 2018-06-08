@@ -180,7 +180,9 @@ describe('videojs-plugin:app', function() {
         'docs:api',
         'docs:toc',
         'prepush',
-        'build:lang'
+        'build:lang',
+        'watch:css',
+        'build:css'
       ]));
     });
 
