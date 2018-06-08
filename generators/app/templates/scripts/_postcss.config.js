@@ -58,7 +58,14 @@ module.exports = function(context) {
       // them into something browsers can support now.
       // see https://preset-env.cssdb.org/features
       // by default we use stage 3+
-      require('postcss-preset-env')({browsers: browsersList, stage: 2}),
+      require('postcss-preset-env')({
+        browsers: browsersList,
+        stage: 3,
+        features: {
+          'custom-environment-variables': true,
+          'nesting-rules': true
+        }
+      }),
 
       // adds a banner to the top of the file
       require('postcss-banner')({important: true, inline: true, banner}),
