@@ -4,15 +4,12 @@ const postcss = require('postcss');
 const path = require('path');
 const fs = require('fs');
 const browsersList = require('./browserslist');
-const {performance} = require('perf_hooks');
-const startTime = performance.now();
 
 const printOutput_ = function(from, to) {
   const relativeFrom = path.relative(process.cwd(), from);
   const relativeTo = path.relative(process.cwd(), to);
-  const timeTaken = Math.round(performance.now() - startTime);
 
-  console.log(`${relativeFrom} -> ${relativeTo} in ${timeTaken}ms`);
+  console.log(`${relativeFrom} -> ${relativeTo}`);
 };
 
 /**
