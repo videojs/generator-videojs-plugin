@@ -26,10 +26,10 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 const DEFAULTS = {
   dependencies: getGeneratorVersions(['global', 'video.js']),
   devDependencies: getGeneratorVersions([
+    'babel-core',
     'babel-plugin-external-helpers',
     'babel-plugin-transform-object-assign',
     'babel-preset-es2015',
-    'bannerize',
     'conventional-changelog-cli',
     'conventional-changelog-videojs',
     'in-publish',
@@ -53,7 +53,6 @@ const DEFAULTS = {
     'rollup-plugin-multi-entry',
     'rollup-plugin-node-resolve',
     'rollup-plugin-uglify',
-    'rollup-watch',
     'semver',
     'sinon',
     'uglify-es',
@@ -158,12 +157,12 @@ const packageJSON = (current, context) => {
       'prepublish': 'not-in-install && npm run build || in-install',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch --no-browsers',
-      'pretest': 'npm run all lint',
+      'pretest': 'npm run lint',
       'test': 'karma start scripts/karma.conf.js',
       'preversion': 'npm test',
       'version': 'node scripts/version.js',
       'watch': 'npm-run-all -p watch:*',
-      'watch:js': 'rollup -c scripts/rollup.config.js -w'
+      'watch:js': 'npm run build:js -- -w'
     }),
 
     // Always include the two minimum keywords with whatever exists in the
@@ -228,7 +227,7 @@ const packageJSON = (current, context) => {
   if (context.css) {
 
     _.assign(result.scripts, {
-      'build:css': 'postcss -o dist/videojs-test.css --config scripts/postcss.config.js src/plugin.css',
+      'build:css': scriptify('postcss --verbose -o dist/%s.css --config scripts/postcss.config.js src/plugin.css'),
       'watch:css': 'npm run build:css -- -w'
     });
 

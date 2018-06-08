@@ -4,8 +4,6 @@
 const plugins = require('./primed-rollup-plugins.js');
 const banner = require('./banner.js').comment;
 
-
-
 // to prevent a screen during rollup watch
 process.stderr.isTTY = false;
 
@@ -52,10 +50,17 @@ export default [{
 }, {
   // cjs and es
   input: 'src/plugin.js',
-  output: [
-    {file: 'dist/<%= pluginName %>.cjs.js', format: 'cjs', globals: moduleGlobals, banner},
-    {file: 'dist/<%= pluginName %>.es.js', format: 'es', globals: moduleGlobals, banner}
-  ],
+  output: [{
+    file: 'dist/<%= pluginName %>.cjs.js',
+    format: 'cjs',
+    globals: moduleGlobals,
+    banner
+  }, {
+    file: 'dist/<%= pluginName %>.es.js',
+    format: 'es',
+    globals: moduleGlobals,
+    banner
+  }],
   external: Object.keys(moduleGlobals)
     .concat(['global', 'global/window', 'global/document']),
   plugins: [plugins.json, plugins.babel]
