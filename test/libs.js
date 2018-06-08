@@ -3,7 +3,7 @@
 const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
-const assert = require('yeoman-generator').assert;
+const assert = require('yeoman-assert');
 
 // Files that are expected to exist in certain conditions.
 const FILES = {
@@ -109,7 +109,7 @@ const allAreNonEmpty = function(obj, checks) {
   checks.forEach(key => {
     const s = obj[key];
 
-    assert.ok(
+    assert(
       typeof s === 'string' && (/\S/).test(s),
       `"${key}" was a non-empty string`
     );
