@@ -157,7 +157,7 @@ const packageJSON = (current, context) => {
       'prepublish': 'not-in-install && npm run build || in-install',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch --no-browsers',
-      'pretest': 'npm run lint',
+      'pretest': 'npm-run-all lint',
       'test': 'karma start scripts/karma.conf.js',
       'preversion': 'npm test',
       'version': 'node scripts/version.js',
@@ -225,6 +225,7 @@ const packageJSON = (current, context) => {
   }
 
   if (context.css) {
+    result.scripts.pretest += ' postclean build:css';
 
     _.assign(result.scripts, {
       'build:css': scriptify('postcss --verbose -o dist/%s.css --config scripts/postcss.config.js src/plugin.css'),
@@ -250,6 +251,12 @@ const packageJSON = (current, context) => {
   // here because the videojs-languages package will create the destination
   // directory if needed.
   if (context.lang) {
+    if (!context.docs) {
+      result.scripts.pretest += ' postclean';
+
+    }
+
+    result.scripts.pretest += ' build:lang';
     result.scripts['build:lang'] = 'vjslang --dir dist/lang';
     _.assign(result.devDependencies, getGeneratorVersions(['videojs-languages']));
   }

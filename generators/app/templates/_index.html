@@ -20,7 +20,7 @@
   <script>
     (function(window, videojs) {
       var player = window.player = videojs('<%= pluginName %>-player');
-      player.<%= pluginFunctionName %>();
+      var <%= pluginFunctionName %> = window.<%= pluginFunctionName %> = player.<%= pluginFunctionName %>();
     }(window, window.videojs));
   </script>
 </body>
