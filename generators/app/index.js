@@ -219,7 +219,8 @@ module.exports = yeoman.generators.Base.extend({
       '_.nvmrc',
       'scripts/_banner.js',
       'scripts/_version.js',
-      'scripts/_primed-rollup-plugins.js'
+      'scripts/_primed-rollup-plugins.js',
+      'scripts/_browserslist.js'
     ];
 
     this._templatesToCopy = [

@@ -180,8 +180,15 @@ describe('videojs-plugin:app', function() {
         'docs:api',
         'docs:toc',
         'prepush',
-        'build:lang'
+        'build:lang',
+        'watch:css',
+        'build:css'
       ]));
+    });
+
+    it('lint works', function() {
+      libs.allAreNonEmpty(this.pkg.dependencies, Object.keys(this.pkg.dependencies));
+      libs.allAreNonEmpty(this.pkg.devDependencies, Object.keys(this.pkg.devDependencies));
     });
 
     it('does not have empty versions', function() {

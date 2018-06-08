@@ -5,13 +5,14 @@ const multiEntry = require('rollup-plugin-multi-entry');
 const resolve = require('rollup-plugin-node-resolve');
 const {uglify} = require('rollup-plugin-uglify');
 const {minify} = require('uglify-es');
+const browsersList = require('./browserslist');
 
 module.exports = {
   babel: babel({
     babelrc: false,
     exclude: 'node_modules/**',
     presets: [
-      ['es2015', {loose: true, modules: false}]
+      ['env', {loose: true, modules: false, targets: {browsers: browsersList}}]
     ],
     plugins: [
       'external-helpers',

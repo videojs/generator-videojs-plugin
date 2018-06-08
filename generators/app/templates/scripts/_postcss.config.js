@@ -3,20 +3,13 @@ const banner = require('./banner').string;
 const postcss = require('postcss');
 const path = require('path');
 const fs = require('fs');
-const {performance} = require('perf_hooks');
-const startTime = performance.now();
-
-// default is: > 0.5%, last 2 versions, Firefox ESR, not dead
-// we add on ie 11 since we still support that.
-// see https://github.com/browserslist/browserslist for more info
-const browserList = ['defaults', 'ie 11'];
+const browsersList = require('./browserslist');
 
 const printOutput_ = function(from, to) {
   const relativeFrom = path.relative(process.cwd(), from);
   const relativeTo = path.relative(process.cwd(), to);
-  const timeTaken = Math.round(performance.now() - startTime);
 
-  console.log(`${relativeFrom} -> ${relativeTo} in ${timeTaken}ms`);
+  console.log(`${relativeFrom} -> ${relativeTo}`);
 };
 
 /**
@@ -58,16 +51,40 @@ const printOutput = postcss.plugin('postcss-print-output', function(opts) {
 module.exports = function(context) {
   return {
     plugins: [
-      require('postcss-banner')({important: true, inline: true, banner}),
+      // inlines local file imports
       require('postcss-import')(),
-      require('autoprefixer')(browserList),
+
+      // allows you to use newer css features, by converting
+      // them into something browsers can support now.
+      // see https://preset-env.cssdb.org/features
+      // by default we use stage 3+
+      require('postcss-preset-env')({
+        browsers: browsersList,
+        stage: 3,
+        features: {
+          'custom-environment-variables': true,
+          'nesting-rules': true
+        }
+      }),
+
+      // adds a banner to the top of the file
+      require('postcss-banner')({important: true, inline: true, banner}),
+
+      // add/remove vendor prefixes based on browser list
+      require('autoprefixer')(browsersList),
+
+      // print and save the unminified output
       unminifiedOutput(),
+
+      // minify
       require('cssnano')({
         safe: true,
         preset: ['default', {
-          autoprefixer: browserList
+          autoprefixer: browsersList
         }]
       }),
+
+      // print the minified output
       printOutput()
     ]
   };
