@@ -199,7 +199,8 @@ describe('videojs-plugin:app', function() {
     it('(generator) has no extra optional deps', function() {
       const optionalPackages = Object.keys(generatorPkg.optionalDependencies);
       const packages = Object.keys(this.pkg.dependencies)
-        .concat(Object.keys(this.pkg.devDependencies));
+        .concat(Object.keys(this.pkg.devDependencies))
+        .concat(Object.keys(this.pkg.peerDependencies));
       let i = optionalPackages.length;
 
       while (i--) {

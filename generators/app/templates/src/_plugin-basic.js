@@ -41,7 +41,7 @@ const <%= pluginFunctionName %> = function(options) {
 };
 
 // Register the plugin with video.js.
-videojs.registerPlugin('<%= functionName %>', <%= functionName %>);
+videojs.registerPlugin('<%= pluginFunctionName %>', <%= pluginFunctionName %>);
 
 // Include the version number.
 <%= pluginFunctionName %>.VERSION = VERSION;
