@@ -3,13 +3,9 @@ const banner = require('./banner').string;
 const postcss = require('postcss');
 const path = require('path');
 const fs = require('fs');
+const browsersList = require('./browserslist');
 const {performance} = require('perf_hooks');
 const startTime = performance.now();
-
-// default is: > 0.5%, last 2 versions, Firefox ESR, not dead
-// we add on ie 11 since we still support that.
-// see https://github.com/browserslist/browserslist for more info
-const browserList = ['defaults', 'ie 11'];
 
 const printOutput_ = function(from, to) {
   const relativeFrom = path.relative(process.cwd(), from);
@@ -64,14 +60,14 @@ module.exports = function(context) {
       // allows you to use newer css features, by converting
       // them into something browsers can support now.
       // see https://preset-env.cssdb.org/features
-      // by default we use stage 2+
-      require('postcss-preset-env')({browsers: browserList}),
+      // by default we use stage 3+
+      require('postcss-preset-env')({browsers: browsersList, stage: 2}),
 
       // adds a banner to the top of the file
       require('postcss-banner')({important: true, inline: true, banner}),
 
       // add/remove vendor prefixes based on browser list
-      require('autoprefixer')(browserList),
+      require('autoprefixer')(browsersList),
 
       // print and save the unminified output
       unminifiedOutput(),
@@ -80,7 +76,7 @@ module.exports = function(context) {
       require('cssnano')({
         safe: true,
         preset: ['default', {
-          autoprefixer: browserList
+          autoprefixer: browsersList
         }]
       }),
 

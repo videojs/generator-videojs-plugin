@@ -29,7 +29,7 @@ const DEFAULTS = {
     'babel-core',
     'babel-plugin-external-helpers',
     'babel-plugin-transform-object-assign',
-    'babel-preset-es2015',
+    'babel-preset-env',
     'conventional-changelog-cli',
     'conventional-changelog-videojs',
     'in-publish',

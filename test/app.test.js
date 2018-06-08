@@ -7,6 +7,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const assert = require('yeoman-generator').assert;
 const helpers = require('yeoman-generator').test;
+const {execSync} = require('child_process');
 
 const libs = require('./libs');
 const packageJSON = require('../generators/app/package-json');
@@ -184,6 +185,27 @@ describe('videojs-plugin:app', function() {
         'watch:css',
         'build:css'
       ]));
+    });
+
+    it('build works', function() {
+
+      execSync('npm run build', {cwd});
+
+      // verify that css, js, and lang files were created
+
+    });
+
+    it('lint works', function() {
+      execSync('npm run lint', {cwd});
+    });
+
+    it('test works', function() {
+      execSync('npm run lint', {cwd});
+    });
+
+    it('lint works', function() {
+      libs.allAreNonEmpty(this.pkg.dependencies, Object.keys(this.pkg.dependencies));
+      libs.allAreNonEmpty(this.pkg.devDependencies, Object.keys(this.pkg.devDependencies));
     });
 
     it('does not have empty versions', function() {
