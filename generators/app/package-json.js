@@ -24,8 +24,10 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 }, {});
 
 const DEFAULTS = {
-  dependencies: getGeneratorVersions(['global', 'video.js']),
+  dependencies: getGeneratorVersions(['global']),
+  peerDependencies: getGeneratorVersions(['video.js']),
   devDependencies: getGeneratorVersions([
+    'video.js',
     'babel-core',
     'babel-plugin-external-helpers',
     'babel-plugin-transform-object-assign',
@@ -190,12 +192,8 @@ const packageJSON = (current, context) => {
     ],
 
     'dependencies': _.assign({}, current.dependencies, DEFAULTS.dependencies),
-
-    'devDependencies': _.assign(
-      {},
-      current.devDependencies,
-      DEFAULTS.devDependencies
-    )
+    'peerDependencies': _.assign({}, current.peerDependencies, DEFAULTS.peerDependencies),
+    'devDependencies': _.assign({}, current.devDependencies, DEFAULTS.devDependencies)
   });
 
   // In case husky was previously installed, but is now "none", we can
@@ -265,6 +263,7 @@ const packageJSON = (current, context) => {
   result.scripts = alphabetizeScripts(result.scripts);
   result.dependencies = alphabetizeObject(result.dependencies);
   result.devDependencies = alphabetizeObject(result.devDependencies);
+  result.peerDependencies = alphabetizeObject(result.peerDependencies);
 
   return result;
 };
