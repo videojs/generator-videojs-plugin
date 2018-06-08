@@ -5,13 +5,13 @@ const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 const tsmlj = require('tsmlj');
-const yeoman = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 const constants = require('./constants');
 const naming = require('./naming');
 const packageJSON = require('./package-json');
 const validators = require('./validators');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = class extends Generator {
 
   /**
    * Whether or not this plugin is privately licensed.
@@ -21,7 +21,7 @@ module.exports = yeoman.generators.Base.extend({
    */
   _isPrivate() {
     return this.config.get('license') === 'private';
-  },
+  }
 
   /**
    * Removes the leading underscore from a template file name and
@@ -48,7 +48,7 @@ module.exports = yeoman.generators.Base.extend({
     }
 
     return this.destinationPath(destname);
-  },
+  }
 
   /**
    * Attempts to get default values for prompts. Async because it may call
@@ -99,7 +99,7 @@ module.exports = yeoman.generators.Base.extend({
     }
 
     return defaults;
-  },
+  }
 
   /**
    * Gets prompts for the user.
@@ -170,7 +170,7 @@ module.exports = yeoman.generators.Base.extend({
     }];
 
     return prompts.filter(p => !_.includes(this._promptsToFilter, p.name));
-  },
+  }
 
   /**
    * Generates a context object used for providing data to EJS file templates.
@@ -195,21 +195,9 @@ module.exports = yeoman.generators.Base.extend({
       pluginName: naming.getPackageName(configs.name),
       version: this._currentPkgJSON && this._currentPkgJSON.version || '0.0.0'
     });
-  },
+  }
 
-  constructor: function() { // eslint-disable-line
-    yeoman.generators.Base.apply(this, arguments);
-
-    this.option('skip-prompt', {
-      type: 'boolean',
-      defaults: false
-    });
-
-    this.option('hurry', {
-      type: 'boolean',
-      defaults: false
-    });
-
+  initializing() {
     this._currentPkgJSON = this.fs.readJSON(this.destinationPath('package.json'), null);
 
     this._filesToCopy = [
@@ -247,7 +235,7 @@ module.exports = yeoman.generators.Base.extend({
       this._promptsToFilter.push('author');
       this._preconfigs.author = this._currentPkgJSON.author;
     }
-  },
+  }
 
   /**
    * Display prompts to the user.
@@ -259,13 +247,10 @@ module.exports = yeoman.generators.Base.extend({
 
     this.log(`Welcome to the ${chalk.green('Video.js')} plugin generator!`);
 
-    const done = this.async();
-
-    this.prompt(this._getPrompts(), (responses) => {
+    return this.prompt(this._getPrompts()).then((responses) => {
       _.assign(this._preconfigs, responses);
-      done();
     });
-  },
+  }
 
   /**
    * Store configs, generate template rendering context, alter the setup for
@@ -293,83 +278,54 @@ module.exports = yeoman.generators.Base.extend({
       this._templatesToCopy.push('src/_plugin.css');
       this._templatesToCopy.push('scripts/_postcss.config.js');
     }
-  },
+  }
 
   /**
    * Perform various writing tasks.
    *
    * @property {Object} writing
    */
-  writing: {
-
-    /**
-     * Initializes a CHANGELOG.md file if one does not exist.
-     *
-     * @function changelog
-     */
-    changelog() {
-      try {
-        fs.statSync(this._dest('CHANGELOG.md'));
-      } catch (x) {
-        this.fs.copy(this.templatePath('_CHANGELOG.md'), this._dest('CHANGELOG.md'));
-      }
-    },
-
-    /**
-     * Writes common files.
-     *
-     * @function common
-     */
-    common() {
-      this.fs.copyTpl(
-        this.templatePath(`src/_plugin-${this.context.pluginType}.js`),
-        this._dest('src/_plugin.js'),
-        this.context
-      );
-
-      this._templatesToCopy.forEach(src => {
-        this.fs.copyTpl(this.templatePath(src), this._dest(src), this.context);
-      });
-
-      this._filesToCopy.forEach(src => {
-        this.fs.copy(this.templatePath(src), this._dest(src));
-      });
-    },
-
-    /**
-     * Writes the LICENSE file based on the chosen license.
-     *
-     * @function license
-     */
-    license() {
-      const file = constants.LICENSE_FILES[this.config.get('license')];
-
-      if (!file) {
-        return;
-      }
-
-      this.fs.copyTpl(
-        this.templatePath(file),
-        this.destinationPath('LICENSE'),
-        this.context
-      );
-    },
-
-    /**
-     * Writes/updates the package.json file.
-     *
-     * @function package
-     */
-    packageJSON() {
-      const json = packageJSON(this._currentPkgJSON, this.context);
-
-      // We want to use normal JSON.stringify here because we want to
-      // preserve whatever ordering existed in the _currentPkgJSON object.
-      const contents = JSON.stringify(json, null, 2);
-
-      this.fs.write(this.destinationPath('package.json'), contents);
+  writing() {
+    try {
+      fs.statSync(this._dest('CHANGELOG.md'));
+    } catch (x) {
+      this.fs.copy(this.templatePath('_CHANGELOG.md'), this._dest('CHANGELOG.md'));
     }
-  },
+
+    this.fs.copyTpl(
+      this.templatePath(`src/_plugin-${this.context.pluginType}.js`),
+      this._dest('src/_plugin.js'),
+      this.context
+    );
+
+    this._templatesToCopy.forEach(src => {
+      this.fs.copyTpl(this.templatePath(src), this._dest(src), this.context);
+    });
+
+    this._filesToCopy.forEach(src => {
+      this.fs.copy(this.templatePath(src), this._dest(src));
+    });
+
+    const file = constants.LICENSE_FILES[this.config.get('license')];
+
+    if (!file) {
+      return;
+    }
+
+    this.fs.copyTpl(
+      this.templatePath(file),
+      this.destinationPath('LICENSE'),
+      this.context
+    );
+
+    const json = packageJSON(this._currentPkgJSON, this.context);
+
+    // We want to use normal JSON.stringify here because we want to
+    // preserve whatever ordering existed in the _currentPkgJSON object.
+    const contents = JSON.stringify(json, null, 2);
+
+    this.fs.write(this.destinationPath('package.json'), contents);
+  }
 
   /**
    * Install npm dependencies; we don't have any Bower dependencies; so,
@@ -377,7 +333,7 @@ module.exports = yeoman.generators.Base.extend({
    */
   install() {
     this.npmInstall();
-  },
+  }
 
   /**
    * Display a final message to the user.
@@ -389,4 +345,4 @@ module.exports = yeoman.generators.Base.extend({
 
     this.log(`All done; ${chalk.green(this.context.pluginName)} is ready to go!`);
   }
-});
+};

@@ -5,8 +5,8 @@
 const _ = require('lodash');
 const fs = require('fs-extra');
 const path = require('path');
-const assert = require('yeoman-generator').assert;
-const helpers = require('yeoman-generator').test;
+const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
 
 const libs = require('./libs');
 const packageJSON = require('../generators/app/package-json');
@@ -48,11 +48,11 @@ describe('videojs-plugin:app', function() {
       assert.strictEqual(p.version, '0.0.0');
       assert.strictEqual(p.main, 'dist/videojs-wat.cjs.js');
       assert.strictEqual(p.module, 'dist/videojs-wat.es.js');
-      assert.ok(_.isArray(p.keywords));
-      assert.ok(_.isPlainObject(p.vjsstandard));
-      assert.ok(_.isPlainObject(p.devDependencies));
+      assert(_.isArray(p.keywords));
+      assert(_.isPlainObject(p.vjsstandard));
+      assert(_.isPlainObject(p.devDependencies));
       assert.strictEqual(p.scripts.prepush, 'npm run lint');
-      assert.ok(_.isPlainObject(p['generator-videojs-plugin']));
+      assert(_.isPlainObject(p['generator-videojs-plugin']));
       assert.strictEqual(p['generator-videojs-plugin'].version, generatorVersion());
     });
 
@@ -94,11 +94,11 @@ describe('videojs-plugin:app', function() {
       assert.strictEqual(p.version, '0.0.0');
       assert.strictEqual(p.main, 'dist/videojs-wat.cjs.js');
       assert.strictEqual(p.module, 'dist/videojs-wat.es.js');
-      assert.ok(_.isArray(p.keywords));
-      assert.ok(_.isPlainObject(p.vjsstandard));
-      assert.ok(_.isPlainObject(p.devDependencies));
+      assert(_.isArray(p.keywords));
+      assert(_.isPlainObject(p.vjsstandard));
+      assert(_.isPlainObject(p.devDependencies));
       assert.strictEqual(p.scripts.prepush, 'npm run lint');
-      assert.ok(_.isPlainObject(p['generator-videojs-plugin']));
+      assert(_.isPlainObject(p['generator-videojs-plugin']));
       assert.strictEqual(p['generator-videojs-plugin'].version, generatorVersion());
     });
 
@@ -258,7 +258,7 @@ describe('videojs-plugin:app', function() {
     it('does not change the value of the author field', function() {
       const author = this.pkg.author;
 
-      assert.ok(_.isPlainObject(author), 'the author is still an object');
+      assert(_.isPlainObject(author), 'the author is still an object');
 
       assert.strictEqual(
         author.name,
@@ -288,7 +288,7 @@ describe('videojs-plugin:app', function() {
     });
 
     it('does not cause a failure', function() {
-      assert.ok(_.isPlainObject(this.pkg));
+      assert(_.isPlainObject(this.pkg));
       assert.strictEqual(this.pkg.scripts.prepush, undefined);
     });
   });
