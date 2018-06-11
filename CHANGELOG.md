@@ -1,3 +1,34 @@
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v5.2.1...v6.0.0) (2018-06-11)
+
+### Features
+
+* **BREAKING:** generated projects can no longer support IE8 out of the box. (#151) ([6669baa](https://github.com/videojs/generator-videojs-plugin/commit/6669baa)), closes [#151](https://github.com/videojs/generator-videojs-plugin/issues/151)
+* **BREAKING:** Remove Sass support option. (#152) ([eab6398](https://github.com/videojs/generator-videojs-plugin/commit/eab6398)), closes [#152](https://github.com/videojs/generator-videojs-plugin/issues/152)
+* add generator deps as optional so they stay up to date (#165) ([815f15e](https://github.com/videojs/generator-videojs-plugin/commit/815f15e)), closes [#165](https://github.com/videojs/generator-videojs-plugin/issues/165)
+* Allow choosing a basic or advanced plugin. (#154) ([2881848](https://github.com/videojs/generator-videojs-plugin/commit/2881848)), closes [#154](https://github.com/videojs/generator-videojs-plugin/issues/154)
+* css support through postcss (#172) ([6664523](https://github.com/videojs/generator-videojs-plugin/commit/6664523)), closes [#172](https://github.com/videojs/generator-videojs-plugin/issues/172)
+* update karma-qunit and switch to qunit pkg (#160) ([7c8f3dd](https://github.com/videojs/generator-videojs-plugin/commit/7c8f3dd)), closes [#160](https://github.com/videojs/generator-videojs-plugin/issues/160)
+* use browserslist through babel-preset-env and postcss-preset-env (#176) ([0eef1b8](https://github.com/videojs/generator-videojs-plugin/commit/0eef1b8)), closes [#176](https://github.com/videojs/generator-videojs-plugin/issues/176)
+* use karma server as dev server (#168) ([4afd6c2](https://github.com/videojs/generator-videojs-plugin/commit/4afd6c2)), closes [#168](https://github.com/videojs/generator-videojs-plugin/issues/168)
+
+### Bug Fixes
+
+* add videojs-languages to optional add add a test (#170) ([4b991e5](https://github.com/videojs/generator-videojs-plugin/commit/4b991e5)), closes [#170](https://github.com/videojs/generator-videojs-plugin/issues/170)
+* always build css and lang before test ([2de0a9c](https://github.com/videojs/generator-videojs-plugin/commit/2de0a9c))
+
+### Chores
+
+* **BREAKING:** Only support node 8+ as dependencies now require it (#169) ([d0feb26](https://github.com/videojs/generator-videojs-plugin/commit/d0feb26)), closes [#169](https://github.com/videojs/generator-videojs-plugin/issues/169)
+* move jsdoc and karma config (#171) ([aadaae7](https://github.com/videojs/generator-videojs-plugin/commit/aadaae7)), closes [#171](https://github.com/videojs/generator-videojs-plugin/issues/171)
+* update video.js ([c350310](https://github.com/videojs/generator-videojs-plugin/commit/c350310))
+* **package:** add 6.x back to video.js version ([77fc224](https://github.com/videojs/generator-videojs-plugin/commit/77fc224))
+* **package:** update yeoman-generator (#177) ([bcc36ce](https://github.com/videojs/generator-videojs-plugin/commit/bcc36ce)), closes [#177](https://github.com/videojs/generator-videojs-plugin/issues/177)
+
+### Code Refactoring
+
+* A single rollup config, and let karma rollup during run (#155) ([d3c6ba1](https://github.com/videojs/generator-videojs-plugin/commit/d3c6ba1)), closes [#155](https://github.com/videojs/generator-videojs-plugin/issues/155)
+
 <a name="5.2.1"></a>
 ## [5.2.1](https://github.com/videojs/generator-videojs-plugin/compare/v5.2.0...v5.2.1) (2018-02-03)
 
