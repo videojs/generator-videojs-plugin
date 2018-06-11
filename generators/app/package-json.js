@@ -225,7 +225,7 @@ const packageJSON = (current, context) => {
   }
 
   if (context.css) {
-    result.scripts.pretest += ' postclean build:css';
+    result.scripts.pretest += ' clean build:css';
 
     _.assign(result.scripts, {
       'build:css': scriptify('postcss --verbose -o dist/%s.css --config scripts/postcss.config.js src/plugin.css'),
