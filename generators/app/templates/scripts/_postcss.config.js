@@ -2,39 +2,7 @@
 const banner = require('./banner').string;
 const postcss = require('postcss');
 const path = require('path');
-const fs = require('fs');
 const browsersList = require('./browserslist');
-
-const printOutput_ = function(from, to) {
-  const relativeFrom = path.relative(process.cwd(), from);
-  const relativeTo = path.relative(process.cwd(), to);
-
-  console.log(`${relativeFrom} -> ${relativeTo}`);
-};
-
-/**
- * A postcss plugin that should be run before minification plugins.
- * it will write to the `to` from the command line with the current
- * output. Then it will change the extension of the `to` from
- * whatever it is to `.min.css`
- */
-const unminifiedOutput = postcss.plugin('postcss-unminified-output', function(opts) {
-  opts = opts || {};
-
-  return function(root, result) {
-    const dist = result.opts.to;
-
-    fs.writeFile(dist, root.toString(), function(err) {
-      if (err) {
-        throw new Error(err);
-      }
-
-      printOutput_(result.opts.from, dist);
-    });
-
-    result.opts.to = result.opts.to.replace(path.extname(result.opts.to), '.min.css');
-  };
-});
 
 /**
  * by default there is no way to print that file was written
@@ -44,7 +12,10 @@ const printOutput = postcss.plugin('postcss-print-output', function(opts) {
   opts = opts || {};
 
   return function(root, results) {
-    printOutput_(results.opts.from, results.opts.to);
+    const relativeFrom = path.relative(process.cwd(), results.opts.from);
+    const relativeTo = path.relative(process.cwd(), results.opts.to);
+
+    console.log(`${relativeFrom} -> ${relativeTo}`);
   };
 });
 
@@ -73,9 +44,6 @@ module.exports = function(context) {
       // add/remove vendor prefixes based on browser list
       require('autoprefixer')(browsersList),
 
-      // print and save the unminified output
-      unminifiedOutput(),
-
       // minify
       require('cssnano')({
         safe: true,
@@ -84,7 +52,6 @@ module.exports = function(context) {
         }]
       }),
 
-      // print the minified output
       printOutput()
     ]
   };
