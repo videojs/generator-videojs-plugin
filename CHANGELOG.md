@@ -1,3 +1,12 @@
+<a name="6.0.2"></a>
+## [6.0.2](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.1...v6.0.2) (2018-06-11)
+
+### Bug Fixes
+
+* only uglify during build ([38e9f52](https://github.com/videojs/generator-videojs-plugin/commit/38e9f52))
+* switch to serve-static as its more stable ([462a36d](https://github.com/videojs/generator-videojs-plugin/commit/462a36d))
+* unintended breaking change, there is no .min.css ([117cf63](https://github.com/videojs/generator-videojs-plugin/commit/117cf63))
+
 <a name="6.0.1"></a>
 ## [6.0.1](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.0...v6.0.1) (2018-06-11)
 
