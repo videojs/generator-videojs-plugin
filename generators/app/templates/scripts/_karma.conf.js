@@ -1,33 +1,23 @@
 /* eslint-disable no-console */
 const rollupPlugins = require('./primed-rollup-plugins');
-const nodeStatic = require('node-static');
+const nodeStatic = require('serve-static');
 const path = require('path');
-const files = new nodeStatic.Server(path.join(__dirname, '..'), {cache: false});
+const serve = serveStatic(path.join(__dirname, '..'), {index: ['index.html', 'index.htm']});
 const testGlobals = {
   'qunit': 'QUnit',
   'qunitjs': 'QUnit',
   'sinon': 'sinon',
   'video.js': 'videojs'
 };
+const testExternals = Object.keys(testGlobals).concat([
+]);
 
 const StaticMiddlewareFactory = function(config) {
   console.log(`**** Dev server started at http://${config.listenAddress}:${config.port}/ *****`);
+
   return function(req, res, next) {
     res.setHeader('Cache-Control', 'no-cache,must-revalidate');
-
-    req.addListener('end', () => {
-      files.serve(req, res, (err) => {
-        if (err) {
-          next();
-        }
-
-        console.log([
-          (new Date()).toISOString(),
-          `[${res.statusCode}]`,
-          req.url
-        ].join(' '));
-      });
-    }).resume();
+    return serve(req, res, next);
   };
 };
 
@@ -96,7 +86,7 @@ module.exports = function(config) {
         name: '<%= moduleName %>Test',
         globals: testGlobals
       },
-      external: Object.keys(testGlobals),
+      external: testExternals,
       plugins: [
         rollupPlugins.multiEntry,
         rollupPlugins.resolve,

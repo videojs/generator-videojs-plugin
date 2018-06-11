@@ -42,7 +42,7 @@ const DEFAULTS = {
     'karma-safari-launcher',
     'karma-rollup-preprocessor',
     'mkdirp',
-    'node-static',
+    'serve-static',
     'npm-run-all',
     'qunit',
     'rimraf',
