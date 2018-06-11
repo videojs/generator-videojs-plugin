@@ -1,3 +1,10 @@
+<a name="6.0.3"></a>
+## [6.0.3](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.2...v6.0.3) (2018-06-11)
+
+### Bug Fixes
+
+* copy/paste issues ([c8cb015](https://github.com/videojs/generator-videojs-plugin/commit/c8cb015))
+
 <a name="6.0.2"></a>
 ## [6.0.2](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.1...v6.0.2) (2018-06-11)
 
