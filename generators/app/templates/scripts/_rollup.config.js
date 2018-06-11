@@ -39,7 +39,6 @@ const builds = [{
   plugins: [
     plugins.resolve,
     plugins.json,
-    plugins.replace,
     plugins.commonjs,
     plugins.babel
   ]
@@ -55,14 +54,11 @@ const builds = [{
   external: Object.keys(moduleGlobals).concat([
     'global',
     'global/document',
-    'global/window',
-    'three',
-    'webvr-boilerplate'
+    'global/window'
   ]),
   plugins: [
     plugins.resolve,
     plugins.json,
-    plugins.replace,
     plugins.commonjs,
     plugins.babel
   ]
@@ -78,14 +74,11 @@ const builds = [{
   external: Object.keys(moduleGlobals).concat([
     'global',
     'global/document',
-    'global/window',
-    'three',
-    'webvr-boilerplate'
+    'global/window'
   ]),
   plugins: [
     plugins.resolve,
     plugins.json,
-    plugins.replace,
     plugins.commonjs
   ]
 }];
@@ -105,7 +98,6 @@ if (!isWatch) {
     plugins: [
       plugins.resolve,
       plugins.json,
-      plugins.replace,
       plugins.commonjs,
       plugins.uglify,
       plugins.babel

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 const rollupPlugins = require('./primed-rollup-plugins');
-const nodeStatic = require('serve-static');
+const serveStatic = require('serve-static');
 const path = require('path');
 const serve = serveStatic(path.join(__dirname, '..'), {index: ['index.html', 'index.htm']});
 const testGlobals = {
