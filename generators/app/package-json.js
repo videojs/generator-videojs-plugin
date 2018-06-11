@@ -8,14 +8,14 @@ pkg.optionalDependencies = pkg.optionalDependencies || {};
 pkg.devDependencies = pkg.devDependencies || {};
 
 const getGeneratorVersion = (pkgName) =>
-  pkg.optionalDependencies[pkgName] || pkg.devDependencies[pkgName];
+  pkg.optionalDependencies[pkgName] || pkg.devDependencies[pkgName] || pkg.dependencies[pkgName];
 
 const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
   const version = getGeneratorVersion(pkgName);
 
   if (!version) {
     throw new Error(
-      `Error ${pkgName} is not in optional/devdependencies for generator-videojs-plugin`
+      `Error ${pkgName} is not in dependencies for generator-videojs-plugin`
     );
   }
 
