@@ -87,7 +87,7 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^4.0.0",
     "semver": "^5.4.1",
-    "sinon": "^5.1.0",
+    "sinon": "^6.0.0",
     "uglify-es": "^3.3.9",
     "video.js": "6.10.2 || ^7.0.3",
     "videojs-languages": "^1.0.0"
