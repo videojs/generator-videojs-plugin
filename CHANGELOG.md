@@ -1,3 +1,11 @@
+<a name="6.0.1"></a>
+## [6.0.1](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.0...v6.0.1) (2018-06-11)
+
+### Bug Fixes
+
+* remove deps from optional ([21a93b8](https://github.com/videojs/generator-videojs-plugin/commit/21a93b8))
+* small script fix, support greenkeeper lock on travis (#180) ([6fcb9e6](https://github.com/videojs/generator-videojs-plugin/commit/6fcb9e6)), closes [#180](https://github.com/videojs/generator-videojs-plugin/issues/180)
+
 <a name="6.0.0"></a>
 # [6.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v5.2.1...v6.0.0) (2018-06-11)
 
