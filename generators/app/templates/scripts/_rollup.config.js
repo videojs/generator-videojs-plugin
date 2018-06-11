@@ -4,8 +4,16 @@
 const plugins = require('./primed-rollup-plugins.js');
 const banner = require('./banner.js').comment;
 
-// to prevent a screen during rollup watch
+// to prevent a screen during rollup watch/build
 process.stderr.isTTY = false;
+
+let isWatch = false;
+
+process.argv.forEach((a) => {
+  if ((/-w|--watch/).test(a)) {
+    isWatch = true;
+  }
+});
 
 const umdGlobals = {
   'video.js': 'videojs',
@@ -17,7 +25,7 @@ const moduleGlobals = {
   'video.js': 'videojs'
 };
 
-export default [{
+const builds = [{
   // umd
   input: 'src/plugin.js',
   output: {
@@ -28,40 +36,81 @@ export default [{
     banner
   },
   external: Object.keys(umdGlobals),
-  plugins: [plugins.resolve, plugins.json, plugins.commonjs, plugins.babel]
-}, {
-  // minified umd
-  input: 'src/plugin.js',
-  output: {
-    name: '<%= moduleName %>',
-    file: 'dist/<%= pluginName %>.min.js',
-    format: 'umd',
-    globals: umdGlobals,
-    banner
-  },
-  external: Object.keys(umdGlobals),
   plugins: [
     plugins.resolve,
     plugins.json,
+    plugins.replace,
     plugins.commonjs,
-    plugins.uglify,
     plugins.babel
   ]
 }, {
-  // cjs and es
+  // cjs
   input: 'src/plugin.js',
   output: [{
     file: 'dist/<%= pluginName %>.cjs.js',
     format: 'cjs',
     globals: moduleGlobals,
     banner
-  }, {
+  }],
+  external: Object.keys(moduleGlobals).concat([
+    'global',
+    'global/document',
+    'global/window',
+    'three',
+    'webvr-boilerplate'
+  ]),
+  plugins: [
+    plugins.resolve,
+    plugins.json,
+    plugins.replace,
+    plugins.commonjs,
+    plugins.babel
+  ]
+}, {
+  // es
+  input: 'src/plugin.js',
+  output: [{
     file: 'dist/<%= pluginName %>.es.js',
     format: 'es',
     globals: moduleGlobals,
     banner
   }],
-  external: Object.keys(moduleGlobals)
-    .concat(['global', 'global/window', 'global/document']),
-  plugins: [plugins.json, plugins.babel]
+  external: Object.keys(moduleGlobals).concat([
+    'global',
+    'global/document',
+    'global/window',
+    'three',
+    'webvr-boilerplate'
+  ]),
+  plugins: [
+    plugins.resolve,
+    plugins.json,
+    plugins.replace,
+    plugins.commonjs
+  ]
 }];
+
+if (!isWatch) {
+  builds.push({
+    // minified umd
+    input: 'src/plugin.js',
+    output: {
+      name: '<%= moduleName %>',
+      file: 'dist/<%= pluginName %>.min.js',
+      format: 'umd',
+      globals: umdGlobals,
+      banner
+    },
+    external: Object.keys(umdGlobals),
+    plugins: [
+      plugins.resolve,
+      plugins.json,
+      plugins.replace,
+      plugins.commonjs,
+      plugins.uglify,
+      plugins.babel
+    ]
+  });
+}
+
+export default builds;
