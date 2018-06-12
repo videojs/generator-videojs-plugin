@@ -1,3 +1,10 @@
+<a name="6.0.6"></a>
+## [6.0.6](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.5...v6.0.6) (2018-06-12)
+
+### Bug Fixes
+
+* test files are not watched ([9aea64e](https://github.com/videojs/generator-videojs-plugin/commit/9aea64e))
+
 <a name="6.0.5"></a>
 ## [6.0.5](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.4...v6.0.5) (2018-06-12)
 
