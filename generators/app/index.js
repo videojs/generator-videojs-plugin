@@ -205,10 +205,7 @@ module.exports = class extends Generator {
       '_.gitignore',
       '_.npmignore',
       '_.nvmrc',
-      'scripts/_banner.js',
-      'scripts/_version.js',
-      'scripts/_primed-rollup-plugins.js',
-      'scripts/_browserslist.js'
+      'scripts/_version.js'
     ];
 
     this._templatesToCopy = [

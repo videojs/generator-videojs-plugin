@@ -40,7 +40,6 @@ const DEFAULTS = {
     'karma-ie-launcher',
     'karma-qunit',
     'karma-safari-launcher',
-    'karma-rollup-preprocessor',
     'mkdirp',
     'serve-static',
     'npm-run-all',
@@ -146,18 +145,21 @@ const packageJSON = (current, context) => {
     'generator-videojs-plugin': {
       version: generatorVersion()
     },
-
+    'browserslist': [
+      'defaults',
+      'ie 11'
+    ],
     'scripts': _.assign({}, current.scripts, {
       'prebuild': 'npm run clean',
       'build': 'npm-run-all -p build:*',
       'build:js': 'rollup -c scripts/rollup.config.js',
-      'clean': 'rimraf dist',
-      'postclean': 'mkdirp dist',
+      'clean': 'rimraf dist test/dist',
+      'postclean': 'mkdirp dist test/dist',
       'lint': 'vjsstandard',
       'prepublish': 'not-in-install && npm run build || in-install',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch --no-browsers',
-      'pretest': 'npm-run-all lint',
+      'pretest': 'npm-run-all lint build',
       'test': 'karma start scripts/karma.conf.js',
       'preversion': 'npm test',
       'version': 'node scripts/version.js',
@@ -175,7 +177,8 @@ const packageJSON = (current, context) => {
     'vjsstandard': {
       ignore: [
         'dist',
-        'docs'
+        'docs',
+        'test/dist'
       ]
     },
 

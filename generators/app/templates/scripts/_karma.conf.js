@@ -1,19 +1,10 @@
 /* eslint-disable no-console */
-const rollupPlugins = require('./primed-rollup-plugins');
 const serveStatic = require('serve-static');
 const path = require('path');
 const serve = serveStatic(
   path.join(__dirname, '..'),
   {index: ['index.html', 'index.htm']}
 );
-const testGlobals = {
-  'qunit': 'QUnit',
-  'qunitjs': 'QUnit',
-  'sinon': 'sinon',
-  'video.js': 'videojs'
-};
-const testExternals = Object.keys(testGlobals).concat([
-]);
 
 const StaticMiddlewareFactory = function(config) {
   console.log(`**** Dev server started at http://${config.listenAddress}:${config.port}/ *****`);
@@ -46,11 +37,10 @@ module.exports = function(config) {
     frameworks: ['qunit', 'detectBrowsers'],
     files: [
       'node_modules/video.js/dist/video-js.css',
-      <% if (css) { %>'dist/<%= pluginName %>.css',<% } %>
+<% if (css) { %>'dist/<%= pluginName %>.css',<% } %>
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/video.js/dist/video.js',
-      {included: false, pattern: 'src/**/*.js', watched: true},
-      'test/**/*.test.js'
+      'test/dist/bundle.js'
     ],
     customLaunchers: {
       travisChrome: {
@@ -77,24 +67,6 @@ module.exports = function(config) {
     colors: true,
     autoWatch: false,
     singleRun: true,
-    concurrency: Infinity,
-    preprocessors: {
-      'test/**/*.test.js': ['rollup']
-    },
-    rollupPreprocessor: {
-      output: {
-        format: 'iife',
-        name: '<%= moduleName %>Test',
-        globals: testGlobals
-      },
-      external: testExternals,
-      plugins: [
-        rollupPlugins.multiEntry,
-        rollupPlugins.resolve,
-        rollupPlugins.json,
-        rollupPlugins.commonjs,
-        rollupPlugins.babel
-      ]
-    }
+    concurrency: Infinity
   });
 };
