@@ -1,3 +1,10 @@
+<a name="6.0.5"></a>
+## [6.0.5](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.4...v6.0.5) (2018-06-12)
+
+### Bug Fixes
+
+* no longer make test/dist ([774d337](https://github.com/videojs/generator-videojs-plugin/commit/774d337))
+
 <a name="6.0.4"></a>
 ## [6.0.4](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.3...v6.0.4) (2018-06-12)
 
