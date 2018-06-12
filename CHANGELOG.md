@@ -1,3 +1,10 @@
+<a name="6.0.4"></a>
+## [6.0.4](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.3...v6.0.4) (2018-06-12)
+
+### Bug Fixes
+
+* linter warning ([008b57b](https://github.com/videojs/generator-videojs-plugin/commit/008b57b))
+
 <a name="6.0.3"></a>
 ## [6.0.3](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.2...v6.0.3) (2018-06-11)
 
