@@ -228,8 +228,6 @@ const packageJSON = (current, context) => {
   }
 
   if (context.css) {
-    result.scripts.pretest += ' clean build:css';
-
     _.assign(result.scripts, {
       'build:css': scriptify('postcss --verbose -o dist/%s.css --config scripts/postcss.config.js src/plugin.css'),
       'watch:css': 'npm run build:css -- -w'
@@ -254,12 +252,6 @@ const packageJSON = (current, context) => {
   // here because the videojs-languages package will create the destination
   // directory if needed.
   if (context.lang) {
-    if (!context.docs) {
-      result.scripts.pretest += ' postclean';
-
-    }
-
-    result.scripts.pretest += ' build:lang';
     result.scripts['build:lang'] = 'vjslang --dir dist/lang';
     _.assign(result.devDependencies, getGeneratorVersions(['videojs-languages']));
   }
