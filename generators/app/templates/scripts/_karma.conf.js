@@ -50,9 +50,7 @@ module.exports = function(config) {
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/video.js/dist/video.js',
       {included: false, pattern: 'src/**/*.js', watched: true},
-      // Make sure to disable Karma’s file watcher
-      // because the preprocessor will use its own.
-      {pattern: 'test/**/*.test.js', watched: false}
+      'test/**/*.test.js'
     ],
     customLaunchers: {
       travisChrome: {
