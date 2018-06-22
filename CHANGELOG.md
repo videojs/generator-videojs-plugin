@@ -1,3 +1,10 @@
+<a name="6.0.9"></a>
+## [6.0.9](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.8...v6.0.9) (2018-06-22)
+
+### Bug Fixes
+
+* less strict vjs version (#184) ([5a43a9e](https://github.com/videojs/generator-videojs-plugin/commit/5a43a9e)), closes [#184](https://github.com/videojs/generator-videojs-plugin/issues/184)
+
 <a name="6.0.8"></a>
 ## [6.0.8](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.7...v6.0.8) (2018-06-12)
 
