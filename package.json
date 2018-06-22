@@ -86,7 +86,7 @@
     "rollup-plugin-uglify": "^4.0.0",
     "sinon": "^5.1.0",
     "uglify-es": "^3.3.9",
-    "video.js": "6.10.2 || ^7.0.3",
+    "video.js": "^6 || ^7",
     "videojs-languages": "^1.0.0"
   }
 }
