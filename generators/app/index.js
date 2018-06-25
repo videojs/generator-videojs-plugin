@@ -305,15 +305,13 @@ module.exports = class extends Generator {
 
     const file = constants.LICENSE_FILES[this.config.get('license')];
 
-    if (!file) {
-      return;
+    if (file) {
+      this.fs.copyTpl(
+        this.templatePath(file),
+        this.destinationPath('LICENSE'),
+        this.context
+      );
     }
-
-    this.fs.copyTpl(
-      this.templatePath(file),
-      this.destinationPath('LICENSE'),
-      this.context
-    );
 
     const json = packageJSON(this._currentPkgJSON, this.context);
 
