@@ -85,6 +85,7 @@ const externals = {
 /* plugins that should be used in each bundle with caveats as comments */
 const plugins = {
   // note uglify will be added before babel for minified bundle
+  // see minPlugins below
   umd: [
     primedPlugins.resolve,
     primedPlugins.json,
@@ -93,6 +94,7 @@ const plugins = {
   ],
 
   // note babel will be removed for es module bundle
+  // see esPlugins below
   module: [
     primedPlugins.resolve,
     primedPlugins.json,
@@ -108,6 +110,18 @@ const plugins = {
     primedPlugins.babel
   ]
 };
+
+// clone module plugins, remove babel
+const esPlugins = plugins.module.slice();
+
+esPlugins.splice(plugins.module.indexOf(primedPlugins.babel), 1);
+
+// clone umd plugins, remove babel, add uglify then babel
+const minPlugins = plugins.umd.slice();
+
+minPlugins.splice(plugins.umd.indexOf(primedPlugins.babel), 1);
+minPlugins.push(primedPlugins.uglify);
+minPlugins.push(primedPlugins.babel);
 
 const builds = [{
   // umd
@@ -142,9 +156,7 @@ const builds = [{
     banner
   }],
   external: externals.module,
-  plugins: []
-    .concat(plugins.module)
-    .splice(plugins.module.indexOf(primedPlugins.babel), 1)
+  plugins: esPlugins
 }, {
   // test bundle
   input: 'test/**/*.test.js',
@@ -170,11 +182,7 @@ if (!isWatch) {
       banner
     },
     external: externals.umd,
-    // add uglify just before babel
-    plugins: []
-      .concat(plugins.umd)
-      .splice(plugins.umd.indexOf(primedPlugins.babel), 1)
-      .concat([primedPlugins.uglify, primedPlugins.babel])
+    plugins: minPlugins
   });
 }
 
