@@ -1,3 +1,19 @@
+<a name="6.1.0"></a>
+# [6.1.0](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.9...v6.1.0) (2018-06-26)
+
+### Features
+
+* add postcss features to make migrating sass easier (#186) ([35c4c6a](https://github.com/videojs/generator-videojs-plugin/commit/35c4c6a)), closes [#186](https://github.com/videojs/generator-videojs-plugin/issues/186)
+* add teamcity & browserstack support (#185) ([9dd44de](https://github.com/videojs/generator-videojs-plugin/commit/9dd44de)), closes [#185](https://github.com/videojs/generator-videojs-plugin/issues/185)
+
+### Bug Fixes
+
+* do not exit on unlicensed (#188) ([432c5da](https://github.com/videojs/generator-videojs-plugin/commit/432c5da)), closes [#188](https://github.com/videojs/generator-videojs-plugin/issues/188)
+
+### Code Refactoring
+
+* make the rollup config easier for users to edit (#189) ([d2b2bd8](https://github.com/videojs/generator-videojs-plugin/commit/d2b2bd8)), closes [#189](https://github.com/videojs/generator-videojs-plugin/issues/189)
+
 <a name="6.0.9"></a>
 ## [6.0.9](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.8...v6.0.9) (2018-06-22)
 
