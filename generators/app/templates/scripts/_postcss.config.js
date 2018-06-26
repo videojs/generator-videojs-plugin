@@ -50,7 +50,7 @@ module.exports = function(context) {
         stage: false,
         features: {
           // turn `var(xyz)` in the actual value
-          'custom-properties': {preserve: false},
+          'custom-properties': {preserve: false, warnings: true},
 
           // flatten nested rules
           'nesting-rules': true
