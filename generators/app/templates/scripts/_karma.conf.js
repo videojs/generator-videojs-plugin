@@ -17,8 +17,11 @@ const StaticMiddlewareFactory = function(config) {
   };
 };
 
-/* browsers to run on teamcity */
-const teamcityLaunchers = {
+/* browsers to run on teamcitystack */
+const teamcityLaunchers = {}
+
+/* browsers to run on browserstack */
+const browserstackLaunchers = {
   bsChrome: {
     base: 'BrowserStack',
     browser: 'chrome',
@@ -80,7 +83,12 @@ module.exports = function(config) {
   config.set({
     basePath: '..',
     frameworks: ['qunit', 'detectBrowsers'],
-    customLaunchers: Object.assign({}, travisLaunchers, teamcityLaunchers),
+    customLaunchers: Object.assign(
+      {},
+      travisLaunchers,
+      teamcityLaunchers,
+      browserstackLaunchers
+    ),
     client: {clearContext: false, qunit: {showUI: true, testTimeout: 5000}},
 
     detectBrowsers: {
@@ -121,9 +129,17 @@ module.exports = function(config) {
 
   /* dynamic configuration, for ci and detectBrowsers */
 
-  // run browsers listed in travisLaunchers
-  if (process.env.TRAVIS) {
+  // determine what browsers should be run on this environment
+  if (process.env.BROWSER_STACK_USERNAME) {
+    config.browsers = Object.keys(browserstackLaunchers);
+  } else if (process.env.TRAVIS) {
     config.browsers = Object.keys(travisLaunchers);
+  } else if (process.env.TEAMCITY_VERSION) {
+    config.browsers = Object.keys(teamcityLaunchers);
+  }
+
+  // if running on travis
+  if (process.env.TRAVIS) {
     config.browserStack.name = process.env.TRAVIS_BUILD_NUMBER;
     if (process.env.TRAVIS_PULL_REQUEST !== 'false') {
       config.browserStack.name += process.env.TRAVIS_PULL_REQUEST;
@@ -133,10 +149,9 @@ module.exports = function(config) {
 
     config.browserStack.name += ' ' + process.env.TRAVIS_BRANCH;
 
-  // run browsers listed in teamcityLaunchers
+  // if running on teamcity
   } else if (process.env.TEAMCITY_VERSION) {
     config.reporters.push('teamcity');
-    config.browsers = Object.keys(teamcityLaunchers);
     config.browserStack.name = process.env.TEAMCITY_PROJECT_NAME;
     config.browserStack.name += '_';
     config.browserStack.name += process.env.BUILD_NUMBER;
