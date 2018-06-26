@@ -1,3 +1,10 @@
+<a name="6.1.1"></a>
+## [6.1.1](https://github.com/videojs/generator-videojs-plugin/compare/v6.1.0...v6.1.1) (2018-06-26)
+
+### Bug Fixes
+
+* linting issue ([69863c7](https://github.com/videojs/generator-videojs-plugin/commit/69863c7))
+
 <a name="6.1.0"></a>
 # [6.1.0](https://github.com/videojs/generator-videojs-plugin/compare/v6.0.9...v6.1.0) (2018-06-26)
 
