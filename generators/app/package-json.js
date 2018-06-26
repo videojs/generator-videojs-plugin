@@ -34,6 +34,8 @@ const DEFAULTS = {
     'conventional-changelog-videojs',
     'in-publish',
     'karma',
+    'karma-browserstack-launcher',
+    'karma-teamcity-reporter',
     'karma-chrome-launcher',
     'karma-detect-browsers',
     'karma-firefox-launcher',
