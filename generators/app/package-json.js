@@ -229,7 +229,7 @@ const packageJSON = (current, context) => {
 
   if (context.css) {
     _.assign(result.scripts, {
-      'build:css': scriptify('postcss --verbose -o dist/%s.css --config scripts/postcss.config.js src/plugin.css'),
+      'build:css': scriptify('postcss -o dist/%s.css --config scripts/postcss.config.js src/plugin.css'),
       'watch:css': 'npm run build:css -- -w'
     });
 

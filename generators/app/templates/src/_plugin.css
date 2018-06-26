@@ -1,15 +1,36 @@
 /**
  * css for <%= pluginName %>
- * postcss allows you to
- * - @import relative files, they will be inlined during build
- * - not have to worry about prefixes, as the last 2 versions of all major browsers
- *   and ie 11 will be automatically prefixed
+ * With the default plugins for postcss you can
+ * - @import files, they will be inlined during build
+ * - not worry about browser prefixes, they will be handled
+ * - nest selectors. This follows the css specification that is
+ *   currently out on some browsers. See https://tabatkins.github.io/specs/css-nesting/
+ * - custom properties (aka variables) via the var(--var-name) syntax. See
+ *   https://www.w3.org/TR/css-variables-1/
  */
+
+
+/* Note: all vars, even ones that will be changed locally in a selector must be defined here */
+:root {
+  --main-color: red;
+  --base-font-size: 11;
+  --font-size: var(--base-font-size);
+}
 
 .video-js {
 
-  // This class is added to the video.js element by the plugin by default.
+  /* This class is added to the video.js element by the plugin by default. */
   &.<%= className %> {
     display: block;
+
+    /* examples of postcss syntax, you probably want to remove this */
+    & .remove-me, & .remove-me-too, &.finally-remove-me {
+      /* override the global default value */
+      --font-size: 10;
+      color: var(--main-color);
+
+      font-size: calc(10 * var(--font-size) * var(--base-font-size));
+
+    }
   }
 }
