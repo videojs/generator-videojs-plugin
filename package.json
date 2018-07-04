@@ -58,7 +58,7 @@
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-preset-env": "^1.7.0",
-    "cssnano": "^3.10.0",
+    "cssnano": "^4.0.0",
     "global": "^4.3.2",
     "in-publish": "^2.0.0",
     "jsdoc": "^3.4.3",
