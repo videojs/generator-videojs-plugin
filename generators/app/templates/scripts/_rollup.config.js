@@ -20,7 +20,9 @@ const banner = `/*! @name ${pkg.name} @version ${pkg.version} @license ${pkg.lic
 const primedPlugins = {
   babel: babel({
     babelrc: false,
-    exclude: 'node_modules/**',
+    // you may want to manually exclude non-es6 modules
+    // if your build is slow
+    exclude: [],
     presets: [
       ['env', {loose: true, modules: false, targets: {browsers: pkg.browserslist}}]
     ],
