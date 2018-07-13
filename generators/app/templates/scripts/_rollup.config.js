@@ -112,6 +112,13 @@ const makeBuild = (name, settings) => {
     input: 'src/plugin.js'
   }, settings);
 
+  if (name === 'umd') {
+    // without the following code requirejs will break.
+    // eventually we will switch this to an iife, since
+    // that is basically what we use anyway.
+    b.amd = {define: 'null'};
+  }
+
   const fixOutput = (o) => {
     if (!o.banner) {
       o.banner = `/*! @name ${pkg.name} @version ${pkg.version} @license ${pkg.license} */`;
