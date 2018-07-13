@@ -10,11 +10,16 @@ const {uglify} = require('rollup-plugin-uglify');
 const {minify} = require('uglify-es');
 const pkg = require('../package.json');
 
-/* General Globals */
-const moduleName = '<%= moduleName %>';
-const pluginName = '<%= pluginName %>';
-const mainFile = 'src/plugin.js';
-const banner = `/*! @name ${pkg.name} @version ${pkg.version} @license ${pkg.license} */`;
+/* to prevent going into a screen during rollup */
+process.stderr.isTTY = false;
+
+let isWatch = false;
+
+process.argv.forEach((a) => {
+  if ((/-w|--watch/).test(a)) {
+    isWatch = true;
+  }
+});
 
 /* configuration for plugins */
 const primedPlugins = {
@@ -36,19 +41,11 @@ const primedPlugins = {
   uglify: uglify({output: {comments: 'some'}}, minify)
 };
 
-// to prevent a screen during rollup watch/build
-process.stderr.isTTY = false;
+/* General Globals */
+const moduleName = '<%= moduleName %>';
+const pluginName = '<%= pluginName %>';
 
-let isWatch = false;
-
-process.argv.forEach((a) => {
-  if ((/-w|--watch/).test(a)) {
-    isWatch = true;
-  }
-});
-
-// globals, aka replace require calls
-// with this
+// globals, aka replace require calls with this
 const globals = {
   umd: {
     'video.js': 'videojs',
@@ -67,9 +64,8 @@ const globals = {
   }
 };
 
-// externals, aka don't bundle there
-// and if not listed as a global don't require
-// them either
+// externals, aka don't bundle these and if not
+// listed as a global don't require them either
 const externals = {
   umd: Object.keys(globals.umd).concat([
 
@@ -85,7 +81,6 @@ const externals = {
 /* plugins that should be used in each bundle with caveats as comments */
 const plugins = {
   // note uglify will be added before babel for minified bundle
-  // see minPlugins below
   umd: [
     primedPlugins.resolve,
     primedPlugins.json,
@@ -109,74 +104,78 @@ const plugins = {
   ]
 };
 
-// clone umd plugins, remove babel, add uglify then babel
-const minPlugins = plugins.umd.slice();
+/* make a build with the specifed settings */
+const makeBuild = (name, settings) => {
+  const b = Object.assign({}, {
+    plugins: plugins[name],
+    external: externals[name],
+    input: 'src/plugin.js'
+  }, settings);
 
-minPlugins.splice(plugins.umd.indexOf(primedPlugins.babel), 1);
-minPlugins.push(primedPlugins.uglify);
-minPlugins.push(primedPlugins.babel);
+  const fixOutput = (o) => {
+    if (!o.banner) {
+      o.banner = `/*! @name ${pkg.name} @version ${pkg.version} @license ${pkg.license} */`;
+    }
+    if (!o.globals) {
+      o.globals = globals[name];
+    }
 
-const builds = [{
-  // umd
-  input: mainFile,
-  output: {
-    name: moduleName,
-    file: `dist/${pluginName}.js`,
-    format: 'umd',
-    globals: globals.umd,
-    banner
-  },
-  external: externals.umd,
-  plugins: plugins.umd
-}, {
-  // cjs
-  input: mainFile,
-  output: [{
-    file: `dist/${pluginName}.cjs.js`,
-    format: 'cjs',
-    globals: globals.module,
-    banner
-  }],
-  external: externals.module,
-  plugins: plugins.module
-}, {
-  // es
-  input: mainFile,
-  output: [{
-    file: `dist/${pluginName}.es.js`,
-    format: 'es',
-    globals: globals.module,
-    banner
-  }],
-  external: externals.module,
-  plugins: plugins.module
-}, {
-  // test bundle
-  input: 'test/**/*.test.js',
-  output: {
-    name: `${moduleName}Tests`,
-    file: 'test/dist/bundle.js',
-    format: 'iife',
-    globals: globals.test
-  },
-  external: externals.test,
-  plugins: plugins.test
-}];
+    return o;
+  };
+
+  if (!Array.isArray(b.output)) {
+    b.output = fixOutput(b.output);
+  } else {
+    b.output = b.output.map(fixOutput);
+  }
+
+  return b;
+};
+
+/* all rollup builds by name. note only object values will be used */
+const builds = {
+  umd: makeBuild('umd', {
+    output: [{
+      name: moduleName,
+      file: `dist/${pluginName}.js`,
+      format: 'umd'
+    }]
+  }),
+  cjs: makeBuild('module', {
+    output: [{
+      file: `dist/${pluginName}.cjs.js`,
+      format: 'cjs'
+    }]
+  }),
+  es: makeBuild('module', {
+    output: [{
+      file: `dist/${pluginName}.es.js`,
+      format: 'es'
+    }]
+  }),
+  test: makeBuild('test', {
+    input: 'test/**/*.test.js',
+    output: [{
+      name: `${moduleName}Tests`,
+      file: 'test/dist/bundle.js',
+      format: 'iife'
+    }]
+  })
+};
 
 if (!isWatch) {
-  builds.push({
-    // minified umd
-    input: mainFile,
-    output: {
+  builds.minUmd = makeBuild('umd', {
+    output: [{
       name: moduleName,
       file: `dist/${pluginName}.min.js`,
-      format: 'umd',
-      globals: globals.umd,
-      banner
-    },
-    external: externals.umd,
-    plugins: minPlugins
+      format: 'umd'
+    }],
+    // we need to minify before babel
+    plugins: plugins.umd
+      .filter((p) => p !== primedPlugins.babel)
+      .concat([primedPlugins.uglify, primedPlugins.babel])
   });
+
 }
 
-export default builds;
+export default Object.values(builds);
