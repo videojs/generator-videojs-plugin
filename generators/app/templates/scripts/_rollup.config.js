@@ -93,8 +93,6 @@ const plugins = {
     primedPlugins.babel
   ],
 
-  // note babel will be removed for es module bundle
-  // see esPlugins below
   module: [
     primedPlugins.resolve,
     primedPlugins.json,
@@ -110,11 +108,6 @@ const plugins = {
     primedPlugins.babel
   ]
 };
-
-// clone module plugins, remove babel
-const esPlugins = plugins.module.slice();
-
-esPlugins.splice(plugins.module.indexOf(primedPlugins.babel), 1);
 
 // clone umd plugins, remove babel, add uglify then babel
 const minPlugins = plugins.umd.slice();
@@ -156,7 +149,7 @@ const builds = [{
     banner
   }],
   external: externals.module,
-  plugins: esPlugins
+  plugins: plugins.module
 }, {
   // test bundle
   input: 'test/**/*.test.js',
