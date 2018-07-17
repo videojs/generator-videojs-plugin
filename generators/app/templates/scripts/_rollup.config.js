@@ -8,6 +8,7 @@ const multiEntry = require('rollup-plugin-multi-entry');
 const resolve = require('rollup-plugin-node-resolve');
 const {uglify} = require('rollup-plugin-uglify');
 const {minify} = require('uglify-es');
+const shim = require('rollup-plugin-shim');
 const pkg = require('../package.json');
 
 /* to prevent going into a screen during rollup */
@@ -20,26 +21,6 @@ process.argv.forEach((a) => {
     isWatch = true;
   }
 });
-
-/* configuration for plugins */
-const primedPlugins = {
-  babel: babel({
-    babelrc: false,
-    exclude: 'node_modules/**',
-    presets: [
-      ['env', {loose: true, modules: false, targets: {browsers: pkg.browserslist}}]
-    ],
-    plugins: [
-      'external-helpers',
-      'transform-object-assign'
-    ]
-  }),
-  commonjs: commonjs({sourceMap: false}),
-  json: json(),
-  multiEntry: multiEntry({exports: false}),
-  resolve: resolve({browser: true, main: true, jsnext: true}),
-  uglify: uglify({output: {comments: 'some'}}, minify)
-};
 
 /* General Globals */
 const moduleName = '<%= moduleName %>';
@@ -78,10 +59,52 @@ const externals = {
   ])
 };
 
+/* configuration for plugins */
+const primedPlugins = {
+  babel: babel({
+    babelrc: false,
+    exclude: 'node_modules/**',
+    presets: [
+      ['env', {loose: true, modules: false, targets: {browsers: pkg.browserslist}}]
+    ],
+    plugins: [
+      'external-helpers',
+      'transform-object-assign'
+    ]
+  }),
+  commonjs: commonjs({sourceMap: false}),
+  json: json(),
+  multiEntry: multiEntry({exports: false}),
+  resolve: resolve({browser: true, main: true, jsnext: true}),
+  uglify: uglify({output: {comments: 'some'}}, minify),
+  /* we have to shim globals to a string to work-around amd bugs in rollup */
+  shim: shim(Object.keys(globals.umd).reduce(function(newObj, key) {
+    newObj[key] = globals.umd[key];
+
+    if (newObj[key] !== 'window' && newObj[key] !== 'document') {
+      newObj[key] = 'window.' + newObj[key];
+    }
+
+    newObj[key] = 'export default ' + newObj[key];
+
+    return newObj;
+  }, {}))
+};
+
+/**
+* Since we are shiming globals as such using rollup-plugin-shim
+* we need to remove externals that are also global here
+*/
+Object.keys(globals.umd).forEach(function(k) {
+  externals.umd.splice(externals.umd.indexOf(k), 1);
+});
+globals.umd = {};
+
 /* plugins that should be used in each bundle with caveats as comments */
 const plugins = {
   // note uglify will be added before babel for minified bundle
   umd: [
+    primedPlugins.shim,
     primedPlugins.resolve,
     primedPlugins.json,
     primedPlugins.commonjs,

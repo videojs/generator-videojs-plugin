@@ -84,6 +84,7 @@
     "rollup-plugin-json": "^3.0.0",
     "rollup-plugin-multi-entry": "^2.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-shim": "^1.0.0",
     "rollup-plugin-uglify": "^4.0.0",
     "serve-static": "^1.13.2",
     "sinon": "^5.1.0",

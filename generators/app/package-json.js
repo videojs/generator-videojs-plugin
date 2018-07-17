@@ -48,6 +48,7 @@ const DEFAULTS = {
     'qunit',
     'rimraf',
     'rollup',
+    'rollup-plugin-shim',
     'rollup-plugin-babel',
     'rollup-plugin-commonjs',
     'rollup-plugin-json',

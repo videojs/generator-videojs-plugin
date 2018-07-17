@@ -54,10 +54,25 @@ player.<%= pluginFunctionName %>();
 When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
 
 ```js
-require(['video.js', '<%= packageName %>'], function(videojs) {
-  var player = videojs('my-video');
+// configure the paths to the packages with requirejs
+requirejs.config({
+  paths: {
+    "videojs": "videojs-url",
+    "<%= pluginFunctionName %>": "plugin-url",
+  },
+});
 
-  player.<%= pluginFunctionName %>();
+// first require videojs (unless you included it as a script on the page)
+requirejs(['videojs'], function(videojs) {
+  // add videojs to window
+  window.videojs = videojs;
+
+  // then require this plugin, as it expects a global videojs on window.
+  requirejs(['<%= pluginFunctionName %>'], function(<%= pluginFunctionName %>) {
+    var player = videojs('my-video');
+
+    console.log(player.<%= pluginFunctionName %>);
+  });
 });
 ```
 
