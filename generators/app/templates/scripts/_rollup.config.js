@@ -77,15 +77,17 @@ const primedPlugins = {
   multiEntry: multiEntry({exports: false}),
   resolve: resolve({browser: true, main: true, jsnext: true}),
   uglify: uglify({output: {comments: 'some'}}, minify),
-  /* we have to shim globals to a string to work-around amd bugs in rollup */
-  shim: shim(Object.keys(globals.umd).reduce(function(newObj, key) {
-    newObj[key] = globals.umd[key];
+  /* we have to shim externals to a string to work-around amd bugs in rollup */
+  shim: shim(externals.umd.reduce(function(newObj, name) {
+    // set the shim to the global or empty object
+    newObj[name] = globals.umd[name] || '{}';
 
-    if (newObj[key] !== 'window' && newObj[key] !== 'document') {
-      newObj[key] = 'window.' + newObj[key];
+    // if the shim is not window, document, or empty object add window to the front of it.
+    if (newObj[name] !== 'window' && newObj[name] !== 'document' && newObj[name] !== '{}') {
+      newObj[name] = 'window.' + newObj[name];
     }
 
-    newObj[key] = 'export default ' + newObj[key];
+    newObj[name] = 'export default ' + newObj[name];
 
     return newObj;
   }, {}))
@@ -95,9 +97,7 @@ const primedPlugins = {
 * Since we are shiming globals as such using rollup-plugin-shim
 * we need to remove externals that are also global here
 */
-Object.keys(globals.umd).forEach(function(k) {
-  externals.umd.splice(externals.umd.indexOf(k), 1);
-});
+externals.umd = [];
 globals.umd = {};
 
 /* plugins that should be used in each bundle with caveats as comments */
