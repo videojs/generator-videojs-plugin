@@ -32,7 +32,7 @@ const globals = {
     'video.js': 'videojs',
     'global': 'window',
     'global/window': 'window',
-    'global/document': 'document'
+    'global/document': 'window.document'
   },
   module: {
     'video.js': 'videojs'
@@ -86,8 +86,11 @@ const primedPlugins = {
     if (newObj[name] !== 'window' && newObj[name] !== 'document' && newObj[name] !== '{}') {
       newObj[name] = 'window.' + newObj[name];
     }
-
-    newObj[name] = 'export default ' + newObj[name];
+    newObj[name] = 'export default ((window) => ' + newObj[name] + ')(';
+    newObj[name] += "typeof window !== 'undefined' ? window : ";
+    newObj[name] += "typeof global !== 'undefined' ? global : ";
+    newObj[name] += "typeof self !== 'undefined' ? self : {} ";
+    newObj[name] += ');';
 
     return newObj;
   }, {}))
