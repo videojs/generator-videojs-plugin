@@ -39,7 +39,7 @@
     "rimraf": "^2.6.1",
     "semver": "^5.1.0",
     "tsmlj": "^1.0.0",
-    "yeoman-generator": "^1.0.0"
+    "yeoman-generator": "^3.0.0"
   },
   "devDependencies": {
     "conventional-changelog-cli": "^2.0.0",
