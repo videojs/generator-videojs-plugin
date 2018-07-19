@@ -1,6 +1,10 @@
 # generator-videojs-plugin
 
+[![Build Status](https://travis-ci.org/videojs/generator-videojs-plugin.svg?branch=master)](https://travis-ci.org/videojs/generator-videojs-plugin)
 [![Greenkeeper badge](https://badges.greenkeeper.io/videojs/generator-videojs-plugin.svg)](https://greenkeeper.io/)
+[![Slack Status](http://slack.videojs.com/badge.svg)](http://slack.videojs.com)
+
+[![NPM](https://nodei.co/npm/generator-videojs-plugin.png?downloads=true&downloadRank=true)](https://nodei.co/npm/generator-videojs-plugin/)
 
 This is an opinionated [Yeoman][yo] generator for [Video.js][vjs] plugins. It is based on the recommendations of the Video.js core team as well as tools and conventions for developing plugins at [Brightcove][bcov].
 
@@ -74,7 +78,7 @@ yo videojs-plugin --hurry
 
 ## Updating an Existing Project
 
-Running a Yeoman generator in an empty directory poses no difficulties; however, running it against an existing project can cause conflicts. Yeoman provides a mechanism, which can be confusing because it's not clearly documented, for resolving these conflicts. It will prompt you to choose one of: 
+Running a Yeoman generator in an empty directory poses no difficulties; however, running it against an existing project can cause conflicts. Yeoman provides a mechanism, which can be confusing because it's not clearly documented, for resolving these conflicts. It will prompt you to choose one of:
 
 - `Y`: yes (default)
 - `n`: no
