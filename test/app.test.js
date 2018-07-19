@@ -155,6 +155,10 @@ describe('videojs-plugin:app', function() {
         'docs:toc'
       ]));
     });
+
+    it('creates docs specific files default set of files', function() {
+      libs.fileList('common', 'docs').forEach(f => assert.file(f));
+    });
   });
 
   describe('all options', function() {

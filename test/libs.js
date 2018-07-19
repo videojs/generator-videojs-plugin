@@ -12,14 +12,12 @@ const FILES = {
     'scripts/rollup.config.js',
     'scripts/version.js',
     'src/plugin.js',
-    'test/index.html',
     'scripts/karma.conf.js',
     'test/plugin.test.js',
     '.editorconfig',
     '.gitignore',
     '.npmignore',
     '.nvmrc',
-    'scripts/jsdoc.json',
     'CHANGELOG.md',
     'CONTRIBUTING.md',
     'index.html',
@@ -53,8 +51,9 @@ const GENERATOR_PATH = path.join(__dirname, '../generators/app');
  * @return   {Array}
  *           An array of filenames.
  */
-const fileList = () =>
-  _.union.apply(_, _.toArray(arguments).map(str => FILES[str]));
+const fileList = function() {
+  return _.union.apply(_, _.toArray(arguments).map(str => FILES[str]));
+};
 
 /**
  * Set up options to always skip installation.
