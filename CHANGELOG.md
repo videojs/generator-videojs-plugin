@@ -1,3 +1,23 @@
+<a name="6.1.2"></a>
+## [6.1.2](https://github.com/videojs/generator-videojs-plugin/compare/v6.1.1...v6.1.2) (2018-07-27)
+
+### Bug Fixes
+
+* bring back babeling of the es dist (#196) ([6641018](https://github.com/videojs/generator-videojs-plugin/commit/6641018)), closes [#196](https://github.com/videojs/generator-videojs-plugin/issues/196)
+
+### Chores
+
+* **package:** update autoprefixer to version 9.0.0 (#198) ([e90f82a](https://github.com/videojs/generator-videojs-plugin/commit/e90f82a)), closes [#198](https://github.com/videojs/generator-videojs-plugin/issues/198)
+* **package:** update cssnano to version 4.0.3 ([405da1e](https://github.com/videojs/generator-videojs-plugin/commit/405da1e))
+* update videojs-standard to 6.0.3 (#204) ([759944a](https://github.com/videojs/generator-videojs-plugin/commit/759944a)), closes [#204](https://github.com/videojs/generator-videojs-plugin/issues/204)
+* **package:** update postcss-cli to version 6.0.0 (#203) ([1345386](https://github.com/videojs/generator-videojs-plugin/commit/1345386)), closes [#203](https://github.com/videojs/generator-videojs-plugin/issues/203)
+* **package:** update rollup to version 0.63.2 (#202) ([11d1cc6](https://github.com/videojs/generator-videojs-plugin/commit/11d1cc6)), closes [#202](https://github.com/videojs/generator-videojs-plugin/issues/202)
+* **package:** update yeoman-generator to version 3.0.0 (#191) ([4f3ae04](https://github.com/videojs/generator-videojs-plugin/commit/4f3ae04)), closes [#191](https://github.com/videojs/generator-videojs-plugin/issues/191)
+
+### Code Refactoring
+
+* refactor the rollup config for easier build additions (#195) ([3538f2d](https://github.com/videojs/generator-videojs-plugin/commit/3538f2d)), closes [#195](https://github.com/videojs/generator-videojs-plugin/issues/195)
+
 <a name="6.1.1"></a>
 ## [6.1.1](https://github.com/videojs/generator-videojs-plugin/compare/v6.1.0...v6.1.1) (2018-06-26)
 
