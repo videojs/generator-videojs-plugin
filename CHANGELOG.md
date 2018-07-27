@@ -1,3 +1,10 @@
+<a name="6.1.3"></a>
+## [6.1.3](https://github.com/videojs/generator-videojs-plugin/compare/v6.1.2...v6.1.3) (2018-07-27)
+
+### Bug Fixes
+
+* global should be external ([9e70371](https://github.com/videojs/generator-videojs-plugin/commit/9e70371))
+
 <a name="6.1.2"></a>
 ## [6.1.2](https://github.com/videojs/generator-videojs-plugin/compare/v6.1.1...v6.1.2) (2018-07-27)
 
