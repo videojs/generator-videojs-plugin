@@ -8,6 +8,7 @@ const multiEntry = require('rollup-plugin-multi-entry');
 const resolve = require('rollup-plugin-node-resolve');
 const {uglify} = require('rollup-plugin-uglify');
 const {minify} = require('uglify-es');
+const shim = require('rollup-plugin-shim');
 const pkg = require('../package.json');
 
 /* to prevent going into a screen during rollup */
@@ -21,26 +22,6 @@ process.argv.forEach((a) => {
   }
 });
 
-/* configuration for plugins */
-const primedPlugins = {
-  babel: babel({
-    babelrc: false,
-    exclude: 'node_modules/**',
-    presets: [
-      ['env', {loose: true, modules: false, targets: {browsers: pkg.browserslist}}]
-    ],
-    plugins: [
-      'external-helpers',
-      'transform-object-assign'
-    ]
-  }),
-  commonjs: commonjs({sourceMap: false}),
-  json: json(),
-  multiEntry: multiEntry({exports: false}),
-  resolve: resolve({browser: true, main: true, jsnext: true}),
-  uglify: uglify({output: {comments: 'some'}}, minify)
-};
-
 /* General Globals */
 const moduleName = '<%= moduleName %>';
 const pluginName = '<%= pluginName %>';
@@ -51,7 +32,7 @@ const globals = {
     'video.js': 'videojs',
     'global': 'window',
     'global/window': 'window',
-    'global/document': 'document'
+    'global/document': 'window.document'
   },
   module: {
     'video.js': 'videojs'
@@ -80,10 +61,55 @@ const externals = {
   ])
 };
 
+/* configuration for plugins */
+const primedPlugins = {
+  babel: babel({
+    babelrc: false,
+    exclude: 'node_modules/**',
+    presets: [
+      ['env', {loose: true, modules: false, targets: {browsers: pkg.browserslist}}]
+    ],
+    plugins: [
+      'external-helpers',
+      'transform-object-assign'
+    ]
+  }),
+  commonjs: commonjs({sourceMap: false}),
+  json: json(),
+  multiEntry: multiEntry({exports: false}),
+  resolve: resolve({browser: true, main: true, jsnext: true}),
+  uglify: uglify({output: {comments: 'some'}}, minify),
+  /* we have to shim externals to a string to work-around amd bugs in rollup */
+  shim: shim(externals.umd.reduce(function(newObj, name) {
+    // set the shim to the global or empty object
+    newObj[name] = globals.umd[name] || '{}';
+
+    // if the shim is not window, document, or empty object add window to the front of it.
+    if (newObj[name] !== 'window' && newObj[name] !== 'document' && newObj[name] !== '{}') {
+      newObj[name] = 'window.' + newObj[name];
+    }
+    newObj[name] = 'export default ((window) => ' + newObj[name] + ')(';
+    newObj[name] += "typeof window !== 'undefined' ? window : ";
+    newObj[name] += "typeof global !== 'undefined' ? global : ";
+    newObj[name] += "typeof self !== 'undefined' ? self : {} ";
+    newObj[name] += ');';
+
+    return newObj;
+  }, {}))
+};
+
+/**
+* Since we are shiming globals as such using rollup-plugin-shim
+* we need to remove externals that are also global here
+*/
+externals.umd = [];
+globals.umd = {};
+
 /* plugins that should be used in each bundle with caveats as comments */
 const plugins = {
   // note uglify will be added before babel for minified bundle
   umd: [
+    primedPlugins.shim,
     primedPlugins.resolve,
     primedPlugins.json,
     primedPlugins.commonjs,
