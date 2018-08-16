@@ -10,7 +10,6 @@ const FILES = {
 
   common: [
     'scripts/rollup.config.js',
-    'scripts/version.js',
     'src/plugin.js',
     'scripts/karma.conf.js',
     'test/plugin.test.js',

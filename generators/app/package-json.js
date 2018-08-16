@@ -54,7 +54,7 @@ const DEFAULTS = {
     'rollup-plugin-multi-entry',
     'rollup-plugin-node-resolve',
     'rollup-plugin-uglify',
-    'semver',
+    'not-prerelease',
     'sinon',
     'uglify-es',
     'videojs-standard'
@@ -164,7 +164,8 @@ const packageJSON = (current, context) => {
       'pretest': 'npm-run-all lint build',
       'test': 'karma start scripts/karma.conf.js',
       'preversion': 'npm test',
-      'version': 'node scripts/version.js',
+      'version': 'is-prerelease || npm run update-changelog && git add CHANGELOG.md',
+      'update-changelog': 'conventional-changelog -p videojs -i CHANGELOG.md -s',
       'watch': 'npm-run-all -p watch:*',
       'watch:js': 'npm run build:js -- -w'
     }),

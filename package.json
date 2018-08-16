@@ -26,7 +26,8 @@
     "prepush": "npm run lint",
     "pretest": "npm run lint",
     "test": "mocha test/*.test.js",
-    "version": "node scripts/version.js"
+    "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
+    "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s"
   },
   "keywords": [
     "yeoman-generator",
@@ -37,11 +38,11 @@
     "chalk": "^2.3.2",
     "lodash": "^4.17.4",
     "rimraf": "^2.6.1",
-    "semver": "^5.1.0",
     "tsmlj": "^1.0.0",
     "yeoman-generator": "^3.0.0"
   },
   "devDependencies": {
+    "not-prerelease": "^1.0.1",
     "conventional-changelog-cli": "^2.0.0",
     "conventional-changelog-videojs": "^3.0.0",
     "doctoc": "^1.3.1",
