@@ -76,10 +76,9 @@
     "postcss-preset-env": "^5.1.0",
     "qunit": "^2.5.1",
     "rollup": "^0.63.2",
-    "videojs-generate-rollup-config": "^1.0.0",
+    "videojs-generate-rollup-config": "~1.0.0",
     "serve-static": "^1.13.2",
     "sinon": "^5.1.0",
-    "uglify-es": "^3.3.9",
     "video.js": "^6 || ^7",
     "videojs-languages": "^1.0.0"
   }

@@ -46,7 +46,6 @@ const DEFAULTS = {
     'rollup',
     'not-prerelease',
     'sinon',
-    'uglify-es',
     'videojs-standard'
   ])
 };
