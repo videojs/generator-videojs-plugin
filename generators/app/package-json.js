@@ -44,6 +44,7 @@ const DEFAULTS = {
     'qunit',
     'rimraf',
     'rollup',
+    'videojs-generate-rollup-config',
     'not-prerelease',
     'sinon',
     'videojs-standard'
