@@ -26,10 +26,6 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 const DEFAULTS = {
   dependencies: getGeneratorVersions(['global', 'video.js']),
   devDependencies: getGeneratorVersions([
-    'babel-core',
-    'babel-plugin-external-helpers',
-    'babel-plugin-transform-object-assign',
-    'babel-preset-env',
     'conventional-changelog-cli',
     'conventional-changelog-videojs',
     'in-publish',
@@ -48,15 +44,9 @@ const DEFAULTS = {
     'qunit',
     'rimraf',
     'rollup',
-    'rollup-plugin-babel',
-    'rollup-plugin-commonjs',
-    'rollup-plugin-json',
-    'rollup-plugin-multi-entry',
-    'rollup-plugin-node-resolve',
-    'rollup-plugin-uglify',
+    'videojs-generate-rollup-config',
     'not-prerelease',
     'sinon',
-    'uglify-es',
     'videojs-standard'
   ])
 };
