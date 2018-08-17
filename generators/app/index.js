@@ -262,10 +262,6 @@ module.exports = class extends Generator {
       this._filesToCopy.push('_.travis.yml');
     }
 
-    if (this.context.docs) {
-      this._filesToCopy.push('scripts/_jsdoc.json');
-    }
-
     if (this.context.lang) {
       this._filesToCopy.push('lang/_en.json');
     }

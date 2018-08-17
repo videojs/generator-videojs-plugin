@@ -30,7 +30,6 @@ const FILES = {
   ],
 
   docs: [
-    'scripts/jsdoc.json'
   ],
 
   css: [
