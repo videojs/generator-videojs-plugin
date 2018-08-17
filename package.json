@@ -54,23 +54,19 @@
     "yeoman-test": "^1.7.2"
   },
   "optionalDependencies": {
-    "autoprefixer": "^9.0.0",
-    "cssnano": "^4.0.3",
     "global": "^4.3.2",
     "in-publish": "^2.0.0",
     "jsdoc": "^3.4.3",
     "karma": "^2.0.2",
     "mkdirp": "^0.5.1",
     "npm-run-all": "^4.1.2",
-    "postcss-banner": "^3.0.0",
     "postcss-cli": "^6.0.0",
-    "postcss-import": "^11.1.0",
-    "postcss-preset-env": "^5.1.0",
     "rollup": "^0.63.2",
     "sinon": "^5.1.0",
     "video.js": "^6 || ^7",
     "videojs-languages": "^1.0.0",
     "videojs-generate-karma-config": "~1.0.0",
+    "videojs-generate-postcss-config": "~1.0.0",
     "videojs-generate-rollup-config": "~1.0.0"
   }
 }

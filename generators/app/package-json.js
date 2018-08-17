@@ -223,11 +223,7 @@ const packageJSON = (current, context) => {
 
     _.assign(result.devDependencies, getGeneratorVersions([
       'postcss-cli',
-      'postcss-banner',
-      'postcss-import',
-      'postcss-preset-env',
-      'autoprefixer',
-      'cssnano'
+      'videojs-generate-postcss-config'
     ]));
 
   }
