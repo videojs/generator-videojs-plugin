@@ -1,3 +1,10 @@
+<a name="7.0.1"></a>
+## [7.0.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.0.0...v7.0.1) (2018-08-22)
+
+### Chores
+
+* ignore yo-rc again ([0d2209a](https://github.com/videojs/generator-videojs-plugin/commit/0d2209a))
+
 <a name="7.0.0"></a>
 # [7.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v6.2.0...v7.0.0) (2018-08-22)
 
