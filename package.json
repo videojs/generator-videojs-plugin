@@ -1,6 +1,6 @@
 {
   "name": "generator-videojs-plugin",
-  "version": "6.2.0",
+  "version": "7.0.0",
   "description": "A Yeoman generator for Video.js plugins",
   "license": "Apache-2.0",
   "main": "generators/app/index.js",

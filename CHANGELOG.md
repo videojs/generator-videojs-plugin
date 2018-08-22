@@ -1,3 +1,19 @@
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v6.2.0...v7.0.0) (2018-08-22)
+
+### Features
+
+* lint staged files on precommit, do nothing on push (#218) ([c6deb82](https://github.com/videojs/generator-videojs-plugin/commit/c6deb82)), closes [#218](https://github.com/videojs/generator-videojs-plugin/issues/218)
+
+### Chores
+
+* update postcss generator ([9a79cc7](https://github.com/videojs/generator-videojs-plugin/commit/9a79cc7))
+
+
+### BREAKING CHANGES
+
+* splits husky option into a precommit/prepush
+
 <a name="6.2.0"></a>
 # [6.2.0](https://github.com/videojs/generator-videojs-plugin/compare/v6.1.4...v6.2.0) (2018-08-22)
 
