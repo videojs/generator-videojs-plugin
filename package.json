@@ -64,7 +64,7 @@
     "sinon": "^6.1.5",
     "video.js": "^6 || ^7",
     "videojs-generate-karma-config": "~1.0.0",
-    "videojs-generate-postcss-config": "~1.0.1",
+    "videojs-generate-postcss-config": "~2.0.0",
     "videojs-generate-rollup-config": "~1.0.0",
     "videojs-languages": "^1.0.0"
   }
