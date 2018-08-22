@@ -51,7 +51,8 @@ describe('videojs-plugin:app', function() {
       assert(_.isArray(p.keywords));
       assert(_.isPlainObject(p.vjsstandard));
       assert(_.isPlainObject(p.devDependencies));
-      assert.strictEqual(p.scripts.prepush, 'npm run lint');
+      assert(_.isPlainObject(p['lint-staged']));
+      assert.strictEqual(p.scripts.precommit, 'lint-staged');
       assert(_.isPlainObject(p['generator-videojs-plugin']));
       assert.strictEqual(p['generator-videojs-plugin'].version, generatorVersion());
     });
@@ -97,7 +98,9 @@ describe('videojs-plugin:app', function() {
       assert(_.isArray(p.keywords));
       assert(_.isPlainObject(p.vjsstandard));
       assert(_.isPlainObject(p.devDependencies));
-      assert.strictEqual(p.scripts.prepush, 'npm run lint');
+
+      assert(_.isPlainObject(p['lint-staged']));
+      assert.strictEqual(p.scripts.precommit, 'lint-staged');
       assert(_.isPlainObject(p['generator-videojs-plugin']));
       assert.strictEqual(p['generator-videojs-plugin'].version, generatorVersion());
     });
@@ -173,7 +176,8 @@ describe('videojs-plugin:app', function() {
           docs: true,
           lang: true,
           css: true,
-          husky: 'test'
+          prepush: true,
+          precommit: true
         })
         .on('end', () => libs.onEnd(this, done));
     });
@@ -184,10 +188,13 @@ describe('videojs-plugin:app', function() {
         'docs:api',
         'docs:toc',
         'prepush',
+        'precommit',
         'build:lang',
         'watch:css',
         'build:css'
       ]));
+
+      assert.equal(Object.keys(this.pkg['lint-staged']).length, 2, 'adds two lint-staged entries');
     });
 
     it('lint works', function() {
@@ -278,7 +285,7 @@ describe('videojs-plugin:app', function() {
     });
   });
 
-  describe('husky "none"', function() {
+  describe('precommit false', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
         .withOptions(libs.options())
@@ -286,12 +293,36 @@ describe('videojs-plugin:app', function() {
           name: 'wat',
           author: 'John Doe',
           description: 'wat is the plugin',
-          husky: 'none'
+          docs: true,
+          precommit: false
         })
         .on('end', () => libs.onEnd(this, done));
     });
 
-    it('does not cause a failure', function() {
+    it('package.json is as expected', function() {
+      assert(_.isPlainObject(this.pkg));
+      assert.strictEqual(this.pkg.scripts.precommit, undefined);
+      assert.strictEqual(this.pkg['lint-staged'], undefined);
+
+      assert.strictEqual(this.pkg.devDependencies.husky, undefined);
+      assert.strictEqual(this.pkg.devDependencies['lint-staged'], undefined);
+    });
+  });
+
+  describe('prepush false', function() {
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin',
+          prepush: false
+        })
+        .on('end', () => libs.onEnd(this, done));
+    });
+
+    it('package.json is as expected', function() {
       assert(_.isPlainObject(this.pkg));
       assert.strictEqual(this.pkg.scripts.prepush, undefined);
     });

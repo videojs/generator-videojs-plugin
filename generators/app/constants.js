@@ -32,12 +32,6 @@ module.exports = {
     basic: 'Basic plugin (function-based)'
   }),
 
-  HUSKY_CHOICES: objectToChoices({
-    lint: 'Check code quality',
-    test: 'Check code quality and run tests',
-    none: 'Nothing'
-  }),
-
   LICENSE_NAMES,
 
   LICENSE_CHOICES: objectToChoices(LICENSE_NAMES),
@@ -52,7 +46,8 @@ module.exports = {
   PROMPT_DEFAULTS: {
     docs: false,
     css: false,
-    husky: 'lint',
+    prepush: false,
+    precommit: true,
     lang: false,
     license: LICENSE_DEFAULT,
     pluginType: 'advanced',
