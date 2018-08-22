@@ -186,12 +186,38 @@ const packageJSON = (current, context) => {
 
   // In case husky was previously installed, but is now "none", we can
   // remove it from the package.json entirely.
-  if (context.husky === 'none') {
-    delete result.devDependencies.husky;
+  if (!context.precommit) {
+    delete result.scripts.precommit;
+  }
+
+  if (!context.prepush) {
     delete result.scripts.prepush;
-  } else {
-    _.assign(result.devDependencies, getGeneratorVersions(['husky']));
-    result.scripts.prepush = `npm run ${context.husky}`;
+  }
+
+  if (!context.prepush && !context.precommit) {
+    delete result.devDependencies.husky;
+    delete result.devDependencies['lint-staged'];
+  }
+
+  if (context.precommit) {
+    _.assign(result.devDependencies, getGeneratorVersions(['husky', 'lint-staged']));
+    result.scripts.precommit = 'lint-staged';
+
+    result['lint-staged'] = result['lint-staged'] || {};
+    _.assign(result['lint-staged'], {
+      '*.js': [
+        'vjsstandard --fix',
+        'git add'
+      ]
+    });
+  }
+
+  if (context.prepush) {
+    if (!result.devDependencies.husky) {
+      _.assign(result.devDependencies, getGeneratorVersions(['husky']));
+    }
+
+    result.scripts.prepush = 'npm run test';
   }
 
   // Support the documentation tooling option.
@@ -203,8 +229,14 @@ const packageJSON = (current, context) => {
       'docs:toc': 'doctoc README.md'
     });
 
-    if (context.husky !== 'none') {
-      result.scripts.precommit = 'npm run docs:toc && git add README.md';
+    if (context.precommit) {
+      result['lint-staged'] = result['lint-staged'] || {};
+      _.assign(result['lint-staged'], {
+        'README.md': [
+          'npm run docs:toc',
+          'git add'
+        ]
+      });
     }
 
     _.assign(result.devDependencies, getGeneratorVersions(['doctoc', 'jsdoc']));
@@ -215,10 +247,6 @@ const packageJSON = (current, context) => {
       'build:css': scriptify('postcss -o dist/%s.css --config scripts/postcss.config.js src/plugin.css'),
       'watch:css': 'npm run build:css -- -w'
     });
-
-    if (context.husky !== 'none') {
-      result.scripts.precommit = 'npm run docs:toc && git add README.md';
-    }
 
     _.assign(result.devDependencies, getGeneratorVersions([
       'postcss-cli',

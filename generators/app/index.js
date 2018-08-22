@@ -162,11 +162,15 @@ module.exports = class extends Generator {
       `,
       default: defaults.lang
     }, {
-      type: 'list',
-      name: 'husky',
-      message: 'What should be done before you `git push`?',
-      default: defaults.husky,
-      choices: constants.HUSKY_CHOICES
+      type: 'confirm',
+      name: 'precommit',
+      message: 'Should we lint changed files before allowing `git commit`',
+      default: defaults.precommit
+    }, {
+      type: 'confirm',
+      name: 'prepush',
+      message: 'Should we run tests before allowing `git push`',
+      default: defaults.prepush
     }];
 
     return prompts.filter(p => !_.includes(this._promptsToFilter, p.name));
