@@ -1,3 +1,21 @@
+<a name="6.2.0"></a>
+# [6.2.0](https://github.com/videojs/generator-videojs-plugin/compare/v6.1.4...v6.2.0) (2018-08-22)
+
+### Features
+
+* no jsdoc config (#212) ([7d1cfcc](https://github.com/videojs/generator-videojs-plugin/commit/7d1cfcc)), closes [#212](https://github.com/videojs/generator-videojs-plugin/issues/212)
+* replace version script with not-prerelase (#209) ([2dc6c27](https://github.com/videojs/generator-videojs-plugin/commit/2dc6c27)), closes [#209](https://github.com/videojs/generator-videojs-plugin/issues/209)
+* simplify karma config (#211) ([add0696](https://github.com/videojs/generator-videojs-plugin/commit/add0696)), closes [#211](https://github.com/videojs/generator-videojs-plugin/issues/211)
+* simplify postcss config (#213) ([d196b82](https://github.com/videojs/generator-videojs-plugin/commit/d196b82)), closes [#213](https://github.com/videojs/generator-videojs-plugin/issues/213)
+* simplify rollup config with new package (#210) ([c2ba58f](https://github.com/videojs/generator-videojs-plugin/commit/c2ba58f)), closes [#210](https://github.com/videojs/generator-videojs-plugin/issues/210)
+
+### Chores
+
+* update dependencies ([9f7971d](https://github.com/videojs/generator-videojs-plugin/commit/9f7971d))
+* update deps (#214) ([702ea3b](https://github.com/videojs/generator-videojs-plugin/commit/702ea3b)), closes [#214](https://github.com/videojs/generator-videojs-plugin/issues/214)
+* update postcss generate ([76a1bd5](https://github.com/videojs/generator-videojs-plugin/commit/76a1bd5))
+* update vjsstandard to 7 (#215) ([76c40a9](https://github.com/videojs/generator-videojs-plugin/commit/76c40a9)), closes [#215](https://github.com/videojs/generator-videojs-plugin/issues/215)
+
 <a name="6.1.4"></a>
 ## [6.1.4](https://github.com/videojs/generator-videojs-plugin/compare/v6.1.3...v6.1.4) (2018-07-27)
 
