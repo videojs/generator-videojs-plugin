@@ -1,3 +1,10 @@
+<a name="7.0.2"></a>
+## [7.0.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.0.1...v7.0.2) (2018-08-22)
+
+### Chores
+
+* update karma config generator ([2766714](https://github.com/videojs/generator-videojs-plugin/commit/2766714))
+
 <a name="7.0.1"></a>
 ## [7.0.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.0.0...v7.0.1) (2018-08-22)
 
