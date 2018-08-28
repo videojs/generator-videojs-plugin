@@ -1,3 +1,10 @@
+<a name="7.1.1"></a>
+## [7.1.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.1.0...v7.1.1) (2018-08-28)
+
+### Bug Fixes
+
+* always install npm-merge-driver ([03f7c76](https://github.com/videojs/generator-videojs-plugin/commit/03f7c76))
+
 <a name="7.1.0"></a>
 # [7.1.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.0.2...v7.1.0) (2018-08-28)
 
