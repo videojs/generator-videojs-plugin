@@ -37,7 +37,8 @@ const DEFAULTS = {
     'videojs-generate-karma-config',
     'not-prerelease',
     'sinon',
-    'videojs-standard'
+    'videojs-standard',
+    'npm-merge-driver'
   ])
 };
 
@@ -143,6 +144,7 @@ const packageJSON = (current, context) => {
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch --no-browsers',
       'pretest': 'npm-run-all lint build',
       'test': 'karma start scripts/karma.conf.js',
+      'posttest': 'shx cat test/dist/coverage/text.txt',
       'preversion': 'npm test',
       'version': 'is-prerelease || npm run update-changelog && git add CHANGELOG.md',
       'update-changelog': 'conventional-changelog -p videojs -i CHANGELOG.md -s',

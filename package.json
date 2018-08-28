@@ -70,14 +70,15 @@
     "in-publish": "^2.0.0",
     "jsdoc": "https://github.com/BrandonOCasey/jsdoc#feat/plugin-from-cli",
     "karma": "^3.0.0",
+    "npm-merge-driver": "^2.3.5",
     "postcss-cli": "^6.0.0",
     "rollup": "^0.64.1",
     "shx": "^0.3.2",
     "sinon": "^6.1.5",
     "video.js": "^6 || ^7",
-    "videojs-generate-karma-config": "~1.0.1",
+    "videojs-generate-karma-config": "~2.0.0",
     "videojs-generate-postcss-config": "~2.0.1",
-    "videojs-generate-rollup-config": "~1.0.0",
+    "videojs-generate-rollup-config": "~2.0.1",
     "videojs-languages": "^1.0.0"
   }
 }
