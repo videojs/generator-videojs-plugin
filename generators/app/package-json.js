@@ -139,7 +139,7 @@ const packageJSON = (current, context) => {
       'clean': 'shx rm -rf ./dist ./test/dist',
       'postclean': 'shx mkdir -p ./dist ./test/dist',
       'lint': 'vjsstandard',
-      'prepublish': 'not-in-install && npm run build || in-install',
+      'prepublish': 'not-in-install && npm run build || in-install && npm-merge-driver install',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch --no-browsers',
       'pretest': 'npm-run-all lint build',
