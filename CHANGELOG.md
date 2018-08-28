@@ -1,3 +1,14 @@
+<a name="7.1.0"></a>
+# [7.1.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.0.2...v7.1.0) (2018-08-28)
+
+### Features
+
+* add code coverage reporting by updating deps (#220) ([80d3d73](https://github.com/videojs/generator-videojs-plugin/commit/80d3d73)), closes [#220](https://github.com/videojs/generator-videojs-plugin/issues/220)
+
+### Tests
+
+* add integration tests via a script ([0dfd5eb](https://github.com/videojs/generator-videojs-plugin/commit/0dfd5eb))
+
 <a name="7.0.2"></a>
 ## [7.0.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.0.1...v7.0.2) (2018-08-22)
 
