@@ -12,7 +12,7 @@ helpers.run(libs.GENERATOR_PATH)
   })
   .withOptions(libs.options())
   .withPrompts({
-    name: 'REPLACE_ME',
+    name: 'integration-test',
     author: 'John Doe',
     description: 'wat is the plugin',
     docs: true,
