@@ -38,7 +38,10 @@ const DEFAULTS = {
     'not-prerelease',
     'sinon',
     'videojs-standard',
-    'npm-merge-driver'
+    'npm-merge-driver',
+    'husky',
+    'lint-staged',
+    'pkg-ok'
   ])
 };
 
@@ -139,7 +142,7 @@ const packageJSON = (current, context) => {
       'clean': 'shx rm -rf ./dist ./test/dist',
       'postclean': 'shx mkdir -p ./dist ./test/dist',
       'lint': 'vjsstandard',
-      'prepublish': 'not-in-install && npm run build || in-install',
+      'prepublish': 'not-in-install && npm run build && pkg-ok || in-install',
       'postinstall': 'shx test -d .git && npm-merge-driver install || in-install',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch --no-browsers',
@@ -177,6 +180,22 @@ const packageJSON = (current, context) => {
       'src/',
       'test/'
     ],
+    'husky': {
+      hooks: {
+        'pre-commit': 'lint-staged',
+        'pre-push': 'npm run test'
+      }
+    },
+    'lint-staged': {
+      '*.js': [
+        'vjsstandard --fix',
+        'git add'
+      ],
+      'README.md': [
+        'npm run docs:toc',
+        'git add'
+      ]
+    },
 
     'dependencies': _.assign({}, current.dependencies, DEFAULTS.dependencies),
 
@@ -191,36 +210,18 @@ const packageJSON = (current, context) => {
   // remove it from the package.json entirely.
   if (!context.precommit) {
     delete result.scripts.precommit;
+    delete result.husky.hooks['pre-commit'];
+    delete result['lint-staged'];
   }
 
   if (!context.prepush) {
     delete result.scripts.prepush;
+    delete result.husky.hooks['pre-push'];
   }
 
   if (!context.prepush && !context.precommit) {
     delete result.devDependencies.husky;
     delete result.devDependencies['lint-staged'];
-  }
-
-  if (context.precommit) {
-    _.assign(result.devDependencies, getGeneratorVersions(['husky', 'lint-staged']));
-    result.scripts.precommit = 'lint-staged';
-
-    result['lint-staged'] = result['lint-staged'] || {};
-    _.assign(result['lint-staged'], {
-      '*.js': [
-        'vjsstandard --fix',
-        'git add'
-      ]
-    });
-  }
-
-  if (context.prepush) {
-    if (!result.devDependencies.husky) {
-      _.assign(result.devDependencies, getGeneratorVersions(['husky']));
-    }
-
-    result.scripts.prepush = 'npm run test';
   }
 
   // Support the documentation tooling option.
@@ -231,16 +232,6 @@ const packageJSON = (current, context) => {
       'docs:api': 'jsdoc src -g plugins/markdown -r -c scripts/jsdoc.json -d docs/api',
       'docs:toc': 'doctoc README.md'
     });
-
-    if (context.precommit) {
-      result['lint-staged'] = result['lint-staged'] || {};
-      _.assign(result['lint-staged'], {
-        'README.md': [
-          'npm run docs:toc',
-          'git add'
-        ]
-      });
-    }
 
     _.assign(result.devDependencies, getGeneratorVersions(['doctoc', 'jsdoc']));
   }

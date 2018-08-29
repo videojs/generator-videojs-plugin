@@ -52,7 +52,7 @@ describe('videojs-plugin:app', function() {
       assert(_.isPlainObject(p.vjsstandard));
       assert(_.isPlainObject(p.devDependencies));
       assert(_.isPlainObject(p['lint-staged']));
-      assert.strictEqual(p.scripts.precommit, 'lint-staged');
+      assert.strictEqual(p.husky.hooks['pre-commit'], 'lint-staged');
       assert(_.isPlainObject(p['generator-videojs-plugin']));
       assert.strictEqual(p['generator-videojs-plugin'].version, generatorVersion());
     });
@@ -100,7 +100,7 @@ describe('videojs-plugin:app', function() {
       assert(_.isPlainObject(p.devDependencies));
 
       assert(_.isPlainObject(p['lint-staged']));
-      assert.strictEqual(p.scripts.precommit, 'lint-staged');
+      assert.strictEqual(p.husky.hooks['pre-commit'], 'lint-staged');
       assert(_.isPlainObject(p['generator-videojs-plugin']));
       assert.strictEqual(p['generator-videojs-plugin'].version, generatorVersion());
     });
@@ -187,13 +187,13 @@ describe('videojs-plugin:app', function() {
         'docs',
         'docs:api',
         'docs:toc',
-        'prepush',
-        'precommit',
         'build:lang',
         'watch:css',
         'build:css'
       ]));
 
+      assert.ok(this.pkg.husky.hooks['pre-push'], 'has pre-push husky script');
+      assert.ok(this.pkg.husky.hooks['pre-commit'], 'has pre-commit husky script');
       assert.equal(Object.keys(this.pkg['lint-staged']).length, 2, 'adds two lint-staged entries');
     });
 
@@ -301,7 +301,7 @@ describe('videojs-plugin:app', function() {
 
     it('package.json is as expected', function() {
       assert(_.isPlainObject(this.pkg));
-      assert.strictEqual(this.pkg.scripts.precommit, undefined);
+      assert.strictEqual(this.pkg.husky.hooks['pre-commit'], undefined);
       assert.strictEqual(this.pkg['lint-staged'], undefined);
 
       assert.strictEqual(this.pkg.devDependencies.husky, undefined);
@@ -324,7 +324,7 @@ describe('videojs-plugin:app', function() {
 
     it('package.json is as expected', function() {
       assert(_.isPlainObject(this.pkg));
-      assert.strictEqual(this.pkg.scripts.prepush, undefined);
+      assert.strictEqual(this.pkg.husky.hooks['pre-push'], undefined);
     });
   });
 
