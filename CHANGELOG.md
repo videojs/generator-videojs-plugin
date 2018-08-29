@@ -1,3 +1,10 @@
+<a name="7.1.2"></a>
+## [7.1.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.1.1...v7.1.2) (2018-08-29)
+
+### Chores
+
+* simplify travis config ([aeb3faf](https://github.com/videojs/generator-videojs-plugin/commit/aeb3faf))
+
 <a name="7.1.1"></a>
 ## [7.1.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.1.0...v7.1.1) (2018-08-28)
 
