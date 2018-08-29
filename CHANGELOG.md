@@ -1,3 +1,10 @@
+<a name="7.2.0"></a>
+# [7.2.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.1.3...v7.2.0) (2018-08-29)
+
+### Features
+
+* update husky, add pkg-ok ([a2e0cb9](https://github.com/videojs/generator-videojs-plugin/commit/a2e0cb9))
+
 <a name="7.1.3"></a>
 ## [7.1.3](https://github.com/videojs/generator-videojs-plugin/compare/v7.1.2...v7.1.3) (2018-08-29)
 
