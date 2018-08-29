@@ -1,3 +1,10 @@
+<a name="7.1.3"></a>
+## [7.1.3](https://github.com/videojs/generator-videojs-plugin/compare/v7.1.2...v7.1.3) (2018-08-29)
+
+### Bug Fixes
+
+* dont install merge driver without .git ([b14d608](https://github.com/videojs/generator-videojs-plugin/commit/b14d608))
+
 <a name="7.1.2"></a>
 ## [7.1.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.1.1...v7.1.2) (2018-08-29)
 
