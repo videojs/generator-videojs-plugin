@@ -95,6 +95,79 @@ Other files you'll usually want to select `n` on - particularly those files plug
 
 However, files that are _not_ commonly edited by plugin authors may deserve a diff check (`d`) if you've made changes to these sorts of files. For example, anything in `scripts/`.
 
+### Migrating to the Latest Version
+
+Migrating across major versions can be a bit of a pain sometimes, but we're working on making it better with the generator. Here are some notes on migrating to the current major version.
+
+First, you should allow it to overwrite everything except your `src/` and `test/` files (as described in the previous section). This is particularly true for everything in `scripts/` - these have changed a lot!
+
+Next, you may - depending on your customizations - be able to remove any of the following `devDependencies` from your generated project:
+
+```
+babel-core
+babel-plugin-external-helpers
+babel-plugin-transform-object-assign
+babel-preset-env
+karma-browserstack-launcher
+karma-chrome-launcher
+karma-detect-browsers
+karma-firefox-launcher
+karma-ie-launcher
+karma-qunit
+karma-safari-launcher
+karma-teamcity-reporter
+mkdirp
+qunit
+rimraf
+rollup-plugin-babel
+rollup-plugin-commonjs
+rollup-plugin-json
+rollup-plugin-multi-entry
+rollup-plugin-node-resolve
+rollup-plugin-uglify
+semver
+serve-static
+sinon
+uglify-es
+```
+
+Or you could run this `npm` command:
+
+```
+npm un -D \
+  babel-core \
+  babel-plugin-external-helpers \
+  babel-plugin-transform-object-assign \
+  babel-preset-env \
+  karma-browserstack-launcher \
+  karma-chrome-launcher \
+  karma-detect-browsers \
+  karma-firefox-launcher \
+  karma-ie-launcher \
+  karma-qunit \
+  karma-safari-launcher \
+  karma-teamcity-reporter \
+  mkdirp \
+  qunit \
+  rimraf \
+  rollup-plugin-babel \
+  rollup-plugin-commonjs \
+  rollup-plugin-json \
+  rollup-plugin-multi-entry \
+  rollup-plugin-node-resolve \
+  rollup-plugin-uglify \
+  semver \
+  serve-static \
+  sinon \
+  uglify-es
+```
+
+All these dependencies should be removable because, in general, build tools are now using the new `videojs-generate-*` libraries. This should make it easier to manage dependencies by offloading much of that work to the Video.js organization. The behavior of these new tools is customizable by editing the files in `scripts/`.
+
+Then, you can re-run `npm install` to ensure your dependencies are in good order. If not, try removing `node_modules` and maybe `package-lock.json` and installing everything fresh.
+
+Be sure to run `npm test` afterward to make sure your stuff still works!
+
 ## License
 
 [Apache 2.0][license]
