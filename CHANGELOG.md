@@ -1,3 +1,10 @@
+<a name="7.2.1"></a>
+## [7.2.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.2.0...v7.2.1) (2018-08-30)
+
+### Chores
+
+* Update rollup and videojs-generate-rollup-config ([ce65c4a](https://github.com/videojs/generator-videojs-plugin/commit/ce65c4a))
+
 <a name="7.2.0"></a>
 # [7.2.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.1.3...v7.2.0) (2018-08-29)
 
