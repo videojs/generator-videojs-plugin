@@ -107,6 +107,9 @@ If you have made no customizations, the simplest process may be to remove some o
 
 - `dependencies`, `devDependencies`, and/or `scripts` from `package.json`
 - `package-lock.json`
+- `scripts/*.js`
+- `test/karma.conf.js`
+- `test/index.html`
 
 For a more conservative approach, you should be able to remove any of the following `devDependencies` from your generated project:
 
@@ -145,7 +148,6 @@ Regardless, you'll almost certainly want allow the generator to fully overwrite 
 - `src/*`
 - `test/*.test.js`
 - `README.md`
-- ...others?
 
 Finally, be sure to run, at minimum, `npm test` afterward to make sure your stuff still works!
 
