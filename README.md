@@ -95,6 +95,62 @@ Other files you'll usually want to select `n` on - particularly those files plug
 
 However, files that are _not_ commonly edited by plugin authors may deserve a diff check (`d`) if you've made changes to these sorts of files. For example, anything in `scripts/`.
 
+### Migrating to the Latest Version
+
+> **NOTE:** This section comes with the caveat that you know your project better than we do; so, do what you think is best.
+
+Migrating across major versions can be a bit of a pain sometimes, but we're working on making it better with the generator. Here are some notes on migrating to the current major version.
+
+You may - depending on your customizations - want to prepare your project by doing one of two things.
+
+If you have made no customizations, the simplest process may be to remove some or all of the following:
+
+- `dependencies`, `devDependencies`, and/or `scripts` from `package.json`
+- `package-lock.json`
+- `scripts/*.js`
+- `test/karma.conf.js`
+- `test/index.html`
+
+For a more conservative approach, you should be able to remove any of the following `devDependencies` from your generated project:
+
+```
+babel-core
+babel-plugin-external-helpers
+babel-plugin-transform-object-assign
+babel-preset-env
+karma-browserstack-launcher
+karma-chrome-launcher
+karma-detect-browsers
+karma-firefox-launcher
+karma-ie-launcher
+karma-qunit
+karma-safari-launcher
+karma-teamcity-reporter
+mkdirp
+qunit
+rimraf
+rollup-plugin-babel
+rollup-plugin-commonjs
+rollup-plugin-json
+rollup-plugin-multi-entry
+rollup-plugin-node-resolve
+rollup-plugin-uglify
+semver
+serve-static
+sinon
+uglify-es
+```
+
+All these dependencies should be removable because, in general, build tools are now using the new `videojs-generate-*` libraries. This should make it easier to manage dependencies by offloading much of that work to the Video.js organization. The behavior of these new tools is customizable by editing the files in `scripts/`.
+
+Regardless, you'll almost certainly want allow the generator to fully overwrite all files as described in the previous section - except those that are likely to have been edited by you:
+
+- `src/*`
+- `test/*.test.js`
+- `README.md`
+
+Finally, be sure to run, at minimum, `npm test` afterward to make sure your stuff still works!
+
 ## License
 
 [Apache 2.0][license]
