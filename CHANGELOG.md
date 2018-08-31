@@ -1,3 +1,14 @@
+<a name="7.2.2"></a>
+## [7.2.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.2.1...v7.2.2) (2018-08-31)
+
+### Chores
+
+* Update the version of karma config generator (#223) ([970374e](https://github.com/videojs/generator-videojs-plugin/commit/970374e)), closes [#223](https://github.com/videojs/generator-videojs-plugin/issues/223)
+
+### Documentation
+
+* Add some documentation on migrating to v7. (#222) ([5bec27c](https://github.com/videojs/generator-videojs-plugin/commit/5bec27c)), closes [#222](https://github.com/videojs/generator-videojs-plugin/issues/222)
+
 <a name="7.2.1"></a>
 ## [7.2.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.2.0...v7.2.1) (2018-08-30)
 
