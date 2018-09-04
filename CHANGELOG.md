@@ -1,3 +1,10 @@
+<a name="7.2.3"></a>
+## [7.2.3](https://github.com/videojs/generator-videojs-plugin/compare/v7.2.2...v7.2.3) (2018-09-04)
+
+### Bug Fixes
+
+* should not try to use jsdoc config (#226) ([f7bb2af](https://github.com/videojs/generator-videojs-plugin/commit/f7bb2af)), closes [#226](https://github.com/videojs/generator-videojs-plugin/issues/226)
+
 <a name="7.2.2"></a>
 ## [7.2.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.2.1...v7.2.2) (2018-08-31)
 
