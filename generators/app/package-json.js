@@ -229,7 +229,7 @@ const packageJSON = (current, context) => {
 
     _.assign(result.scripts, {
       'docs': 'npm-run-all docs:*',
-      'docs:api': 'jsdoc src -g plugins/markdown -r -c scripts/jsdoc.json -d docs/api',
+      'docs:api': 'jsdoc src -g plugins/markdown -r -d docs/api',
       'docs:toc': 'doctoc README.md'
     });
 
