@@ -145,7 +145,7 @@ const packageJSON = (current, context) => {
       'prepublish': 'not-in-install && npm run build && pkg-ok || in-install',
       'postinstall': 'shx test -d .git && npm-merge-driver install || in-install',
       'start': 'npm-run-all -p server watch',
-      'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch --no-browsers',
+      'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
       'pretest': 'npm-run-all lint build',
       'test': 'karma start scripts/karma.conf.js',
       'posttest': 'shx cat test/dist/coverage/text.txt',
