@@ -38,7 +38,7 @@ const DEFAULTS = {
     'not-prerelease',
     'sinon',
     'videojs-standard',
-    'npm-merge-driver',
+    'npm-merge-driver-install',
     'husky',
     'lint-staged',
     'pkg-ok'
@@ -143,7 +143,6 @@ const packageJSON = (current, context) => {
       'postclean': 'shx mkdir -p ./dist ./test/dist',
       'lint': 'vjsstandard',
       'prepublish': 'not-in-install && npm run build && pkg-ok || in-install',
-      'postinstall': 'shx test -d .git && npm-merge-driver install || in-install',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
       'pretest': 'npm-run-all lint build',
