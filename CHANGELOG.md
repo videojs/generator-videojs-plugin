@@ -1,3 +1,11 @@
+<a name="7.2.4"></a>
+## [7.2.4](https://github.com/videojs/generator-videojs-plugin/compare/v7.2.3...v7.2.4) (2018-09-05)
+
+### Bug Fixes
+
+* allow karma to launch browsers in server mode ([f2ba826](https://github.com/videojs/generator-videojs-plugin/commit/f2ba826))
+* use npm-merge-driver-install to fix install issues (#229) ([f0e312f](https://github.com/videojs/generator-videojs-plugin/commit/f0e312f)), closes [#229](https://github.com/videojs/generator-videojs-plugin/issues/229)
+
 <a name="7.2.3"></a>
 ## [7.2.3](https://github.com/videojs/generator-videojs-plugin/compare/v7.2.2...v7.2.3) (2018-09-04)
 
