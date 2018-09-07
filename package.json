@@ -68,6 +68,7 @@
     "yeoman-test": "^2.0.0"
   },
   "optionalDependencies": {
+    "es-check": "^2.2.0",
     "global": "^4.3.2",
     "jsdoc": "https://github.com/BrandonOCasey/jsdoc#feat/plugin-from-cli",
     "karma": "^3.0.0",
