@@ -64,11 +64,11 @@
     "pkg-ok": "^2.2.0",
     "videojs-standard": "^7.1.0",
     "yeoman-assert": "^3.1.1",
-    "yeoman-test": "^2.0.0"
+    "yeoman-test": "^2.0.0",
+    "jsdoc": "https://github.com/BrandonOCasey/jsdoc#feat/plugin-from-cli"
   },
   "optionalDependencies": {
     "global": "^4.3.2",
-    "jsdoc": "https://github.com/BrandonOCasey/jsdoc#feat/plugin-from-cli",
     "karma": "^3.0.0",
     "postcss-cli": "^6.0.0",
     "rollup": "^0.65.0",
