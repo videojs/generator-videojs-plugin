@@ -26,8 +26,10 @@
     "test": "npm-run-all test:*",
     "test:unit": "mocha test/*.test.js",
     "test:integration": "node scripts/run-integration-tests.js",
+    "preversion": "npm run test",
     "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
-    "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s"
+    "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
+    "prepublish": "not-in-publish || vjsverify --skip-es-check"
   },
   "lint-staged": {
     "*.js": [
@@ -61,11 +63,11 @@
     "not-prerelease": "^1.0.1",
     "npm-merge-driver-install": "^1.0.0",
     "npm-run-all": "^4.1.3",
-    "pkg-ok": "^2.2.0",
     "videojs-standard": "^7.1.0",
     "yeoman-assert": "^3.1.1",
     "yeoman-test": "^2.0.0",
-    "jsdoc": "https://github.com/BrandonOCasey/jsdoc#feat/plugin-from-cli"
+    "jsdoc": "https://github.com/BrandonOCasey/jsdoc#feat/plugin-from-cli",
+    "videojs-generator-verify": "~1.0.3"
   },
   "optionalDependencies": {
     "global": "^4.3.2",
