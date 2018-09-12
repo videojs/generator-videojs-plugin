@@ -68,6 +68,7 @@
     "jsdoc": "https://github.com/BrandonOCasey/jsdoc#feat/plugin-from-cli"
   },
   "optionalDependencies": {
+    "es-check": "^2.2.0",
     "global": "^4.3.2",
     "karma": "^3.0.0",
     "postcss-cli": "^6.0.0",

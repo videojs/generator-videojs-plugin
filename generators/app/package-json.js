@@ -41,7 +41,8 @@ const DEFAULTS = {
     'npm-merge-driver-install',
     'husky',
     'lint-staged',
-    'pkg-ok'
+    'pkg-ok',
+    'es-check'
   ])
 };
 
@@ -142,7 +143,12 @@ const packageJSON = (current, context) => {
       'clean': 'shx rm -rf ./dist ./test/dist',
       'postclean': 'shx mkdir -p ./dist ./test/dist',
       'lint': 'vjsstandard',
-      'prepublish': 'not-in-install && npm run build && pkg-ok || in-install',
+      'prepublish': 'not-in-install && npm run verify || in-install',
+      'preverify': 'npm run build',
+      'verify': 'npm-run-all -p verify:*',
+      'verify:pkg': 'pkg-ok',
+      'verify:es5': 'es-check es5 \'dist/!(*.es.js|*.css)\'',
+      'verify:es6': 'es-check --module true es6 dist/*.es.js',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
       'pretest': 'npm-run-all lint build',
