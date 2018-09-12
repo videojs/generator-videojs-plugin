@@ -217,7 +217,8 @@ module.exports = class extends Generator {
       'test/_plugin.test.js',
       '_index.html',
       '_CONTRIBUTING.md',
-      '_README.md'
+      '_README.md',
+      '_package-lock.json'
     ];
 
     this._promptsToFilter = [];
