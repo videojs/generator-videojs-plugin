@@ -44,16 +44,18 @@ helpers.run(libs.GENERATOR_PATH)
     process.on('SIGQUIT', cleanup);
     process.on('exit', cleanup);
 
-    const vjsVerify = path.join(tempDir, 'node_modules', '.bin', 'vjsverify');
-
     const commands = [
       ['git', 'init'],
-      ['npm', 'install'],
+      // mimics yeoman install command
+      ['npm', 'install', '--cache-min', '86400'],
       ['npm', 'ci'],
       ['git', 'add', '--all'],
       ['git', 'commit', '-a', '-m', 'feat: initial release!'],
+      ['npm', 'version', 'prerelease'],
+      // copy the changelog over to check its size
+      ['shx', 'cp', 'CHANGELOG.md', 'CHANGELOG-prerelease.md'],
       ['npm', 'version', 'major'],
-      [vjsVerify, '--verbose']
+      ['npm', 'publish', '--dry-run']
     ];
 
     commands.forEach(function(args) {
@@ -74,9 +76,11 @@ helpers.run(libs.GENERATOR_PATH)
       }
     });
 
-    const stat = fs.statSync(path.join(tempDir, 'CHANGELOG.md'));
+    const release = fs.statSync(path.join(tempDir, 'CHANGELOG.md'));
+    const prerelease = fs.statSync(path.join(tempDir, 'CHANGELOG-prerelease.md'));
 
-    assert.ok(stat.size > 0, 'changelog was written to');
+    assert.ok(prerelease.size === 0, 'changelog was not written to after prerelease');
+    assert.ok(release.size > 0, 'changelog was written to after major');
 
     // test is a success
     return Promise.resolve();
