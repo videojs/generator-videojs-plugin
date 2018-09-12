@@ -28,7 +28,6 @@ const DEFAULTS = {
   devDependencies: getGeneratorVersions([
     'conventional-changelog-cli',
     'conventional-changelog-videojs',
-    'in-publish',
     'karma',
     'npm-run-all',
     'rollup',
@@ -41,7 +40,7 @@ const DEFAULTS = {
     'npm-merge-driver-install',
     'husky',
     'lint-staged',
-    'pkg-ok'
+    'videojs-generator-verify'
   ])
 };
 
@@ -142,7 +141,7 @@ const packageJSON = (current, context) => {
       'clean': 'shx rm -rf ./dist ./test/dist',
       'postclean': 'shx mkdir -p ./dist ./test/dist',
       'lint': 'vjsstandard',
-      'prepublish': 'not-in-install && npm run build && pkg-ok || in-install',
+      'prepublishOnly': 'npm run build && vjsverify',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
       'pretest': 'npm-run-all lint build',

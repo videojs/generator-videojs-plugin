@@ -3,8 +3,11 @@
 const helpers = require('yeoman-test');
 const libs = require('../test/libs.js');
 const spawnSync = require('child_process').spawnSync;
+const path = require('path');
+const assert = require('assert');
+const fs = require('fs');
 
-let tempDir = '';
+let tempDir;
 
 helpers.run(libs.GENERATOR_PATH)
   .inTmpDir(function(dir) {
@@ -22,36 +25,64 @@ helpers.run(libs.GENERATOR_PATH)
     precommit: true
   })
   .then(function() {
-    const installRetval = spawnSync('npm', ['i'], {
-      stdio: 'inherit',
-      env: process.env,
-      cwd: tempDir
+    const spawnOptions = {cwd: tempDir};
+
+    const cleanup = function() {
+      console.log(`Cleaning up ${tempDir}`);
+      const result = spawnSync(
+        path.join(tempDir, 'node_modules', '.bin', 'shx'),
+        ['rm', '-rf', tempDir],
+        spawnOptions
+      );
+
+      if (result.status !== 0) {
+        console.error('Failed to cleanup');
+      }
+    };
+
+    process.on('SIGINT', cleanup);
+    process.on('SIGQUIT', cleanup);
+    process.on('exit', cleanup);
+
+    const vjsVerify = path.join(tempDir, 'node_modules', '.bin', 'vjsverify');
+
+    const commands = [
+      ['git', 'init'],
+      ['npm', 'install'],
+      ['npm', 'ci'],
+      ['git', 'add', '--all'],
+      ['git', 'commit', '-a', '-m', 'feat: initial release!'],
+      ['npm', 'version', 'major'],
+      [vjsVerify, '--verbose']
+    ];
+
+    commands.forEach(function(args) {
+      const cmd = args.shift();
+      const command = `${path.basename(cmd)} ${args.join(' ')}`;
+
+      console.log(`Running '${command}'`);
+      const retval = spawnSync(cmd, args, spawnOptions);
+
+      if (retval.status !== 0) {
+        const output = retval.output
+          .filter((s) => !!s)
+          .map((s) => s.toString())
+          .join('');
+
+        console.error(output);
+        throw new Error(`${command} Failed`);
+      }
     });
 
-    if (installRetval.status !== 0) {
-      console.error('npm i failed');
-      process.exit(1);
-    }
+    const stat = fs.statSync(path.join(tempDir, 'CHANGELOG.md'));
 
-    const testRetval = spawnSync('npm', ['run', 'test'], {
-      stdio: 'inherit',
-      env: process.env,
-      cwd: tempDir
-    });
+    assert.ok(stat.size > 0, 'changelog was written to');
 
-    if (testRetval.status !== 0) {
-      console.error('npm test failed');
-      process.exit(1);
-    }
-
-    const rmRetval = spawnSync('shx', ['rm', '-rf', tempDir], {
-      stdio: 'inherit',
-      env: process.env,
-      cwd: process.cwd()
-    });
-
-    if (rmRetval.status !== 0) {
-      console.error('failed to rm temp dir ' + tempDir);
-      process.exit(1);
-    }
+    // test is a success
+    return Promise.resolve();
+  }).then(() => {
+    process.exit();
+  }).catch((e) => {
+    console.error(e.message);
+    process.exit(1);
   });
