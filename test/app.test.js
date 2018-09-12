@@ -3,10 +3,10 @@
 /* global before, describe, it */
 
 const _ = require('lodash');
-const fs = require('fs-extra');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
+const fs = require('fs');
 
 const libs = require('./libs');
 const packageJSON = require('../generators/app/package-json');
@@ -255,7 +255,18 @@ describe('videojs-plugin:app', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)
         .inTmpDir(function(dir) {
-          fs.copySync(path.join(__dirname, '../fixtures/author'), dir);
+          const authorFixture = {
+            name: 'videojs-author-fixture',
+            description: 'This is a fixture to test the handling of an author object.',
+            author: {
+              name: 'John Doe',
+              email: 'john@doe.com'
+            },
+            license: 'MIT',
+            version: '1.0.0'
+          };
+
+          fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(authorFixture));
         })
         .withOptions(libs.options({force: true}))
         .withPrompts({
