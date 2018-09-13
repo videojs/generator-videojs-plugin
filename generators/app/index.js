@@ -342,6 +342,14 @@ module.exports = class extends Generator {
       return this.npmInstall();
     }
 
+    // this.npmInstall automaticall handles
+    // skipInstall, but our custom  install does not.
+    // handle it now.
+    if (this.options.skipInstall) {
+      this.log('Skipping Install, to install later please run: npm i --package-lock-only && npm ci');
+      return;
+    }
+
     // if we are on npm greater than 6
     // save time by updating package-lock-only
     // and then running npm ci
