@@ -21,6 +21,7 @@ const FILES = {
     'CONTRIBUTING.md',
     'index.html',
     'package.json',
+    'package-lock.json',
     'README.md'
   ],
 
