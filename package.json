@@ -26,7 +26,7 @@
     "test:unit": "mocha test/*.test.js",
     "test:integration": "node scripts/run-integration-tests.js",
     "preversion": "npm-run-all generate-pkg-lock test",
-    "generate-pkg-lock": "node scripts/generate-pkg-lock.t js && git add generators/app/templates/_package-lock.json",
+    "generate-pkg-lock": "node scripts/generate-pkg-lock.js && git add generators/app/templates/_package-lock.json",
     "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
     "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
     "prepublish": "not-in-publish || vjsverify --skip-es-check"
