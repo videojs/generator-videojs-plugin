@@ -77,6 +77,10 @@ module.exports = class extends Generator {
     // purposes of the prompt (otherwise it will be rejected by validation).
     defaults.name = naming.getBasicName(defaults.name);
 
+    // we need to default the description to an empty string for
+    // --hurry
+    defaults.description = '';
+
     // The package.json stores a value from `LICENSE_NAMES`, so in that
     // case, we need to find the key instead of the value.
     if (pkg && pkg.license && pkg.license === defaults.license) {
@@ -242,6 +246,7 @@ module.exports = class extends Generator {
    */
   prompting() {
     if (this.options.skipPrompt) {
+      _.assign(this._preconfigs, this._getPromptDefaults());
       return;
     }
 
