@@ -1,3 +1,22 @@
+<a name="7.3.0"></a>
+# [7.3.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.2.4...v7.3.0) (2018-09-13)
+
+### Features
+
+* pre-generate package-lock for faster install (#233) ([dcb0427](https://github.com/videojs/generator-videojs-plugin/commit/dcb0427)), closes [#233](https://github.com/videojs/generator-videojs-plugin/issues/233)
+* remove fs-extra ([79be645](https://github.com/videojs/generator-videojs-plugin/commit/79be645))
+* Use videojs-generator-verify to verify packages prepublish (#232) ([a75f375](https://github.com/videojs/generator-videojs-plugin/commit/a75f375)), closes [#232](https://github.com/videojs/generator-videojs-plugin/issues/232)
+
+### Bug Fixes
+
+* The --hurry option (#234) ([b608014](https://github.com/videojs/generator-videojs-plugin/commit/b608014)), closes [#234](https://github.com/videojs/generator-videojs-plugin/issues/234)
+
+### Chores
+
+* **package:** update videojs-generate-rollup-config to v2.2.0 ([30ee6c6](https://github.com/videojs/generator-videojs-plugin/commit/30ee6c6))
+* **package:** update videojs-standard to v7.1.0 ([777ab40](https://github.com/videojs/generator-videojs-plugin/commit/777ab40))
+* remove old packages and update packages ([fd682a3](https://github.com/videojs/generator-videojs-plugin/commit/fd682a3))
+
 <a name="7.2.4"></a>
 ## [7.2.4](https://github.com/videojs/generator-videojs-plugin/compare/v7.2.3...v7.2.4) (2018-09-05)
 
