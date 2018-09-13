@@ -1,10 +1,8 @@
 'use strict';
 
 const _ = require('lodash');
-const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
-const tsmlj = require('tsmlj');
 const Generator = require('yeoman-generator');
 const constants = require('./constants');
 const naming = require('./naming');
@@ -122,10 +120,7 @@ module.exports = class extends Generator {
       validate: validators.scope
     }, {
       name: 'name',
-      message: tsmlj`
-        Enter the name of this plugin (a-z/0-9/- only; will be
-        prefixed with "${constants.PREFIX}"):
-      `,
+      message: `Enter the name of this plugin (a-z/0-9/- only; will be prefixed with "${constants.PREFIX}"):`,
       default: defaults.name,
       validate: validators.name
     }, {
@@ -161,10 +156,7 @@ module.exports = class extends Generator {
     }, {
       type: 'confirm',
       name: 'lang',
-      message: tsmlj`
-        Do you need video.js language file infrastructure for
-        internationalized strings?
-      `,
+      message: 'Do you need video.js language file infrastructure for internationalized strings?',
       default: defaults.lang
     }, {
       type: 'confirm',
@@ -252,7 +244,7 @@ module.exports = class extends Generator {
       return;
     }
 
-    this.log(`Welcome to the ${chalk.green('Video.js')} plugin generator!`);
+    this.log('Welcome to the Video.js plugin generator!');
 
     return this.prompt(this._getPrompts()).then((responses) => {
       _.assign(this._preconfigs, responses);
@@ -371,6 +363,6 @@ module.exports = class extends Generator {
       return;
     }
 
-    this.log(`All done; ${chalk.green(this.context.pluginName)} is ready to go!`);
+    this.log(`All done; ${this.context.pluginName} is ready to go!`);
   }
 };

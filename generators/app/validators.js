@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const tsmlj = require('tsmlj');
 const PREFIX = require('./constants');
 
 /**
@@ -17,17 +16,12 @@ const PREFIX = require('./constants');
 const name = (input) => {
 
   if (!(/^[a-z][a-z0-9-]*$/).test(input)) {
-    return tsmlj`
-      Names must start with a lower-case letter and contain
-      only lower-case letters (a-z), digits (0-9), and hyphens (-).
-    `;
+    return 'Names must start with a lower-case letter and contain' +
+      ' only lower-case letters (a-z), digits (0-9), and hyphens (-).';
   }
 
   if (_.startsWith(input, PREFIX)) {
-    return tsmlj`
-      Plugins cannot start with "${PREFIX}"; it will automatically
-      be prepended!
-    `;
+    return `Plugins cannot start with "${PREFIX}"; it will automatically be prepended!`;
   }
 
   return true;
@@ -49,10 +43,7 @@ const scope = (input) => {
   }
 
   if (input && _.endsWith(input, '/')) {
-    return tsmlj`
-      Do not include a trailing "/" in your package scope,
-      it will be automatically added.
-    `;
+    return 'Do not include a trailing "/" in your package scope, it will be automatically added.';
   }
 
   return true;
