@@ -10,6 +10,7 @@ const constants = require('./constants');
 const naming = require('./naming');
 const packageJSON = require('./package-json');
 const validators = require('./validators');
+const spawnSync = require('child_process').spawnSync;
 
 module.exports = class extends Generator {
 
@@ -327,7 +328,26 @@ module.exports = class extends Generator {
    * we don't want to run that (or depend on it in any way).
    */
   install() {
-    this.npmInstall();
+    const result = spawnSync('npm', ['--version']);
+
+    // no access to npm uh oh, lets let yeoman throw an error
+    if (result.status !== 0) {
+      return this.npmInstall();
+    }
+
+    // get the major version for npm
+    const major = parseFloat(result.stdout.toString().trim().split('.')[0]);
+
+    if (!major || major <= 5) {
+      return this.npmInstall();
+    }
+
+    // if we are on npm greater than 6
+    // save time by updating package-lock-only
+    // and then running npm ci
+    spawnSync('npm', ['i', '--package-lock-only'], {stdio: 'inherit', cwd: this.destinationRoot()});
+    spawnSync('npm', ['ci'], {stdio: 'inherit', cwd: this.destinationRoot()});
+
   }
 
   /**

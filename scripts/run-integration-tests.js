@@ -12,8 +12,9 @@ let tempDir;
 helpers.run(libs.GENERATOR_PATH)
   .inTmpDir(function(dir) {
     tempDir = dir;
+    console.log(`Generating Project in ${tempDir}`);
   })
-  .withOptions(libs.options())
+  .withOptions(Object.assign(libs.options(), {skipInstall: false}))
   .withPrompts({
     name: 'integration-test',
     author: 'John Doe',
@@ -46,9 +47,6 @@ helpers.run(libs.GENERATOR_PATH)
 
     const commands = [
       ['git', 'init'],
-      // mimics yeoman install command
-      ['npm', 'install', '--cache-min', '86400'],
-      ['npm', 'ci'],
       ['git', 'add', '--all'],
       ['git', 'commit', '-a', '-m', 'feat: initial release!'],
       ['npm', 'version', 'prerelease'],
