@@ -44,11 +44,11 @@ module.exports = {
   LICENSE_DEFAULT,
 
   PROMPT_DEFAULTS: {
-    docs: false,
-    css: false,
+    docs: true,
+    css: true,
     prepush: false,
     precommit: true,
-    lang: false,
+    lang: true,
     license: LICENSE_DEFAULT,
     pluginType: 'advanced',
     name: path.basename(process.cwd()).replace(/^videojs-/, '')
