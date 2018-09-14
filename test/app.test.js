@@ -11,7 +11,7 @@ const fs = require('fs');
 const libs = require('./libs');
 const packageJSON = require('../generators/app/package-json');
 const generatorVersion = require('../generators/app/generator-version');
-const generatorPkg = require('../package.json');
+const pluginPkg = require('../plugin/package.json');
 
 describe('videojs-plugin:app', function() {
   const scripts = [
@@ -207,21 +207,12 @@ describe('videojs-plugin:app', function() {
       libs.allAreNonEmpty(this.pkg.devDependencies, Object.keys(this.pkg.devDependencies));
     });
 
-    it('(generator) has no extra optional deps', function() {
-      const optionalPackages = Object.keys(generatorPkg.optionalDependencies);
-      const packages = Object.keys(this.pkg.dependencies)
-        .concat(Object.keys(this.pkg.devDependencies));
-      let i = optionalPackages.length;
+    it('should have the same deps as the template package', function() {
 
-      while (i--) {
-        const pkg = optionalPackages[i];
+      const templatePackages = Object.keys(pluginPkg.dependencies).concat(Object.keys(pluginPkg.devDependencies));
+      const packages = Object.keys(this.pkg.dependencies).concat(Object.keys(this.pkg.devDependencies));
 
-        if (packages.indexOf(pkg) !== -1) {
-          optionalPackages.splice(i, 1);
-        }
-      }
-
-      assert.deepEqual(optionalPackages, [], 'there are no extra packages in optional dependencies');
+      assert.deepEqual(templatePackages, packages, 'have the same packages');
     });
   });
 
