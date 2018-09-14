@@ -214,8 +214,7 @@ module.exports = class extends Generator {
       'test/_plugin.test.js',
       '_index.html',
       '_CONTRIBUTING.md',
-      '_README.md',
-      '_package-lock.json'
+      '_README.md'
     ];
 
     this._promptsToFilter = [];
@@ -311,13 +310,16 @@ module.exports = class extends Generator {
       );
     }
 
-    const json = packageJSON(this._currentPkgJSON, this.context);
+    const pkg = packageJSON(this._currentPkgJSON, this.context);
+    const lock = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'plugin', 'package-lock.json')));
+
+    lock.name = pkg.name;
+    lock.version = pkg.version;
 
     // We want to use normal JSON.stringify here because we want to
     // preserve whatever ordering existed in the _currentPkgJSON object.
-    const contents = JSON.stringify(json, null, 2);
-
-    this.fs.write(this.destinationPath('package.json'), contents);
+    this.fs.write(this.destinationPath('package.json'), JSON.stringify(pkg, null, 2));
+    this.fs.write(this.destinationPath('package-lock.json'), JSON.stringify(lock, null, 2));
   }
 
   /**
