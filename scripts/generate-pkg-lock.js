@@ -52,6 +52,7 @@ helpers.run(libs.GENERATOR_PATH)
     const lock = JSON.parse(fs.readFileSync(templateLock));
 
     lock.name = '<%= packageName %>';
+    lock.version = '<%= version %>';
 
     fs.writeFileSync(templateLock, JSON.stringify(lock, null, 2));
 
