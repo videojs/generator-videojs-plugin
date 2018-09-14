@@ -1,0 +1,10 @@
+{
+  "groups": {
+    "generator": {
+      "packages": ["./package.json"]
+    },
+    "plugin": {
+      "packages": ["./plugin-package.json"]
+    }
+  }
+}

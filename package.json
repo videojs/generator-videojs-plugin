@@ -65,20 +65,7 @@
     "videojs-generator-verify": "~1.0.4",
     "videojs-standard": "^7.1.0",
     "yeoman-assert": "^3.1.1",
-    "yeoman-test": "^2.0.0",
-    "jsdoc": "https://github.com/BrandonOCasey/jsdoc#feat/plugin-from-cli"
-  },
-  "optionalDependencies": {
-    "global": "^4.3.2",
-    "karma": "^3.0.0",
-    "postcss-cli": "^6.0.0",
-    "rollup": "^0.65.0",
-    "sinon": "^6.1.5",
-    "video.js": "^6 || ^7",
-    "videojs-generate-karma-config": "~3.0.0",
-    "videojs-generate-postcss-config": "~2.0.1",
-    "videojs-generate-rollup-config": "~2.2.0",
-    "videojs-languages": "^1.0.0"
+    "yeoman-test": "^2.0.0"
   },
   "husky": {
     "hooks": {

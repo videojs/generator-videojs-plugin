@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 const generatorVersion = require('./generator-version');
-const pkg = require('../../package.json');
+const pkg = require('../../plugin-package.json');
 
 pkg.optionalDependencies = pkg.optionalDependencies || {};
 pkg.devDependencies = pkg.devDependencies || {};
