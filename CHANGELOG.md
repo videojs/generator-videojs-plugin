@@ -1,3 +1,14 @@
+<a name="7.3.2"></a>
+## [7.3.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.3.1...v7.3.2) (2018-09-17)
+
+### Bug Fixes
+
+* use prepublishOnly instead ([b35cffb](https://github.com/videojs/generator-videojs-plugin/commit/b35cffb))
+
+### Chores
+
+* add Greenkeeper config file (#237) ([2702fcc](https://github.com/videojs/generator-videojs-plugin/commit/2702fcc)), closes [#237](https://github.com/videojs/generator-videojs-plugin/issues/237)
+
 <a name="7.3.1"></a>
 ## [7.3.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.3.0...v7.3.1) (2018-09-14)
 
