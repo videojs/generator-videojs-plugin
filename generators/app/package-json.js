@@ -28,7 +28,6 @@ const DEFAULTS = {
   devDependencies: getGeneratorVersions([
     'conventional-changelog-cli',
     'conventional-changelog-videojs',
-    'in-publish',
     'karma',
     'npm-run-all',
     'rollup',
@@ -142,7 +141,7 @@ const packageJSON = (current, context) => {
       'clean': 'shx rm -rf ./dist ./test/dist',
       'postclean': 'shx mkdir -p ./dist ./test/dist',
       'lint': 'vjsstandard',
-      'prepublish': 'not-in-publish || npm-run-all build verify',
+      'prepublishOnly': 'npm run build && vjsverify',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
       'pretest': 'npm-run-all lint build',
@@ -150,7 +149,6 @@ const packageJSON = (current, context) => {
       'posttest': 'shx cat test/dist/coverage/text.txt',
       'preversion': 'npm test',
       'version': 'is-prerelease || npm run update-changelog && git add CHANGELOG.md',
-      'verify': 'vjsverify',
       'update-changelog': 'conventional-changelog -p videojs -i CHANGELOG.md -s',
       'watch': 'npm-run-all -p watch:*',
       'watch:js': 'npm run build:js -- -w'
