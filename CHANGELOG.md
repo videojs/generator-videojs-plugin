@@ -1,3 +1,14 @@
+<a name="7.3.3"></a>
+## [7.3.3](https://github.com/videojs/generator-videojs-plugin/compare/v7.3.2...v7.3.3) (2018-09-18)
+
+### Bug Fixes
+
+* publish package-lock.json ([b1d50bf](https://github.com/videojs/generator-videojs-plugin/commit/b1d50bf))
+
+### Chores
+
+* **package:** update rollup to version 0.66.0 🚀 (#238) ([3e6e8e1](https://github.com/videojs/generator-videojs-plugin/commit/3e6e8e1)), closes [#238](https://github.com/videojs/generator-videojs-plugin/issues/238)
+
 <a name="7.3.2"></a>
 ## [7.3.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.3.1...v7.3.2) (2018-09-17)
 
