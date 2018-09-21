@@ -14,9 +14,7 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
   const version = getGeneratorVersion(pkgName);
 
   if (!version) {
-    throw new Error(
-      `Error ${pkgName} is not in dependencies for generator-videojs-plugin`
-    );
+    throw new Error(`Error ${pkgName} is not in dependencies for generator-videojs-plugin`);
   }
 
   acc[pkgName] = version;
@@ -74,9 +72,7 @@ const alphabetizeObject = (source) =>
  */
 const alphabetizeScripts = (source) => {
   const keys = Object.keys(source);
-  const prePost = keys.filter(
-    k => _.startsWith(k, 'pre') || _.startsWith(k, 'post')
-  );
+  const prePost = keys.filter(k => _.startsWith(k, 'pre') || _.startsWith(k, 'post'));
   const order = _.difference(keys, prePost).sort();
 
   // Inject the pre/post scripts into the order where they belong.
