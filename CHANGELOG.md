@@ -1,3 +1,10 @@
+<a name="7.3.4"></a>
+## [7.3.4](https://github.com/videojs/generator-videojs-plugin/compare/v7.3.3...v7.3.4) (2018-09-28)
+
+### Chores
+
+* **package:** update husky to version 1.0.1 ([6a4404b](https://github.com/videojs/generator-videojs-plugin/commit/6a4404b))
+
 <a name="7.3.3"></a>
 ## [7.3.3](https://github.com/videojs/generator-videojs-plugin/compare/v7.3.2...v7.3.3) (2018-09-18)
 
