@@ -25,11 +25,12 @@
     "test": "npm-run-all test:*",
     "test:unit": "mocha test/*.test.js",
     "test:integration": "node scripts/run-integration-tests.js",
+    "test:verify": "vjsverify --skip-es-check --verbose",
     "preversion": "npm-run-all generate-pkg-lock test",
     "generate-pkg-lock": "node scripts/generate-pkg-lock.js && git add plugin/package-lock.json",
     "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
     "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
-    "prepublishOnly": "vjsverify --skip-es-check"
+    "prepublishOnly": "npm run test:verify"
   },
   "lint-staged": {
     "*.js": [
@@ -61,7 +62,7 @@
     "npm-merge-driver-install": "^1.0.0",
     "npm-run-all": "^4.1.3",
     "shx": "^0.3.2",
-    "videojs-generator-verify": "~1.0.4",
+    "videojs-generator-verify": "~1.1.0",
     "videojs-standard": "^8.0.1",
     "yeoman-assert": "^3.1.1",
     "yeoman-test": "^2.0.0"
