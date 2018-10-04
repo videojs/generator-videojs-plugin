@@ -137,7 +137,7 @@ const packageJSON = (current, context) => {
       'clean': 'shx rm -rf ./dist ./test/dist',
       'postclean': 'shx mkdir -p ./dist ./test/dist',
       'lint': 'vjsstandard',
-      'prepublishOnly': 'vjsverify --verbose',
+      'prepublishOnly': 'npm run build && vjsverify --verbose',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
       'pretest': 'npm-run-all lint build',
