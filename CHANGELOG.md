@@ -1,3 +1,14 @@
+<a name="7.4.0"></a>
+# [7.4.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.3.4...v7.4.0) (2018-10-05)
+
+### Features
+
+* Use vjsverify during npm test (#244) ([fcad1f5](https://github.com/videojs/generator-videojs-plugin/commit/fcad1f5)), closes [#244](https://github.com/videojs/generator-videojs-plugin/issues/244)
+
+### Chores
+
+* **package:** update videojs-languages to the latest version 🚀 (#242) ([cf7cdac](https://github.com/videojs/generator-videojs-plugin/commit/cf7cdac)), closes [#242](https://github.com/videojs/generator-videojs-plugin/issues/242)
+
 <a name="7.3.4"></a>
 ## [7.3.4](https://github.com/videojs/generator-videojs-plugin/compare/v7.3.3...v7.3.4) (2018-09-28)
 
