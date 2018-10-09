@@ -19,8 +19,8 @@
   <script src="dist/<%= pluginName %>.js"></script>
   <script>
     (function(window, videojs) {
-      var player = window.player = videojs('<%= pluginName %>-player');
-      var <%= pluginFunctionName %> = window.<%= pluginFunctionName %> = player.<%= pluginFunctionName %>();
+      var examplePlayer = window.examplePlayer = videojs('<%= pluginName %>-player');
+      var <%= pluginFunctionName %> = window.<%= pluginFunctionName %> = examplePlayer.<%= pluginFunctionName %>();
     }(window, window.videojs));
   </script>
 </body>
