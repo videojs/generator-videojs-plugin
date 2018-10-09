@@ -152,6 +152,10 @@ const packageJSON = (current, context) => {
       'watch:js': 'npm run build:js -- -w'
     }),
 
+    'engine': {
+      node: '>=8'
+    },
+
     // Always include the two minimum keywords with whatever exists in the
     // current keywords array.
     'keywords': _.union(['videojs', 'videojs-plugin'], current.keywords).sort(),
