@@ -152,8 +152,9 @@ const packageJSON = (current, context) => {
       'watch:js': 'npm run build:js -- -w'
     }),
 
-    'engine': {
-      node: '>=8'
+    'engines': {
+      node: '>=8',
+      npm: '>=5'
     },
 
     // Always include the two minimum keywords with whatever exists in the
