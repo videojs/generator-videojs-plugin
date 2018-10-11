@@ -4,8 +4,9 @@
   "description": "A Yeoman generator for Video.js plugins",
   "license": "Apache-2.0",
   "main": "generators/app/index.js",
-  "engine": {
-    "node": ">=8"
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
   },
   "repository": "videojs/generator-videojs-plugin",
   "author": {
@@ -49,6 +50,7 @@
   ],
   "dependencies": {
     "lodash": "^4.17.10",
+    "please-upgrade-node": "^3.1.1",
     "yeoman-generator": "^3.1.1"
   },
   "devDependencies": {

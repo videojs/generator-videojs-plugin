@@ -6,7 +6,7 @@ We welcome contributions from everyone!
 <% } -%>
 ## Getting Started
 
-Make sure you have Node.js 4.8 or higher and npm installed.
+Make sure you have Node.js 8 or higher and npm installed.
 
 <% if (!isPrivate) { -%>
 1. Fork this repository and clone your fork
