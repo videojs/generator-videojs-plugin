@@ -39,7 +39,7 @@
       "git add"
     ],
     "(README.md|docs/conventions.md)": [
-      "doctoc",
+      "doctoc --notitle",
       "git add"
     ]
   },
