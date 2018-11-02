@@ -2,6 +2,7 @@ sudo: false
 dist: trusty
 language: node_js
 # node version is specified using the .nvmrc file
+cache: npm
 before_install:
   - npm install -g greenkeeper-lockfile@1
 before_script:
