@@ -1,5 +1,4 @@
-sudo: false
-dist: trusty
+dist: xenial
 language: node_js
 # node version is specified using the .nvmrc file
 cache: npm
