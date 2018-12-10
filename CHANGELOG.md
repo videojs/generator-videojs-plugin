@@ -1,3 +1,28 @@
+<a name="7.5.0"></a>
+# [7.5.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.4.0...v7.5.0) (2018-12-10)
+
+### Features
+
+* use cache in travis (#258) ([65b32cc](https://github.com/videojs/generator-videojs-plugin/commit/65b32cc)), closes [#258](https://github.com/videojs/generator-videojs-plugin/issues/258)
+
+### Bug Fixes
+
+* Require node 8 in with please-upgrade-node (#246) ([80222eb](https://github.com/videojs/generator-videojs-plugin/commit/80222eb)), closes [#246](https://github.com/videojs/generator-videojs-plugin/issues/246)
+
+### Chores
+
+* **package:** update lint-staged to version 8.0.0 (#252) ([2a93422](https://github.com/videojs/generator-videojs-plugin/commit/2a93422)), closes [#252](https://github.com/videojs/generator-videojs-plugin/issues/252)
+* **package:** update npm-run-all to 4.1.5 (#263) ([05504b8](https://github.com/videojs/generator-videojs-plugin/commit/05504b8)), closes [#263](https://github.com/videojs/generator-videojs-plugin/issues/263)
+* **package:** update videojs-generate-karma-config to version 3.1.0 (#248) ([9827cc6](https://github.com/videojs/generator-videojs-plugin/commit/9827cc6)), closes [#248](https://github.com/videojs/generator-videojs-plugin/issues/248)
+* **package:** update videojs-generate-rollup-config to version 2.3.0 🚀 (#247) ([dc55df2](https://github.com/videojs/generator-videojs-plugin/commit/dc55df2)), closes [#247](https://github.com/videojs/generator-videojs-plugin/issues/247)
+* **package:** update videojs-generator-verify to version 1.2.0 (#262) ([474006f](https://github.com/videojs/generator-videojs-plugin/commit/474006f)), closes [#262](https://github.com/videojs/generator-videojs-plugin/issues/262)
+* update travis config per recommendations (#264) ([220db7b](https://github.com/videojs/generator-videojs-plugin/commit/220db7b)), closes [#264](https://github.com/videojs/generator-videojs-plugin/issues/264)
+* **package:** Updated npm-run-all from 4.1.3 to 4.1.5 so that event-stream@3.3.6 is not used. (#267) ([2184a33](https://github.com/videojs/generator-videojs-plugin/commit/2184a33)), closes [#267](https://github.com/videojs/generator-videojs-plugin/issues/267)
+
+### Code Refactoring
+
+* Use a different name for player in plugin index page (#245) ([c117984](https://github.com/videojs/generator-videojs-plugin/commit/c117984)), closes [#245](https://github.com/videojs/generator-videojs-plugin/issues/245)
+
 <a name="7.4.0"></a>
 # [7.4.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.3.4...v7.4.0) (2018-10-05)
 
