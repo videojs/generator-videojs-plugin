@@ -193,7 +193,7 @@ const packageJSON = (current, context) => {
         'git add'
       ],
       'README.md': [
-        'npm run docs:toc',
+        'doctoc --notitle',
         'git add'
       ]
     },
@@ -231,7 +231,7 @@ const packageJSON = (current, context) => {
     _.assign(result.scripts, {
       'docs': 'npm-run-all docs:*',
       'docs:api': 'jsdoc src -g plugins/markdown -r -d docs/api',
-      'docs:toc': 'doctoc README.md'
+      'docs:toc': 'doctoc --notitle README.md'
     });
 
     _.assign(result.devDependencies, getGeneratorVersions(['doctoc', 'jsdoc']));
