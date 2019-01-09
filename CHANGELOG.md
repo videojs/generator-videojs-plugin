@@ -1,3 +1,14 @@
+<a name="7.5.1"></a>
+## [7.5.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.5.0...v7.5.1) (2019-01-09)
+
+### Bug Fixes
+
+* support partially staged commits, and remove doctoc title (#255) ([2442ee2](https://github.com/videojs/generator-videojs-plugin/commit/2442ee2)), closes [#255](https://github.com/videojs/generator-videojs-plugin/issues/255)
+
+### Chores
+
+* **package:** Use Rollup 1.0 and videojs-generate-rollup-config 3.0 (#269) ([c3a425e](https://github.com/videojs/generator-videojs-plugin/commit/c3a425e)), closes [#269](https://github.com/videojs/generator-videojs-plugin/issues/269)
+
 <a name="7.5.0"></a>
 # [7.5.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.4.0...v7.5.0) (2018-12-10)
 
