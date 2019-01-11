@@ -24,14 +24,14 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 const DEFAULTS = {
   dependencies: getGeneratorVersions(['global', 'video.js']),
   devDependencies: getGeneratorVersions([
+    '@videojs/generator-helpers',
     'karma',
     'rollup',
     'videojs-generate-rollup-config',
     'videojs-generate-karma-config',
     'sinon',
     'videojs-standard',
-    'videojs-generator-verify',
-    'videojs-generator-helpers'
+    'videojs-generator-verify'
   ])
 };
 

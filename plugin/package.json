@@ -13,6 +13,7 @@
     "video.js": "^6 || ^7"
   },
   "devDependencies": {
+    "@videojs/generator-helpers": "videojs/generator-helpers",
     "jsdoc": "BrandonOCasey/jsdoc#fix/security-issue",
     "karma": "^3.0.0",
     "postcss-cli": "^6.0.0",
@@ -21,7 +22,6 @@
     "videojs-generate-karma-config": "~5.0.2",
     "videojs-generate-postcss-config": "~2.0.1",
     "videojs-generate-rollup-config": "~3.0.2",
-    "videojs-generator-helpers": "videojs/videojs-generator-helpers#1ff008e",
     "videojs-generator-verify": "~1.2.0",
     "videojs-languages": "^2.0.0",
     "videojs-standard": "^8.0.1"

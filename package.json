@@ -56,7 +56,7 @@
   "devDependencies": {
     "is-ci": "^2.0.0",
     "mocha": "^5.2.0",
-    "videojs-generator-helpers": "videojs/videojs-generator-helpers#1ff008e",
+    "@videojs/generator-helpers": "videojs/generator-helpers",
     "videojs-generator-verify": "~1.2.0",
     "videojs-standard": "^8.0.1",
     "yeoman-assert": "^3.1.1",
