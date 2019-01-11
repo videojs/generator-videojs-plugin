@@ -13,7 +13,7 @@
     "video.js": "^6 || ^7"
   },
   "devDependencies": {
-    "@videojs/generator-helpers": "videojs/generator-helpers",
+    "@videojs/generator-helpers": "~1.0.0",
     "jsdoc": "BrandonOCasey/jsdoc#fix/security-issue",
     "karma": "^3.0.0",
     "postcss-cli": "^6.0.0",
