@@ -14,7 +14,7 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
   const version = getGeneratorVersion(pkgName);
 
   if (!version) {
-    throw new Error(`Error ${pkgName} is not in dependencies for generator-videojs-plugin`);
+    throw new Error(`Error ${pkgName} is not in dependencies for generator-videojs-plugin/plugin/package.json`);
   }
 
   acc[pkgName] = version;
@@ -24,20 +24,13 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 const DEFAULTS = {
   dependencies: getGeneratorVersions(['global', 'video.js']),
   devDependencies: getGeneratorVersions([
-    'conventional-changelog-cli',
-    'conventional-changelog-videojs',
+    '@videojs/generator-helpers',
     'karma',
-    'npm-run-all',
     'rollup',
-    'shx',
     'videojs-generate-rollup-config',
     'videojs-generate-karma-config',
-    'not-prerelease',
     'sinon',
     'videojs-standard',
-    'npm-merge-driver-install',
-    'husky',
-    'lint-staged',
     'videojs-generator-verify'
   ])
 };
@@ -234,7 +227,7 @@ const packageJSON = (current, context) => {
       'docs:toc': 'doctoc --notitle README.md'
     });
 
-    _.assign(result.devDependencies, getGeneratorVersions(['doctoc', 'jsdoc']));
+    _.assign(result.devDependencies, getGeneratorVersions(['jsdoc']));
   }
 
   if (context.css) {
