@@ -1,3 +1,15 @@
+<a name="7.6.0"></a>
+# [7.6.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.5.1...v7.6.0) (2019-01-14)
+
+### Features
+
+* use [@videojs](https://github.com/videojs)/generator-helpers (#257) ([be0f2e3](https://github.com/videojs/generator-videojs-plugin/commit/be0f2e3)), closes [#257](https://github.com/videojs/generator-videojs-plugin/issues/257)
+
+### Chores
+
+* **package:** fix a security issue in jsdoc ([4ce15db](https://github.com/videojs/generator-videojs-plugin/commit/4ce15db))
+* **package:** update videojs-generate-karma-config to ~5.0.2 ([9bc8631](https://github.com/videojs/generator-videojs-plugin/commit/9bc8631))
+
 <a name="7.5.1"></a>
 ## [7.5.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.5.0...v7.5.1) (2019-01-09)
 
