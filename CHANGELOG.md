@@ -1,3 +1,10 @@
+<a name="7.6.1"></a>
+## [7.6.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.6.0...v7.6.1) (2019-01-14)
+
+### Chores
+
+* **package:** updates to resolve dependency deprecation warnings (#273) ([d075376](https://github.com/videojs/generator-videojs-plugin/commit/d075376)), closes [#273](https://github.com/videojs/generator-videojs-plugin/issues/273)
+
 <a name="7.6.0"></a>
 # [7.6.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.5.1...v7.6.0) (2019-01-14)
 
