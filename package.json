@@ -34,7 +34,7 @@
     "prepublishOnly": "npm run test:verify"
   },
   "lint-staged": {
-    "*.js": [
+    "**/*.js": [
       "vjsstandard --fix",
       "git add"
     ],
