@@ -1,3 +1,19 @@
+<a name="7.6.2"></a>
+## [7.6.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.6.1...v7.6.2) (2019-04-11)
+
+### Bug Fixes
+
+* **security:** fix security issues by updating package-lock.json ([5d11e2a](https://github.com/videojs/generator-videojs-plugin/commit/5d11e2a))
+
+### Chores
+
+* **package:** update karma to version 4.0.0 🚀 (#274) ([2f1cc2e](https://github.com/videojs/generator-videojs-plugin/commit/2f1cc2e)), closes [#274](https://github.com/videojs/generator-videojs-plugin/issues/274)
+* **package:** update mocha to version 6.0.0 🚀 (#275) ([0c68ab4](https://github.com/videojs/generator-videojs-plugin/commit/0c68ab4)), closes [#275](https://github.com/videojs/generator-videojs-plugin/issues/275)
+* **package:** update packages to prevent npm audit warnings (#279) ([0594778](https://github.com/videojs/generator-videojs-plugin/commit/0594778)), closes [#279](https://github.com/videojs/generator-videojs-plugin/issues/279)
+* **package:** update rollup to version 1.10.0 (#280) ([d6d0827](https://github.com/videojs/generator-videojs-plugin/commit/d6d0827)), closes [#280](https://github.com/videojs/generator-videojs-plugin/issues/280)
+* **package:** update videojs-generate-karma-config to version 5.1.0 🚀 (#277) ([eb80caa](https://github.com/videojs/generator-videojs-plugin/commit/eb80caa)), closes [#277](https://github.com/videojs/generator-videojs-plugin/issues/277)
+* **package:** videojs-standard minimum version to 8.0.3 ([466f475](https://github.com/videojs/generator-videojs-plugin/commit/466f475))
+
 <a name="7.6.1"></a>
 ## [7.6.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.6.0...v7.6.1) (2019-01-14)
 
