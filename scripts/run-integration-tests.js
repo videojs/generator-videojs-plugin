@@ -74,6 +74,7 @@ helpers.run(libs.GENERATOR_PATH)
       ['git', 'init'],
       ['npm', 'i', '--package-lock-only'],
       ['npm', 'ci'],
+      ['npm', 'run', 'docs'],
       ['git', 'add', '--all'],
       ['git', 'commit', '-a', '-m', 'feat: initial release!'],
 
@@ -112,6 +113,9 @@ helpers.run(libs.GENERATOR_PATH)
         throw new Error(`${command} Failed`);
       }
     });
+    console.log('** Running \'npm audit\' **');
+    // not a test, but useful to log
+    spawnSync('npm', ['audit'], spawnOptions);
 
     const release = fs.statSync(path.join(tempDir, 'CHANGELOG.md'));
     const prerelease = fs.statSync(path.join(tempDir, 'CHANGELOG-prerelease.md'));
