@@ -58,7 +58,7 @@
     "mocha": "^6.0.0",
     "@videojs/generator-helpers": "~1.0.0",
     "videojs-generator-verify": "~1.2.0",
-    "videojs-standard": "^8.0.1",
+    "videojs-standard": "^8.0.3",
     "yeoman-assert": "^3.1.1",
     "yeoman-test": "^2.0.0"
   },
