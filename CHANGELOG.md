@@ -1,3 +1,18 @@
+<a name="7.6.3"></a>
+## [7.6.3](https://github.com/videojs/generator-videojs-plugin/compare/v7.6.2...v7.6.3) (2019-04-22)
+
+### Bug Fixes
+
+* ignore plugin/node_modules during publish ([5b2f151](https://github.com/videojs/generator-videojs-plugin/commit/5b2f151))
+
+### Chores
+
+* **package:** update videojs-generate-karma-config to version 5.2.0 🚀 (#281) ([fb49f83](https://github.com/videojs/generator-videojs-plugin/commit/fb49f83)), closes [#281](https://github.com/videojs/generator-videojs-plugin/issues/281)
+
+### Documentation
+
+* update packages that can be removed (#282) ([1d6f7d6](https://github.com/videojs/generator-videojs-plugin/commit/1d6f7d6)), closes [#282](https://github.com/videojs/generator-videojs-plugin/issues/282)
+
 <a name="7.6.2"></a>
 ## [7.6.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.6.1...v7.6.2) (2019-04-11)
 
