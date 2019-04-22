@@ -31,6 +31,13 @@ To learn more about Video.js plugins and this generator's conventions and opinio
 - [Updating an Existing Project](#updating-an-existing-project)
   - [Recommendations](#recommendations)
   - [Migrating to the Latest Version](#migrating-to-the-latest-version)
+  - [Where do dependencies come from?](#where-do-dependencies-come-from)
+    - [`videojs-generate-rollup-config`](#videojs-generate-rollup-config)
+    - [`videojs-genreate-karma-config`](#videojs-genreate-karma-config)
+    - [`videojs-generate-postcss-config`](#videojs-generate-postcss-config)
+    - [`videojs-generator-verify`](#videojs-generator-verify)
+    - [`@videojs/generator-helpers`](#videojsgenerator-helpers)
+    - [No longer needed](#no-longer-needed)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -112,34 +119,68 @@ If you have made no customizations, the simplest process may be to remove some o
 - `test/karma.conf.js`
 - `test/index.html`
 
-For a more conservative approach, you should be able to remove any of the following `devDependencies` from your generated project:
+For a more conservative approach, you should be able to remove any dependencies not listed in [`plugin/package.json`](plugin/package.json) unless it is specifically needed by your project.
 
+### Where do dependencies come from?
+
+#### `videojs-generate-rollup-config`
 ```
 babel-core
 babel-plugin-external-helpers
 babel-plugin-transform-object-assign
 babel-preset-env
-karma-browserstack-launcher
-karma-chrome-launcher
-karma-detect-browsers
-karma-firefox-launcher
-karma-ie-launcher
-karma-qunit
-karma-safari-launcher
-karma-teamcity-reporter
-mkdirp
-qunit
-rimraf
+@babel/preset-env
+@babel/plugin-transform-object-assign
+@babel/core
+@babel/plugin-external-helpers
 rollup-plugin-babel
 rollup-plugin-commonjs
 rollup-plugin-json
 rollup-plugin-multi-entry
 rollup-plugin-node-resolve
 rollup-plugin-uglify
-semver
-serve-static
-sinon
+rollup-plugin-terser
 uglify-es
+```
+
+#### `videojs-genreate-karma-config`
+```
+karma-browserstack-launcher
+karma-chrome-launcher
+karma-coverage
+karma-detect-browsers
+karma-firefox-launcher
+karma-ie-launcher
+karma-qunit
+karma-safari-launcher
+karma-safaritechpreview-launcher
+karma-safari-applescript-launcher
+karma-teamcity-reporter
+karma-static-server
+qunit
+```
+
+#### `videojs-generate-postcss-config`
+```
+autoprefixer
+postcss-banner
+postcss-calc
+postcss-csso
+postcss-custom-properties
+postcss-import
+postcss-nesting
+postcss-progress
+```
+
+#### `videojs-generator-verify`
+```
+es-check
+pkg-ok
+pkg-can-install
+```
+
+#### `@videojs/generator-helpers`
+```
 conventional-changelog-cli
 conventional-changelog-videojs
 doctoc
@@ -149,19 +190,16 @@ not-prerelease
 npm-merge-driver-install
 npm-run-all
 shx
-pkg-ok
-in-publish
 ```
 
-All these dependencies should be removable because, in general, build tools are now using the new `videojs-generate-*` libraries. This should make it easier to manage dependencies by offloading much of that work to the Video.js organization. The behavior of these new tools is customizable by editing the files in `scripts/`.
+#### No longer needed
 
-Regardless, you'll almost certainly want allow the generator to fully overwrite all files as described in the previous section - except those that are likely to have been edited by you:
-
-- `src/*`
-- `test/*.test.js`
-- `README.md`
-
-Finally, be sure to run, at minimum, `npm test` afterward to make sure your stuff still works!
+No longer needed for other reasons
+* `serve-static`: replaced by `karma-static-server`
+* `in-publish`: replaced by using `prepublishOnly` via a new version of npm
+* `mkdirp`: replaced by using `shx`
+* `rimraf`: replaced by using `shx`
+* `semver`: replaced by `@videojs/generator-helpers`
 
 ## License
 
