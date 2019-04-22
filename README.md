@@ -30,6 +30,7 @@ To learn more about Video.js plugins and this generator's conventions and opinio
     - [Hurry](#hurry)
 - [Updating an Existing Project](#updating-an-existing-project)
   - [Recommendations](#recommendations)
+  - [Migrating to the Latest Version](#migrating-to-the-latest-version)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -139,6 +140,17 @@ semver
 serve-static
 sinon
 uglify-es
+conventional-changelog-cli
+conventional-changelog-videojs
+doctoc
+husky
+lint-staged
+not-prerelease
+npm-merge-driver-install
+npm-run-all
+shx
+pkg-ok
+in-publish
 ```
 
 All these dependencies should be removable because, in general, build tools are now using the new `videojs-generate-*` libraries. This should make it easier to manage dependencies by offloading much of that work to the Video.js organization. The behavior of these new tools is customizable by editing the files in `scripts/`.
