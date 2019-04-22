@@ -33,7 +33,7 @@ To learn more about Video.js plugins and this generator's conventions and opinio
   - [Migrating to the Latest Version](#migrating-to-the-latest-version)
   - [Where do dependencies come from?](#where-do-dependencies-come-from)
     - [`videojs-generate-rollup-config`](#videojs-generate-rollup-config)
-    - [`videojs-genreate-karma-config`](#videojs-genreate-karma-config)
+    - [`videojs-generate-karma-config`](#videojs-generate-karma-config)
     - [`videojs-generate-postcss-config`](#videojs-generate-postcss-config)
     - [`videojs-generator-verify`](#videojs-generator-verify)
     - [`@videojs/generator-helpers`](#videojsgenerator-helpers)
@@ -143,7 +143,7 @@ rollup-plugin-terser
 uglify-es
 ```
 
-#### `videojs-genreate-karma-config`
+#### `videojs-generate-karma-config`
 ```
 karma-browserstack-launcher
 karma-chrome-launcher
