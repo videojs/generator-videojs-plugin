@@ -1,3 +1,14 @@
+<a name="7.6.4"></a>
+## [7.6.4](https://github.com/videojs/generator-videojs-plugin/compare/v7.6.3...v7.6.4) (2019-06-28)
+
+### Chores
+
+* **package:** update [@videojs](https://github.com/videojs)/generator-helpers to version 1.1.0 🚀 (#285) ([08bf5cd](https://github.com/videojs/generator-videojs-plugin/commit/08bf5cd)), closes [#285](https://github.com/videojs/generator-videojs-plugin/issues/285)
+* **package:** update package locks ([63fd985](https://github.com/videojs/generator-videojs-plugin/commit/63fd985))
+* **package:** update videojs-generate-karma-config to version 5.3.0 🚀 (#284) ([01a2aa2](https://github.com/videojs/generator-videojs-plugin/commit/01a2aa2)), closes [#284](https://github.com/videojs/generator-videojs-plugin/issues/284)
+* **package:** update videojs-generate-rollup-config to version 3.2.0 (#286) ([b7c30e5](https://github.com/videojs/generator-videojs-plugin/commit/b7c30e5)), closes [#286](https://github.com/videojs/generator-videojs-plugin/issues/286)
+* **package:** update yeoman-generator to version 4.0.0 🚀 (#287) ([46ce479](https://github.com/videojs/generator-videojs-plugin/commit/46ce479)), closes [#287](https://github.com/videojs/generator-videojs-plugin/issues/287)
+
 <a name="7.6.3"></a>
 ## [7.6.3](https://github.com/videojs/generator-videojs-plugin/compare/v7.6.2...v7.6.3) (2019-04-22)
 
