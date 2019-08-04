@@ -124,8 +124,8 @@ const packageJSON = (current, context) => {
       'ie 11'
     ],
     'scripts': _.assign({}, current.scripts, {
-      'build-test': "npm-run-all -s clean -p 'build:!(js)' 'build:js -- --environment TEST_BUNDLE_ONLY'",
-      'build-prod': "npm-run-all -s clean -p 'build:!(js)' 'build:js -- --environment NO_TEST_BUNDLE'",
+      'build-test': "npm-run-all -s clean 'build:js -- --environment TEST_BUNDLE_ONLY'",
+      'build-prod': "npm-run-all -s clean 'build:js -- --environment NO_TEST_BUNDLE'",
       'build': 'npm-run-all -s clean -p build:*',
       'build:js': 'rollup -c scripts/rollup.config.js',
       'clean': 'shx rm -rf ./dist ./test/dist && shx mkdir -p ./dist ./test/dist',
@@ -245,7 +245,15 @@ const packageJSON = (current, context) => {
   // directory if needed.
   if (context.lang) {
     result.scripts['build:lang'] = 'vjslang --dir dist/lang';
+
     _.assign(result.devDependencies, getGeneratorVersions(['videojs-languages']));
+  }
+
+  if (context.lang || context.css) {
+    _.assign(result.scripts, {
+      'build-test': "npm-run-all -s clean -p 'build:!(js)' 'build:js -- --environment TEST_BUNDLE_ONLY'",
+      'build-prod': "npm-run-all -s clean -p 'build:!(js)' 'build:js -- --environment NO_TEST_BUNDLE'"
+    });
   }
 
   result.files.sort();
