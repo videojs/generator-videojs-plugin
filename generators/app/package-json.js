@@ -24,6 +24,7 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 const DEFAULTS = {
   dependencies: getGeneratorVersions(['global', 'video.js']),
   devDependencies: getGeneratorVersions([
+    'cross-env',
     '@videojs/generator-helpers',
     'karma',
     'rollup',
@@ -124,8 +125,8 @@ const packageJSON = (current, context) => {
       'ie 11'
     ],
     'scripts': _.assign({}, current.scripts, {
-      'build-test': "npm-run-all -s clean 'build:js -- --environment TEST_BUNDLE_ONLY'",
-      'build-prod': "npm-run-all -s clean 'build:js -- --environment NO_TEST_BUNDLE'",
+      'build-test': "cross-env-shell TEST_BUNDLE_ONLY=1 'npm run build'",
+      'build-prod': "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
       'build': 'npm-run-all -s clean -p build:*',
       'build:js': 'rollup -c scripts/rollup.config.js',
       'clean': 'shx rm -rf ./dist ./test/dist && shx mkdir -p ./dist ./test/dist',
@@ -247,13 +248,6 @@ const packageJSON = (current, context) => {
     result.scripts['build:lang'] = 'vjslang --dir dist/lang';
 
     _.assign(result.devDependencies, getGeneratorVersions(['videojs-languages']));
-  }
-
-  if (context.lang || context.css) {
-    _.assign(result.scripts, {
-      'build-test': "npm-run-all -s clean -p 'build:!(js)' 'build:js -- --environment TEST_BUNDLE_ONLY'",
-      'build-prod': "npm-run-all -s clean -p 'build:!(js)' 'build:js -- --environment NO_TEST_BUNDLE'"
-    });
   }
 
   result.files.sort();
