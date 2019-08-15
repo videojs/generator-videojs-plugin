@@ -2,12 +2,48 @@
   "name": "plugin-pkg-template",
   "version": "0.0.0",
   "description": "template for greenkeeper",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [],
+  "main": "dist/%s.cjs.js",
+  "module": "dist/%s.es.js",
+  "scripts": {
+    "build:lang": "vjslang --dir dist/lang",
+    "build:css": "postcss -o dist/%s.css --config scripts/postcss.config.js src/plugin.css",
+    "watch:css": "npm run build:css -- -w",
+    "docs": "npm-run-all docs:*",
+    "docs:api": "jsdoc src -g plugins/markdown -r -d docs/api",
+    "docs:toc": "doctoc --notitle README.md",
+    "build-test": "npm-run-all -s clean -p 'build:!(js)' 'build:js -- --environment TEST_BUNDLE_ONLY'",
+    "build-prod": "npm-run-all -s clean -p 'build:!(js)' 'build:js -- --environment NO_TEST_BUNDLE'",
+    "build": "npm-run-all -s clean -p build:*",
+    "build:js": "rollup -c scripts/rollup.config.js",
+    "clean": "shx rm -rf ./dist ./test/dist && shx mkdir -p ./dist ./test/dist",
+    "lint": "vjsstandard",
+    "prepublishOnly": "npm-run-all build-prod && vjsverify --verbose",
+    "start": "npm-run-all -p server watch",
+    "server": "karma start scripts/karma.conf.js --singleRun=false --auto-watch",
+    "test": "npm run build-test && karma start scripts/karma.conf.js",
+    "posttest": "shx cat test/dist/coverage/text.txt",
+    "preversion": "npm test",
+    "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
+    "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
+    "watch": "npm-run-all -p watch:*",
+    "watch:js": "npm run build:js -- -w"
+  },
+  "keywords": [
+    "videojs",
+    "videojs-plugin"
+  ],
   "author": "",
   "repository": "https://github.com/videojs/generator-videojs-plugin",
   "license": "ISC",
+  "files": [
+    "CONTRIBUTING.md",
+    "dist/",
+    "docs/",
+    "index.html",
+    "scripts/",
+    "src/",
+    "test/"
+  ],
   "dependencies": {
     "global": "^4.3.2",
     "video.js": "^6 || ^7"
@@ -25,5 +61,36 @@
     "videojs-generator-verify": "~1.2.0",
     "videojs-languages": "^2.0.0",
     "videojs-standard": "^8.0.3"
+  },
+  "browserslist": [
+    "defaults",
+    "ie 11"
+  ],
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "vjsstandard": {
+    "ignore": [
+      "dist",
+      "docs",
+      "test/dist"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "vjsstandard --fix",
+      "git add"
+    ],
+    "README.md": [
+      "doctoc --notitle",
+      "git add"
+    ]
   }
 }

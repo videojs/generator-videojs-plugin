@@ -2,38 +2,7 @@
 
 const _ = require('lodash');
 const generatorVersion = require('./generator-version');
-const pkg = require('../../plugin/package.json');
-
-pkg.optionalDependencies = pkg.optionalDependencies || {};
-pkg.devDependencies = pkg.devDependencies || {};
-
-const getGeneratorVersion = (pkgName) =>
-  pkg.optionalDependencies[pkgName] || pkg.devDependencies[pkgName] || pkg.dependencies[pkgName];
-
-const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
-  const version = getGeneratorVersion(pkgName);
-
-  if (!version) {
-    throw new Error(`Error ${pkgName} is not in dependencies for generator-videojs-plugin/plugin/package.json`);
-  }
-
-  acc[pkgName] = version;
-  return acc;
-}, {});
-
-const DEFAULTS = {
-  dependencies: getGeneratorVersions(['global', 'video.js']),
-  devDependencies: getGeneratorVersions([
-    '@videojs/generator-helpers',
-    'karma',
-    'rollup',
-    'videojs-generate-rollup-config',
-    'videojs-generate-karma-config',
-    'sinon',
-    'videojs-standard',
-    'videojs-generator-verify'
-  ])
-};
+const pkgTemplate = require('../../plugin/package.json');
 
 /**
  * Takes advantage of the way V8 orders object properties - by their
@@ -109,92 +78,37 @@ const packageJSON = (current, context) => {
     return str.replace(/%s/g, context.pluginName);
   };
 
-  const result = _.assign({}, current, {
+  const result = _.assign({}, current, pkgTemplate, {
     'name': context.packageName,
     'version': context.version,
     'description': context.description,
-    'main': scriptify('dist/%s.cjs.js'),
-    'module': scriptify('dist/%s.es.js'),
+    'main': scriptify(pkgTemplate.main),
+    'module': scriptify(pkgTemplate.module),
+    'author': context.author,
+    'license': context.licenseName,
 
     'generator-videojs-plugin': {
       version: generatorVersion()
     },
-    'browserslist': [
-      'defaults',
-      'ie 11'
-    ],
-    'scripts': _.assign({}, current.scripts, {
-      'build-test': "npm-run-all -s clean 'build:js -- --environment TEST_BUNDLE_ONLY'",
-      'build-prod': "npm-run-all -s clean 'build:js -- --environment NO_TEST_BUNDLE'",
-      'build': 'npm-run-all -s clean -p build:*',
-      'build:js': 'rollup -c scripts/rollup.config.js',
-      'clean': 'shx rm -rf ./dist ./test/dist && shx mkdir -p ./dist ./test/dist',
-      'lint': 'vjsstandard',
-      'prepublishOnly': 'npm-run-all build-prod && vjsverify --verbose',
-      'start': 'npm-run-all -p server watch',
-      'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
-      'test': 'npm run build-test && karma start scripts/karma.conf.js',
-      'posttest': 'shx cat test/dist/coverage/text.txt',
-      'preversion': 'npm test',
-      'version': 'is-prerelease || npm run update-changelog && git add CHANGELOG.md',
-      'update-changelog': 'conventional-changelog -p videojs -i CHANGELOG.md -s',
-      'watch': 'npm-run-all -p watch:*',
-      'watch:js': 'npm run build:js -- -w'
+    'scripts': _.assign({}, current.scripts, pkgTemplate.scripts, {
+      'build:css': scriptify(pkgTemplate.scripts['build:css'])
     }),
 
-    'engines': {
-      node: '>=8',
-      npm: '>=5'
+    'vjsstandard': _.assign({}, current.vjsstandard, pkgTemplate.vjsstandard, {
+      ignore: _.union(current.vjsstandard && current.vjsstandard.ignore, pkgTemplate.vjsstandard.ignore).sort()
+    }),
+
+    'husky': {
+      hooks: _.assign({}, current.husky && current.husky.hooks || {}, pkgTemplate.husky.hooks)
     },
+
+    'lint-staged': _.assign({}, current['lint-staged'], pkgTemplate['lint-staged']),
 
     // Always include the two minimum keywords with whatever exists in the
     // current keywords array.
-    'keywords': _.union(['videojs', 'videojs-plugin'], current.keywords).sort(),
-
-    'author': context.author,
-    'license': context.licenseName,
-
-    'vjsstandard': {
-      ignore: [
-        'dist',
-        'docs',
-        'test/dist'
-      ]
-    },
-
-    'files': [
-      'CONTRIBUTING.md',
-      'dist/',
-      'docs/',
-      'index.html',
-      'scripts/',
-      'src/',
-      'test/'
-    ],
-    'husky': {
-      hooks: {
-        'pre-commit': 'lint-staged',
-        'pre-push': 'npm run test'
-      }
-    },
-    'lint-staged': {
-      '*.js': [
-        'vjsstandard --fix',
-        'git add'
-      ],
-      'README.md': [
-        'doctoc --notitle',
-        'git add'
-      ]
-    },
-
-    'dependencies': _.assign({}, current.dependencies, DEFAULTS.dependencies),
-
-    'devDependencies': _.assign(
-      {},
-      current.devDependencies,
-      DEFAULTS.devDependencies
-    )
+    'keywords': _.union(pkgTemplate.keywords, current.keywords).sort(),
+    'dependencies': _.assign({}, current.dependencies, pkgTemplate.dependencies),
+    'devDependencies': _.assign({}, current.devDependencies, pkgTemplate.devDependencies)
   });
 
   // In case husky was previously installed, but is now "none", we can
@@ -216,44 +130,29 @@ const packageJSON = (current, context) => {
   }
 
   // Support the documentation tooling option.
-  if (context.docs) {
-
-    _.assign(result.scripts, {
-      'docs': 'npm-run-all docs:*',
-      'docs:api': 'jsdoc src -g plugins/markdown -r -d docs/api',
-      'docs:toc': 'doctoc --notitle README.md'
-    });
-
-    _.assign(result.devDependencies, getGeneratorVersions(['jsdoc']));
+  if (!context.docs) {
+    delete result.scripts.docs;
+    delete result.scripts['docs:api'];
+    delete result.scripts['docs:toc'];
+    delete result.devDependencies.jsdoc;
+    if (result['lint-staged']) {
+      delete result['lint-staged']['README.md'];
+    }
   }
 
-  if (context.css) {
-    _.assign(result.scripts, {
-      'build:css': scriptify('postcss -o dist/%s.css --config scripts/postcss.config.js src/plugin.css'),
-      'watch:css': 'npm run build:css -- -w'
-    });
-
-    _.assign(result.devDependencies, getGeneratorVersions([
-      'postcss-cli',
-      'videojs-generate-postcss-config'
-    ]));
-
+  if (!context.css) {
+    delete result.scripts['build:css'];
+    delete result.scripts['watch:css'];
+    delete result.devDependencies['postcss-cli'];
+    delete result.devDependencies['videojs-generate-postcss-config'];
   }
 
   // Include language support. Note that `mkdirs` does not need to change
   // here because the videojs-languages package will create the destination
   // directory if needed.
-  if (context.lang) {
-    result.scripts['build:lang'] = 'vjslang --dir dist/lang';
-
-    _.assign(result.devDependencies, getGeneratorVersions(['videojs-languages']));
-  }
-
-  if (context.lang || context.css) {
-    _.assign(result.scripts, {
-      'build-test': "npm-run-all -s clean -p 'build:!(js)' 'build:js -- --environment TEST_BUNDLE_ONLY'",
-      'build-prod': "npm-run-all -s clean -p 'build:!(js)' 'build:js -- --environment NO_TEST_BUNDLE'"
-    });
+  if (!context.lang) {
+    delete result.scripts['build:lang'];
+    delete result.devDependencies['videojs-languages'];
   }
 
   result.files.sort();

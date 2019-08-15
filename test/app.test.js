@@ -209,8 +209,8 @@ describe('videojs-plugin:app', function() {
 
     it('should have the same deps as the template package', function() {
 
-      const templatePackages = Object.keys(pluginPkg.dependencies).concat(Object.keys(pluginPkg.devDependencies));
-      const packages = Object.keys(this.pkg.dependencies).concat(Object.keys(this.pkg.devDependencies));
+      const templatePackages = Object.keys(pluginPkg.dependencies).concat(Object.keys(pluginPkg.devDependencies)).sort();
+      const packages = Object.keys(this.pkg.dependencies).concat(Object.keys(this.pkg.devDependencies)).sort();
 
       assert.deepEqual(templatePackages, packages, 'have the same packages');
     });
