@@ -24,6 +24,7 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 const DEFAULTS = {
   dependencies: getGeneratorVersions(['global', 'video.js']),
   devDependencies: getGeneratorVersions([
+    '@babel/runtime',
     '@videojs/generator-helpers',
     'karma',
     'rollup',
@@ -124,19 +125,16 @@ const packageJSON = (current, context) => {
       'ie 11'
     ],
     'scripts': _.assign({}, current.scripts, {
-      'prebuild': 'npm run clean',
-      'build': 'npm-run-all -p build:*',
+      'build-test': "cross-env-shell TEST_BUNDLE_ONLY=1 'npm run build'",
+      'build-prod': "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
+      'build': 'npm-run-all -s clean -p build:*',
       'build:js': 'rollup -c scripts/rollup.config.js',
-      'clean': 'shx rm -rf ./dist ./test/dist',
-      'postclean': 'shx mkdir -p ./dist ./test/dist',
+      'clean': 'shx rm -rf ./dist ./test/dist && shx mkdir -p ./dist ./test/dist',
       'lint': 'vjsstandard',
-      'prepublishOnly': 'npm-run-all build test:verify',
+      'prepublishOnly': 'npm-run-all build-prod && vjsverify --verbose',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
-      'pretest': 'npm-run-all lint build',
-      'test': 'npm-run-all test:*',
-      'test:verify': 'vjsverify --verbose',
-      'test:unit': 'karma start scripts/karma.conf.js',
+      'test': 'npm-run-all lint build-test && karma start scripts/karma.conf.js',
       'posttest': 'shx cat test/dist/coverage/text.txt',
       'preversion': 'npm test',
       'version': 'is-prerelease || npm run update-changelog && git add CHANGELOG.md',
