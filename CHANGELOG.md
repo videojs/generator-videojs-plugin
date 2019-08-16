@@ -1,3 +1,10 @@
+<a name="7.7.0"></a>
+# [7.7.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.6.4...v7.7.0) (2019-08-16)
+
+### Features
+
+* Update to videojs-generate-rollup-config ~5.0.0, use env options, and `[@babel](https://github.com/babel)/runtime` (#289) ([a63fa59](https://github.com/videojs/generator-videojs-plugin/commit/a63fa59)), closes [#289](https://github.com/videojs/generator-videojs-plugin/issues/289)
+
 <a name="7.6.4"></a>
 ## [7.6.4](https://github.com/videojs/generator-videojs-plugin/compare/v7.6.3...v7.6.4) (2019-06-28)
 
