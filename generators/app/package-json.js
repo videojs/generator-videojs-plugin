@@ -24,7 +24,6 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 const DEFAULTS = {
   dependencies: getGeneratorVersions(['global', 'video.js']),
   devDependencies: getGeneratorVersions([
-    'cross-env',
     '@videojs/generator-helpers',
     'karma',
     'rollup',
@@ -246,7 +245,6 @@ const packageJSON = (current, context) => {
   // directory if needed.
   if (context.lang) {
     result.scripts['build:lang'] = 'vjslang --dir dist/lang';
-
     _.assign(result.devDependencies, getGeneratorVersions(['videojs-languages']));
   }
 
