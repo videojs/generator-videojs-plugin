@@ -24,6 +24,7 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 const DEFAULTS = {
   dependencies: getGeneratorVersions(['global', 'video.js']),
   devDependencies: getGeneratorVersions([
+    '@babel/runtime',
     '@videojs/generator-helpers',
     'karma',
     'rollup',
