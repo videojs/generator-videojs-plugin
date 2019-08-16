@@ -1,3 +1,10 @@
+<a name="7.7.1"></a>
+## [7.7.1](https://github.com/videojs/generator-videojs-plugin/compare/v7.7.0...v7.7.1) (2019-08-16)
+
+### Chores
+
+* **package:** update to videojs-generate-rollup-config@~5.0.1 ([2612b35](https://github.com/videojs/generator-videojs-plugin/commit/2612b35))
+
 <a name="7.7.0"></a>
 # [7.7.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.6.4...v7.7.0) (2019-08-16)
 
