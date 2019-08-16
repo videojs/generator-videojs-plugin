@@ -134,7 +134,7 @@ const packageJSON = (current, context) => {
       'prepublishOnly': 'npm-run-all build-prod && vjsverify --verbose',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
-      'test': 'npm run build-test && karma start scripts/karma.conf.js',
+      'test': 'npm-run-all lint build-test && karma start scripts/karma.conf.js',
       'posttest': 'shx cat test/dist/coverage/text.txt',
       'preversion': 'npm test',
       'version': 'is-prerelease || npm run update-changelog && git add CHANGELOG.md',
