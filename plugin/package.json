@@ -14,7 +14,7 @@
     "@babel/runtime": "^7.5.5"
   },
   "devDependencies": {
-    "@videojs/generator-helpers": "videojs/generator-helpers#feat/add-cross-env",
+    "@videojs/generator-helpers": "~1.2.0",
     "jsdoc": "BrandonOCasey/jsdoc#feat/plugin-from-cli",
     "karma": "^4.0.0",
     "postcss-cli": "^6.0.0",
