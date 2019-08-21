@@ -1,3 +1,10 @@
+<a name="7.7.3"></a>
+## [7.7.3](https://github.com/videojs/generator-videojs-plugin/compare/v7.7.2...v7.7.3) (2019-08-21)
+
+### Chores
+
+* **package:** update videojs-generator-verify ([c6fbce5](https://github.com/videojs/generator-videojs-plugin/commit/c6fbce5))
+
 <a name="7.7.2"></a>
 ## [7.7.2](https://github.com/videojs/generator-videojs-plugin/compare/v7.7.1...v7.7.2) (2019-08-21)
 
