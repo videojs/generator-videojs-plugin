@@ -212,3 +212,4 @@ No longer needed for other reasons
 [conventions]: docs/conventions.md
 [vjs]: http://videojs.com/
 [yo]: http://yeoman.io/
+Creative Commons Attribution 4.0 International License.
