@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "is-ci": "^2.0.0",
-    "mocha": "^6.0.0",
+    "mocha": "^7.0.1",
     "@videojs/generator-helpers": "~1.1.0",
     "videojs-generator-verify": "~2.0.0",
     "videojs-standard": "^8.0.3",
