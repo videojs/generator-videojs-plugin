@@ -19,7 +19,7 @@
     "karma": "^4.0.0",
     "postcss-cli": "^6.0.0",
     "rollup": "^1.12.0",
-    "sinon": "^7.2.2",
+    "sinon": "^9.0.1",
     "videojs-generate-karma-config": "~5.3.1",
     "videojs-generate-postcss-config": "~2.1.0",
     "videojs-generate-rollup-config": "~5.0.1",
