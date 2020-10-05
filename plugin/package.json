@@ -9,22 +9,24 @@
   "repository": "https://github.com/videojs/generator-videojs-plugin",
   "license": "ISC",
   "dependencies": {
-    "global": "^4.3.2",
-    "video.js": "^6 || ^7",
-    "@babel/runtime": "^7.5.5"
+    "@babel/runtime": "^7.11.2",
+    "global": "^4.4.0",
+    "video.js": "^6 || ^7"
   },
   "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@videojs/babel-config": "^0.2.0",
     "@videojs/generator-helpers": "~1.2.0",
     "jsdoc": "BrandonOCasey/jsdoc#feat/plugin-from-cli",
     "karma": "^4.0.0",
     "postcss-cli": "^6.0.0",
-    "rollup": "^1.12.0",
-    "sinon": "^7.2.2",
-    "videojs-generate-karma-config": "~5.3.1",
-    "videojs-generate-postcss-config": "~2.1.0",
-    "videojs-generate-rollup-config": "~5.0.2",
-    "videojs-generator-verify": "~2.0.0",
+    "rollup": "^2.28.2",
+    "sinon": "^9.1.0",
+    "videojs-generate-karma-config": "~6.0.0",
+    "videojs-generate-postcss-config": "~2.1.1",
+    "videojs-generate-rollup-config": "https://github.com/videojs/videojs-generate-rollup-config#fix/minifier-babel",
+    "videojs-generator-verify": "https://github.com/videojs/videojs-generator-verify#feat/library",
     "videojs-languages": "^2.0.0",
-    "videojs-standard": "^8.0.3"
+    "videojs-standard": "^8.0.4"
   }
 }

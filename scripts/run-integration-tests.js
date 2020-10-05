@@ -10,6 +10,7 @@ const fs = require('fs');
 const isCi = require('is-ci');
 
 let debug = false;
+let library = false;
 
 if (isCi) {
   debug = true;
@@ -18,6 +19,10 @@ if (isCi) {
 for (let i = 0; i < process.argv.length; i++) {
   if ((/-d|--debug/).test(process.argv[i])) {
     debug = true;
+    break;
+  }
+  if ((/--library/).test(process.argv[i])) {
+    library = true;
     break;
   }
 }
@@ -37,7 +42,8 @@ helpers.run(libs.GENERATOR_PATH)
     lang: true,
     css: true,
     prepush: true,
-    precommit: true
+    precommit: true,
+    library
   })
   .then(function() {
     const spawnOptions = {cwd: tempDir, env: Object.assign(process.env, {NPM_MERGE_DRIVER_IGNORE_CI: true})};

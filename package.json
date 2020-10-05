@@ -26,6 +26,7 @@
     "test": "npm-run-all test:*",
     "test:unit": "mocha test/*.test.js",
     "test:integration": "node scripts/run-integration-tests.js",
+    "test:integration-lib": "node scripts/run-integration-tests.js --library",
     "test:verify": "vjsverify --skip-es-check --verbose",
     "preversion": "npm-run-all generate-pkg-lock test",
     "generate-pkg-lock": "node scripts/generate-pkg-lock.js && git add plugin/package-lock.json",

@@ -116,7 +116,7 @@ const packageJSON = (current, context) => {
     'description': context.description,
     'main': scriptify('dist/%s.cjs.js'),
     'module': scriptify('dist/%s.es.js'),
-
+    'browser': scriptify('dist/%s.js'),
     'generator-videojs-plugin': {
       version: generatorVersion()
     },
@@ -129,9 +129,9 @@ const packageJSON = (current, context) => {
       'build-prod': "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
       'build': 'npm-run-all -s clean -p build:*',
       'build:js': 'rollup -c scripts/rollup.config.js',
-      'clean': 'shx rm -rf ./dist ./test/dist && shx mkdir -p ./dist ./test/dist',
+      'clean': 'shx rm -rf ./dist ./test/dist ./cjs ./es && shx mkdir -p ./dist ./test/dist ./cjs ./es',
       'lint': 'vjsstandard',
-      'prepublishOnly': 'npm-run-all build-prod && vjsverify --verbose',
+      'prepublishOnly': 'npm ci && npm-run-all build-prod && vjsverify --verbose',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
       'test': 'npm-run-all lint build-test && karma start scripts/karma.conf.js',
@@ -157,6 +157,8 @@ const packageJSON = (current, context) => {
 
     'vjsstandard': {
       ignore: [
+        'es',
+        'cjs',
         'dist',
         'docs',
         'test/dist'
@@ -166,6 +168,8 @@ const packageJSON = (current, context) => {
     'files': [
       'CONTRIBUTING.md',
       'dist/',
+      'es/',
+      'cjs/',
       'docs/',
       'index.html',
       'scripts/',
@@ -247,6 +251,23 @@ const packageJSON = (current, context) => {
   if (context.lang) {
     result.scripts['build:lang'] = 'vjslang --dir dist/lang';
     _.assign(result.devDependencies, getGeneratorVersions(['videojs-languages']));
+  }
+
+  if (context.library) {
+    result.main = 'cjs/plugin.js';
+    result.module = 'es/plugin.js';
+
+    _.assign(result.devDependencies, getGeneratorVersions([
+      '@babel/cli',
+      '@videojs/babel-config'
+    ]));
+
+    _.assign(result.scripts, {
+      'build:cjs': 'babel-config-cjs -d ./cjs ./src',
+      'build:es': 'babel-config-es -d ./es ./src',
+      'watch:cjs': 'npm run build:cjs -- -w',
+      'watch:es': 'npm run build:es -- -w'
+    });
   }
 
   result.files.sort();

@@ -177,7 +177,8 @@ describe('videojs-plugin:app', function() {
           lang: true,
           css: true,
           prepush: true,
-          precommit: true
+          precommit: true,
+          library: true
         })
         .on('end', () => libs.onEnd(this, done));
     });
@@ -209,8 +210,8 @@ describe('videojs-plugin:app', function() {
 
     it('should have the same deps as the template package', function() {
 
-      const templatePackages = Object.keys(pluginPkg.dependencies).concat(Object.keys(pluginPkg.devDependencies));
-      const packages = Object.keys(this.pkg.dependencies).concat(Object.keys(this.pkg.devDependencies));
+      const templatePackages = Object.keys(pluginPkg.dependencies).concat(Object.keys(pluginPkg.devDependencies)).sort();
+      const packages = Object.keys(this.pkg.dependencies).concat(Object.keys(this.pkg.devDependencies)).sort();
 
       assert.deepEqual(templatePackages, packages, 'have the same packages');
     });
@@ -238,6 +239,29 @@ describe('videojs-plugin:app', function() {
 
     it('creates css specific files default set of files', function() {
       libs.fileList('common', 'oss', 'css').forEach(f => assert.file(f));
+    });
+  });
+
+  describe('library', function() {
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin',
+          library: true
+        })
+        .on('end', () => libs.onEnd(this, done));
+    });
+
+    it('populates otherwise empty npm scripts', function() {
+      libs.allAreNonEmpty(this.pkg.scripts, scripts.concat([
+        'build:es',
+        'build:cjs',
+        'build:es',
+        'build:cjs'
+      ]));
     });
   });
 
