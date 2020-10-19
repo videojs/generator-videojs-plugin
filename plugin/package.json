@@ -25,7 +25,7 @@
     "videojs-generate-karma-config": "~6.0.0",
     "videojs-generate-postcss-config": "~2.1.1",
     "videojs-generate-rollup-config": "https://github.com/videojs/videojs-generate-rollup-config#fix/minifier-babel",
-    "videojs-generator-verify": "https://github.com/videojs/videojs-generator-verify#feat/library",
+    "videojs-generator-verify": "~3.0.0",
     "videojs-languages": "^2.0.0",
     "videojs-standard": "^8.0.4"
   }
