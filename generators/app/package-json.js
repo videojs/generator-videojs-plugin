@@ -131,7 +131,7 @@ const packageJSON = (current, context) => {
       'build:js': 'rollup -c scripts/rollup.config.js',
       'clean': 'shx rm -rf ./dist ./test/dist ./cjs ./es && shx mkdir -p ./dist ./test/dist ./cjs ./es',
       'lint': 'vjsstandard',
-      'prepublishOnly': 'npm ci && npm-run-all build-prod && vjsverify --verbose',
+      'prepublishOnly': 'npm-run-all build-prod && vjsverify --verbose',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
       'test': 'npm-run-all lint build-test && karma start scripts/karma.conf.js',
@@ -183,14 +183,8 @@ const packageJSON = (current, context) => {
       }
     },
     'lint-staged': {
-      '*.js': [
-        'vjsstandard --fix',
-        'git add'
-      ],
-      'README.md': [
-        'doctoc --notitle',
-        'git add'
-      ]
+      '*.js': 'vjsstandard --fix',
+      'README.md': 'doctoc --notitle'
     },
 
     'dependencies': _.assign({}, current.dependencies, DEFAULTS.dependencies),
@@ -225,7 +219,7 @@ const packageJSON = (current, context) => {
 
     _.assign(result.scripts, {
       'docs': 'npm-run-all docs:*',
-      'docs:api': 'jsdoc src -g plugins/markdown -r -d docs/api',
+      'docs:api': 'jsdoc src -r -d docs/api',
       'docs:toc': 'doctoc --notitle README.md'
     });
 
