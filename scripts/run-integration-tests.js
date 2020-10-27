@@ -92,11 +92,11 @@ helpers.run(libs.GENERATOR_PATH)
 
       // convoluted npm merge driver test
       ['git', 'checkout', '-b', 'merge-driver-test'],
-      ['npm', 'i', '-D', 'is-ci'],
-      ['git', 'commit', '-a', '-m', 'add is-ci to dev deps'],
+      ['npm', 'i', '--package-lock-only', '-D', 'express'],
+      ['git', 'commit', '-a', '-m', 'add express to dev deps'],
       ['git', 'checkout', 'master'],
-      ['npm', 'i', 'is-ci'],
-      ['git', 'commit', '-a', '-m', 'add is-ci as dep'],
+      ['npm', 'i', '--package-lock-only', 'express'],
+      ['git', 'commit', '-a', '-m', 'add express as dep'],
       ['git', 'merge', '--no-edit', 'merge-driver-test']
     ];
 
@@ -139,7 +139,7 @@ helpers.run(libs.GENERATOR_PATH)
 
     if (mergeDriverOutput) {
       console.error(mergeDriverOutput);
-      throw new Error('npm-merge-driver should have merged conflicts!');
+      throw new Error('npm-merge-driver-install should have merged conflicts!');
     }
 
     console.log('** Making sure husky/lint-staged/doctoc works **');
