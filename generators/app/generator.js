@@ -161,7 +161,7 @@ module.exports = class extends Generator {
     }, {
       type: 'confirm',
       name: 'library',
-      message: 'Do you want to every file in ./src available for consumption in other packages?',
+      message: 'Do you want to every file in ./src available for use as ./cjs and ./es in other packages?',
       default: defaults.library
     }, {
       type: 'confirm',
