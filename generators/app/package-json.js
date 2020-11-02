@@ -233,6 +233,7 @@ const packageJSON = (current, context) => {
     });
 
     _.assign(result.devDependencies, getGeneratorVersions([
+      'postcss',
       'postcss-cli',
       'videojs-generate-postcss-config'
     ]));
