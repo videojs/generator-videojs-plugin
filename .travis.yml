@@ -1,5 +1,9 @@
 dist: xenial
 language: node_js
+node_js:
+  - 10
+  - 12
+  - 14
 # node version is specified using the .nvmrc file
 cache: npm
 before_install:

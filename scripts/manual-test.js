@@ -19,10 +19,10 @@ helpers.run(libs.GENERATOR_PATH)
     lang: true,
     css: true,
     prepush: false,
-    precommit: true
+    precommit: true,
+    library: true
   })
   .then(function() {
-
     console.log(`Generated Project in ${tempDir}`);
     console.log('be sure to clean it up when your done!');
   });

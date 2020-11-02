@@ -160,6 +160,11 @@ module.exports = class extends Generator {
       default: defaults.lang
     }, {
       type: 'confirm',
+      name: 'library',
+      message: 'Do you want to every file in ./src available for use as ./cjs and ./es in other packages?',
+      default: defaults.library
+    }, {
+      type: 'confirm',
       name: 'precommit',
       message: 'Should we lint changed files before allowing `git commit`',
       default: defaults.precommit
@@ -349,12 +354,7 @@ module.exports = class extends Generator {
       return;
     }
 
-    // if we are on npm greater than 6
-    // save time by updating package-lock-only
-    // and then running npm ci
-    spawnSync('npm', ['i', '--package-lock-only'], {stdio: 'inherit', cwd: this.destinationRoot()});
-    spawnSync('npm', ['ci'], {stdio: 'inherit', cwd: this.destinationRoot()});
-
+    spawnSync('npm', ['i', '--prefer-offline', '--no-audit', '--progress=false'], {stdio: 'inherit', cwd: this.destinationRoot()});
   }
 
   /**

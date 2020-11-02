@@ -26,6 +26,7 @@
     "test": "npm-run-all test:*",
     "test:unit": "mocha test/*.test.js",
     "test:integration": "node scripts/run-integration-tests.js",
+    "test:integration-lib": "node scripts/run-integration-tests.js --library",
     "test:verify": "vjsverify --skip-es-check --verbose",
     "preversion": "npm-run-all generate-pkg-lock test",
     "generate-pkg-lock": "node scripts/generate-pkg-lock.js && git add plugin/package-lock.json",
@@ -34,14 +35,8 @@
     "prepublishOnly": "npm run test:verify"
   },
   "lint-staged": {
-    "**/*.js": [
-      "vjsstandard --fix",
-      "git add"
-    ],
-    "(README.md|docs/conventions.md)": [
-      "doctoc --notitle",
-      "git add"
-    ]
+    "**/*.js": "vjsstandard --fix",
+    "(README.md|docs/conventions.md)": "doctoc --notitle"
   },
   "keywords": [
     "yeoman-generator",
@@ -56,8 +51,8 @@
   "devDependencies": {
     "is-ci": "^2.0.0",
     "mocha": "^6.0.0",
-    "@videojs/generator-helpers": "~1.1.0",
-    "videojs-generator-verify": "~2.0.0",
+    "@videojs/generator-helpers": "~2.0.1",
+    "videojs-generator-verify": "~3.0.0",
     "videojs-standard": "^8.0.3",
     "yeoman-assert": "^3.1.1",
     "yeoman-test": "^2.0.0"

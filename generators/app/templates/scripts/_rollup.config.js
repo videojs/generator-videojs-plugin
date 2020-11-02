@@ -6,6 +6,12 @@ const options = {};
 const config = generate(options);
 
 // Add additonal builds/customization here!
-
+<% if (library) { %>
+// do not build module dists with rollup
+// this is handled by build:es and build:cjs
+if (config.builds.module) {
+  delete config.builds.module;
+}
+<% } %>
 // export the builds to rollup
 export default Object.values(config.builds);
