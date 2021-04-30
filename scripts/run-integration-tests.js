@@ -78,6 +78,9 @@ helpers.run(libs.GENERATOR_PATH)
 
     const commands = [
       ['git', 'init'],
+      // set the default branch name
+      ['git', 'branch', '-m', 'main']
+      // set the user info for commits, mostly for ci
       ['git', 'config', 'user.email', '"you@example.com"'],
       ['git', 'config', 'user.name', '"Your Name"'],
       ['npm', 'i', '--package-lock-only'],
