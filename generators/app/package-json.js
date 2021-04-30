@@ -120,10 +120,6 @@ const packageJSON = (current, context) => {
     'generator-videojs-plugin': {
       version: generatorVersion()
     },
-    'browserslist': [
-      'defaults',
-      'ie 11'
-    ],
     'scripts': _.assign({}, current.scripts, {
       'build-test': "cross-env-shell TEST_BUNDLE_ONLY=1 'npm run build'",
       'build-prod': "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
@@ -144,8 +140,8 @@ const packageJSON = (current, context) => {
     }),
 
     'engines': {
-      node: '>=8',
-      npm: '>=5'
+      node: '>=14',
+      npm: '>=6'
     },
 
     // Always include the two minimum keywords with whatever exists in the

@@ -94,7 +94,7 @@ helpers.run(libs.GENERATOR_PATH)
       ['git', 'checkout', '-b', 'merge-driver-test'],
       ['npm', 'i', '--package-lock-only', '-D', 'express'],
       ['git', 'commit', '-a', '-m', 'add express to dev deps'],
-      ['git', 'checkout', 'master'],
+      ['git', 'checkout', 'main'],
       ['npm', 'i', '--package-lock-only', 'express'],
       ['git', 'commit', '-a', '-m', 'add express as dep'],
       ['git', 'merge', '--no-edit', 'merge-driver-test']
