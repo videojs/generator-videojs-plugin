@@ -78,6 +78,8 @@ helpers.run(libs.GENERATOR_PATH)
 
     const commands = [
       ['git', 'init'],
+      ['git', 'config', 'user.email', '"you@example.com"'],
+      ['git', 'config', 'user.name', '"Your Name"'],
       ['npm', 'i', '--package-lock-only'],
       ['npm', 'ci'],
       ['npm', 'run', 'docs'],
