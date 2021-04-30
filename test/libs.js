@@ -26,7 +26,7 @@ const FILES = {
   ],
 
   oss: [
-    '.travis.yml',
+    '.github/workflows/ci.yml',
     'LICENSE'
   ],
 

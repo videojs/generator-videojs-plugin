@@ -266,7 +266,7 @@ module.exports = class extends Generator {
     this.context = this._getContext();
 
     if (!this._isPrivate()) {
-      this._filesToCopy.push('_.travis.yml');
+      this._filesToCopy.push('.github/workflows/_ci.yml');
     }
 
     if (this.context.lang) {
