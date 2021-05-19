@@ -9,6 +9,7 @@ const naming = require('./naming');
 const packageJSON = require('./package-json');
 const validators = require('./validators');
 const spawnSync = require('child_process').spawnSync;
+const syncRequest = require('sync-request');
 
 module.exports = class extends Generator {
 
@@ -213,6 +214,8 @@ module.exports = class extends Generator {
       '_.nvmrc'
     ];
 
+    this._filesToDownload = [];
+
     this._templatesToCopy = [
       'scripts/_rollup.config.js',
       'scripts/_karma.conf.js',
@@ -266,7 +269,10 @@ module.exports = class extends Generator {
     this.context = this._getContext();
 
     if (!this._isPrivate()) {
-      this._filesToCopy.push('_.travis.yml');
+      this._filesToDownload.push({
+        dest: '.github/workflows/ci.yml',
+        url: 'https://raw.githubusercontent.com/videojs/.github/main/workflow-templates/ci.yml'
+      });
     }
 
     if (this.context.lang) {
@@ -303,6 +309,12 @@ module.exports = class extends Generator {
 
     this._filesToCopy.forEach(src => {
       this.fs.copy(this.templatePath(src), this._dest(src));
+    });
+
+    this._filesToDownload.forEach(({url, dest}) => {
+      const response = syncRequest('GET', url);
+
+      this.fs.write(this.destinationPath(dest), response.getBody('utf8'));
     });
 
     const file = constants.LICENSE_FILES[this.config.get('license')];

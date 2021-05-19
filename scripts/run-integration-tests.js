@@ -78,6 +78,11 @@ helpers.run(libs.GENERATOR_PATH)
 
     const commands = [
       ['git', 'init'],
+      // set the default branch name
+      ['git', 'branch', '-m', 'main'],
+      // set the user info for commits, mostly for ci
+      ['git', 'config', 'user.email', '"you@example.com"'],
+      ['git', 'config', 'user.name', '"Your Name"'],
       ['npm', 'i', '--package-lock-only'],
       ['npm', 'ci'],
       ['npm', 'run', 'docs'],
@@ -94,7 +99,7 @@ helpers.run(libs.GENERATOR_PATH)
       ['git', 'checkout', '-b', 'merge-driver-test'],
       ['npm', 'i', '--package-lock-only', '-D', 'express'],
       ['git', 'commit', '-a', '-m', 'add express to dev deps'],
-      ['git', 'checkout', 'master'],
+      ['git', 'checkout', 'main'],
       ['npm', 'i', '--package-lock-only', 'express'],
       ['git', 'commit', '-a', '-m', 'add express as dep'],
       ['git', 'merge', '--no-edit', 'merge-driver-test']

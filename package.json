@@ -5,8 +5,8 @@
   "license": "Apache-2.0",
   "main": "generators/app/index.js",
   "engines": {
-    "node": ">=8",
-    "npm": ">=5"
+    "node": ">=14",
+    "npm": ">=6"
   },
   "repository": "videojs/generator-videojs-plugin",
   "author": {
@@ -46,6 +46,7 @@
   "dependencies": {
     "lodash": "^4.17.20",
     "please-upgrade-node": "^3.2.0",
+    "sync-request": "^6.1.0",
     "yeoman-generator": "^4.12.0"
   },
   "devDependencies": {
