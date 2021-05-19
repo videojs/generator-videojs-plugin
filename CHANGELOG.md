@@ -1,3 +1,18 @@
+<a name="8.0.0"></a>
+# [8.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.7.3...v8.0.0) (2021-05-19)
+
+### Features
+
+* **BREAKING:** switch to node 14 and only test on safari 12/14, chrome, and firefox (#307) ([787424b](https://github.com/videojs/generator-videojs-plugin/commit/787424b)), closes [#307](https://github.com/videojs/generator-videojs-plugin/issues/307)
+* support libraries, via [@videojs](https://github.com/videojs)/babel-config (#306) ([5dddda0](https://github.com/videojs/generator-videojs-plugin/commit/5dddda0)), closes [#306](https://github.com/videojs/generator-videojs-plugin/issues/306)
+
+### Chores
+
+* update [@videojs](https://github.com/videojs)-generator-helpers ([737ef5c](https://github.com/videojs/generator-videojs-plugin/commit/737ef5c))
+* update dependencies ([832e757](https://github.com/videojs/generator-videojs-plugin/commit/832e757))
+* update postcss versions ([8a72be4](https://github.com/videojs/generator-videojs-plugin/commit/8a72be4))
+* update videojs-generate-rollup-config to 5.0.2 (#302) ([c2cf32c](https://github.com/videojs/generator-videojs-plugin/commit/c2cf32c)), closes [#302](https://github.com/videojs/generator-videojs-plugin/issues/302)
+
 <a name="7.7.3"></a>
 ## [7.7.3](https://github.com/videojs/generator-videojs-plugin/compare/v7.7.2...v7.7.3) (2019-08-21)
 
