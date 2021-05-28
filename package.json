@@ -44,19 +44,20 @@
     "videojs-plugin"
   ],
   "dependencies": {
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "please-upgrade-node": "^3.2.0",
     "sync-request": "^6.1.0",
-    "yeoman-generator": "^4.12.0"
+    "yeoman-environment": "^3.4.1",
+    "yeoman-generator": "^5.3.0"
   },
   "devDependencies": {
-    "is-ci": "^2.0.0",
-    "mocha": "^8.2.1",
-    "@videojs/generator-helpers": "~2.0.2",
-    "videojs-generator-verify": "~3.0.1",
-    "videojs-standard": "^8.0.4",
+    "is-ci": "^3.0.0",
+    "mocha": "^8.4.0",
+    "@videojs/generator-helpers": "~3.0.0",
+    "videojs-generator-verify": "~4.0.0",
+    "videojs-standard": "^9.0.0",
     "yeoman-assert": "^3.1.1",
-    "yeoman-test": "^3.0.0"
+    "yeoman-test": "^6.1.0"
   },
   "husky": {
     "hooks": {

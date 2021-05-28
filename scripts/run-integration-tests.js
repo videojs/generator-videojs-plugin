@@ -1,4 +1,3 @@
-/* global Promise */
 /* eslint-disable no-console */
 
 const helpers = require('yeoman-test');
