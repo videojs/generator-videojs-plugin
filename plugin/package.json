@@ -16,7 +16,7 @@
   "devDependencies": {
     "@babel/cli": "^7.14.3",
     "@videojs/babel-config": "^0.2.0",
-    "@videojs/generator-helpers": "~3.0.0",
+    "@videojs/generator-helpers": "~3.1.0",
     "jsdoc": "~3.6.7",
     "karma": "^6.3.2",
     "postcss-cli": "^8.3.1",
