@@ -91,6 +91,8 @@ helpers.run(libs.GENERATOR_PATH)
       ['npm', 'version', 'prerelease'],
       // copy the changelog over to check its size
       ['shx', 'cp', 'CHANGELOG.md', 'CHANGELOG-prerelease.md'],
+      ['shx', 'rm', 'CHANGELOG.md'],
+      ['git', 'commit', '-a', '-m', 'fix: some commit!'],
       ['npm', 'version', 'major'],
       ['npm', 'publish', '--dry-run'],
 
@@ -127,11 +129,14 @@ helpers.run(libs.GENERATOR_PATH)
     // not a test, but useful to log
     spawnSync('npm', ['audit'], spawnOptions);
 
-    const release = fs.statSync(path.join(tempDir, 'CHANGELOG.md'));
-    const prerelease = fs.statSync(path.join(tempDir, 'CHANGELOG-prerelease.md'));
+    const release = fs.readFileSync(path.join(tempDir, 'CHANGELOG.md'));
+    const prerelease = fs.readFileSync(path.join(tempDir, 'CHANGELOG-prerelease.md'));
 
-    assert.ok(prerelease.size === 0, 'changelog was not written to after prerelease');
-    assert.ok(release.size > 0, 'changelog was written to after major');
+    assert.ok(prerelease.length > 0, 'changelog was not written to after prerelease');
+    assert.ok(release.length > 0, 'changelog was written to after major');
+    assert.ok((/initial release/).test(prerelease), 'have prerelease in prerelease changelog');
+    assert.ok((/initial release/).test(release), 'have prerelease commit in release changelog');
+    assert.ok((/some commit/).test(release), 'release has commit in release changelog');
 
     console.log('** Making sure npm-merge-driver-install works **');
 

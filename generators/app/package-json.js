@@ -133,8 +133,7 @@ const packageJSON = (current, context) => {
       'test': 'npm-run-all lint build-test && karma start scripts/karma.conf.js',
       'posttest': 'shx cat test/dist/coverage/text.txt',
       'preversion': 'npm test',
-      'version': 'is-prerelease || npm run update-changelog && git add CHANGELOG.md',
-      'update-changelog': 'conventional-changelog -p videojs -i CHANGELOG.md -s',
+      'version': 'vjs-update-changelog --add --run-on-prerelease',
       'watch': 'npm-run-all -p watch:*',
       'watch:js': 'npm run build:js -- -w'
     }),
