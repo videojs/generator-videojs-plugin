@@ -22,9 +22,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
+        test-type: ['unit']
     env:
       BROWSER_STACK_USERNAME: ${{secrets.BROWSER_STACK_USERNAME}}
       BROWSER_STACK_ACCESS_KEY: ${{secrets.BROWSER_STACK_ACCESS_KEY}}
+      CI_TEST_TYPE: ${{matrix.test-type}}
     runs-on: ${{matrix.os}}
     steps:
     - name: checkout code
@@ -62,6 +64,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '${{steps.nvm.outputs.NVMRC}}'
+        cache: npm
 
     # turn off the default setup-node problem watchers...
     - run: echo "::remove-matcher owner=eslint-compact::"
@@ -75,3 +78,11 @@ jobs:
       uses: GabrielBB/xvfb-action@v1
       with:
         run: npm run test
+
+    - name: coverage
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        files: './test/dist/coverage/coverage-final.json'
+        fail_ci_if_error: true
+      if: ${{startsWith(env.CI_TEST_TYPE, 'coverage')}}

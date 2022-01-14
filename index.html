@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>videojs-ra Demo</title>
+  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+
+  <script src="//imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+  <script src="node_modules/video.js/dist/video.js"></script>
+  <script src="../node_modules/videojs-contrib-ads/dist/videojs-contrib-ads.js"></script>
+  <script src="../node_modules/videojs-ima/dist/videojs.ima.js"></script>
+  <script src="dist/videojs-ra.js"></script>
+
+</head>
+<body>
+<video id="videojs-ra-player" class="video-js vjs-default-skin" controls>
+  <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
+  <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
+</video>
+<ul>
+  <li><a href="/test/debug.html">Run unit tests in browser.</a></li>
+
+</ul>
+
+
+<script>
+  (function(window, videojs) {
+    var examplePlayer = window.examplePlayer = videojs('videojs-ra-player');
+    var ra = window.ra = examplePlayer.ra();
+
+    /** setting ima plugin */
+    const options = {
+      id: 'vid1',
+      adTagUrl: 'http://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=xml_vmap1&unviewed_position_start=1&cust_params=sample_ar%3Dpremidpostpod%26deployment%3Dgmf-js&cmsid=496&vid=short_onecue&correlator='
+    };
+    examplePlayer.ima(options);
+
+  }(window, window.videojs));
+</script>
+</body>
+</html>
+
