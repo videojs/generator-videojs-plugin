@@ -1,8 +1,6 @@
 import videojs from 'video.js';
 import {version as VERSION} from '../package.json';
 
-const Plugin = videojs.getPlugin('plugin');
-
 // Default options for the plugin.
 const defaults = {};
 
@@ -11,8 +9,10 @@ const defaults = {};
  *
  * See: https://blog.videojs.com/feature-spotlight-advanced-plugins/
  */
-class Ra extends Plugin {
 
+const ra = function(options) {
+
+  const player = this; // eslint-disable-line consistent-this
   /**
    * Create a Ra plugin instance.
    *
@@ -26,31 +26,26 @@ class Ra extends Plugin {
    *         second argument of options is a convenient way to accept inputs
    *         from your plugin's caller.
    */
-  constructor(player, options) {
-    // the parent class will add player under this.player
-    super(player);
 
-    this.options = videojs.mergeOptions(defaults, options);
+  this.options = videojs.mergeOptions(defaults, options);
 
-    this.player.ready(() => {
-      this.player.addClass('vjs-ra');
-    });
+  player.ready(() => {
+    player.addClass('vjs-ra');
+  });
 
-    this.player.on('playing', function() {
-      this.volume(0.25);
-      videojs.log('playback began!');
-    });
-
-  }
-}
+  player.on('playing', function() {
+    this.volume(0.25);
+    videojs.log('playback began 1!');
+  });
+};
 
 // Define default values for the plugin's `state` object here.
-Ra.defaultState = {};
+ra.defaultState = {};
 
 // Include the version number.
-Ra.VERSION = VERSION;
+ra.VERSION = VERSION;
 
 // Register the plugin with video.js.
-videojs.registerPlugin('ra', Ra);
+videojs.registerPlugin('ra', ra);
 
-export default Ra;
+export default ra;
