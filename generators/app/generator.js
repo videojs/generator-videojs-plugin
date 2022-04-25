@@ -145,6 +145,11 @@ module.exports = class extends Generator {
       default: defaults.pluginType,
       choices: constants.PLUGIN_TYPE_CHOICES
     }, {
+      type: 'list',
+      name: 'peerDep',
+      message: 'Install video.js as a peerDependency and devDependency, instead of a regular dependency',
+      default: defaults.peerDep
+    }, {
       type: 'confirm',
       name: 'css',
       message: 'Do you want to use css tooling?',

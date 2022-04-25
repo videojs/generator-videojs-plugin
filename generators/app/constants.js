@@ -52,6 +52,7 @@ module.exports = {
     library: false,
     license: LICENSE_DEFAULT,
     pluginType: 'advanced',
-    name: path.basename(process.cwd()).replace(/^videojs-/, '')
+    name: path.basename(process.cwd()).replace(/^videojs-/, ''),
+    peerDep: false
   }
 };

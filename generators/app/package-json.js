@@ -22,7 +22,7 @@ const getGeneratorVersions = (pkgList) => pkgList.reduce((acc, pkgName) => {
 }, {});
 
 const DEFAULTS = {
-  dependencies: getGeneratorVersions(['global', 'video.js']),
+  dependencies: getGeneratorVersions(['global']),
   devDependencies: getGeneratorVersions([
     '@babel/runtime',
     '@videojs/generator-helpers',
@@ -191,6 +191,14 @@ const packageJSON = (current, context) => {
       DEFAULTS.devDependencies
     )
   });
+
+  // Add video.js as a dependency by default, or as both a peerDep and devDep
+  if (context.peerDep) {
+    result.peerDependencies = _.assign({}, getGeneratorVersions(['video.js']));
+    _.assign(result.devDependencies, getGeneratorVersions(['video.js']));
+  } else {
+    _.assign(result.dependencies, getGeneratorVersions(['video.js']));
+  }
 
   // In case husky was previously installed, but is now "none", we can
   // remove it from the package.json entirely.
