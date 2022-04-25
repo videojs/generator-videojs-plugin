@@ -311,6 +311,47 @@ describe('videojs-plugin:app', function() {
     });
   });
 
+  describe('video.js is regular dependency by default', function() {
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin'
+        })
+        .on('end', () => libs.onEnd(this, done));
+    });
+
+    it('package.json is as expected', function() {
+      assert(_.isPlainObject(this.pkg));
+      assert.strictEqual(typeof this.pkg.dependencies['video.js'], 'string');
+      assert.strictEqual(this.pkg.devDependencies['video.js'], undefined);
+      assert.strictEqual(this.pkg.peerDependencies['video.js'], undefined);
+    });
+  });
+
+  describe('video.js can be a peer and dev dependency', function() {
+    before(function(done) {
+      helpers.run(libs.GENERATOR_PATH)
+        .withOptions(libs.options())
+        .withPrompts({
+          name: 'wat',
+          author: 'John Doe',
+          description: 'wat is the plugin',
+          peerDep: true
+        })
+        .on('end', () => libs.onEnd(this, done));
+    });
+
+    it('package.json is as expected', function() {
+      assert(_.isPlainObject(this.pkg));
+      assert.strictEqual(this.pkg.dependencies['video.js'], undefined);
+      assert.strictEqual(typeof this.pkg.devDependencies['video.js'], 'string');
+      assert.strictEqual(typeof this.pkg.peerDependencies['video.js'], 'string');
+    });
+  });
+
   describe('precommit false', function() {
     before(function(done) {
       helpers.run(libs.GENERATOR_PATH)

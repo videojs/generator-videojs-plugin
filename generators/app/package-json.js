@@ -189,12 +189,14 @@ const packageJSON = (current, context) => {
       {},
       current.devDependencies,
       DEFAULTS.devDependencies
-    )
+    ),
+
+    'peerDependencies': _.assign({}, current.dependencies)
   });
 
   // Add video.js as a dependency by default, or as both a peerDep and devDep
   if (context.peerDep) {
-    result.peerDependencies = _.assign({}, getGeneratorVersions(['video.js']));
+    _.assign(result.peerDependencies, getGeneratorVersions(['video.js']));
     _.assign(result.devDependencies, getGeneratorVersions(['video.js']));
   } else {
     _.assign(result.dependencies, getGeneratorVersions(['video.js']));
