@@ -344,6 +344,14 @@ module.exports = class extends Generator {
    * we don't want to run that (or depend on it in any way).
    */
   install() {
+    if (!fs.existsSync('./.git')) {
+      // husky's postinstall would fail if git not initialised
+      this.log('Initialising git…');
+      spawnSync('git', ['init']);
+    }
+
+    this.log('Installing dependencies…');
+
     const result = spawnSync('npm', ['--version']);
 
     // no access to npm uh oh, lets let yeoman throw an error
