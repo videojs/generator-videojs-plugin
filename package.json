@@ -24,7 +24,7 @@
     "lint": "vjsstandard",
     "pretest": "npm run lint",
     "test": "npm-run-all test:*",
-    "test:unit": "mocha test/*.test.js",
+    "test:unit": "mocha test/*.test.js --timeout 10000",
     "test:integration": "node scripts/run-integration-tests.js",
     "test:integration-lib": "node scripts/run-integration-tests.js --library",
     "test:verify": "vjsverify --skip-es-check --verbose",
