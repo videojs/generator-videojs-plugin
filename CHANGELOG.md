@@ -1,3 +1,17 @@
+<a name="9.0.0"></a>
+# [9.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v8.0.0...v9.0.0) (2023-04-12)
+
+### Bug Fixes
+
+* remove obsolete v5 compatiblity (#309) ([5068642](https://github.com/videojs/generator-videojs-plugin/commit/5068642)), closes [#309](https://github.com/videojs/generator-videojs-plugin/issues/309)
+* Update contributing template for node 14 (#308) ([59e7c71](https://github.com/videojs/generator-videojs-plugin/commit/59e7c71)), closes [#308](https://github.com/videojs/generator-videojs-plugin/issues/308)
+
+### Chores
+
+* add mocha timeout ([b805263](https://github.com/videojs/generator-videojs-plugin/commit/b805263))
+* package version updates ([f8a6fdd](https://github.com/videojs/generator-videojs-plugin/commit/f8a6fdd))
+* Update video.js and rollup config generator versions (#318) ([c5cba4d](https://github.com/videojs/generator-videojs-plugin/commit/c5cba4d)), closes [#318](https://github.com/videojs/generator-videojs-plugin/issues/318)
+
 <a name="8.0.0"></a>
 # [8.0.0](https://github.com/videojs/generator-videojs-plugin/compare/v7.7.3...v8.0.0) (2021-05-19)
 
