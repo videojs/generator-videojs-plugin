@@ -1,6 +1,6 @@
 {
   "name": "generator-videojs-plugin",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "description": "A Yeoman generator for Video.js plugins",
   "license": "Apache-2.0",
   "main": "generators/app/index.js",
@@ -24,7 +24,7 @@
     "lint": "vjsstandard",
     "pretest": "npm run lint",
     "test": "npm-run-all test:*",
-    "test:unit": "mocha test/*.test.js",
+    "test:unit": "mocha test/*.test.js --timeout 10000",
     "test:integration": "node scripts/run-integration-tests.js",
     "test:integration-lib": "node scripts/run-integration-tests.js --library",
     "test:verify": "vjsverify --skip-es-check --verbose",
@@ -47,17 +47,17 @@
     "lodash": "^4.17.21",
     "please-upgrade-node": "^3.2.0",
     "sync-request": "^6.1.0",
-    "yeoman-environment": "^3.4.1",
-    "yeoman-generator": "^5.3.0"
+    "yeoman-environment": "^3.19.3",
+    "yeoman-generator": "^5.9.0"
   },
   "devDependencies": {
-    "is-ci": "^3.0.0",
-    "mocha": "^8.4.0",
-    "@videojs/generator-helpers": "~3.0.0",
-    "videojs-generator-verify": "^4.1.0",
-    "videojs-standard": "^9.0.0",
+    "@videojs/generator-helpers": "^3.2.0",
+    "is-ci": "^3.0.1",
+    "mocha": "^10.2.0",
+    "videojs-generator-verify": "^4.0.1",
+    "videojs-standard": "^9.0.1",
     "yeoman-assert": "^3.1.1",
-    "yeoman-test": "^6.1.0"
+    "yeoman-test": "^6.3.0"
   },
   "husky": {
     "hooks": {

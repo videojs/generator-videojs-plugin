@@ -11,7 +11,7 @@
   "dependencies": {
     "@babel/runtime": "^7.14.0",
     "global": "^4.4.0",
-    "video.js": "^6 || ^7"
+    "video.js": "^8"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",
@@ -25,7 +25,7 @@
     "sinon": "^9.1.0",
     "videojs-generate-karma-config": "~8.0.0",
     "videojs-generate-postcss-config": "~3.0.0",
-    "videojs-generate-rollup-config": "~6.2.0",
+    "videojs-generate-rollup-config": "~7.0.1",
     "videojs-generator-verify": "~4.0.0",
     "videojs-languages": "^2.0.0",
     "videojs-standard": "^9.0.0"

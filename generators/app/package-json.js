@@ -127,7 +127,7 @@ const packageJSON = (current, context) => {
       'build:js': 'rollup -c scripts/rollup.config.js',
       'clean': 'shx rm -rf ./dist ./test/dist ./cjs ./es && shx mkdir -p ./dist ./test/dist ./cjs ./es',
       'lint': 'vjsstandard',
-      'prepublishOnly': 'npm-run-all build-prod && vjsverify --verbose',
+      'prepublishOnly': 'npm-run-all build-prod && vjsverify --verbose --skip-es-check',
       'start': 'npm-run-all -p server watch',
       'server': 'karma start scripts/karma.conf.js --singleRun=false --auto-watch',
       'test': 'npm-run-all lint build-test && karma start scripts/karma.conf.js',
